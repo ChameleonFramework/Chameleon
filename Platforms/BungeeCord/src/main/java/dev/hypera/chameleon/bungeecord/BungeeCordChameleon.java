@@ -7,18 +7,19 @@ import dev.hypera.chameleon.core.objects.users.ChatUser;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.plugin.Plugin;
 
-public abstract class BungeeCordChameleon implements Chameleon {
+public class BungeeCordChameleon extends Chameleon {
 
-    private final Plugin plugin;
+    private final Plugin bungeePlugin;
     private final BungeeAudiences adventure;
 
-    public BungeeCordChameleon(Plugin plugin) {
-        this.plugin = plugin;
-        this.adventure = BungeeAudiences.create(plugin);
+    public BungeeCordChameleon(Class<? extends dev.hypera.chameleon.core.objects.Plugin> pluginClass, Plugin bungeePlugin) throws InstantiationException {
+        super(pluginClass);
+        this.bungeePlugin = bungeePlugin;
+        this.adventure = BungeeAudiences.create(bungeePlugin);
     }
 
     public Plugin getPlugin() {
-        return plugin;
+        return bungeePlugin;
     }
 
     public BungeeAudiences getAdventure() {
@@ -27,12 +28,12 @@ public abstract class BungeeCordChameleon implements Chameleon {
 
     @Override
     public void registerCommand(Command command) {
-        plugin.getProxy().getPluginManager().registerCommand(plugin, new BungeeCordCommand(this, command));
+        bungeePlugin.getProxy().getPluginManager().registerCommand(bungeePlugin, new BungeeCordCommand(this, command));
     }
 
     @Override
     public ChatUser getConsoleSender() {
-        return new ChameleonCommandSender(adventure, plugin.getProxy().getConsole());
+        return new ChameleonCommandSender(adventure, bungeePlugin.getProxy().getConsole());
     }
 
 }

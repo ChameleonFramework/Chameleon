@@ -18,12 +18,8 @@ public class MyBungeeCord extends Plugin {
 
     @Override
     public void onEnable() {
-        chameleon = new BungeeCordChameleon(this) {
-            private final MyPlugin myPlugin = new MyPlugin(this);
-            @Override public void onEnable() {myPlugin.onEnable();}
-            @Override public void onDisable() {myPlugin.onDisable();}
-        };
-        chameleon.onEnable();
+        try { chameleon = new BungeeCordChameleon(MyPlugin.class, this); chameleon.onEnable(); }
+        catch (InstantiationException e) { e.printStackTrace(); }
     }
 
     @Override

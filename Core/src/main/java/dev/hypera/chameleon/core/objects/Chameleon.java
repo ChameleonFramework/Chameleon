@@ -3,13 +3,29 @@ package dev.hypera.chameleon.core.objects;
 import dev.hypera.chameleon.core.objects.commands.Command;
 import dev.hypera.chameleon.core.objects.users.ChatUser;
 
-public interface Chameleon {
+import java.lang.reflect.InvocationTargetException;
 
-    void onEnable();
-    void onDisable();
+public abstract class Chameleon {
 
-    void registerCommand(Command command);
+    protected final Plugin plugin;
 
-    ChatUser getConsoleSender();
+    public Chameleon(Class<? extends Plugin> pluginClass) throws InstantiationException {
+        try {
+            this.plugin = pluginClass.getConstructor(Chameleon.class).newInstance(this);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new InstantiationException("Failed to initialise instance of " + pluginClass.getSimpleName());
+        }
+    }
+
+    public void onEnable() {
+        plugin.onEnable();
+    }
+    public void onDisable() {
+        plugin.onDisable();
+    }
+
+    public abstract void registerCommand(Command command);
+
+    public abstract ChatUser getConsoleSender();
 
 }
