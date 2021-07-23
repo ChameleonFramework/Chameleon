@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>dev.hypera.chameleon</groupId>
     <artifactId>Platforms</artifactId>
     <packaging>pom</packaging>
     <modules>
