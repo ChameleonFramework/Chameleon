@@ -1,7 +1,7 @@
 # Development Progress
 | Platform                                | BungeeCord | Spigot | Velocity | Minestom | Nukkit |
 |:---------------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|
-| [Commands](#Commands)                   | ✓          |        |          |          |        |
+| [Commands](#Commands)                   | ✓          | ✓      |          |          |        |
 | [Events](#Events)                       |            |        |          |          |        |
 | [Users](#Users)                         |            |        |          |          |        |
 
