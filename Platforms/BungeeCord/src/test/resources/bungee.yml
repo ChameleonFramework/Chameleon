@@ -1,0 +1,4 @@
+name: MyPlugin
+main: dev.hypera.chameleon.bungeecord.test.MyBungeeCord
+version: 1.0.0
+author: Hypera
