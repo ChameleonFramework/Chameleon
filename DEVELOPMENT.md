@@ -4,6 +4,7 @@
 | [Commands](#Commands)                   | ✓          | ✓      | ✓        |          |        |
 | [Events](#Events)                       |            |        |          |          |        |
 | [Users](#Users)                         |            |        |          |          |        |
+| [Configuration](#Configuration)         |            |        |          |          |        |
 
 ### Extra Information
 All examples below are taken from [the example Chameleon project](https://github.com/HyperaOfficial/ChameleonProject).
@@ -78,4 +79,22 @@ public void onEnable() {
 * [ ] User
 * [ ] ProxyUser
 * [ ] ServerUser
-* [ ] ChameleonAudience
+* [x] AudienceWrapper
+
+## Configuration
+* [ ] Data folders
+* [ ] Config
+* [ ] YamlConfig
+
+#### ExampleConfig.java
+```java
+// Work in progress
+```
+
+#### ChameleonProject.java
+```java
+@Override
+public void onEnable() {
+    // Work in progress
+}
+```
