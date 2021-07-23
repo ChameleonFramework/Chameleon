@@ -12,6 +12,6 @@ You can also check out our [development roadmap](DEVELOPMENT.md) or various exam
 Here is a TODO list of all the platforms we'd like to support. If you have any suggestions you can post them on our [feedback site](https://feedback.hypera.dev).
 * [x] BungeeCord
 * [x] Spigot
-* [ ] Velocity
+* [x] Velocity
 * [ ] Minestom
 * [ ] Nukkit
