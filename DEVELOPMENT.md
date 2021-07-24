@@ -85,7 +85,7 @@ public void onEnable() {
 * [x] Data folders
 * [x] Config
 * [x] YamlConfig
-* [ ] Copy default from resources
+* [x] Copy default from resources
 * [ ] Setters
 
 #### ChameleonProject.java
