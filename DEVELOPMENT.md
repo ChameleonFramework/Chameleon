@@ -1,10 +1,10 @@
 # Development Progress
-| Platform                                | BungeeCord | Spigot | Velocity | Minestom | Nukkit |
-|:---------------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|
-| [Commands](#Commands)                   | ✓          | ✓      | ✓        | ✓        |        |
-| [Events](#Events)                       |            |        |          |          |        |
-| [Users](#Users)                         |            |        |          |          |        |
-| [Configuration](#Configuration)         |            |        |          |          |        |
+| Platform                                | BungeeCord | Spigot | Velocity | Minestom |
+|:---------------------------------------:|:----------:|:------:|:--------:|:--------:|
+| [Commands](#Commands)                   | ✓          | ✓      | ✓        | ✓        |
+| [Events](#Events)                       |            |        |          |          |
+| [Users](#Users)                         |            |        |          |          |
+| [Configuration](#Configuration)         |            |        |          |          |
 
 ### Extra Information
 All examples below are taken from [the example Chameleon project](https://github.com/HyperaOfficial/ChameleonProject).

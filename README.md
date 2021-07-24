@@ -14,4 +14,3 @@ Here is a TODO list of all the platforms we'd like to support. If you have any s
 * [x] Spigot
 * [x] Velocity
 * [x] Minestom
-* [ ] Nukkit
