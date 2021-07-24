@@ -4,7 +4,7 @@
 | [Commands](#Commands)                   | ✓          | ✓      | ✓        | ✓        |        |        |
 | [Events](#Events)                       |            |        |          |          |        |        |
 | [Users](#Users)                         |            |        |          |          |        |        |
-| [Configuration](#Configuration)         |            |        |          |          |        |        |
+| [Configuration](#Configuration)         | ✓          | ✓      | ✓        | ✓        |        |        |
 
 ### Extra Information
 All examples below are taken from [the example Chameleon project](https://github.com/HyperaOfficial/ChameleonProject).
@@ -82,19 +82,20 @@ public void onEnable() {
 * [x] AudienceWrapper
 
 ## Configuration
-* [ ] Data folders
-* [ ] Config
-* [ ] YamlConfig
-
-#### ExampleConfig.java
-```java
-// Work in progress
-```
+* [x] Data folders
+* [x] Config
+* [x] YamlConfig
+* [ ] Copy default from resources
+* [ ] Setters
 
 #### ChameleonProject.java
 ```java
+private Configuration config;
+
 @Override
 public void onEnable() {
-    // Work in progress
+    // ...
+    config = new YamlConfiguration(chameleon, "config.yml", true);
+    // ...
 }
 ```
