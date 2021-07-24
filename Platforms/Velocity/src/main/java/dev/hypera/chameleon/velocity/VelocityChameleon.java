@@ -7,24 +7,25 @@ import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.velocity.commands.VelocityCommand;
 import dev.hypera.chameleon.velocity.users.ChameleonCommandSource;
+import org.jetbrains.annotations.NotNull;
 
 public class VelocityChameleon extends Chameleon {
 
-    private final VelocityPlugin velocityPlugin;
+    private final @NotNull VelocityPlugin velocityPlugin;
 
-    public VelocityChameleon(Class<? extends Plugin> pluginClass, VelocityPlugin velocityPlugin) throws InstantiationException {
+    public VelocityChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull VelocityPlugin velocityPlugin) throws InstantiationException {
         super(pluginClass);
         this.velocityPlugin = velocityPlugin;
     }
 
     @Override
-    public void registerCommand(Command command) {
+    public void registerCommand(@NotNull Command command) {
         CommandManager commandManager = velocityPlugin.getServer().getCommandManager();
         commandManager.register(commandManager.metaBuilder(command.getName()).aliases(command.getAliases()).build(), new VelocityCommand(command));
     }
 
     @Override
-    public ChatUser getConsoleSender() {
+    public @NotNull ChatUser getConsoleSender() {
         return new ChameleonCommandSource(velocityPlugin.getServer().getConsoleCommandSource());
     }
 

@@ -10,30 +10,31 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 
 public class SpigotChameleon extends Chameleon {
 
-    private final JavaPlugin spigotPlugin;
-    private final BukkitAudiences adventure;
+    private final @NotNull JavaPlugin spigotPlugin;
+    private final @NotNull BukkitAudiences adventure;
 
-    public SpigotChameleon(Class<? extends Plugin> pluginClass, JavaPlugin spigotPlugin) throws InstantiationException {
+    public SpigotChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull JavaPlugin spigotPlugin) throws InstantiationException {
         super(pluginClass);
         this.spigotPlugin = spigotPlugin;
         this.adventure = BukkitAudiences.create(spigotPlugin);
     }
 
-    public JavaPlugin getPlugin() {
+    public @NotNull JavaPlugin getPlugin() {
         return spigotPlugin;
     }
 
-    public BukkitAudiences getAdventure() {
+    public @NotNull BukkitAudiences getAdventure() {
         return adventure;
     }
 
     @Override
-    public void registerCommand(Command command) {
+    public void registerCommand(@NotNull Command command) {
         try {
             Field commandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             commandMap.setAccessible(true);
@@ -46,7 +47,7 @@ public class SpigotChameleon extends Chameleon {
     }
 
     @Override
-    public ChatUser getConsoleSender() {
+    public @NotNull ChatUser getConsoleSender() {
         return new ChameleonCommandSender(this, Bukkit.getConsoleSender());
     }
 

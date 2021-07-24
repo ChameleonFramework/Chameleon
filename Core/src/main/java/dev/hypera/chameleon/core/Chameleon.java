@@ -2,14 +2,15 @@ package dev.hypera.chameleon.core;
 
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class Chameleon {
 
-    protected final Plugin plugin;
+    protected final @NotNull Plugin plugin;
 
-    public Chameleon(Class<? extends Plugin> pluginClass) throws InstantiationException {
+    public Chameleon(@NotNull Class<? extends Plugin> pluginClass) throws InstantiationException {
         try {
             this.plugin = pluginClass.getConstructor(Chameleon.class).newInstance(this);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -24,8 +25,8 @@ public abstract class Chameleon {
         plugin.onDisable();
     }
 
-    public abstract void registerCommand(Command command);
+    public abstract void registerCommand(@NotNull Command command);
 
-    public abstract ChatUser getConsoleSender();
+    public abstract @NotNull ChatUser getConsoleSender();
 
 }
