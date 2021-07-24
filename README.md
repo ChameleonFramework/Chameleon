@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 <div align="center">
     <img src="https://i.hypera.dev/assets/chameleon@750x150.png" />
     <p><strong>Cross-platform Minecraft plugin creation library</strong></p>
+=======
+<div align="center" id="logo">
+    <a href="#logo"><img src="https://i.hypera.dev/assets/chameleon@750x150.png" /></a>
+    <h4>Cross-platform Minecraft plugin creation library</h4>
+>>>>>>> 2b9f61a80467a7b5b9069fe2709ccc8e1325ca74
 </div>
 
 -----------
