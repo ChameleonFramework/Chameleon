@@ -1,4 +1,4 @@
-package dev.hypera.chameleon.core.objects.internal.utils;
+package dev.hypera.chameleon.core.internal.utils;
 
 import java.util.function.Predicate;
 

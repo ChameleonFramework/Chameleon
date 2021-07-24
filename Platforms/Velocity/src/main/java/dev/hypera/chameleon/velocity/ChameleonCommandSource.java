@@ -1,8 +1,8 @@
 package dev.hypera.chameleon.velocity;
 
 import com.velocitypowered.api.command.CommandSource;
-import dev.hypera.chameleon.core.objects.internal.utils.AudienceWrapper;
-import dev.hypera.chameleon.core.objects.users.ChatUser;
+import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
+import dev.hypera.chameleon.core.users.ChatUser;
 
 public class ChameleonCommandSource extends AudienceWrapper implements ChatUser {
 

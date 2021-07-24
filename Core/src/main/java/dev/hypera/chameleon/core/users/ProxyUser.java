@@ -1,4 +1,4 @@
-package dev.hypera.chameleon.core.objects.users;
+package dev.hypera.chameleon.core.users;
 
 /**
  * A client-side user in the scope of a proxy.

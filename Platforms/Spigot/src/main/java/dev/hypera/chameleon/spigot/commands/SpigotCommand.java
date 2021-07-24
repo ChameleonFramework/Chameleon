@@ -1,6 +1,6 @@
 package dev.hypera.chameleon.spigot.commands;
 
-import dev.hypera.chameleon.core.objects.commands.Command;
+import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.spigot.ChameleonCommandSender;
 import dev.hypera.chameleon.spigot.SpigotChameleon;
 import org.bukkit.command.CommandSender;

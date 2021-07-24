@@ -19,8 +19,8 @@ All examples below are taken from [the example Chameleon project](https://github
 ```java
 package org.example.chameleonproject.commands;
 
-import dev.hypera.chameleon.core.objects.commands.Command;
-import dev.hypera.chameleon.core.objects.users.ChatUser;
+import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.users.ChatUser;
 import net.kyori.adventure.text.Component;
 
 import java.util.Collections;

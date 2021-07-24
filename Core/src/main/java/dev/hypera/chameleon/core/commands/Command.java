@@ -1,6 +1,6 @@
-package dev.hypera.chameleon.core.objects.commands;
+package dev.hypera.chameleon.core.commands;
 
-import dev.hypera.chameleon.core.objects.users.ChatUser;
+import dev.hypera.chameleon.core.users.ChatUser;
 
 import java.util.List;
 

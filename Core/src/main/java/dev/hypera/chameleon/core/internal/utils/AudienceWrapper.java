@@ -1,4 +1,4 @@
-package dev.hypera.chameleon.core.objects.internal.utils;
+package dev.hypera.chameleon.core.internal.utils;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.MessageType;

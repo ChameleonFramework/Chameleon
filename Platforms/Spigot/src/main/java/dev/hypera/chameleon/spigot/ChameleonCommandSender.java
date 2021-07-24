@@ -1,7 +1,7 @@
 package dev.hypera.chameleon.spigot;
 
-import dev.hypera.chameleon.core.objects.internal.utils.AudienceWrapper;
-import dev.hypera.chameleon.core.objects.users.ChatUser;
+import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
+import dev.hypera.chameleon.core.users.ChatUser;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.command.CommandSender;
 

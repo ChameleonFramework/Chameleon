@@ -1,9 +1,9 @@
 package dev.hypera.chameleon.spigot;
 
-import dev.hypera.chameleon.core.objects.Chameleon;
-import dev.hypera.chameleon.core.objects.Plugin;
-import dev.hypera.chameleon.core.objects.commands.Command;
-import dev.hypera.chameleon.core.objects.users.ChatUser;
+import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.Plugin;
+import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.spigot.commands.SpigotCommand;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;

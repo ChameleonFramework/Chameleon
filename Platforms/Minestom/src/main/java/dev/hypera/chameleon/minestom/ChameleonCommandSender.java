@@ -1,7 +1,7 @@
 package dev.hypera.chameleon.minestom;
 
-import dev.hypera.chameleon.core.objects.internal.utils.AudienceWrapper;
-import dev.hypera.chameleon.core.objects.users.ChatUser;
+import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
+import dev.hypera.chameleon.core.users.ChatUser;
 import net.minestom.server.command.CommandSender;
 
 public class ChameleonCommandSender extends AudienceWrapper implements ChatUser {

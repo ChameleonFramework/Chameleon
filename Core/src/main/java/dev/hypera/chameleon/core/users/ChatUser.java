@@ -1,6 +1,6 @@
-package dev.hypera.chameleon.core.objects.users;
+package dev.hypera.chameleon.core.users;
 
-import dev.hypera.chameleon.core.objects.users.permissions.PermissionHolder;
+import dev.hypera.chameleon.core.users.permissions.PermissionHolder;
 import net.kyori.adventure.audience.Audience;
 
 /**

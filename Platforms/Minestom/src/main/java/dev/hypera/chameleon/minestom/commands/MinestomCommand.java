@@ -1,6 +1,6 @@
 package dev.hypera.chameleon.minestom.commands;
 
-import dev.hypera.chameleon.core.objects.commands.Command;
+import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.minestom.ChameleonCommandSender;
 
 public class MinestomCommand extends net.minestom.server.command.builder.Command {

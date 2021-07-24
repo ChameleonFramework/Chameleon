@@ -1,9 +1,9 @@
 package dev.hypera.chameleon.minestom;
 
-import dev.hypera.chameleon.core.objects.Chameleon;
-import dev.hypera.chameleon.core.objects.Plugin;
-import dev.hypera.chameleon.core.objects.commands.Command;
-import dev.hypera.chameleon.core.objects.users.ChatUser;
+import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.Plugin;
+import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.minestom.commands.MinestomCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;

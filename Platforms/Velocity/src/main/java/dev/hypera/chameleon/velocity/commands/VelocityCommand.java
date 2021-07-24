@@ -1,7 +1,7 @@
 package dev.hypera.chameleon.velocity.commands;
 
 import com.velocitypowered.api.command.SimpleCommand;
-import dev.hypera.chameleon.core.objects.commands.Command;
+import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.velocity.ChameleonCommandSource;
 
 import java.util.List;

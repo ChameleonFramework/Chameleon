@@ -1,4 +1,4 @@
-package dev.hypera.chameleon.core.objects;
+package dev.hypera.chameleon.core;
 
 public abstract class Plugin {
 

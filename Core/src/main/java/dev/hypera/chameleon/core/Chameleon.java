@@ -1,7 +1,7 @@
-package dev.hypera.chameleon.core.objects;
+package dev.hypera.chameleon.core;
 
-import dev.hypera.chameleon.core.objects.commands.Command;
-import dev.hypera.chameleon.core.objects.users.ChatUser;
+import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.users.ChatUser;
 
 import java.lang.reflect.InvocationTargetException;
 

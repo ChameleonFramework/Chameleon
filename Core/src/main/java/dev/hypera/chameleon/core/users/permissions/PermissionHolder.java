@@ -1,4 +1,4 @@
-package dev.hypera.chameleon.core.objects.users.permissions;
+package dev.hypera.chameleon.core.users.permissions;
 
 public interface PermissionHolder {
 

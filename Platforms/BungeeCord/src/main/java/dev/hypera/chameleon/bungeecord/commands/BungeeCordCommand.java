@@ -2,7 +2,7 @@ package dev.hypera.chameleon.bungeecord.commands;
 
 import dev.hypera.chameleon.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.bungeecord.ChameleonCommandSender;
-import dev.hypera.chameleon.core.objects.commands.Command;
+import dev.hypera.chameleon.core.commands.Command;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.TabExecutor;
 
