@@ -1,6 +1,7 @@
 package dev.hypera.chameleon.bungeecord;
 
 import dev.hypera.chameleon.bungeecord.commands.BungeeCordCommand;
+import dev.hypera.chameleon.bungeecord.users.ChameleonCommandSender;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
@@ -33,7 +34,7 @@ public class BungeeCordChameleon extends Chameleon {
 
     @Override
     public ChatUser getConsoleSender() {
-        return new ChameleonCommandSender(adventure, bungeePlugin.getProxy().getConsole());
+        return new ChameleonCommandSender(this, bungeePlugin.getProxy().getConsole());
     }
 
 }

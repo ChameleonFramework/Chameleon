@@ -5,6 +5,7 @@ import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.spigot.commands.SpigotCommand;
+import dev.hypera.chameleon.spigot.users.ChameleonCommandSender;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
@@ -46,7 +47,7 @@ public class SpigotChameleon extends Chameleon {
 
     @Override
     public ChatUser getConsoleSender() {
-        return null;
+        return new ChameleonCommandSender(this, Bukkit.getConsoleSender());
     }
 
 }

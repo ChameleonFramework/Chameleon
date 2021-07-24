@@ -1,16 +1,18 @@
-package dev.hypera.chameleon.bungeecord;
+package dev.hypera.chameleon.spigot.users;
 
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ChatUser;
-import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
-import net.md_5.bungee.api.CommandSender;
+import dev.hypera.chameleon.spigot.SpigotChameleon;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.ApiStatus;
 
 public class ChameleonCommandSender extends AudienceWrapper implements ChatUser {
 
     private final CommandSender sender;
 
-    public ChameleonCommandSender(BungeeAudiences adventure, CommandSender sender) {
-        super(adventure.sender(sender));
+    @ApiStatus.Internal
+    public ChameleonCommandSender(SpigotChameleon chameleon, CommandSender sender) {
+        super(chameleon.getAdventure().sender(sender));
         this.sender = sender;
     }
 

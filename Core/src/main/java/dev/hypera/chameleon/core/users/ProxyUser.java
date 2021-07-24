@@ -5,6 +5,4 @@ package dev.hypera.chameleon.core.users;
  */
 public interface ProxyUser extends User {
 
-    void sendToServer(String server);
-
 }

@@ -6,6 +6,7 @@ import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.velocity.commands.VelocityCommand;
+import dev.hypera.chameleon.velocity.users.ChameleonCommandSource;
 
 public class VelocityChameleon extends Chameleon {
 

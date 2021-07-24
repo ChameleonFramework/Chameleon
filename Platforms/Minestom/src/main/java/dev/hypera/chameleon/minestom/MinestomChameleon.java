@@ -5,6 +5,7 @@ import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.minestom.commands.MinestomCommand;
+import dev.hypera.chameleon.minestom.users.ChameleonCommandSender;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 

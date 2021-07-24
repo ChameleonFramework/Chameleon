@@ -1,7 +1,7 @@
 package dev.hypera.chameleon.bungeecord.commands;
 
 import dev.hypera.chameleon.bungeecord.BungeeCordChameleon;
-import dev.hypera.chameleon.bungeecord.ChameleonCommandSender;
+import dev.hypera.chameleon.bungeecord.users.BungeeCordUserManager;
 import dev.hypera.chameleon.core.commands.Command;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.TabExecutor;
@@ -19,12 +19,12 @@ public class BungeeCordCommand extends net.md_5.bungee.api.plugin.Command implem
 
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
-        command.execute(new ChameleonCommandSender(chameleon.getAdventure(), commandSender), strings);
+        command.execute(BungeeCordUserManager.getUser(chameleon, commandSender), strings);
     }
 
     @Override
     public Iterable<String> onTabComplete(CommandSender commandSender, String[] strings) {
-        return command.tabComplete(new ChameleonCommandSender(chameleon.getAdventure(), commandSender), strings);
+        return command.tabComplete(BungeeCordUserManager.getUser(chameleon, commandSender), strings);
     }
 
     public Command getCommand() {
