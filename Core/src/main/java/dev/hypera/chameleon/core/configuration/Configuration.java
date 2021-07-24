@@ -21,38 +21,18 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.core;
+package dev.hypera.chameleon.core.configuration;
 
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.core.users.ChatUser;
-import org.jetbrains.annotations.NotNull;
+import java.util.List;
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
+public interface Configuration {
 
-public abstract class Chameleon {
-
-    protected final @NotNull Plugin plugin;
-
-    public Chameleon(@NotNull Class<? extends Plugin> pluginClass) throws InstantiationException {
-        try {
-            this.plugin = pluginClass.getConstructor(Chameleon.class).newInstance(this);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new InstantiationException("Failed to initialise instance of " + pluginClass.getSimpleName());
-        }
-    }
-
-    public void onEnable() {
-        plugin.onEnable();
-    }
-    public void onDisable() {
-        plugin.onDisable();
-    }
-
-    public abstract File getDataFolder();
-
-    public abstract void registerCommand(@NotNull Command command);
-
-    public abstract @NotNull ChatUser getConsoleSender();
+    <T> T get(String path, Class<T> type);
+    Object get(String path);
+    String getString(String path);
+    int getInt(String path);
+    long getLong(String path);
+    boolean getBoolean(String path);
+    List<?> getList(String path);
 
 }
