@@ -12,6 +12,7 @@
     <groupId>dev.hypera.chameleon</groupId>
     <artifactId>Platforms</artifactId>
     <packaging>pom</packaging>
+
     <modules>
         <module>BungeeCord</module>
         <module>Spigot</module>
