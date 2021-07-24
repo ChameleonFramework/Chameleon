@@ -62,6 +62,16 @@ public class YamlConfiguration implements Configuration {
     }
 
     @Override
+    public Class<?> getType(String path) {
+        return config.get(path).getClass();
+    }
+
+    @Override
+    public boolean isType(String path, Class<?> type) {
+        return type.isInstance(config.get(path));
+    }
+
+    @Override
     public <T> T get(String path, Class<T> type) {
         return type.cast(config.get(path));
     }
@@ -79,6 +89,11 @@ public class YamlConfiguration implements Configuration {
     @Override
     public int getInt(String path) {
         return (int) config.get(path);
+    }
+
+    @Override
+    public double getDouble(String path) {
+        return (double) config.get(path);
     }
 
     @Override

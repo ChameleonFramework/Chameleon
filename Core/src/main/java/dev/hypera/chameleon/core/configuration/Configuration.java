@@ -27,10 +27,13 @@ import java.util.List;
 
 public interface Configuration {
 
+    Class<?> getType(String path);
+    boolean isType(String path, Class<?> type);
     <T> T get(String path, Class<T> type);
     Object get(String path);
     String getString(String path);
     int getInt(String path);
+    double getDouble(String path);
     long getLong(String path);
     boolean getBoolean(String path);
     List<?> getList(String path);
