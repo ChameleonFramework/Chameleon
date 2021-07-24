@@ -1,6 +1,5 @@
 <div style="text-align: center;">
-    <h1>Chameleon</h1>
-    <img src="https://i.hypera.dev/chameleon-logo.png" />
+    <img src="https://i.hypera.dev/assets/chameleon@750x150.png" />
     <h4>Cross-platform Minecraft plugin creation library.</h4>
 </div>
 
