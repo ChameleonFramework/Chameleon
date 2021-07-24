@@ -1,9 +1,10 @@
 package dev.hypera.chameleon.velocity;
 
 import com.velocitypowered.api.proxy.ProxyServer;
+import org.jetbrains.annotations.NotNull;
 
 public interface VelocityPlugin {
 
-    ProxyServer getServer();
+    @NotNull ProxyServer getServer();
 
 }

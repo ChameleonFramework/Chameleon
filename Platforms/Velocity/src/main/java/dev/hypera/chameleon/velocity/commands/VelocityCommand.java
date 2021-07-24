@@ -3,14 +3,15 @@ package dev.hypera.chameleon.velocity.commands;
 import com.velocitypowered.api.command.SimpleCommand;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.velocity.ChameleonCommandSource;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class VelocityCommand implements SimpleCommand {
 
-    private final Command command;
+    private final @NotNull Command command;
 
-    public VelocityCommand(Command command) {
+    public VelocityCommand(@NotNull Command command) {
         this.command = command;
     }
 

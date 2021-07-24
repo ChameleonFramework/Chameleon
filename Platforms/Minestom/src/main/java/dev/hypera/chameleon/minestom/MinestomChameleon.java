@@ -7,27 +7,28 @@ import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.minestom.commands.MinestomCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
+import org.jetbrains.annotations.NotNull;
 
 public class MinestomChameleon extends Chameleon {
 
-    private final Extension extension;
+    private final @NotNull Extension extension;
 
-    public MinestomChameleon(Class<? extends Plugin> pluginClass, Extension extension) throws InstantiationException {
+    public MinestomChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull Extension extension) throws InstantiationException {
         super(pluginClass);
         this.extension = extension;
     }
 
-    public Extension getExtension() {
+    public @NotNull Extension getExtension() {
         return extension;
     }
 
     @Override
-    public void registerCommand(Command command) {
+    public void registerCommand(@NotNull Command command) {
         MinecraftServer.getCommandManager().register(new MinestomCommand(command));
     }
 
     @Override
-    public ChatUser getConsoleSender() {
+    public @NotNull ChatUser getConsoleSender() {
         return new ChameleonCommandSender(MinecraftServer.getCommandManager().getConsoleSender());
     }
 

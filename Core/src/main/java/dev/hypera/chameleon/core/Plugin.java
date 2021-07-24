@@ -1,14 +1,16 @@
 package dev.hypera.chameleon.core;
 
+import org.jetbrains.annotations.NotNull;
+
 public abstract class Plugin {
 
     protected final Chameleon chameleon;
 
-    public Plugin(Chameleon chameleon) {
+    public Plugin(@NotNull Chameleon chameleon) {
         this.chameleon = chameleon;
     }
 
-    public Chameleon getChameleon() {
+    public @NotNull Chameleon getChameleon() {
         return chameleon;
     }
 

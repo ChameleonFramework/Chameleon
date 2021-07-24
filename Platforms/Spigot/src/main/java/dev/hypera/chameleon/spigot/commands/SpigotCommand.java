@@ -11,10 +11,10 @@ import java.util.List;
 
 public class SpigotCommand extends org.bukkit.command.Command {
 
-    private final SpigotChameleon chameleon;
-    private final Command command;
+    private final @NotNull SpigotChameleon chameleon;
+    private final @NotNull Command command;
 
-    public SpigotCommand(SpigotChameleon chameleon, Command command) {
+    public SpigotCommand(@NotNull SpigotChameleon chameleon, @NotNull Command command) {
         super(command.getName(), "", "", Arrays.asList(command.getAliases()));
         this.chameleon = chameleon;
         this.command = command;

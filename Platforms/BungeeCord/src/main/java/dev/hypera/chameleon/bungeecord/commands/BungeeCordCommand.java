@@ -5,13 +5,14 @@ import dev.hypera.chameleon.bungeecord.ChameleonCommandSender;
 import dev.hypera.chameleon.core.commands.Command;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.TabExecutor;
+import org.jetbrains.annotations.NotNull;
 
 public class BungeeCordCommand extends net.md_5.bungee.api.plugin.Command implements TabExecutor {
 
-    private final BungeeCordChameleon chameleon;
-    private final Command command;
+    private final @NotNull BungeeCordChameleon chameleon;
+    private final @NotNull Command command;
 
-    public BungeeCordCommand(BungeeCordChameleon chameleon, Command command) {
+    public BungeeCordCommand(@NotNull BungeeCordChameleon chameleon, @NotNull Command command) {
         super(command.getName(), null, command.getAliases());
         this.chameleon = chameleon;
         this.command = command;
@@ -27,7 +28,7 @@ public class BungeeCordCommand extends net.md_5.bungee.api.plugin.Command implem
         return command.tabComplete(new ChameleonCommandSender(chameleon.getAdventure(), commandSender), strings);
     }
 
-    public Command getCommand() {
+    public @NotNull Command getCommand() {
         return command;
     }
 

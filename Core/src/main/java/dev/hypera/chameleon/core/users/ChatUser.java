@@ -7,4 +7,5 @@ import net.kyori.adventure.audience.Audience;
  * Something that can send messages, receive messages and have permissions.
  */
 public interface ChatUser extends Audience, PermissionHolder {
+
 }
