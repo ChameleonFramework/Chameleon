@@ -16,6 +16,7 @@
         <module>BungeeCord</module>
         <module>Spigot</module>
         <module>Velocity</module>
+        <module>Minestom</module>
     </modules>
 
     <properties>
