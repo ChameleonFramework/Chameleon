@@ -7,7 +7,7 @@
 
 
 ### Welcome
-Welcome to [Chameleon](https://github.com/HyperaOfficial/Chameleon), first off, thank you for taking the time to consider contributing.
+Welcome to [Chameleon](https://github.com/HyperaOfficial/Chameleon), first off, thank you for taking the time to consider contributing.  
 Please be sure to read this repository's [Code of Conduct] before contributing.
 
 
@@ -17,11 +17,13 @@ Please don't create an issue to ask a question, instead please contact us on [Di
 
 ### Getting started
 **Note**: All code contributions to this repository must be under the [MIT License].  
-If you contribute more than 10% of a file, please add your name and email address to the copyright notice, in the format: `Copyright (c) 2021 My Name <myname@email.com>`
+If you contribute more than 10% of a file, please add your name and email address to the copyright notice, in the format:  
+`Copyright (c) 2021 My Name <myname@email.com>`
 
 
-**Working on your first Pull Request?**  
+*Working on your first Pull Request?*  
 You can learn how from this *free* series: [How to Contribute to an Open Source Project on GitHub](https://kcd.im/pull-request)
+
 
 If you wish to contribute code to this repository, please:
 1. Fork the repository,
