@@ -29,6 +29,8 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +48,9 @@ public class YamlConfiguration implements Configuration {
             this.file = new File(dataFolder, filename);
             if (!file.exists()) {
                 if (copyDefaultFromResources) {
-                    // TODO: Copy from resources.
+                    InputStream defaultFromResources = YamlConfiguration.class.getClassLoader().getResourceAsStream(filename);
+                    Files.copy(defaultFromResources, file.toPath());
+                    defaultFromResources.close();
                 } else file.createNewFile();
             }
             FileReader reader = new FileReader(file);
