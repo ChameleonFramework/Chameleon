@@ -92,12 +92,14 @@ public void onEnable() {
 
 #### ChameleonProject.java
 ```java
-private Configuration config;
+private static Configuration yamlConfig;
+private static Configuration jsonTest;
 
 @Override
 public void onEnable() {
     // ...
-    config = new YamlConfiguration(chameleon, "config.yml", true);
+	yamlConfig = new YamlConfiguration(chameleon, "config.yml", true);
+	jsonTest = new JsonConfiguration(chameleon, "test.json", true);
     // ...
 }
 ```
