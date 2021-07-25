@@ -84,9 +84,11 @@ public void onEnable() {
 ## Configuration
 * [x] Data folders
 * [x] Config
-* [x] YamlConfig
+* [x] Yaml support
+* [x] Json support
 * [x] Copy default from resources
 * [ ] Setters
+* [ ] Saving
 
 #### ChameleonProject.java
 ```java

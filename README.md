@@ -22,6 +22,15 @@ Chameleon plans to support every platform in this list. If you have ideas for ot
 As this is hard to explain, we have created an [Example Project][Example]. In short, you have a common module with non-platform-specific code (this would only be Chameleon code), then you have a module for each platform you would like to support.  
 You can also check out our [Development Roadmap][Roadmap] or various examples of [BungeeCord support][BungeeCord-project], [Spigot support][Spigot-project], [Velocity support][Velocity-project] and [Minestom support][Minestom-project] for reference.
 
+### Project Structure
+ * **Core** - Most of Chameleon's non-platform-specific code belongs here.
+ * **Platforms** - Any platform-specific code belongs inside here.
+   * *BungeeCord* - Any code that interacts with BungeeCord belongs here.
+   * *Minestom* - Any code that interacts with Minestom belongs here.
+   * *Spigot* - Any code that interacts with Bukkit or Spigot belongs here.
+   * *Velocity* - Any code that interacts with Velocity belongs here.
+
+
 ### Contributing
 Please read [CONTRIBUTING].
 
