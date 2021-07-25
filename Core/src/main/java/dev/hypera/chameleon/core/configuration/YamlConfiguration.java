@@ -57,7 +57,7 @@ public class YamlConfiguration implements Configuration {
 
             if (!file.exists()) {
                 if (copyDefaultFromResources) {
-                    try (InputStream defaultResource = YamlConfiguration.class.getResourceAsStream(filename)) {
+                    try (InputStream defaultResource = YamlConfiguration.class.getResourceAsStream("/" + filename)) {
                         if (null == defaultResource) {
                             throw new IllegalStateException("Failed to load resource '" + filename + "'");
                         }

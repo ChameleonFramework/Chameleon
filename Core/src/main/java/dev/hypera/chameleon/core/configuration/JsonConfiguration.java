@@ -58,7 +58,7 @@ public class JsonConfiguration implements Configuration {
 
 			if (!file.exists()) {
 				if (copyDefaultFromResources) {
-					try (InputStream defaultResource = JsonConfiguration.class.getResourceAsStream(filename)) {
+					try (InputStream defaultResource = JsonConfiguration.class.getResourceAsStream("/" + filename)) {
 						if (null == defaultResource) {
 							throw new IllegalStateException("Failed to load resource '" + filename + "'");
 						}

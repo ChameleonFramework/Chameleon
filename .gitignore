@@ -3,5 +3,6 @@
 *.ipr
 *.iws
 
+target/
 **/target/
 **/**/target/
