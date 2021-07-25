@@ -1,6 +1,7 @@
 /*
  * Chameleon - Cross-platform Minecraft plugin creation library
  *  Copyright (c) 2021 SLLCoding <luisjk266@gmail.com>
+ *  Copyright (c) 2021 Joshua Sing <joshua@hypera.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +24,30 @@
 
 package dev.hypera.chameleon.core.configuration;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 public interface Configuration {
 
-    Class<?> getType(String path);
-    boolean isType(String path, Class<?> type);
-    <T> T get(String path, Class<T> type);
-    Object get(String path);
-    String getString(String path);
-    int getInt(String path);
-    double getDouble(String path);
-    long getLong(String path);
-    boolean getBoolean(String path);
-    List<?> getList(String path);
+    @Nullable Class<?> getType(@NotNull String path);
+    @Nullable Class<?> getType(@NotNull String path, @Nullable Class<?> def);
+    boolean isType(@NotNull String path, @NotNull Class<?> type);
+    @Nullable <T> T get(@NotNull String path, @NotNull Class<T> type);
+    @Nullable Object get(@NotNull String path);
+    @Nullable Object get(@NotNull String path, @Nullable Object def);
+    @Nullable String getString(@NotNull String path);
+    @NotNull String getString(@NotNull String path, @NotNull String def);
+    @Nullable Integer getInt(@NotNull String path);
+    int getInt(@NotNull String path, int def);
+    @Nullable Double getDouble(@NotNull String path);
+    double getDouble(@NotNull String path, double def);
+    @Nullable Long getLong(@NotNull String path);
+    long getLong(@NotNull String path, long def);
+    @Nullable Boolean getBoolean(@NotNull String path);
+    boolean getBoolean(@NotNull String path, boolean def);
+    @Nullable List<?> getList(@NotNull String path);
+    @NotNull List<?> getList(@NotNull String path, @NotNull List<?> def);
 
 }

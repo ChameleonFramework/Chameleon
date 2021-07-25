@@ -40,7 +40,7 @@ Bug reports should be submitted to the [Official Feedback Site].
 Feature requests should be submitted to the [Official Feedback Site].
 
 ### Code review
-All contributions, including contributions by the Hypera developers, require review.
+All contributions, including contributions by the Hypera developers, require review.  
 Before a pull request can be merged, it **must** be reviewed by at least two of the following accounts:
  - [@joshuasing](https://github.com/joshuasing)
  - [@SLLCoding](https://github.com/SLLCoding)

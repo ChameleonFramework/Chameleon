@@ -41,6 +41,7 @@
     </properties>
 
     <dependencies>
+        <!-- Kyori Adventure -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-api</artifactId>
@@ -51,10 +52,41 @@
             <artifactId>adventure-text-serializer-legacy</artifactId>
             <version>4.8.0</version>
         </dependency>
+
+        <!-- Snake YAML -->
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
             <version>1.29</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>joda-time</groupId>
+                    <artifactId>joda-time</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache</groupId>
+                    <artifactId>velocity</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- JSON-Simple -->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

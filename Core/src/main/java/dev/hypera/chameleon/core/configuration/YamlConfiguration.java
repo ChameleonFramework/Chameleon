@@ -1,6 +1,7 @@
 /*
  * Chameleon - Cross-platform Minecraft plugin creation library
  *  Copyright (c) 2021 SLLCoding <luisjk266@gmail.com>
+ *  Copyright (c) 2021 Joshua Sing <joshua@hypera.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +25,8 @@
 package dev.hypera.chameleon.core.configuration;
 
 import dev.hypera.chameleon.core.Chameleon;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -31,6 +34,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -40,75 +44,159 @@ public class YamlConfiguration implements Configuration {
     private Map<String, Object> config;
 
     private static final Yaml yaml = new Yaml();
+    private static final String SEPARATOR = ".";
 
     public YamlConfiguration(Chameleon chameleon, String filename, boolean copyDefaultFromResources) {
         try {
             File dataFolder = chameleon.getDataFolder();
-            if (!dataFolder.exists()) dataFolder.mkdirs();
-            this.file = new File(dataFolder, filename);
+            if (!dataFolder.exists()) {
+                dataFolder.mkdirs();
+            }
+
+            file = new File(dataFolder, filename);
+
             if (!file.exists()) {
                 if (copyDefaultFromResources) {
-                    InputStream defaultFromResources = YamlConfiguration.class.getClassLoader().getResourceAsStream(filename);
-                    Files.copy(defaultFromResources, file.toPath());
-                    defaultFromResources.close();
-                } else file.createNewFile();
+                    try (InputStream defaultResource = YamlConfiguration.class.getResourceAsStream(filename)) {
+                        if (null == defaultResource) {
+                            throw new IllegalStateException("Failed to load resource '" + filename + "'");
+                        }
+                        Files.copy(defaultResource, file.toPath());
+                    }
+                } else {
+                    file.createNewFile();
+                }
             }
+
             FileReader reader = new FileReader(file);
             config = yaml.load(reader);
             reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
     @Override
-    public Class<?> getType(String path) {
-        return config.get(path).getClass();
+    public @Nullable Class<?> getType(@NotNull String path) {
+        Object obj = get(path);
+        return (null == obj ? null : obj.getClass());
     }
 
     @Override
-    public boolean isType(String path, Class<?> type) {
-        return type.isInstance(config.get(path));
+    public @Nullable Class<?> getType(@NotNull String path, @Nullable Class<?> def) {
+        Object obj = get(path);
+        return (null == obj ? def : obj.getClass());
     }
 
     @Override
-    public <T> T get(String path, Class<T> type) {
-        return type.cast(config.get(path));
+    public boolean isType(@NotNull String path, @NotNull Class<?> type) {
+        return type.isInstance(get(path));
     }
 
     @Override
-    public Object get(String path) {
-        return config.get(path);
+    public <T> @Nullable T get(@NotNull String path, @NotNull Class<T> type) {
+        return type.cast(get(path));
     }
 
     @Override
-    public String getString(String path) {
-        return (String) config.get(path);
+    public @Nullable Object get(@NotNull String path) {
+        return get(path, (Object) null);
     }
 
     @Override
-    public int getInt(String path) {
-        return (int) config.get(path);
+    public @Nullable Object get(@NotNull String path, @Nullable Object def) {
+        if (path.contains(SEPARATOR)) {
+            List<String> parts = Arrays.asList(path.split("\\" + SEPARATOR));
+
+            if (parts.size() < 2 || !(config.get(parts.get(0)) instanceof Map<?, ?>)) {
+                return def;
+            }
+
+            Map<?, ?> section = (Map<?, ?>) config.get(parts.get(0));
+            Object output = null;
+
+            for (int i = 1; i < parts.size(); i++) {
+                if (null == section.get(parts.get(i))) {
+                    break;
+                }
+
+                if (i == parts.size() - 1) {
+                    output = section.get(parts.get(i));
+                    break;
+                }
+
+                if (section.get(parts.get(i)) instanceof Map<?, ?>) {
+                    section = (Map<?, ?>) section.get(parts.get(i));
+                    continue;
+                }
+
+                break;
+            }
+
+            return null == output ? def : output;
+        } else {
+            return config.getOrDefault(path, def);
+        }
     }
 
     @Override
-    public double getDouble(String path) {
-        return (double) config.get(path);
+    public @Nullable String getString(@NotNull String path) {
+        return (String) get(path);
     }
 
     @Override
-    public long getLong(String path) {
-        return (long) config.get(path);
+    public @NotNull String getString(@NotNull String path, @NotNull String def) {
+        return (String) get(path, def);
     }
 
     @Override
-    public boolean getBoolean(String path) {
-        return (boolean) config.get(path);
+    public @Nullable Integer getInt(@NotNull String path) {
+        return (Integer) get(path);
     }
 
     @Override
-    public List<?> getList(String path) {
-        return (List<?>) config.get(path);
+    public int getInt(@NotNull String path, int def) {
+        return (int) get(path, def);
+    }
+
+    @Override
+    public @Nullable Double getDouble(@NotNull String path) {
+        return (Double) get(path);
+    }
+
+    @Override
+    public double getDouble(@NotNull String path, double def) {
+        return (double) get(path, def);
+    }
+
+    @Override
+    public @Nullable Long getLong(@NotNull String path) {
+        return (Long) get(path);
+    }
+
+    @Override
+    public long getLong(@NotNull String path, long def) {
+        return (long) get(path, def);
+    }
+
+    @Override
+    public @Nullable Boolean getBoolean(@NotNull String path) {
+        return (Boolean) get(path);
+    }
+
+    @Override
+    public boolean getBoolean(@NotNull String path, boolean def) {
+        return (boolean) get(path, def);
+    }
+
+    @Override
+    public @Nullable List<?> getList(@NotNull String path) {
+        return (List<?>) get(path);
+    }
+
+    @Override
+    public @NotNull List<?> getList(@NotNull String path, @NotNull List<?> def) {
+        return (List<?>) get(path, def);
     }
 
 }
