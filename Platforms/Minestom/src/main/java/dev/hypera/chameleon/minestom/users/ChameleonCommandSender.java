@@ -21,17 +21,39 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.minestom.commands;
+package dev.hypera.chameleon.minestom.users;
 
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.minestom.users.MinestomUserManager;
+import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
+import dev.hypera.chameleon.core.users.ChatUser;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.permission.Permission;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-public class MinestomCommand extends net.minestom.server.command.builder.Command {
+public class ChameleonCommandSender extends AudienceWrapper implements ChatUser {
 
-    public MinestomCommand(@NotNull Command command) {
-        super(command.getName(), command.getAliases());
-        setDefaultExecutor((sender, context) -> command.execute(MinestomUserManager.getUser(sender), context.getInput().replace(context.getCommandName() + " ", "").split(" ")));
+    private final @NotNull CommandSender sender;
+
+    @ApiStatus.Internal
+    public ChameleonCommandSender(@NotNull CommandSender sender) {
+        super(sender);
+        this.sender = sender;
+    }
+
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return sender.hasPermission(permission);
+    }
+
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        if (has) sender.addPermission(new Permission(permission));
+        else sender.removePermission(permission);
+    }
+
+    @Override
+    public String getName() {
+        return "Console";
     }
 
 }

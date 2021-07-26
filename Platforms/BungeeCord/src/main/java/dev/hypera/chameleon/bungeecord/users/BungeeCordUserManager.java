@@ -21,17 +21,18 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.minestom.commands;
+package dev.hypera.chameleon.bungeecord.users;
 
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.minestom.users.MinestomUserManager;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.bungeecord.BungeeCordChameleon;
+import dev.hypera.chameleon.core.users.ChatUser;
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class MinestomCommand extends net.minestom.server.command.builder.Command {
+public class BungeeCordUserManager {
 
-    public MinestomCommand(@NotNull Command command) {
-        super(command.getName(), command.getAliases());
-        setDefaultExecutor((sender, context) -> command.execute(MinestomUserManager.getUser(sender), context.getInput().replace(context.getCommandName() + " ", "").split(" ")));
+    public static ChatUser getUser(BungeeCordChameleon chameleon, CommandSender user) {
+        if (user instanceof ProxiedPlayer) return new ChameleonProxiedPlayer(chameleon, (ProxiedPlayer) user);
+        else return new ChameleonCommandSender(chameleon, user);
     }
 
 }

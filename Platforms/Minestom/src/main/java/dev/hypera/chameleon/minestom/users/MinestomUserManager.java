@@ -21,17 +21,17 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.minestom.commands;
+package dev.hypera.chameleon.minestom.users;
 
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.minestom.users.MinestomUserManager;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.core.users.ChatUser;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.entity.Player;
 
-public class MinestomCommand extends net.minestom.server.command.builder.Command {
+public class MinestomUserManager {
 
-    public MinestomCommand(@NotNull Command command) {
-        super(command.getName(), command.getAliases());
-        setDefaultExecutor((sender, context) -> command.execute(MinestomUserManager.getUser(sender), context.getInput().replace(context.getCommandName() + " ", "").split(" ")));
+    public static ChatUser getUser(CommandSender user) {
+        if (user instanceof Player) return new ChameleonPlayer((Player) user);
+        else return new ChameleonCommandSender(user);
     }
 
 }

@@ -21,17 +21,40 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.minestom.commands;
+package dev.hypera.chameleon.spigot.users;
 
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.minestom.users.MinestomUserManager;
+import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
+import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.spigot.SpigotChameleon;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-public class MinestomCommand extends net.minestom.server.command.builder.Command {
+public class ChameleonCommandSender extends AudienceWrapper implements ChatUser {
 
-    public MinestomCommand(@NotNull Command command) {
-        super(command.getName(), command.getAliases());
-        setDefaultExecutor((sender, context) -> command.execute(MinestomUserManager.getUser(sender), context.getInput().replace(context.getCommandName() + " ", "").split(" ")));
+    private final @NotNull SpigotChameleon chameleon;
+    private final @NotNull CommandSender sender;
+
+    @ApiStatus.Internal
+    public ChameleonCommandSender(@NotNull SpigotChameleon chameleon, @NotNull CommandSender sender) {
+        super(chameleon.getAdventure().sender(sender));
+        this.chameleon = chameleon;
+        this.sender = sender;
     }
 
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return sender.hasPermission(permission);
+    }
+
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        // TODO: Complete this and make it work.
+        System.err.println("ChameleonCommandSender#setPermission(String, boolean) is not implemented yet.");
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
 }

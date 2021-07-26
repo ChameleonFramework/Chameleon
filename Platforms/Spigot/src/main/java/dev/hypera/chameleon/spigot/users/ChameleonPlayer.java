@@ -21,17 +21,39 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.minestom.commands;
+package dev.hypera.chameleon.spigot.users;
 
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.minestom.users.MinestomUserManager;
+import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
+import dev.hypera.chameleon.core.users.ServerUser;
+import dev.hypera.chameleon.spigot.SpigotChameleon;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-public class MinestomCommand extends net.minestom.server.command.builder.Command {
+public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
 
-    public MinestomCommand(@NotNull Command command) {
-        super(command.getName(), command.getAliases());
-        setDefaultExecutor((sender, context) -> command.execute(MinestomUserManager.getUser(sender), context.getInput().replace(context.getCommandName() + " ", "").split(" ")));
+    private final Player player;
+
+    @ApiStatus.Internal
+    public ChameleonPlayer(SpigotChameleon chameleon, Player player) {
+        super(chameleon.getAdventure().player(player));
+        this.player = player;
+    }
+
+    @Override
+    public boolean hasPermission(String permission) {
+        return player.hasPermission(permission);
+    }
+
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        // TODO: Complete this and make it work.
+        System.err.println("ChameleonPlayer#setPermission(String, boolean) is not implemented yet.");
+    }
+
+    @Override
+    public String getName() {
+        return player.getName();
     }
 
 }

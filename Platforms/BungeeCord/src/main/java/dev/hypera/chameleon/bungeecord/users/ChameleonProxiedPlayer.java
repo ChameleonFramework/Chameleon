@@ -21,17 +21,38 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.minestom.commands;
+package dev.hypera.chameleon.bungeecord.users;
 
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.minestom.users.MinestomUserManager;
+import dev.hypera.chameleon.bungeecord.BungeeCordChameleon;
+import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
+import dev.hypera.chameleon.core.users.ProxyUser;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-public class MinestomCommand extends net.minestom.server.command.builder.Command {
+public class ChameleonProxiedPlayer extends AudienceWrapper implements ProxyUser {
 
-    public MinestomCommand(@NotNull Command command) {
-        super(command.getName(), command.getAliases());
-        setDefaultExecutor((sender, context) -> command.execute(MinestomUserManager.getUser(sender), context.getInput().replace(context.getCommandName() + " ", "").split(" ")));
+    private final ProxiedPlayer player;
+
+    @ApiStatus.Internal
+    public ChameleonProxiedPlayer(BungeeCordChameleon chameleon, ProxiedPlayer player) {
+        super(chameleon.getAdventure().player(player));
+        this.player = player;
+    }
+
+    @Override
+    public boolean hasPermission(String permission) {
+        return player.hasPermission(permission);
+    }
+
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        player.setPermission(permission, has);
+    }
+
+    @Override
+    public String getName() {
+        return player.getName();
     }
 
 }

@@ -21,17 +21,37 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.minestom.commands;
+package dev.hypera.chameleon.velocity.users;
 
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.minestom.users.MinestomUserManager;
+import com.velocitypowered.api.command.CommandSource;
+import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
+import dev.hypera.chameleon.core.users.ChatUser;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-public class MinestomCommand extends net.minestom.server.command.builder.Command {
+public class ChameleonCommandSource extends AudienceWrapper implements ChatUser {
 
-    public MinestomCommand(@NotNull Command command) {
-        super(command.getName(), command.getAliases());
-        setDefaultExecutor((sender, context) -> command.execute(MinestomUserManager.getUser(sender), context.getInput().replace(context.getCommandName() + " ", "").split(" ")));
+    private final @NotNull CommandSource commandSource;
+
+    @ApiStatus.Internal
+    public ChameleonCommandSource(@NotNull CommandSource commandSource) {
+        super(commandSource);
+        this.commandSource = commandSource;
     }
 
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return commandSource.hasPermission(permission);
+    }
+
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        // TODO: Complete this and make it work.
+        System.err.println("ChameleonCommandSource#setPermission(String, boolean) is not implemented yet.");
+    }
+
+    @Override
+    public String getName() {
+        return "Console";
+    }
 }

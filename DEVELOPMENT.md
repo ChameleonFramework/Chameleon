@@ -1,10 +1,19 @@
+<div align="center">
+    <img src="https://i.hypera.dev/assets/chameleon@750x150.png" />
+    <p><strong>Cross-platform Minecraft plugin framework</strong></p>
+</div>
+
+-----------
+
+
+
 # Development Progress
-| Platform                                | BungeeCord | Spigot | Velocity | Minestom |
-|:---------------------------------------:|:----------:|:------:|:--------:|:--------:|
-| [Commands](#Commands)                   | ✓          | ✓      | ✓        | ✓        |
-| [Events](#Events)                       |            |        |          |          |
-| [Users](#Users)                         |            |        |          |          |
-| [Configuration](#Configuration)         |            |        |          |          |
+| Platform                                | BungeeCord | Spigot | Velocity | Minestom | Sponge |
+|:---------------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|
+| [Commands](#Commands)                   | ✓          | ✓      | ✓        | ✓        |        |
+| [Events](#Events)                       |            |        |          |          |        |
+| [Users](#Users)                         |            |        |          |          |        |
+| [Configuration](#Configuration)         | ✓          | ✓      | ✓        | ✓        |        |
 
 ### Extra Information
 All examples below are taken from [the example Chameleon project](https://github.com/HyperaOfficial/ChameleonProject).
@@ -82,19 +91,24 @@ public void onEnable() {
 * [x] AudienceWrapper
 
 ## Configuration
-* [ ] Data folders
-* [ ] Config
-* [ ] YamlConfig
-
-#### ExampleConfig.java
-```java
-// Work in progress
-```
+* [x] Data folders
+* [x] Config
+* [x] Yaml support
+* [x] Json support
+* [x] Copy default from resources
+* [ ] Setters
+* [ ] Saving
 
 #### ChameleonProject.java
 ```java
+private static Configuration yamlConfig;
+private static Configuration jsonTest;
+
 @Override
 public void onEnable() {
-    // Work in progress
+    // ...
+	yamlConfig = new YamlConfiguration(chameleon, "config.yml", true);
+	jsonTest = new JsonConfiguration(chameleon, "test.json", true);
+    // ...
 }
 ```

@@ -1,6 +1,7 @@
 /*
  * Chameleon - Cross-platform Minecraft plugin creation library
  *  Copyright (c) 2021 SLLCoding <luisjk266@gmail.com>
+ *  Copyright (c) 2021 Joshua Sing <joshua@hypera.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -21,31 +22,32 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.velocity.commands;
+package dev.hypera.chameleon.core.configuration;
 
-import com.velocitypowered.api.command.SimpleCommand;
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.velocity.users.VelocityUserManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class VelocityCommand implements SimpleCommand {
+public interface Configuration {
 
-    private final @NotNull Command command;
-
-    public VelocityCommand(@NotNull Command command) {
-        this.command = command;
-    }
-
-    @Override
-    public void execute(Invocation invocation) {
-        command.execute(VelocityUserManager.getUser(invocation.source()), invocation.arguments());
-    }
-
-    @Override
-    public List<String> suggest(Invocation invocation) {
-        return command.tabComplete(VelocityUserManager.getUser(invocation.source()), invocation.arguments());
-    }
+    @Nullable Class<?> getType(@NotNull String path);
+    @Nullable Class<?> getType(@NotNull String path, @Nullable Class<?> def);
+    boolean isType(@NotNull String path, @NotNull Class<?> type);
+    @Nullable <T> T get(@NotNull String path, @NotNull Class<T> type);
+    @Nullable Object get(@NotNull String path);
+    @Nullable Object get(@NotNull String path, @Nullable Object def);
+    @Nullable String getString(@NotNull String path);
+    @NotNull String getString(@NotNull String path, @NotNull String def);
+    @Nullable Integer getInt(@NotNull String path);
+    int getInt(@NotNull String path, int def);
+    @Nullable Double getDouble(@NotNull String path);
+    double getDouble(@NotNull String path, double def);
+    @Nullable Long getLong(@NotNull String path);
+    long getLong(@NotNull String path, long def);
+    @Nullable Boolean getBoolean(@NotNull String path);
+    boolean getBoolean(@NotNull String path, boolean def);
+    @Nullable List<?> getList(@NotNull String path);
+    @NotNull List<?> getList(@NotNull String path, @NotNull List<?> def);
 
 }
