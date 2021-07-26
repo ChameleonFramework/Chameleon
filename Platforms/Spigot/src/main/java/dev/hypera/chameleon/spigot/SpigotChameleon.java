@@ -35,6 +35,7 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.lang.reflect.Field;
 
 public class SpigotChameleon extends Chameleon {
@@ -54,6 +55,11 @@ public class SpigotChameleon extends Chameleon {
 
     public @NotNull BukkitAudiences getAdventure() {
         return adventure;
+    }
+
+    @Override
+    public File getDataFolder() {
+        return spigotPlugin.getDataFolder();
     }
 
     @Override

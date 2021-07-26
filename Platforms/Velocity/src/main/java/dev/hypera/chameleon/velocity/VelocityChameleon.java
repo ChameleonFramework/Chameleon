@@ -32,6 +32,8 @@ import dev.hypera.chameleon.velocity.commands.VelocityCommand;
 import dev.hypera.chameleon.velocity.users.ChameleonCommandSource;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
 public class VelocityChameleon extends Chameleon {
 
     private final @NotNull VelocityPlugin velocityPlugin;
@@ -39,6 +41,11 @@ public class VelocityChameleon extends Chameleon {
     public VelocityChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull VelocityPlugin velocityPlugin) throws InstantiationException {
         super(pluginClass);
         this.velocityPlugin = velocityPlugin;
+    }
+
+    @Override
+    public File getDataFolder() {
+        return velocityPlugin.getDataDirectory().toFile();
     }
 
     @Override

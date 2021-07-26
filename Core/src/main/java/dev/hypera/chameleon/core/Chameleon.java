@@ -27,6 +27,7 @@ import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class Chameleon {
@@ -47,6 +48,8 @@ public abstract class Chameleon {
     public void onDisable() {
         plugin.onDisable();
     }
+
+    public abstract File getDataFolder();
 
     public abstract void registerCommand(@NotNull Command command);
 

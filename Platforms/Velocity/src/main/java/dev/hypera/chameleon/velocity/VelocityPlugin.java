@@ -26,8 +26,11 @@ package dev.hypera.chameleon.velocity;
 import com.velocitypowered.api.proxy.ProxyServer;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Path;
+
 public interface VelocityPlugin {
 
     @NotNull ProxyServer getServer();
+    @NotNull Path getDataDirectory();
 
 }

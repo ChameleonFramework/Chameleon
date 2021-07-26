@@ -33,6 +33,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
 public class MinestomChameleon extends Chameleon {
 
     private final @NotNull Extension extension;
@@ -44,6 +46,11 @@ public class MinestomChameleon extends Chameleon {
 
     public @NotNull Extension getExtension() {
         return extension;
+    }
+
+    @Override
+    public File getDataFolder() {
+        return extension.getDataDirectory().toFile();
     }
 
     @Override
