@@ -28,6 +28,7 @@ import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ProxyUser;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 public class ChameleonProxiedPlayer extends AudienceWrapper implements ProxyUser {
 
@@ -42,6 +43,16 @@ public class ChameleonProxiedPlayer extends AudienceWrapper implements ProxyUser
     @Override
     public boolean hasPermission(String permission) {
         return player.hasPermission(permission);
+    }
+
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        player.setPermission(permission, has);
+    }
+
+    @Override
+    public String getName() {
+        return player.getName();
     }
 
 }

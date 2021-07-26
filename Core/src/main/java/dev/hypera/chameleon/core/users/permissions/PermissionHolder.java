@@ -28,5 +28,6 @@ import org.jetbrains.annotations.NotNull;
 public interface PermissionHolder {
 
     boolean hasPermission(@NotNull String permission);
+    void setPermission(@NotNull String permission, boolean has);
 
 }

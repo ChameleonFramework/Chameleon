@@ -45,4 +45,14 @@ public class ChameleonCommandSender extends AudienceWrapper implements ChatUser 
         return sender.hasPermission(permission);
     }
 
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        sender.setPermission(permission, has);
+    }
+
+    @Override
+    public String getName() {
+        return sender.getName();
+    }
+
 }
