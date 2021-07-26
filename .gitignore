@@ -4,5 +4,4 @@
 *.iws
 
 target/
-**/target/
-**/**/target/
+dependency-reduced-pom.xml

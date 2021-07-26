@@ -29,18 +29,82 @@
 
     <groupId>dev.hypera</groupId>
     <artifactId>Chameleon</artifactId>
-    <packaging>pom</packaging>
     <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Chameleon</name>
+    <description>Cross-platform Minecraft plugin framework</description>
+    <url>https://github.com/HyperaOfficial/Chameleon</url>
+
     <modules>
         <module>Core</module>
         <module>Platforms</module>
     </modules>
 
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>joshuasing</id>
+            <name>Joshua Sing</name>
+            <email>joshua@hypera.dev</email>
+        </developer>
+        <developer>
+            <id>sllcoding</id>
+            <name>SLLCoding</name>
+            <email>luisjk266@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/HyperaOfficial/Chameleon.git</connection>
+        <developerConnection>scm:git:ssh://github.com:HyperaOfficial/Chameleon.git</developerConnection>
+        <url>http://github.com/HyperaOfficial/Chameleon/tree/master</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/HyperaOfficial/Chameleon/issues</url>
+    </issueManagement>
+
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <java.version>8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>hypera-snapshots</id>
+            <url>https://repo.hypera.dev/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>hypera-releases</id>
+            <url>https://repo.hypera.dev/releases/</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <defaultGoal>clean deploy</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
