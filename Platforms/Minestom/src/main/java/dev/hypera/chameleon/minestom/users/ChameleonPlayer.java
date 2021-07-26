@@ -26,7 +26,9 @@ package dev.hypera.chameleon.minestom.users;
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ServerUser;
 import net.minestom.server.entity.Player;
+import net.minestom.server.permission.Permission;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
 
@@ -41,6 +43,17 @@ public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
     @Override
     public boolean hasPermission(String permission) {
         return player.hasPermission(permission);
+    }
+
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        if (has) player.addPermission(new Permission(permission));
+        else player.removePermission(permission);
+    }
+
+    @Override
+    public String getName() {
+        return player.getUsername();
     }
 
 }

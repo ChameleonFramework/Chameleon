@@ -26,6 +26,7 @@ package dev.hypera.chameleon.minestom.users;
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ChatUser;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.permission.Permission;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,6 +43,17 @@ public class ChameleonCommandSender extends AudienceWrapper implements ChatUser 
     @Override
     public boolean hasPermission(@NotNull String permission) {
         return sender.hasPermission(permission);
+    }
+
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        if (has) sender.addPermission(new Permission(permission));
+        else sender.removePermission(permission);
+    }
+
+    @Override
+    public String getName() {
+        return "Console";
     }
 
 }
