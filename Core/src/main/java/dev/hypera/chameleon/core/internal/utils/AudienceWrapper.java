@@ -187,13 +187,13 @@ public class AudienceWrapper implements Audience {
     }
 
     @Override
-    public void stopSound(@NotNull Sound sound) {
-        audience.stopSound(sound);
+    public void playSound(@NotNull Sound sound, @NotNull Sound.Emitter emitter) {
+        audience.playSound(sound, emitter);
     }
 
     @Override
-    public void playSound(@NotNull Sound sound, Sound.@NotNull Emitter emitter) {
-        audience.playSound(sound, emitter);
+    public void stopSound(@NotNull Sound sound) {
+        audience.stopSound(sound);
     }
 
     @Override
