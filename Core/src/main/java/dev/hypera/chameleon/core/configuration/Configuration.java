@@ -1,5 +1,6 @@
 /*
  * Chameleon - Cross-platform Minecraft plugin creation library
+ *  Copyright (c) 2021 SLLCoding <luisjk266@gmail.com>
  *  Copyright (c) 2021 Joshua Sing <joshua@hypera.dev>
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,25 +22,32 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.internal.utils;
+package dev.hypera.chameleon.core.configuration;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Predicate;
+import java.util.List;
 
-public class Preconditions {
+public interface Configuration {
 
-	public static void check(boolean exp, @NotNull String errorMessage) {
-		if (exp) {
-			throw new IllegalArgumentException(errorMessage);
-		}
-	}
-
-	public static void check(@Nullable Object obj, @NotNull Predicate<Object> predicate, @NotNull String errorMessage) {
-		if (predicate.test(obj)) {
-			throw new IllegalArgumentException(errorMessage);
-		}
-	}
+    @Nullable Class<?> getType(@NotNull String path);
+    @Nullable Class<?> getType(@NotNull String path, @Nullable Class<?> def);
+    boolean isType(@NotNull String path, @NotNull Class<?> type);
+    @Nullable <T> T get(@NotNull String path, @NotNull Class<T> type);
+    @Nullable Object get(@NotNull String path);
+    @Nullable Object get(@NotNull String path, @Nullable Object def);
+    @Nullable String getString(@NotNull String path);
+    @NotNull String getString(@NotNull String path, @NotNull String def);
+    @Nullable Integer getInt(@NotNull String path);
+    int getInt(@NotNull String path, int def);
+    @Nullable Double getDouble(@NotNull String path);
+    double getDouble(@NotNull String path, double def);
+    @Nullable Long getLong(@NotNull String path);
+    long getLong(@NotNull String path, long def);
+    @Nullable Boolean getBoolean(@NotNull String path);
+    boolean getBoolean(@NotNull String path, boolean def);
+    @Nullable List<?> getList(@NotNull String path);
+    @NotNull List<?> getList(@NotNull String path, @NotNull List<?> def);
 
 }
