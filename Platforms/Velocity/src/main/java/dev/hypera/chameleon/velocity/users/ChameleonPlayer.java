@@ -27,6 +27,7 @@ import com.velocitypowered.api.proxy.Player;
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ProxyUser;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 public class ChameleonPlayer extends AudienceWrapper implements ProxyUser {
 
@@ -41,6 +42,17 @@ public class ChameleonPlayer extends AudienceWrapper implements ProxyUser {
     @Override
     public boolean hasPermission(String permission) {
         return player.hasPermission(permission);
+    }
+
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        // TODO: Complete this and make it work.
+        System.err.println("ChameleonPlayer#setPermission(String, boolean) is not implemented yet.");
+    }
+
+    @Override
+    public String getName() {
+        return player.getUsername();
     }
 
 }

@@ -44,4 +44,14 @@ public class ChameleonCommandSource extends AudienceWrapper implements ChatUser 
         return commandSource.hasPermission(permission);
     }
 
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        // TODO: Complete this and make it work.
+        System.err.println("ChameleonCommandSource#setPermission(String, boolean) is not implemented yet.");
+    }
+
+    @Override
+    public String getName() {
+        return "Console";
+    }
 }

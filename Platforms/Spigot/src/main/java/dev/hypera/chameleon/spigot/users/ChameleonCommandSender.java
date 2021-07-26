@@ -32,11 +32,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class ChameleonCommandSender extends AudienceWrapper implements ChatUser {
 
+    private final @NotNull SpigotChameleon chameleon;
     private final @NotNull CommandSender sender;
 
     @ApiStatus.Internal
     public ChameleonCommandSender(@NotNull SpigotChameleon chameleon, @NotNull CommandSender sender) {
         super(chameleon.getAdventure().sender(sender));
+        this.chameleon = chameleon;
         this.sender = sender;
     }
 
@@ -45,4 +47,14 @@ public class ChameleonCommandSender extends AudienceWrapper implements ChatUser 
         return sender.hasPermission(permission);
     }
 
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        // TODO: Complete this and make it work.
+        System.err.println("ChameleonCommandSender#setPermission(String, boolean) is not implemented yet.");
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
 }

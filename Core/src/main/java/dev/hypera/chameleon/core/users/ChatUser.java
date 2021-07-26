@@ -31,4 +31,6 @@ import net.kyori.adventure.audience.Audience;
  */
 public interface ChatUser extends Audience, PermissionHolder {
 
+    String getName();
+
 }

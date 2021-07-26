@@ -28,6 +28,7 @@ import dev.hypera.chameleon.core.users.ServerUser;
 import dev.hypera.chameleon.spigot.SpigotChameleon;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
 
@@ -42,6 +43,17 @@ public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
     @Override
     public boolean hasPermission(String permission) {
         return player.hasPermission(permission);
+    }
+
+    @Override
+    public void setPermission(@NotNull String permission, boolean has) {
+        // TODO: Complete this and make it work.
+        System.err.println("ChameleonPlayer#setPermission(String, boolean) is not implemented yet.");
+    }
+
+    @Override
+    public String getName() {
+        return player.getName();
     }
 
 }
