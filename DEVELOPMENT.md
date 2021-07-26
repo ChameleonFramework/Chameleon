@@ -1,3 +1,12 @@
+<div align="center">
+    <img src="https://i.hypera.dev/assets/chameleon@750x150.png" />
+    <p><strong>Cross-platform Minecraft plugin framework</strong></p>
+</div>
+
+-----------
+
+
+
 # Development Progress
 | Platform                                | BungeeCord | Spigot | Velocity | Minestom | Sponge |
 |:---------------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|
