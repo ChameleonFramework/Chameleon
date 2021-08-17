@@ -41,7 +41,7 @@ public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
     }
 
     @Override
-    public boolean hasPermission(String permission) {
+    public boolean hasPermission(@NotNull String permission) {
         return player.hasPermission(permission);
     }
 

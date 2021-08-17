@@ -28,15 +28,23 @@ import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.spigot.commands.SpigotCommand;
+import dev.hypera.chameleon.spigot.events.SpigotEventHandler;
+import dev.hypera.chameleon.spigot.transformers.PlayerChatUserTransformer;
+import dev.hypera.chameleon.spigot.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.spigot.users.ChameleonCommandSender;
+import dev.hypera.chameleon.spigot.users.ChameleonPlayer;
+import dev.hypera.chameleon.spigot.users.SpigotUserManager;
+import java.util.UUID;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import org.jetbrains.annotations.Nullable;
 
 public class SpigotChameleon extends Chameleon {
 
@@ -44,7 +52,10 @@ public class SpigotChameleon extends Chameleon {
     private final @NotNull BukkitAudiences adventure;
 
     public SpigotChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull JavaPlugin spigotPlugin) throws InstantiationException {
-        super(pluginClass);
+        super(pluginClass,
+                new PlayerUUIDTransformer(),
+                new PlayerChatUserTransformer()
+        );
         this.spigotPlugin = spigotPlugin;
         this.adventure = BukkitAudiences.create(spigotPlugin);
     }
@@ -55,6 +66,12 @@ public class SpigotChameleon extends Chameleon {
 
     public @NotNull BukkitAudiences getAdventure() {
         return adventure;
+    }
+
+    @Override
+    public void onEnable() {
+        new SpigotEventHandler(this);
+        super.onEnable();
     }
 
     @Override
@@ -80,4 +97,8 @@ public class SpigotChameleon extends Chameleon {
         return new ChameleonCommandSender(this, Bukkit.getConsoleSender());
     }
 
+    @Override
+    public @Nullable ChatUser getPlayer(UUID uuid) {
+        return SpigotUserManager.getUser(this, uuid);
+    }
 }

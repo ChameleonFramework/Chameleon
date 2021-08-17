@@ -25,14 +25,27 @@ package dev.hypera.chameleon.spigot.users;
 
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.spigot.SpigotChameleon;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 public class SpigotUserManager {
 
     public static ChatUser getUser(SpigotChameleon chameleon, CommandSender user) {
-        if (user instanceof Player) return new ChameleonPlayer(chameleon, (Player) user);
-        else return new ChameleonCommandSender(chameleon, user);
+        if (user instanceof Player) {
+            return new ChameleonPlayer(chameleon, (Player) user);
+        } else {
+            return new ChameleonCommandSender(chameleon, user);
+        }
     }
+
+    @Nullable
+    public static ChatUser getUser(SpigotChameleon chameleon, UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
+        return (null == player ? null : new ChameleonPlayer(chameleon, player));
+    }
+
 
 }

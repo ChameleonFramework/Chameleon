@@ -199,4 +199,9 @@ public class YamlConfiguration implements Configuration {
         return (List<?>) get(path, def);
     }
 
+    @Override
+    public @NotNull File getFile() {
+        return file;
+    }
+
 }

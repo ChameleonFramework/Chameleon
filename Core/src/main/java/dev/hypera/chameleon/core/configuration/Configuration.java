@@ -24,6 +24,7 @@
 
 package dev.hypera.chameleon.core.configuration;
 
+import java.io.File;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,5 +50,6 @@ public interface Configuration {
     boolean getBoolean(@NotNull String path, boolean def);
     @Nullable List<?> getList(@NotNull String path);
     @NotNull List<?> getList(@NotNull String path, @NotNull List<?> def);
+    @NotNull File getFile();
 
 }
