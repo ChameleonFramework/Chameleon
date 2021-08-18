@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.bungeecord;
 
 import dev.hypera.chameleon.bungeecord.commands.BungeeCordCommand;
+import dev.hypera.chameleon.bungeecord.data.BungeeCordData;
 import dev.hypera.chameleon.bungeecord.events.BungeeCordEventHandler;
 import dev.hypera.chameleon.bungeecord.transformers.ConnectionChatUserTransformer;
 import dev.hypera.chameleon.bungeecord.transformers.ProxiedPlayerChatUserTransformer;
@@ -33,12 +34,11 @@ import dev.hypera.chameleon.bungeecord.users.ChameleonCommandSender;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
+import java.nio.file.Path;
 import java.util.UUID;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 import org.jetbrains.annotations.Nullable;
 
 public class BungeeCordChameleon extends Chameleon {
@@ -47,7 +47,7 @@ public class BungeeCordChameleon extends Chameleon {
     private final @NotNull BungeeAudiences adventure;
 
     public BungeeCordChameleon(@NotNull Class<? extends dev.hypera.chameleon.core.Plugin> pluginClass, @NotNull Plugin bungeePlugin) throws InstantiationException {
-        super(pluginClass,
+        super(pluginClass, new BungeeCordData(),
                 new ProxiedPlayerUUIDTransformer(),
                 new ProxiedPlayerChatUserTransformer(),
                 new ConnectionChatUserTransformer()
@@ -56,7 +56,7 @@ public class BungeeCordChameleon extends Chameleon {
         this.adventure = BungeeAudiences.create(bungeePlugin);
     }
 
-    public @NotNull Plugin getPlugin() {
+    public @NotNull Plugin getBungeeCordPlugin() {
         return bungeePlugin;
     }
 
@@ -71,8 +71,8 @@ public class BungeeCordChameleon extends Chameleon {
     }
 
     @Override
-    public File getDataFolder() {
-        return bungeePlugin.getDataFolder();
+    public Path getDataFolder() {
+        return bungeePlugin.getDataFolder().toPath();
     }
 
     @Override
@@ -89,4 +89,5 @@ public class BungeeCordChameleon extends Chameleon {
     public @Nullable ChatUser getPlayer(UUID uuid) {
         return BungeeCordUserManager.getUser(this, uuid);
     }
+
 }

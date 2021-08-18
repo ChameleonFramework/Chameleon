@@ -28,19 +28,17 @@ import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.minestom.commands.MinestomCommand;
+import dev.hypera.chameleon.minestom.data.MinestomData;
 import dev.hypera.chameleon.minestom.events.MinestomEventHandler;
 import dev.hypera.chameleon.minestom.transformers.PlayerChatUserTransformer;
 import dev.hypera.chameleon.minestom.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.minestom.users.ChameleonCommandSender;
-import dev.hypera.chameleon.minestom.users.ChameleonPlayer;
 import dev.hypera.chameleon.minestom.users.MinestomUserManager;
+import java.nio.file.Path;
 import java.util.UUID;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 import org.jetbrains.annotations.Nullable;
 
 public class MinestomChameleon extends Chameleon {
@@ -48,7 +46,7 @@ public class MinestomChameleon extends Chameleon {
     private final @NotNull Extension extension;
 
     public MinestomChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull Extension extension) throws InstantiationException {
-        super(pluginClass,
+        super(pluginClass, new MinestomData(),
                 new PlayerUUIDTransformer(),
                 new PlayerChatUserTransformer()
         );
@@ -66,8 +64,8 @@ public class MinestomChameleon extends Chameleon {
     }
 
     @Override
-    public File getDataFolder() {
-        return extension.getDataDirectory().toFile();
+    public Path getDataFolder() {
+        return extension.getDataDirectory();
     }
 
     @Override

@@ -63,7 +63,7 @@ public class SpigotEventHandler implements Listener {
 						} catch (MapFailedException ignored) {
 							// TODO: Handle this error!
 						}
-					}, chameleon.getPlugin()));
+					}, chameleon.getSpigotPlugin()));
 		});
 	}
 

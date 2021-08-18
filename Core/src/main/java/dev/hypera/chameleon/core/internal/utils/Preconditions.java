@@ -23,10 +23,9 @@
 
 package dev.hypera.chameleon.core.internal.utils;
 
+import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Predicate;
 
 public class Preconditions {
 

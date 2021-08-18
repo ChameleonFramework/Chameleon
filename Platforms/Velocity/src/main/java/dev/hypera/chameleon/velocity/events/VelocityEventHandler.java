@@ -23,10 +23,7 @@
 
 package dev.hypera.chameleon.velocity.events;
 
-import com.velocitypowered.api.event.ResultedEvent;
-import com.velocitypowered.api.event.ResultedEvent.GenericResult;
 import dev.hypera.chameleon.core.annotations.MappedClass;
-import dev.hypera.chameleon.core.events.Cancellable;
 import dev.hypera.chameleon.core.events.ChameleonEvent;
 import dev.hypera.chameleon.core.exceptions.MapFailedException;
 import dev.hypera.chameleon.velocity.VelocityChameleon;

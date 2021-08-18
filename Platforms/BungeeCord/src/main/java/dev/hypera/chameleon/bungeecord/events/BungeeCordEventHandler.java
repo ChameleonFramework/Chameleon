@@ -27,7 +27,6 @@ import dev.hypera.chameleon.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.core.annotations.MappedClass;
 import dev.hypera.chameleon.core.events.Cancellable;
 import dev.hypera.chameleon.core.events.ChameleonEvent;
-import dev.hypera.chameleon.core.events.listener.EventHandler;
 import dev.hypera.chameleon.core.exceptions.MapFailedException;
 import java.util.HashSet;
 import java.util.Optional;
@@ -58,7 +57,7 @@ public class BungeeCordEventHandler implements Listener {
 		});
 
 		if (bungeeEvents.size() > 0) {
-			ProxyServer.getInstance().getPluginManager().registerListener(chameleon.getPlugin(), new BungeeCordListenerAdapter() {
+			ProxyServer.getInstance().getPluginManager().registerListener(chameleon.getBungeeCordPlugin(), new BungeeCordListenerAdapter() {
 				@Override
 				public void onEvent(Event e) {
 					try {

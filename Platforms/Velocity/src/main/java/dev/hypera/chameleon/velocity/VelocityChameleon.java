@@ -29,13 +29,14 @@ import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.velocity.commands.VelocityCommand;
+import dev.hypera.chameleon.velocity.data.VelocityData;
 import dev.hypera.chameleon.velocity.events.VelocityEventHandler;
 import dev.hypera.chameleon.velocity.transformers.PlayerChatUserTransformer;
 import dev.hypera.chameleon.velocity.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.velocity.transformers.ResultBooleanTransformer;
 import dev.hypera.chameleon.velocity.users.ChameleonCommandSource;
 import dev.hypera.chameleon.velocity.users.VelocityUserManager;
-import java.io.File;
+import java.nio.file.Path;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +46,7 @@ public class VelocityChameleon extends Chameleon {
     private final @NotNull VelocityPlugin velocityPlugin;
 
     public VelocityChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull VelocityPlugin velocityPlugin) throws InstantiationException {
-        super(pluginClass,
+        super(pluginClass, new VelocityData(velocityPlugin.getServer()),
                 new PlayerUUIDTransformer(),
                 new PlayerChatUserTransformer(),
                 new ResultBooleanTransformer()
@@ -64,8 +65,8 @@ public class VelocityChameleon extends Chameleon {
     }
 
     @Override
-    public File getDataFolder() {
-        return velocityPlugin.getDataDirectory().toFile();
+    public Path getDataFolder() {
+        return velocityPlugin.getDataDirectory();
     }
 
     @Override
