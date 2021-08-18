@@ -29,11 +29,10 @@ import dev.hypera.chameleon.bungeecord.users.ChameleonCommandSender;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
+import java.nio.file.Path;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 public class BungeeCordChameleon extends Chameleon {
 
@@ -55,8 +54,8 @@ public class BungeeCordChameleon extends Chameleon {
     }
 
     @Override
-    public File getDataFolder() {
-        return bungeePlugin.getDataFolder();
+    public Path getDataFolder() {
+        return bungeePlugin.getDataFolder().toPath();
     }
 
     @Override
