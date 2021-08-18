@@ -45,7 +45,7 @@ import dev.hypera.chameleon.core.users.ChatUser;
 })
 public class UserLeaveEvent implements UserEvent {
 
-	@Transform(ChatUser.class)
+	@Transform
 	@MappedField("getPlayer()")
 	private ChatUser player;
 

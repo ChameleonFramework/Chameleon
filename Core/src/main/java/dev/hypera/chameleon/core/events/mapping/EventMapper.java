@@ -104,9 +104,9 @@ public class EventMapper {
 		if (originalField.isAnnotationPresent(Transform.class)) {
 			Transform transform = originalField.getAnnotation(Transform.class);
 			if (null != transform.data() && transform.data().length > 0) {
-				return Transformer.transformWithData(chameleon, mappedObject, transform.value(), transform.data());
+				return Transformer.transformWithData(chameleon, mappedObject, originalField.getType(), transform.data());
 			} else {
-				return Transformer.transform(chameleon, mappedObject, transform.value());
+				return Transformer.transform(chameleon, mappedObject, originalField.getType());
 			}
 		} else {
 			return mappedObject;

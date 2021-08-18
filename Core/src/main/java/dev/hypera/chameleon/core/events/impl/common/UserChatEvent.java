@@ -47,15 +47,15 @@ import net.kyori.adventure.text.Component;
 })
 public class UserChatEvent implements UserEvent, Cancellable {
 
-	@Transform(ChatUser.class)
+	@Transform
 	@MappedField({ "getPlayer()", "getSender()" })
 	private ChatUser sender;
 
-	@Transform(Component.class)
+	@Transform
 	@MappedField("message")
 	private Component message;
 
-	@Transform(Boolean.class)
+	@Transform
 	@MappedField({ "cancel", "cancelled", "result" })
 	private boolean cancelled;
 

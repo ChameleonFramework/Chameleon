@@ -29,14 +29,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation is used internally by the event mapper to transform objects when a platform event is mapped to a chameleon event.
+ * This annotation is used internally by the event mapper to figure out what it needs to transform when mapping a platform event to a chameleon event.
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Transform {
-
-	/* What the data needs to be transformed to */
-	Class<?> value();
 
 	/* Any data the transformer might need */
 	String[] data() default {};
