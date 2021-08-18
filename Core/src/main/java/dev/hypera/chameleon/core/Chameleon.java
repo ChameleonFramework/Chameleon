@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.core;
 
 import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.data.IPlatformData;
 import dev.hypera.chameleon.core.users.ChatUser;
 import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
@@ -33,13 +34,16 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class Chameleon {
 
     protected final @NotNull Plugin plugin;
+    private final @NotNull IPlatformData platformData;
 
-    public Chameleon(@NotNull Class<? extends Plugin> pluginClass) throws InstantiationException {
+    public Chameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull IPlatformData platformData) throws InstantiationException {
         try {
             this.plugin = pluginClass.getConstructor(Chameleon.class).newInstance(this);
+            this.plugin.getData().check();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new InstantiationException("Failed to initialise instance of " + pluginClass.getSimpleName());
         }
+        this.platformData = platformData;
     }
 
     public void onEnable() {
@@ -49,10 +53,15 @@ public abstract class Chameleon {
         plugin.onDisable();
     }
 
+    public @NotNull Plugin getPlugin() {
+        return plugin;
+    }
+    public @NotNull IPlatformData getPlatformData() {
+        return platformData;
+    }
+
     public abstract Path getDataFolder();
-
     public abstract void registerCommand(@NotNull Command command);
-
     public abstract @NotNull ChatUser getConsoleSender();
 
 }

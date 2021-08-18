@@ -23,6 +23,7 @@
 
 package dev.hypera.chameleon.core;
 
+import dev.hypera.chameleon.core.data.PluginData;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Plugin {
@@ -39,5 +40,6 @@ public abstract class Plugin {
 
     public abstract void onEnable();
     public abstract void onDisable();
+    public abstract @NotNull PluginData getData();
 
 }

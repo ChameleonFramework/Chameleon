@@ -28,6 +28,7 @@ import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.spigot.commands.SpigotCommand;
+import dev.hypera.chameleon.spigot.data.SpigotData;
 import dev.hypera.chameleon.spigot.users.ChameleonCommandSender;
 import java.nio.file.Path;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -44,12 +45,12 @@ public class SpigotChameleon extends Chameleon {
     private final @NotNull BukkitAudiences adventure;
 
     public SpigotChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull JavaPlugin spigotPlugin) throws InstantiationException {
-        super(pluginClass);
+        super(pluginClass, new SpigotData());
         this.spigotPlugin = spigotPlugin;
         this.adventure = BukkitAudiences.create(spigotPlugin);
     }
 
-    public @NotNull JavaPlugin getPlugin() {
+    public @NotNull JavaPlugin getSpigotPlugin() {
         return spigotPlugin;
     }
 

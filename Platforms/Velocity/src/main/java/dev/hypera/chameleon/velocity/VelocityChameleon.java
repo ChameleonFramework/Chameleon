@@ -29,6 +29,7 @@ import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.velocity.commands.VelocityCommand;
+import dev.hypera.chameleon.velocity.data.VelocityData;
 import dev.hypera.chameleon.velocity.users.ChameleonCommandSource;
 import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +39,7 @@ public class VelocityChameleon extends Chameleon {
     private final @NotNull VelocityPlugin velocityPlugin;
 
     public VelocityChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull VelocityPlugin velocityPlugin) throws InstantiationException {
-        super(pluginClass);
+        super(pluginClass, new VelocityData(velocityPlugin.getServer()));
         this.velocityPlugin = velocityPlugin;
     }
 

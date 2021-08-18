@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.bungeecord;
 
 import dev.hypera.chameleon.bungeecord.commands.BungeeCordCommand;
+import dev.hypera.chameleon.bungeecord.data.BungeeCordData;
 import dev.hypera.chameleon.bungeecord.users.ChameleonCommandSender;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.commands.Command;
@@ -39,12 +40,12 @@ public class BungeeCordChameleon extends Chameleon {
     private final @NotNull BungeeAudiences adventure;
 
     public BungeeCordChameleon(@NotNull Class<? extends dev.hypera.chameleon.core.Plugin> pluginClass, @NotNull Plugin bungeePlugin) throws InstantiationException {
-        super(pluginClass);
+        super(pluginClass, new BungeeCordData());
         this.bungeePlugin = bungeePlugin;
         this.adventure = BungeeAudiences.create(bungeePlugin);
     }
 
-    public @NotNull Plugin getPlugin() {
+    public @NotNull Plugin getBungeeCordPlugin() {
         return bungeePlugin;
     }
 

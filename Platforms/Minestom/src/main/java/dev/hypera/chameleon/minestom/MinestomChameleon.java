@@ -28,6 +28,7 @@ import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.minestom.commands.MinestomCommand;
+import dev.hypera.chameleon.minestom.data.MinestomData;
 import dev.hypera.chameleon.minestom.users.ChameleonCommandSender;
 import java.nio.file.Path;
 import net.minestom.server.MinecraftServer;
@@ -39,7 +40,7 @@ public class MinestomChameleon extends Chameleon {
     private final @NotNull Extension extension;
 
     public MinestomChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull Extension extension) throws InstantiationException {
-        super(pluginClass);
+        super(pluginClass, new MinestomData());
         this.extension = extension;
     }
 
