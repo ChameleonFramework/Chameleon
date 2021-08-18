@@ -29,11 +29,10 @@ import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.minestom.commands.MinestomCommand;
 import dev.hypera.chameleon.minestom.users.ChameleonCommandSender;
+import java.nio.file.Path;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 public class MinestomChameleon extends Chameleon {
 
@@ -49,8 +48,8 @@ public class MinestomChameleon extends Chameleon {
     }
 
     @Override
-    public File getDataFolder() {
-        return extension.getDataDirectory().toFile();
+    public Path getDataFolder() {
+        return extension.getDataDirectory();
     }
 
     @Override

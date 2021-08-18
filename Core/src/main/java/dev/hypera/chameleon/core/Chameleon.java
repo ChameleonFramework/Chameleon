@@ -25,9 +25,9 @@ package dev.hypera.chameleon.core;
 
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
+import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class Chameleon {
@@ -49,7 +49,7 @@ public abstract class Chameleon {
         plugin.onDisable();
     }
 
-    public abstract File getDataFolder();
+    public abstract Path getDataFolder();
 
     public abstract void registerCommand(@NotNull Command command);
 

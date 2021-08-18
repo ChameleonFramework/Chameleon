@@ -30,9 +30,8 @@ import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.velocity.commands.VelocityCommand;
 import dev.hypera.chameleon.velocity.users.ChameleonCommandSource;
+import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 public class VelocityChameleon extends Chameleon {
 
@@ -44,8 +43,8 @@ public class VelocityChameleon extends Chameleon {
     }
 
     @Override
-    public File getDataFolder() {
-        return velocityPlugin.getDataDirectory().toFile();
+    public Path getDataFolder() {
+        return velocityPlugin.getDataDirectory();
     }
 
     @Override

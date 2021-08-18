@@ -25,12 +25,13 @@
 package dev.hypera.chameleon.core.configuration;
 
 import dev.hypera.chameleon.core.Chameleon;
+import java.io.BufferedReader;
+import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -40,7 +41,7 @@ import java.util.Map;
 
 public class YamlConfiguration implements Configuration {
 
-    private File file;
+    private Path file;
     private Map<String, Object> config;
 
     private static final Yaml yaml = new Yaml();
@@ -48,27 +49,27 @@ public class YamlConfiguration implements Configuration {
 
     public YamlConfiguration(Chameleon chameleon, String filename, boolean copyDefaultFromResources) {
         try {
-            File dataFolder = chameleon.getDataFolder();
-            if (!dataFolder.exists()) {
-                dataFolder.mkdirs();
+            Path dataFolder = chameleon.getDataFolder();
+            if (!Files.exists(dataFolder)) {
+                Files.createDirectories(dataFolder);
             }
 
-            file = new File(dataFolder, filename);
+            file = dataFolder.resolve(filename);
 
-            if (!file.exists()) {
+            if (!Files.exists(file)) {
                 if (copyDefaultFromResources) {
                     try (InputStream defaultResource = YamlConfiguration.class.getResourceAsStream("/" + filename)) {
                         if (null == defaultResource) {
                             throw new IllegalStateException("Failed to load resource '" + filename + "'");
                         }
-                        Files.copy(defaultResource, file.toPath());
+                        Files.copy(defaultResource, file);
                     }
                 } else {
-                    file.createNewFile();
+                    Files.createFile(file);
                 }
             }
 
-            FileReader reader = new FileReader(file);
+            BufferedReader reader = Files.newBufferedReader(file);
             config = yaml.load(reader);
             reader.close();
         } catch (IOException ex) {
@@ -197,6 +198,17 @@ public class YamlConfiguration implements Configuration {
     @Override
     public @NotNull List<?> getList(@NotNull String path, @NotNull List<?> def) {
         return (List<?>) get(path, def);
+    }
+
+    @Override
+    @Deprecated
+    public @NotNull File getFile() {
+        return file.toFile();
+    }
+
+    @Override
+    public @NotNull Path getPath() {
+        return file;
     }
 
 }
