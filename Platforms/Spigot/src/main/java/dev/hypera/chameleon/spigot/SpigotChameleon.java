@@ -29,13 +29,13 @@ import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.spigot.commands.SpigotCommand;
 import dev.hypera.chameleon.spigot.users.ChameleonCommandSender;
+import java.nio.file.Path;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.lang.reflect.Field;
 
 public class SpigotChameleon extends Chameleon {
@@ -58,8 +58,8 @@ public class SpigotChameleon extends Chameleon {
     }
 
     @Override
-    public File getDataFolder() {
-        return spigotPlugin.getDataFolder();
+    public Path getDataFolder() {
+        return spigotPlugin.getDataFolder().toPath();
     }
 
     @Override
