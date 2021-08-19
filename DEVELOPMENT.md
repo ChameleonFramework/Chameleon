@@ -79,8 +79,8 @@ import dev.hypera.chameleon.core.events.listener.ChameleonListener;
 import dev.hypera.chameleon.core.events.listener.EventHandler;
 import net.kyori.adventure.text.Component;
 
-public class Listener implements ChameleonListener {
-	
+public class ExampleListener implements ChameleonListener {
+
 	@EventHandler
 	public void onJoin(UserJoinEvent event) {
 		event.getPlayer().sendMessage(Component.text("Welcome to my server!"));
