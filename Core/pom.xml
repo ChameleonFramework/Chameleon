@@ -177,6 +177,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- Commons Lang -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.4</version>
+        </dependency>
     </dependencies>
 
 </project>

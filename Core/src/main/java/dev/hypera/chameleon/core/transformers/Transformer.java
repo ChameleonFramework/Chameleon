@@ -28,6 +28,7 @@ import dev.hypera.chameleon.core.exceptions.TransformFailedException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import org.apache.commons.lang.ClassUtils;
 
 /**
  * Transformer
@@ -84,11 +85,16 @@ public class Transformer {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T, U> U transform(Chameleon chameleon, T object, Class<U> to) throws TransformFailedException {
+		if (to.isPrimitive()) {
+			to = ClassUtils.primitiveToWrapper(to);
+		}
+
 		if (to.isInstance(object)) {
 			return (U) object;
 		}
 
-		Optional<ITransformer<T, U>> transformer = registeredTransformers.stream().filter(t -> (t.getFrom().equals(object.getClass()) || t.getFrom().isAssignableFrom(object.getClass())) && (t.getTo().equals(to) || t.getTo().isAssignableFrom(to))).map(t -> (ITransformer<T, U>) t).findFirst();
+		Class<U> toClass = to;
+		Optional<ITransformer<T, U>> transformer = registeredTransformers.stream().filter(t -> (t.getFrom().isInstance(object) || t.getFrom().equals(object.getClass()) || t.getFrom().isAssignableFrom(object.getClass())) && (t.getTo().equals(toClass) || t.getTo().isAssignableFrom(toClass) || toClass.isInstance(object))).map(t -> (ITransformer<T, U>) t).findFirst();
 		if (!transformer.isPresent()) {
 			throw new TransformFailedException("Failed to transform " + object.getClass().getCanonicalName() + " to " + to.getCanonicalName());
 		} else {
@@ -109,11 +115,16 @@ public class Transformer {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T, U> U transformWithData(Chameleon chameleon, T object, Class<U> to, String... data) throws TransformFailedException {
+		if (to.isPrimitive()) {
+			to = ClassUtils.primitiveToWrapper(to);
+		}
+
 		if (to.isInstance(object)) {
 			return (U) object;
 		}
 
-		Optional<ITransformer<T, U>> transformer = registeredTransformers.stream().filter(t -> (t.getFrom().equals(object.getClass()) || t.getFrom().isAssignableFrom(object.getClass())) && (t.getTo().equals(to) || t.getTo().isAssignableFrom(to))).map(t -> (ITransformer<T, U>) t).findFirst();
+		Class<U> toClass = to;
+		Optional<ITransformer<T, U>> transformer = registeredTransformers.stream().filter(t -> (t.getFrom().isInstance(object) || t.getFrom().equals(object.getClass()) || t.getFrom().isAssignableFrom(object.getClass())) && (t.getTo().equals(toClass) || t.getTo().isAssignableFrom(toClass) || toClass.isInstance(object))).map(t -> (ITransformer<T, U>) t).findFirst();
 		if (!transformer.isPresent()) {
 			throw new TransformFailedException("Failed to transform " + object.getClass().getCanonicalName() + " to " + to.getCanonicalName());
 		} else {
