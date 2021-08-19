@@ -23,6 +23,8 @@
 
 package dev.hypera.chameleon.core.internal.utils;
 
+import java.util.Optional;
+import java.util.function.Supplier;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
@@ -39,9 +41,6 @@ import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
-
-import java.util.Optional;
-import java.util.function.Supplier;
 
 public class AudienceWrapper implements Audience {
 

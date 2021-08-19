@@ -24,9 +24,8 @@
 package dev.hypera.chameleon.velocity;
 
 import com.velocitypowered.api.proxy.ProxyServer;
-import org.jetbrains.annotations.NotNull;
-
 import java.nio.file.Path;
+import org.jetbrains.annotations.NotNull;
 
 public interface VelocityPlugin {
 

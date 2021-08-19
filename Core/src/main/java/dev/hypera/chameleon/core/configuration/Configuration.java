@@ -26,10 +26,9 @@ package dev.hypera.chameleon.core.configuration;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public interface Configuration {
 

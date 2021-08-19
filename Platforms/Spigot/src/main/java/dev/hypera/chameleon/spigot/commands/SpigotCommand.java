@@ -26,11 +26,10 @@ package dev.hypera.chameleon.spigot.commands;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.spigot.SpigotChameleon;
 import dev.hypera.chameleon.spigot.users.SpigotUserManager;
-import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 public class SpigotCommand extends org.bukkit.command.Command {
 

@@ -25,23 +25,48 @@ package dev.hypera.chameleon.core;
 
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.data.IPlatformData;
+import dev.hypera.chameleon.core.events.dispatch.EventDispatcher;
+import dev.hypera.chameleon.core.events.impl.common.UserChatEvent;
+import dev.hypera.chameleon.core.events.impl.common.UserJoinEvent;
+import dev.hypera.chameleon.core.events.impl.common.UserLeaveEvent;
+import dev.hypera.chameleon.core.transformers.ITransformer;
+import dev.hypera.chameleon.core.transformers.Transformer;
+import dev.hypera.chameleon.core.transformers.impl.StringComponentTransformer;
+import dev.hypera.chameleon.core.transformers.impl.StringUUIDTransformer;
+import dev.hypera.chameleon.core.transformers.impl.UUIDChatUserTransformer;
 import dev.hypera.chameleon.core.users.ChatUser;
-import java.nio.file.Path;
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
+import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class Chameleon {
 
     protected final @NotNull Plugin plugin;
+    protected final @NotNull EventDispatcher dispatcher;
     private final @NotNull IPlatformData platformData;
 
-    public Chameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull IPlatformData platformData) throws InstantiationException {
+    public Chameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull IPlatformData platformData, ITransformer<?, ?>... transformers) throws InstantiationException {
+        Transformer.register(
+                transformers,
+                new StringUUIDTransformer(),
+                new UUIDChatUserTransformer(),
+                new StringComponentTransformer()
+        );
+
+        dispatcher = new EventDispatcher(this);
+        dispatcher.registerEvents(
+                UserChatEvent.class,
+                UserJoinEvent.class,
+                UserLeaveEvent.class
+        );
+
         try {
             this.plugin = pluginClass.getConstructor(Chameleon.class).newInstance(this);
             this.plugin.getData().check();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new InstantiationException("Failed to initialise instance of " + pluginClass.getSimpleName());
+            throw new InstantiationException("Failed to initialise instance of " + pluginClass.getCanonicalName());
         }
         this.platformData = platformData;
     }
@@ -62,6 +87,12 @@ public abstract class Chameleon {
 
     public abstract Path getDataFolder();
     public abstract void registerCommand(@NotNull Command command);
+
+    public EventDispatcher getEventDispatcher() {
+        return dispatcher;
+    }
+
     public abstract @NotNull ChatUser getConsoleSender();
+    public abstract @Nullable ChatUser getPlayer(UUID uuid);
 
 }

@@ -26,18 +26,17 @@ package dev.hypera.chameleon.core.configuration;
 
 import dev.hypera.chameleon.core.Chameleon;
 import java.io.BufferedReader;
-import java.nio.file.Path;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.yaml.snakeyaml.Yaml;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.yaml.snakeyaml.Yaml;
 
 public class YamlConfiguration implements Configuration {
 

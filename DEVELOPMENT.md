@@ -11,7 +11,7 @@
 | Platform                                | BungeeCord | Spigot | Velocity | Minestom | Sponge |
 |:---------------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|
 | [Commands](#Commands)                   | ✓          | ✓      | ✓        | ✓        |        |
-| [Events](#Events)                       |            |        |          |          |        |
+| [Events](#Events)                       | ✓          | ✓      | ✓        | ✓        |        |
 | [Users](#Users)                         |            |        |          |          |        |
 | [Configuration](#Configuration)         | ✓          | ✓      | ✓        | ✓        |        |
 
@@ -66,20 +66,36 @@ public void onEnable() {
 ```
 
 ## Events
-* [ ] Event
-* [ ] Listener
-* [ ] Cross-platform events
+* [x] Event
+* [x] Listener
+* [x] Cross-platform events
 
 #### ExampleListener.java
 ```java
-// Work in progress
+package org.example.chameleonproject.events;
+
+import dev.hypera.chameleon.core.events.impl.common.UserJoinEvent;
+import dev.hypera.chameleon.core.events.listener.ChameleonListener;
+import dev.hypera.chameleon.core.events.listener.EventHandler;
+import net.kyori.adventure.text.Component;
+
+public class ExampleListener implements ChameleonListener {
+
+	@EventHandler
+	public void onJoin(UserJoinEvent event) {
+		event.getPlayer().sendMessage(Component.text("Welcome to my server!"));
+	}
+
+}
 ```
 
 #### ChameleonProject.java
 ```java
 @Override
 public void onEnable() {
-    // Work in progress
+    // ...
+    chameleon.getEventDispatcher().registerListener(new ExampleListener(this));
+    // ...
 }
 ```
 
@@ -107,8 +123,8 @@ private static Configuration jsonTest;
 @Override
 public void onEnable() {
     // ...
-	yamlConfig = new YamlConfiguration(chameleon, "config.yml", true);
-	jsonTest = new JsonConfiguration(chameleon, "test.json", true);
+    yamlConfig = new YamlConfiguration(chameleon, "config.yml", true);
+    jsonTest = new JsonConfiguration(chameleon, "test.json", true);
     // ...
 }
 ```

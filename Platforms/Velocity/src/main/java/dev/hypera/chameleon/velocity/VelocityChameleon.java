@@ -30,17 +30,38 @@ import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.velocity.commands.VelocityCommand;
 import dev.hypera.chameleon.velocity.data.VelocityData;
+import dev.hypera.chameleon.velocity.events.VelocityEventHandler;
+import dev.hypera.chameleon.velocity.transformers.PlayerChatUserTransformer;
+import dev.hypera.chameleon.velocity.transformers.PlayerUUIDTransformer;
+import dev.hypera.chameleon.velocity.transformers.ResultBooleanTransformer;
 import dev.hypera.chameleon.velocity.users.ChameleonCommandSource;
+import dev.hypera.chameleon.velocity.users.VelocityUserManager;
 import java.nio.file.Path;
+import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class VelocityChameleon extends Chameleon {
 
     private final @NotNull VelocityPlugin velocityPlugin;
 
     public VelocityChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull VelocityPlugin velocityPlugin) throws InstantiationException {
-        super(pluginClass, new VelocityData(velocityPlugin.getServer()));
+        super(pluginClass, new VelocityData(velocityPlugin.getServer()),
+                new PlayerUUIDTransformer(),
+                new PlayerChatUserTransformer(),
+                new ResultBooleanTransformer()
+        );
         this.velocityPlugin = velocityPlugin;
+    }
+
+    public @NotNull VelocityPlugin getVelocityPlugin() {
+        return velocityPlugin;
+    }
+
+    @Override
+    public void onEnable() {
+        new VelocityEventHandler(this);
+        super.onEnable();
     }
 
     @Override
@@ -57,6 +78,11 @@ public class VelocityChameleon extends Chameleon {
     @Override
     public @NotNull ChatUser getConsoleSender() {
         return new ChameleonCommandSource(velocityPlugin.getServer().getConsoleCommandSource());
+    }
+
+    @Override
+    public @Nullable ChatUser getPlayer(UUID uuid) {
+        return VelocityUserManager.getUser(this, uuid);
     }
 
 }
