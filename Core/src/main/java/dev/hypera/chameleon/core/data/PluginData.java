@@ -31,9 +31,11 @@ public class PluginData {
 	private String version;
 	private String author;
 
+
 	public static PluginData builder() {
 		return new PluginData();
 	}
+
 
 	public PluginData name(@NotNull String name) {
 		this.name = name;
@@ -56,6 +58,19 @@ public class PluginData {
 		}
 
 		return this;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public String getAuthor() {
+		return author;
 	}
 
 }
