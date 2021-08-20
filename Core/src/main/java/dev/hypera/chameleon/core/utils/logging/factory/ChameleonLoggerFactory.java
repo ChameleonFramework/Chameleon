@@ -21,66 +21,23 @@
  * SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.data;
+package dev.hypera.chameleon.core.utils.logging.factory;
 
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.utils.logging.ChameleonLogger;
+import dev.hypera.chameleon.core.utils.logging.impl.ChameleonLoggerImpl;
 
-public class PluginData {
+public class ChameleonLoggerFactory {
 
-	private String name;
-	private String version;
-	private String author;
-	private String logPrefix = "[%s]";
+	private final Chameleon chameleon;
 
-
-	public static PluginData builder() {
-		return new PluginData();
+	public ChameleonLoggerFactory(Chameleon chameleon) {
+		this.chameleon = chameleon;
 	}
 
 
-	public PluginData name(@NotNull String name) {
-		this.name = name;
-		return this;
-	}
-
-	public PluginData version(@NotNull String version) {
-		this.version = version;
-		return this;
-	}
-
-	public PluginData author(@NotNull String author) {
-		this.author = author;
-		return this;
-	}
-
-	public PluginData logPrefix(@NotNull String logPrefix) {
-		this.logPrefix = logPrefix;
-		return this;
-	}
-
-	public PluginData check() {
-		if (null == name || null == version || null == author || null == logPrefix) {
-			throw new IllegalStateException("Plugin data is missing");
-		}
-
-		return this;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public String getLogPrefix() {
-		return logPrefix;
+	public ChameleonLogger getLogger(Class<?> clazz) {
+		return new ChameleonLoggerImpl(clazz, chameleon);
 	}
 
 }

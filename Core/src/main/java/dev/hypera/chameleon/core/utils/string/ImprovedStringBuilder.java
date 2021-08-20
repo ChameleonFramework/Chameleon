@@ -21,66 +21,73 @@
  * SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.data;
+package dev.hypera.chameleon.core.utils.string;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.function.Predicate;
 
-public class PluginData {
+public class ImprovedStringBuilder {
 
-	private String name;
-	private String version;
-	private String author;
-	private String logPrefix = "[%s]";
+	private StringBuilder builder = new StringBuilder();
 
+	public ImprovedStringBuilder() {
 
-	public static PluginData builder() {
-		return new PluginData();
+	}
+
+	public ImprovedStringBuilder(StringBuilder builder) {
+		this.builder = builder;
 	}
 
 
-	public PluginData name(@NotNull String name) {
-		this.name = name;
+	public ImprovedStringBuilder append(Object obj) {
+		builder.append(obj);
 		return this;
 	}
 
-	public PluginData version(@NotNull String version) {
-		this.version = version;
-		return this;
-	}
-
-	public PluginData author(@NotNull String author) {
-		this.author = author;
-		return this;
-	}
-
-	public PluginData logPrefix(@NotNull String logPrefix) {
-		this.logPrefix = logPrefix;
-		return this;
-	}
-
-	public PluginData check() {
-		if (null == name || null == version || null == author || null == logPrefix) {
-			throw new IllegalStateException("Plugin data is missing");
+	public ImprovedStringBuilder appendIf(Object obj, Predicate<Object> predicate) {
+		if (predicate.test(obj)) {
+			builder.append(obj);
 		}
-
 		return this;
 	}
 
-
-	public String getName() {
-		return name;
+	public ImprovedStringBuilder appendIfElse(Object obj, Object other, Predicate<Object> predicate) {
+		if (predicate.test(obj)) {
+			builder.append(obj);
+		} else {
+			builder.append(other);
+		}
+		return this;
 	}
 
-	public String getVersion() {
-		return version;
+	public ImprovedStringBuilder insert(int offset, Object obj) {
+		builder.insert(offset, obj);
+		return this;
 	}
 
-	public String getAuthor() {
-		return author;
+	public int indexOf(String s) {
+		return builder.indexOf(s);
 	}
 
-	public String getLogPrefix() {
-		return logPrefix;
+	public int indexOf(String s, int fromIndex) {
+		return builder.indexOf(s, fromIndex);
+	}
+
+	public int lastIndexOf(String s) {
+		return builder.lastIndexOf(s);
+	}
+
+	public int lastIndexOf(String s, int fromIndex) {
+		return builder.lastIndexOf(s, fromIndex);
+	}
+
+	public ImprovedStringBuilder reverse() {
+		builder.reverse();
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return builder.toString();
 	}
 
 }
