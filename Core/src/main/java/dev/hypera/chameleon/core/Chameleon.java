@@ -35,6 +35,8 @@ import dev.hypera.chameleon.core.transformers.impl.StringComponentTransformer;
 import dev.hypera.chameleon.core.transformers.impl.StringUUIDTransformer;
 import dev.hypera.chameleon.core.transformers.impl.UUIDChatUserTransformer;
 import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.core.utils.logging.ChameleonLogger;
+import dev.hypera.chameleon.core.utils.logging.factory.ChameleonLoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.UUID;
@@ -46,6 +48,7 @@ public abstract class Chameleon {
     protected final @NotNull Plugin plugin;
     protected final @NotNull EventDispatcher dispatcher;
     private final @NotNull IPlatformData platformData;
+    private final @NotNull ChameleonLoggerFactory factory = new ChameleonLoggerFactory(this);
 
     public Chameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull IPlatformData platformData, ITransformer<?, ?>... transformers) throws InstantiationException {
         Transformer.register(
@@ -76,6 +79,10 @@ public abstract class Chameleon {
     }
     public void onDisable() {
         plugin.onDisable();
+    }
+
+    public @NotNull ChameleonLogger getLogger(Class<?> clazz) {
+        return factory.getLogger(clazz);
     }
 
     public @NotNull Plugin getPlugin() {

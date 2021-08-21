@@ -21,66 +21,16 @@
  * SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.data;
+package dev.hypera.chameleon.core.utils.string;
 
-import org.jetbrains.annotations.NotNull;
+public class StringUtils {
 
-public class PluginData {
-
-	private String name;
-	private String version;
-	private String author;
-	private String logPrefix = "[%s]";
-
-
-	public static PluginData builder() {
-		return new PluginData();
-	}
-
-
-	public PluginData name(@NotNull String name) {
-		this.name = name;
-		return this;
-	}
-
-	public PluginData version(@NotNull String version) {
-		this.version = version;
-		return this;
-	}
-
-	public PluginData author(@NotNull String author) {
-		this.author = author;
-		return this;
-	}
-
-	public PluginData logPrefix(@NotNull String logPrefix) {
-		this.logPrefix = logPrefix;
-		return this;
-	}
-
-	public PluginData check() {
-		if (null == name || null == version || null == author || null == logPrefix) {
-			throw new IllegalStateException("Plugin data is missing");
-		}
-
-		return this;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public String getLogPrefix() {
-		return logPrefix;
+	/**
+	 * Create new {@link ImprovedStringBuilder} instance.
+	 * @return New improved string builder instance.
+	 */
+	public static ImprovedStringBuilder getImprovedStringBuilder() {
+		return new ImprovedStringBuilder();
 	}
 
 }

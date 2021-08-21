@@ -21,66 +21,21 @@
  * SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.data;
+package dev.hypera.chameleon.core.utils.logging;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class PluginData {
+public interface ChameleonLogger {
 
-	private String name;
-	private String version;
-	private String author;
-	private String logPrefix = "[%s]";
-
-
-	public static PluginData builder() {
-		return new PluginData();
-	}
-
-
-	public PluginData name(@NotNull String name) {
-		this.name = name;
-		return this;
-	}
-
-	public PluginData version(@NotNull String version) {
-		this.version = version;
-		return this;
-	}
-
-	public PluginData author(@NotNull String author) {
-		this.author = author;
-		return this;
-	}
-
-	public PluginData logPrefix(@NotNull String logPrefix) {
-		this.logPrefix = logPrefix;
-		return this;
-	}
-
-	public PluginData check() {
-		if (null == name || null == version || null == author || null == logPrefix) {
-			throw new IllegalStateException("Plugin data is missing");
-		}
-
-		return this;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public String getLogPrefix() {
-		return logPrefix;
-	}
+	void log(@NotNull String s);
+	void info(@NotNull String s, @Nullable Object... o);
+	void debug(@NotNull String s, @Nullable Object... o);
+	void warn(@NotNull String s, @Nullable Object... o);
+	void warn(@NotNull String s, @NotNull Throwable throwable, @Nullable Object... o);
+	void error(@NotNull String s, @Nullable Object... o);
+	void error(@NotNull String s, @NotNull Throwable throwable, @Nullable Object... o);
+	void setDebugEnabled(boolean enabled);
+	boolean isDebugEnabled();
 
 }
