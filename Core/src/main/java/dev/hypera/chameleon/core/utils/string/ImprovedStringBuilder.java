@@ -25,6 +25,9 @@ package dev.hypera.chameleon.core.utils.string;
 
 import java.util.function.Predicate;
 
+/**
+ * This class simply wraps a StringBuilder, allowing us to add more helpful methods like {@link ImprovedStringBuilder#appendIf(Object, Predicate)}
+ */
 public class ImprovedStringBuilder {
 
 	private StringBuilder builder = new StringBuilder();

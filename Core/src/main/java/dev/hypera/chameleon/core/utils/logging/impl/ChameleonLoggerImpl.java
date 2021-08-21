@@ -31,6 +31,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ChameleonLoggerImpl implements ChameleonLogger {
 
@@ -44,14 +45,14 @@ public class ChameleonLoggerImpl implements ChameleonLogger {
 	private final boolean isChameleon;
 	private boolean debug = false;
 
-	public ChameleonLoggerImpl(Class<?> clazz, @NotNull Chameleon chameleon) {
+	public ChameleonLoggerImpl(@NotNull Class<?> clazz, @NotNull Chameleon chameleon) {
 		this.chameleon = chameleon;
 		this.isChameleon = clazz.getPackage().getName().startsWith("dev.hypera.chameleon");
 	}
 
 
 	@Override
-	public void log(String s) {
+	public void log(@NotNull String s) {
 		ImprovedStringBuilder builder = StringUtils.getImprovedStringBuilder();
 		builder.appendIfElse(String.format(chameleon.getPlugin().getData().getLogPrefix(), chameleon.getPlugin().getData().getName()), CHAMELEON_PREFIX, (str) -> !isChameleon).append(RESET).append(" ")
 				.append(s);
@@ -59,33 +60,33 @@ public class ChameleonLoggerImpl implements ChameleonLogger {
 	}
 
 	@Override
-	public void info(String s, Object... o) {
+	public void info(@NotNull String s, @Nullable Object... o) {
 		log(String.format(s, o));
 	}
 
 	@Override
-	public void debug(String s, Object... o) {
+	public void debug(@NotNull String s, @Nullable Object... o) {
 		log(DEBUG_PREFIX + String.format(s, o));
 	}
 
 	@Override
-	public void warn(String s, Object... o) {
+	public void warn(@NotNull String s, @Nullable Object... o) {
 		log(WARNING_PREFIX + String.format(s, o));
 	}
 
 	@Override
-	public void warn(String s, Throwable throwable, Object... o) {
+	public void warn(@NotNull String s, @NotNull Throwable throwable, @Nullable Object... o) {
 		warn(s, o);
 		warn(getTrace(throwable));
 	}
 
 	@Override
-	public void error(String s, Object... o) {
+	public void error(@NotNull String s, @Nullable Object... o) {
 		log(ERROR_PREFIX + String.format(s, o));
 	}
 
 	@Override
-	public void error(String s, Throwable throwable, Object... o) {
+	public void error(@NotNull String s, @NotNull Throwable throwable, @Nullable Object... o) {
 		error(s, o);
 		error(getTrace(throwable));
 	}
@@ -100,12 +101,12 @@ public class ChameleonLoggerImpl implements ChameleonLogger {
 		return debug;
 	}
 
-	private String getTrace(Throwable throwable) {
+	private @NotNull String getTrace(@NotNull Throwable throwable) {
 		try (StringWriter writer = new StringWriter(); PrintWriter printWriter = new PrintWriter(writer)) {
 			throwable.printStackTrace(printWriter);
 			return writer.toString();
 		} catch (Exception ignored) {
-			return null;
+			return throwable.getMessage();
 		}
 	}
 

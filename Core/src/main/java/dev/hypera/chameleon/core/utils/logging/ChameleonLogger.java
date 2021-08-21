@@ -23,15 +23,18 @@
 
 package dev.hypera.chameleon.core.utils.logging;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public interface ChameleonLogger {
 
-	void log(String s);
-	void info(String s, Object... o);
-	void debug(String s, Object... o);
-	void warn(String s, Object... o);
-	void warn(String s, Throwable throwable, Object... o);
-	void error(String s, Object... o);
-	void error(String s, Throwable throwable, Object... o);
+	void log(@NotNull String s);
+	void info(@NotNull String s, @Nullable Object... o);
+	void debug(@NotNull String s, @Nullable Object... o);
+	void warn(@NotNull String s, @Nullable Object... o);
+	void warn(@NotNull String s, @NotNull Throwable throwable, @Nullable Object... o);
+	void error(@NotNull String s, @Nullable Object... o);
+	void error(@NotNull String s, @NotNull Throwable throwable, @Nullable Object... o);
 	void setDebugEnabled(boolean enabled);
 	boolean isDebugEnabled();
 

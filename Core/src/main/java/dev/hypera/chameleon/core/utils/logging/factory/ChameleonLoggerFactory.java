@@ -26,17 +26,23 @@ package dev.hypera.chameleon.core.utils.logging.factory;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.utils.logging.ChameleonLogger;
 import dev.hypera.chameleon.core.utils.logging.impl.ChameleonLoggerImpl;
+import org.jetbrains.annotations.NotNull;
 
 public class ChameleonLoggerFactory {
 
 	private final Chameleon chameleon;
 
-	public ChameleonLoggerFactory(Chameleon chameleon) {
+	public ChameleonLoggerFactory(@NotNull Chameleon chameleon) {
 		this.chameleon = chameleon;
 	}
 
 
-	public ChameleonLogger getLogger(Class<?> clazz) {
+	/**
+	 * Creates a new instance of a {@link ChameleonLogger} implementation.
+	 * @param clazz Class the logger should be created for.
+	 * @return New chameleon logger.
+	 */
+	public ChameleonLogger getLogger(@NotNull Class<?> clazz) {
 		return new ChameleonLoggerImpl(clazz, chameleon);
 	}
 

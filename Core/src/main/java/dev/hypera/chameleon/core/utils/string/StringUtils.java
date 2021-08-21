@@ -25,6 +25,10 @@ package dev.hypera.chameleon.core.utils.string;
 
 public class StringUtils {
 
+	/**
+	 * Create new {@link ImprovedStringBuilder} instance.
+	 * @return New improved string builder instance.
+	 */
 	public static ImprovedStringBuilder getImprovedStringBuilder() {
 		return new ImprovedStringBuilder();
 	}
