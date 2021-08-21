@@ -28,7 +28,7 @@ import dev.hypera.chameleon.core.exceptions.TransformFailedException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang3.ClassUtils;
 
 /**
  * Transformer
@@ -86,7 +86,7 @@ public class Transformer {
 	@SuppressWarnings("unchecked")
 	public static <T, U> U transform(Chameleon chameleon, T object, Class<U> to) throws TransformFailedException {
 		if (to.isPrimitive()) {
-			to = ClassUtils.primitiveToWrapper(to);
+			to = (Class<U>) ClassUtils.primitiveToWrapper(to);
 		}
 
 		if (to.isInstance(object)) {
@@ -116,7 +116,7 @@ public class Transformer {
 	@SuppressWarnings("unchecked")
 	public static <T, U> U transformWithData(Chameleon chameleon, T object, Class<U> to, String... data) throws TransformFailedException {
 		if (to.isPrimitive()) {
-			to = ClassUtils.primitiveToWrapper(to);
+			to = (Class<U>) ClassUtils.primitiveToWrapper(to);
 		}
 
 		if (to.isInstance(object)) {
