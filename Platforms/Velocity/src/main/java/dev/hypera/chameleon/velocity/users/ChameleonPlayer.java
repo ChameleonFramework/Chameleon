@@ -26,6 +26,7 @@ package dev.hypera.chameleon.velocity.users;
 import com.velocitypowered.api.proxy.Player;
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ProxyUser;
+import java.util.UUID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,6 +54,11 @@ public class ChameleonPlayer extends AudienceWrapper implements ProxyUser {
     @Override
     public String getName() {
         return player.getUsername();
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return player.getUniqueId();
     }
 
 }

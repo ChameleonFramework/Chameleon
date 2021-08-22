@@ -25,6 +25,7 @@ package dev.hypera.chameleon.minestom.users;
 
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ServerUser;
+import java.util.UUID;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.Permission;
 import org.jetbrains.annotations.ApiStatus;
@@ -54,6 +55,11 @@ public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
     @Override
     public String getName() {
         return player.getUsername();
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return player.getUuid();
     }
 
 }

@@ -26,6 +26,7 @@ package dev.hypera.chameleon.bungeecord.users;
 import dev.hypera.chameleon.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ProxyUser;
+import java.util.UUID;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -53,6 +54,11 @@ public class ChameleonProxiedPlayer extends AudienceWrapper implements ProxyUser
     @Override
     public String getName() {
         return player.getName();
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return player.getUniqueId();
     }
 
 }
