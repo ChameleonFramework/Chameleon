@@ -26,6 +26,7 @@ package dev.hypera.chameleon.spigot.users;
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ServerUser;
 import dev.hypera.chameleon.spigot.SpigotChameleon;
+import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +42,7 @@ public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
     }
 
     @Override
-    public boolean hasPermission(String permission) {
+    public boolean hasPermission(@NotNull String permission) {
         return player.hasPermission(permission);
     }
 
@@ -54,6 +55,11 @@ public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
     @Override
     public String getName() {
         return player.getName();
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return player.getUniqueId();
     }
 
 }

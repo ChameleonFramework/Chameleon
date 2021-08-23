@@ -24,9 +24,8 @@
 package dev.hypera.chameleon.core.commands;
 
 import dev.hypera.chameleon.core.users.ChatUser;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class Command {
 

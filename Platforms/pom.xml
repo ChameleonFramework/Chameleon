@@ -28,7 +28,7 @@
     <parent>
         <artifactId>Chameleon</artifactId>
         <groupId>dev.hypera</groupId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.2.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -42,11 +42,6 @@
         <module>Velocity</module>
         <module>Minestom</module>
     </modules>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
     <dependencies>
         <dependency>

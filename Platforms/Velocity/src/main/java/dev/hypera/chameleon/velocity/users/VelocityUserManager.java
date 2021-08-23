@@ -26,12 +26,23 @@ package dev.hypera.chameleon.velocity.users;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.velocity.VelocityChameleon;
+import java.util.UUID;
+import org.jetbrains.annotations.Nullable;
 
 public class VelocityUserManager {
 
     public static ChatUser getUser(CommandSource user) {
-        if (user instanceof Player) return new ChameleonPlayer((Player) user);
-        else return new ChameleonCommandSource(user);
+        if (user instanceof Player) {
+            return new ChameleonPlayer((Player) user);
+        } else {
+            return new ChameleonCommandSource(user);
+        }
+    }
+
+    @Nullable
+    public static ChatUser getUser(VelocityChameleon chameleon, UUID uuid) {
+        return chameleon.getVelocityPlugin().getServer().getPlayer(uuid).map(ChameleonPlayer::new).orElse(null);
     }
 
 }

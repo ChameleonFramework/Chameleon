@@ -23,9 +23,13 @@
 
 package dev.hypera.chameleon.core.users;
 
+import java.util.UUID;
+
 /**
  * A client-side user.
  */
 public interface User extends ChatUser {
+
+	UUID getUniqueId();
 
 }

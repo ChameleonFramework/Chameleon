@@ -24,14 +24,26 @@
 package dev.hypera.chameleon.minestom.users;
 
 import dev.hypera.chameleon.core.users.ChatUser;
+import java.util.UUID;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 public class MinestomUserManager {
 
     public static ChatUser getUser(CommandSender user) {
-        if (user instanceof Player) return new ChameleonPlayer((Player) user);
-        else return new ChameleonCommandSender(user);
+        if (user instanceof Player) {
+            return new ChameleonPlayer((Player) user);
+        } else {
+            return new ChameleonCommandSender(user);
+        }
+    }
+
+    @Nullable
+    public static ChatUser getUser(UUID uuid) {
+        Player player = MinecraftServer.getConnectionManager().getPlayer(uuid);
+        return (null == player ? null : new ChameleonPlayer(player));
     }
 
 }
