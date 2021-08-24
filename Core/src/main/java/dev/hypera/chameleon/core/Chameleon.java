@@ -67,10 +67,10 @@ public abstract class Chameleon {
 
         try {
             this.plugin = pluginClass.getConstructor(Chameleon.class).newInstance(this);
-            this.plugin.getData().check();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new InstantiationException("Failed to initialise instance of " + pluginClass.getCanonicalName());
         }
+        this.plugin.getData().check();
         this.platformData = platformData;
     }
 
