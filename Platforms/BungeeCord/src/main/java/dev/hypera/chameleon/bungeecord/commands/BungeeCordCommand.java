@@ -36,7 +36,7 @@ public class BungeeCordCommand extends net.md_5.bungee.api.plugin.Command implem
     private final @NotNull Command command;
 
     public BungeeCordCommand(@NotNull BungeeCordChameleon chameleon, @NotNull Command command) {
-        super(command.getName(), null, command.getAliases());
+        super(command.getName(), null, command.getAliases().toArray(new String[0]));
         this.chameleon = chameleon;
         this.command = command;
     }

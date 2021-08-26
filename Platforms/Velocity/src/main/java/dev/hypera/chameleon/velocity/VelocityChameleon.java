@@ -70,9 +70,9 @@ public class VelocityChameleon extends Chameleon {
     }
 
     @Override
-    public void registerCommand(@NotNull Command command) {
+    public void registerPlatformCommand(@NotNull Command command) {
         CommandManager commandManager = velocityPlugin.getServer().getCommandManager();
-        commandManager.register(commandManager.metaBuilder(command.getName()).aliases(command.getAliases()).build(), new VelocityCommand(command));
+        commandManager.register(commandManager.metaBuilder(command.getName()).aliases(command.getAliases().toArray(new String[0])).build(), new VelocityCommand(command));
     }
 
     @Override

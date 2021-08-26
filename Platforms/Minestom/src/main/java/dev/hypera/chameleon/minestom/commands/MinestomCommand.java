@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 public class MinestomCommand extends net.minestom.server.command.builder.Command {
 
     public MinestomCommand(@NotNull Command command) {
-        super(command.getName(), command.getAliases());
+        super(command.getName(), command.getAliases().toArray(new String[0]));
         setDefaultExecutor((sender, context) -> command.execute(MinestomUserManager.getUser(sender), context.getInput().replace(context.getCommandName() + " ", "").split(" ")));
     }
 

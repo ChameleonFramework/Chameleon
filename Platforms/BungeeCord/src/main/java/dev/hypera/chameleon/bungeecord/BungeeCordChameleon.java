@@ -76,7 +76,7 @@ public class BungeeCordChameleon extends Chameleon {
     }
 
     @Override
-    public void registerCommand(@NotNull Command command) {
+    public void registerPlatformCommand(@NotNull Command command) {
         bungeePlugin.getProxy().getPluginManager().registerCommand(bungeePlugin, new BungeeCordCommand(this, command));
     }
 

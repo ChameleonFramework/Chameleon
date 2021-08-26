@@ -23,33 +23,18 @@
 
 package dev.hypera.chameleon.core.commands;
 
+import dev.hypera.chameleon.core.objects.Platform;
 import dev.hypera.chameleon.core.users.ChatUser;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Command {
 
-    private final @NotNull String name;
-    private final @NotNull String[] aliases;
+    public abstract void execute(@NotNull ChatUser user, @NotNull String[] args);
+    public abstract @NotNull List<String> tabComplete(@NotNull ChatUser user, @NotNull String[] args);
 
-    public Command(@NotNull String name, @NotNull String... aliases) {
-        this.name = name;
-        this.aliases = aliases;
-    }
-
-    public Command(@NotNull String name) {
-        this(name, new String[0]);
-    }
-
-    public @NotNull String getName() {
-        return name;
-    }
-
-    public @NotNull String[] getAliases() {
-        return aliases;
-    }
-
-    public abstract boolean execute(@NotNull ChatUser user, @NotNull String[] args);
-    public abstract List<String> tabComplete(@NotNull ChatUser user, @NotNull String[] args);
+    public abstract @NotNull String getName();
+    public abstract @NotNull List<String> getAliases();
+    public abstract @NotNull Platform getPlatform();
 
 }
