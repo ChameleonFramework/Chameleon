@@ -78,7 +78,7 @@ public class SpigotChameleon extends Chameleon {
     }
 
     @Override
-    public void registerCommand(@NotNull Command command) {
+    public void registerPlatformCommand(@NotNull Command command) {
         try {
             Field commandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             commandMap.setAccessible(true);

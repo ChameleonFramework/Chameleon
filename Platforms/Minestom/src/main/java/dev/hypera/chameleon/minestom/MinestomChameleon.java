@@ -69,7 +69,7 @@ public class MinestomChameleon extends Chameleon {
     }
 
     @Override
-    public void registerCommand(@NotNull Command command) {
+    public void registerPlatformCommand(@NotNull Command command) {
         MinecraftServer.getCommandManager().register(new MinestomCommand(command));
     }
 

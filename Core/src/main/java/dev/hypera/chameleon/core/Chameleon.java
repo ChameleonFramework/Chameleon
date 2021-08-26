@@ -93,7 +93,12 @@ public abstract class Chameleon {
     }
 
     public abstract Path getDataFolder();
-    public abstract void registerCommand(@NotNull Command command);
+    public void registerCommand(@NotNull Command command) {
+        if (command.getPlatform().getPlatformTypes().stream().anyMatch(t -> t.equals(platformData.getType()))) {
+            registerPlatformCommand(command);
+        }
+    }
+    protected abstract void registerPlatformCommand(@NotNull Command command);
 
     public EventDispatcher getEventDispatcher() {
         return dispatcher;

@@ -37,14 +37,15 @@ public class SpigotCommand extends org.bukkit.command.Command {
     private final @NotNull Command command;
 
     public SpigotCommand(@NotNull SpigotChameleon chameleon, @NotNull Command command) {
-        super(command.getName(), "", "", Arrays.asList(command.getAliases()));
+        super(command.getName(), "", "", command.getAliases());
         this.chameleon = chameleon;
         this.command = command;
     }
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
-        return command.execute(SpigotUserManager.getUser(chameleon, sender), args);
+        command.execute(SpigotUserManager.getUser(chameleon, sender), args);
+        return true;
     }
 
     @NotNull
