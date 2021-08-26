@@ -34,8 +34,10 @@ import dev.hypera.chameleon.velocity.data.VelocityData;
 import dev.hypera.chameleon.velocity.events.VelocityEventHandler;
 import dev.hypera.chameleon.velocity.objects.VelocityServer;
 import dev.hypera.chameleon.velocity.transformers.PlayerChatUserTransformer;
+import dev.hypera.chameleon.velocity.transformers.PlayerProxyUserTransformer;
 import dev.hypera.chameleon.velocity.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.velocity.transformers.ResultBooleanTransformer;
+import dev.hypera.chameleon.velocity.transformers.ServerTransformer;
 import dev.hypera.chameleon.velocity.users.ChameleonCommandSource;
 import dev.hypera.chameleon.velocity.users.VelocityUserManager;
 import java.nio.file.Path;
@@ -51,7 +53,9 @@ public class VelocityChameleon extends Chameleon {
         super(pluginClass, new VelocityData(velocityPlugin.getServer()),
                 new PlayerUUIDTransformer(),
                 new PlayerChatUserTransformer(),
-                new ResultBooleanTransformer()
+                new PlayerProxyUserTransformer(),
+                new ResultBooleanTransformer(),
+                new ServerTransformer()
         );
         this.velocityPlugin = velocityPlugin;
     }

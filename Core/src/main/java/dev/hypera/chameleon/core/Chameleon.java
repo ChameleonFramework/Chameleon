@@ -30,6 +30,7 @@ import dev.hypera.chameleon.core.events.dispatch.EventDispatcher;
 import dev.hypera.chameleon.core.events.impl.common.UserChatEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserJoinEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserLeaveEvent;
+import dev.hypera.chameleon.core.events.impl.proxy.ProxyUserSwitchEvent;
 import dev.hypera.chameleon.core.objects.Platform;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.transformers.ITransformer;
@@ -65,7 +66,9 @@ public abstract class Chameleon {
         dispatcher.registerEvents(
                 UserChatEvent.class,
                 UserJoinEvent.class,
-                UserLeaveEvent.class
+                UserLeaveEvent.class,
+
+                ProxyUserSwitchEvent.class
         );
 
         try {
