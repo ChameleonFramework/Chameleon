@@ -23,6 +23,7 @@
 
 package dev.hypera.chameleon.core.annotations;
 
+import dev.hypera.chameleon.core.objects.Platform;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -32,5 +33,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PlatformSpecific {
+
+	Platform value();
 
 }
