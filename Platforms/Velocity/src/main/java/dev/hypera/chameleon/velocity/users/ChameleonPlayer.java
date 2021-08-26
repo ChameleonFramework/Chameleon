@@ -24,11 +24,24 @@
 package dev.hypera.chameleon.velocity.users;
 
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ServerConnection;
+import com.velocitypowered.api.proxy.messages.ChannelIdentifier;
+import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
+import com.velocitypowered.api.util.ModInfo;
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
+import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ProxyUser;
+import dev.hypera.chameleon.velocity.VelocityChameleon;
+import dev.hypera.chameleon.velocity.objects.VelocityServer;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ChameleonPlayer extends AudienceWrapper implements ProxyUser {
 
@@ -48,7 +61,7 @@ public class ChameleonPlayer extends AudienceWrapper implements ProxyUser {
     @Override
     public void setPermission(@NotNull String permission, boolean has) {
         // TODO: Complete this and make it work.
-        System.err.println("ChameleonPlayer#setPermission(String, boolean) is not implemented yet.");
+        throw new UnsupportedOperationException("ChameleonPlayer#setPermission(String, boolean) is not implemented yet.");
     }
 
     @Override
@@ -57,8 +70,61 @@ public class ChameleonPlayer extends AudienceWrapper implements ProxyUser {
     }
 
     @Override
-    public UUID getUniqueId() {
+    public @NotNull UUID getUniqueId() {
         return player.getUniqueId();
+    }
+
+    @Override
+    public @Nullable Locale getLocale() {
+        return player.getPlayerSettings().getLocale();
+    }
+
+    @Override
+    public int getPing() {
+        return (int) player.getPing();
+    }
+
+    @Override
+    public @Nullable Server getServer() {
+        return player.getCurrentServer().map(s -> new VelocityServer(s.getServer())).orElse(null);
+    }
+
+    @Override
+    public boolean isForgeUser() {
+        return player.getModInfo().isPresent();
+    }
+
+    @Override
+    public @Nullable Map<String, String> getModList() {
+        Optional<ModInfo> info = player.getModInfo();
+        if (!info.isPresent()) {
+            return null;
+        } else {
+            Map<String, String> mods = new HashMap<>();
+            info.get().getMods().forEach(m -> mods.put(m.getId(), m.getVersion()));
+            return mods;
+        }
+    }
+
+    @Override
+    public void chat(@NotNull String message) {
+        player.spoofChatInput(message);
+    }
+
+    @Override
+    public void sendData(@NotNull String channel, byte[] data) {
+        player.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
+    }
+
+    @Override
+    public void connect(@NotNull Server server) {
+        player.createConnectionRequest(((VelocityServer) server).getServer());
+    }
+
+    @Override
+    public void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback) {
+        player.createConnectionRequest(((VelocityServer) server).getServer());
+        callback.accept(true, null);
     }
 
 }

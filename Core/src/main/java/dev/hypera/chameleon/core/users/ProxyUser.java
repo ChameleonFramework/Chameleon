@@ -23,9 +23,22 @@
 
 package dev.hypera.chameleon.core.users;
 
+import dev.hypera.chameleon.core.objects.Server;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * A client-side user in the scope of a proxy.
  */
 public interface ProxyUser extends User {
+
+	@Nullable Server getServer();
+	boolean isForgeUser();
+	@Nullable Map<String, String> getModList();
+
+	void connect(@NotNull Server server);
+	void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback);
 
 }

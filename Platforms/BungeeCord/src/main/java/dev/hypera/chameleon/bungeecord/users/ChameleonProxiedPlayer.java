@@ -24,25 +24,33 @@
 package dev.hypera.chameleon.bungeecord.users;
 
 import dev.hypera.chameleon.bungeecord.BungeeCordChameleon;
+import dev.hypera.chameleon.bungeecord.objects.BungeeCordServer;
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
+import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ProxyUser;
+import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ChameleonProxiedPlayer extends AudienceWrapper implements ProxyUser {
 
+    private final BungeeCordChameleon chameleon;
     private final ProxiedPlayer player;
 
-    @ApiStatus.Internal
+    @Internal
     public ChameleonProxiedPlayer(BungeeCordChameleon chameleon, ProxiedPlayer player) {
         super(chameleon.getAdventure().player(player));
+        this.chameleon = chameleon;
         this.player = player;
     }
 
     @Override
-    public boolean hasPermission(String permission) {
+    public boolean hasPermission(@NotNull String permission) {
         return player.hasPermission(permission);
     }
 
@@ -57,8 +65,53 @@ public class ChameleonProxiedPlayer extends AudienceWrapper implements ProxyUser
     }
 
     @Override
-    public UUID getUniqueId() {
+    public @NotNull UUID getUniqueId() {
         return player.getUniqueId();
+    }
+
+    @Override
+    public @Nullable Locale getLocale() {
+        return player.getLocale();
+    }
+
+    @Override
+    public int getPing() {
+        return player.getPing();
+    }
+
+    @Override
+    public @Nullable Server getServer() {
+        return null == player.getServer() ? null : new BungeeCordServer(chameleon, player.getServer().getInfo());
+    }
+
+    @Override
+    public boolean isForgeUser() {
+        return player.isForgeUser();
+    }
+
+    @Override
+    public @Nullable Map<String, String> getModList() {
+        return player.getModList();
+    }
+
+    @Override
+    public void chat(@NotNull String message) {
+        player.chat(message);
+    }
+
+    @Override
+    public void sendData(@NotNull String channel, byte[] data) {
+        player.sendData(channel, data);
+    }
+
+    @Override
+    public void connect(@NotNull Server server) {
+        player.connect(((BungeeCordServer) server).getServer());
+    }
+
+    @Override
+    public void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback) {
+        player.connect(((BungeeCordServer) server).getServer(), callback::accept);
     }
 
 }

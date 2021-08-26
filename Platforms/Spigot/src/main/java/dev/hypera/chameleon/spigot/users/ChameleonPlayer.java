@@ -26,18 +26,22 @@ package dev.hypera.chameleon.spigot.users;
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ServerUser;
 import dev.hypera.chameleon.spigot.SpigotChameleon;
+import java.util.Locale;
 import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
 
+    private final SpigotChameleon chameleon;
     private final Player player;
 
     @ApiStatus.Internal
     public ChameleonPlayer(SpigotChameleon chameleon, Player player) {
         super(chameleon.getAdventure().player(player));
+        this.chameleon = chameleon;
         this.player = player;
     }
 
@@ -49,7 +53,7 @@ public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
     @Override
     public void setPermission(@NotNull String permission, boolean has) {
         // TODO: Complete this and make it work.
-        System.err.println("ChameleonPlayer#setPermission(String, boolean) is not implemented yet.");
+        throw new UnsupportedOperationException("ChameleonPlayer#setPermission(String, boolean) is not implemented yet.");
     }
 
     @Override
@@ -58,8 +62,28 @@ public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
     }
 
     @Override
-    public UUID getUniqueId() {
+    public @NotNull UUID getUniqueId() {
         return player.getUniqueId();
+    }
+
+    @Override
+    public @Nullable Locale getLocale() {
+        return Locale.forLanguageTag(player.getLocale());
+    }
+
+    @Override
+    public int getPing() {
+        return player.getPing();
+    }
+
+    @Override
+    public void chat(@NotNull String message) {
+        player.chat(message);
+    }
+
+    @Override
+    public void sendData(@NotNull String channel, byte[] data) {
+        player.sendPluginMessage(chameleon.getSpigotPlugin(), channel, data);
     }
 
 }

@@ -23,13 +23,22 @@
 
 package dev.hypera.chameleon.core.users;
 
+import java.util.Locale;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A client-side user.
  */
 public interface User extends ChatUser {
 
-	UUID getUniqueId();
+	@NotNull UUID getUniqueId();
+	@Nullable Locale getLocale();
+	int getPing();
+
+	void chat(@NotNull String message);
+	void sendData(@NotNull String channel, byte[] data);
+
 
 }
