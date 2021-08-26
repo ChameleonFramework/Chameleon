@@ -26,6 +26,7 @@ package dev.hypera.chameleon.minestom;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.minestom.commands.MinestomCommand;
 import dev.hypera.chameleon.minestom.data.MinestomData;
@@ -81,6 +82,11 @@ public class MinestomChameleon extends Chameleon {
     @Override
     public @Nullable ChatUser getPlayer(UUID uuid) {
         return MinestomUserManager.getUser(uuid);
+    }
+
+    @Override
+    public @Nullable Server getServer(String name) {
+        throw new UnsupportedOperationException("This method is not supported on this platform.");
     }
 
 }

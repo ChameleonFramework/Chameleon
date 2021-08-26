@@ -25,11 +25,13 @@ package dev.hypera.chameleon.minestom.users;
 
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ServerUser;
+import java.util.Locale;
 import java.util.UUID;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.Permission;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
 
@@ -58,8 +60,28 @@ public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
     }
 
     @Override
-    public UUID getUniqueId() {
+    public @NotNull UUID getUniqueId() {
         return player.getUuid();
+    }
+
+    @Override
+    public @Nullable Locale getLocale() {
+        return player.getLocale();
+    }
+
+    @Override
+    public int getPing() {
+        return player.getLatency();
+    }
+
+    @Override
+    public void chat(@NotNull String message) {
+        player.chat(message);
+    }
+
+    @Override
+    public void sendData(@NotNull String channel, byte[] data) {
+        player.sendPluginMessage(channel, data);
     }
 
 }

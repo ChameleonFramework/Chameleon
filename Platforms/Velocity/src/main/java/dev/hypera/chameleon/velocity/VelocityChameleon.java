@@ -27,10 +27,12 @@ import com.velocitypowered.api.command.CommandManager;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.velocity.commands.VelocityCommand;
 import dev.hypera.chameleon.velocity.data.VelocityData;
 import dev.hypera.chameleon.velocity.events.VelocityEventHandler;
+import dev.hypera.chameleon.velocity.objects.VelocityServer;
 import dev.hypera.chameleon.velocity.transformers.PlayerChatUserTransformer;
 import dev.hypera.chameleon.velocity.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.velocity.transformers.ResultBooleanTransformer;
@@ -83,6 +85,11 @@ public class VelocityChameleon extends Chameleon {
     @Override
     public @Nullable ChatUser getPlayer(UUID uuid) {
         return VelocityUserManager.getUser(this, uuid);
+    }
+
+    @Override
+    public @Nullable Server getServer(String name) {
+        return getVelocityPlugin().getServer().getServer(name).map(VelocityServer::new).orElse(null);
     }
 
 }

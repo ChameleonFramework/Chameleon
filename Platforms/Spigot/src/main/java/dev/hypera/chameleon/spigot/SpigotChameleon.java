@@ -26,6 +26,7 @@ package dev.hypera.chameleon.spigot;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.spigot.commands.SpigotCommand;
 import dev.hypera.chameleon.spigot.data.SpigotData;
@@ -98,6 +99,11 @@ public class SpigotChameleon extends Chameleon {
     @Override
     public @Nullable ChatUser getPlayer(UUID uuid) {
         return SpigotUserManager.getUser(this, uuid);
+    }
+
+    @Override
+    public @Nullable Server getServer(String name) {
+        throw new UnsupportedOperationException("This method is not supported on this platform.");
     }
 
 }

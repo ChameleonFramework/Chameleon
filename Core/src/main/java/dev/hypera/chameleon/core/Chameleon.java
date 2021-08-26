@@ -23,12 +23,15 @@
 
 package dev.hypera.chameleon.core;
 
+import dev.hypera.chameleon.core.annotations.PlatformSpecific;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.data.IPlatformData;
 import dev.hypera.chameleon.core.events.dispatch.EventDispatcher;
 import dev.hypera.chameleon.core.events.impl.common.UserChatEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserJoinEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserLeaveEvent;
+import dev.hypera.chameleon.core.objects.Platform;
+import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.transformers.ITransformer;
 import dev.hypera.chameleon.core.transformers.Transformer;
 import dev.hypera.chameleon.core.transformers.impl.StringComponentTransformer;
@@ -106,5 +109,6 @@ public abstract class Chameleon {
 
     public abstract @NotNull ChatUser getConsoleSender();
     public abstract @Nullable ChatUser getPlayer(UUID uuid);
+    public abstract @PlatformSpecific(Platform.PROXY) @Nullable Server getServer(String name);
 
 }

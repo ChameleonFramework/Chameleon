@@ -21,19 +21,21 @@
  * SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.annotations;
+package dev.hypera.chameleon.core.objects;
 
-import dev.hypera.chameleon.core.objects.Platform;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import dev.hypera.chameleon.core.users.ProxyUser;
+import java.net.SocketAddress;
+import java.util.Set;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * Annotation used for noting that something can only be used on a specific platform/group of platforms.
- * This annotation is also used internally to tell the event mapper that a mapped value can be null.
- */
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PlatformSpecific {
+public interface Server {
 
-	Platform value();
+	@NotNull String getName();
+	@NotNull SocketAddress getSocketAddress();
+	@NotNull Set<ProxyUser> getPlayers();
+	@Nullable String getMotd();
+
+	void sendData(@NotNull String channel, byte[] data);
 
 }

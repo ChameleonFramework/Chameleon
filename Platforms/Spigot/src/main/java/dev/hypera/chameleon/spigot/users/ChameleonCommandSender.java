@@ -50,7 +50,7 @@ public class ChameleonCommandSender extends AudienceWrapper implements ChatUser 
     @Override
     public void setPermission(@NotNull String permission, boolean has) {
         // TODO: Complete this and make it work.
-        System.err.println("ChameleonCommandSender#setPermission(String, boolean) is not implemented yet.");
+        throw new UnsupportedOperationException("ChameleonCommandSender#setPermission(String, boolean) is not implemented yet.");
     }
 
     @Override
