@@ -103,7 +103,7 @@ public class SpigotChameleon extends Chameleon {
 
     @Override
     public @Nullable Server getServer(String name) {
-        return null;
+        throw new UnsupportedOperationException("This method is not supported on this platform.");
     }
 
 }
