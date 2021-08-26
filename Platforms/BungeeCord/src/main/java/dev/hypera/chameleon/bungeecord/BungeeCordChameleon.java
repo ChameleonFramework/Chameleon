@@ -29,7 +29,9 @@ import dev.hypera.chameleon.bungeecord.events.BungeeCordEventHandler;
 import dev.hypera.chameleon.bungeecord.objects.BungeeCordServer;
 import dev.hypera.chameleon.bungeecord.transformers.ConnectionChatUserTransformer;
 import dev.hypera.chameleon.bungeecord.transformers.ProxiedPlayerChatUserTransformer;
+import dev.hypera.chameleon.bungeecord.transformers.ProxiedPlayerProxyUserTransformer;
 import dev.hypera.chameleon.bungeecord.transformers.ProxiedPlayerUUIDTransformer;
+import dev.hypera.chameleon.bungeecord.transformers.ServerInfoServerTransformer;
 import dev.hypera.chameleon.bungeecord.users.BungeeCordUserManager;
 import dev.hypera.chameleon.bungeecord.users.ChameleonCommandSender;
 import dev.hypera.chameleon.core.Chameleon;
@@ -55,7 +57,9 @@ public class BungeeCordChameleon extends Chameleon {
         super(pluginClass, new BungeeCordData(),
                 new ProxiedPlayerUUIDTransformer(),
                 new ProxiedPlayerChatUserTransformer(),
-                new ConnectionChatUserTransformer()
+                new ProxiedPlayerProxyUserTransformer(),
+                new ConnectionChatUserTransformer(),
+                new ServerInfoServerTransformer()
         );
         this.bungeePlugin = bungeePlugin;
         this.adventure = BungeeAudiences.create(bungeePlugin);
