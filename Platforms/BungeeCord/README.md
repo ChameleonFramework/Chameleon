@@ -25,4 +25,4 @@ public final class ChameleonProjectBungee extends Plugin {
 
 }
 ```
-A full example of a Chameleon plugin supporting BungeeCord is in [the example project](https://github.com/HyperaOfficial/ChameleonProject/tree/master/ChameleonProject-Bungee).
+A full example of a Chameleon plugin supporting BungeeCord is in [the example project](https://github.com/HyperaOfficial/ChameleonProject/tree/main/BungeeCord).

@@ -25,4 +25,4 @@ public class ChameleonProjectMinestom extends Extension {
 
 }
 ```
-A full example of a Chameleon plugin supporting Minestom is in [the example project](https://github.com/HyperaOfficial/ChameleonProject/tree/master/ChameleonProject-Minestom).
+A full example of a Chameleon plugin supporting Minestom is in [the example project](https://github.com/HyperaOfficial/ChameleonProject/tree/main/Minestom).
