@@ -32,6 +32,7 @@ import dev.hypera.chameleon.core.events.impl.common.UserJoinEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserLeaveEvent;
 import dev.hypera.chameleon.core.events.impl.proxy.ProxyUserSwitchEvent;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.exceptions.PEBKACException;
 import dev.hypera.chameleon.core.objects.Platform;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.transformers.ITransformer;
@@ -75,10 +76,10 @@ public abstract class Chameleon {
 
         try {
             this.plugin = pluginClass.getConstructor(Chameleon.class).newInstance(this);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            this.plugin.getData().check();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | PEBKACException e) {
             throw new ChameleonInstantiationException("Failed to initialise instance of " + pluginClass.getCanonicalName(), e);
         }
-        this.plugin.getData().check();
         this.platformData = platformData;
     }
 
