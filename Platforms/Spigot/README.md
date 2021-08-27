@@ -15,7 +15,7 @@ public final class ChameleonProjectSpigot extends JavaPlugin {
     @Override
     public void onEnable() {
         try { chameleon = new SpigotChameleon(ChameleonProject.class, this); chameleon.onEnable(); }
-        catch (InstantiationException e) { e.printStackTrace(); }
+        catch (ChameleonInstantiationException e) { e.printStackTrace(); }
     }
 
     @Override

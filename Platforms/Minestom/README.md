@@ -15,7 +15,7 @@ public class ChameleonProjectMinestom extends Extension {
     @Override
     public void initialize() {
         try { chameleon = new MinestomChameleon(ChameleonProject.class, this); chameleon.onEnable(); }
-        catch (InstantiationException e) { e.printStackTrace(); }
+        catch (ChameleonInstantiationException e) { e.printStackTrace(); }
     }
 
     @Override

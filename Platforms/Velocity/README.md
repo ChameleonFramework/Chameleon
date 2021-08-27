@@ -20,7 +20,7 @@ public class ChameleonProjectVelocity implements VelocityPlugin {
     private final ProxyServer server;
     private final VelocityChameleon chameleon = new VelocityChameleon(ChameleonProject.class, this);
 
-    @Inject public ChameleonProjectVelocity(ProxyServer server) throws InstantiationException { this.server = server; }
+    @Inject public ChameleonProjectVelocity(ProxyServer server) throws ChameleonInstantiationException { this.server = server; }
     @Subscribe public void onProxyInitialization(ProxyInitializeEvent event) { chameleon.onEnable(); }
     @Subscribe public void onProxyShutdown(ProxyShutdownEvent event) { chameleon.onDisable(); }
     @Override public ProxyServer getServer() { return server; }

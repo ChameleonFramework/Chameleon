@@ -32,6 +32,7 @@ import dev.hypera.chameleon.bungeecord.users.BungeeCordUserManager;
 import dev.hypera.chameleon.bungeecord.users.ChameleonCommandSender;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.commands.CommandManager;
+import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
@@ -50,7 +51,7 @@ public class BungeeCordChameleon extends Chameleon {
     private final @NotNull BungeeAudiences adventure;
     private final @NotNull CommandManager commandManager;
 
-    public BungeeCordChameleon(@NotNull Class<? extends dev.hypera.chameleon.core.Plugin> pluginClass, @NotNull Plugin bungeePlugin) throws InstantiationException {
+    public BungeeCordChameleon(@NotNull Class<? extends dev.hypera.chameleon.core.Plugin> pluginClass, @NotNull Plugin bungeePlugin) throws ChameleonInstantiationException {
         super(pluginClass, new BungeeCordData(),
                 new ProxiedPlayerUUIDTransformer(),
                 new ProxiedPlayerChatUserTransformer(),

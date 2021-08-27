@@ -31,6 +31,7 @@ import dev.hypera.chameleon.core.events.impl.common.UserChatEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserJoinEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserLeaveEvent;
 import dev.hypera.chameleon.core.events.impl.proxy.ProxyUserSwitchEvent;
+import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.objects.Platform;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.transformers.ITransformer;
@@ -55,7 +56,7 @@ public abstract class Chameleon {
     private final @NotNull IPlatformData platformData;
     private final @NotNull ChameleonLoggerFactory factory = new ChameleonLoggerFactory(this);
 
-    public Chameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull IPlatformData platformData, ITransformer<?, ?>... transformers) throws InstantiationException {
+    public Chameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull IPlatformData platformData, ITransformer<?, ?>... transformers) throws ChameleonInstantiationException {
         Transformer.register(
                 transformers,
                 new StringUUIDTransformer(),
@@ -75,7 +76,7 @@ public abstract class Chameleon {
         try {
             this.plugin = pluginClass.getConstructor(Chameleon.class).newInstance(this);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new InstantiationException("Failed to initialise instance of " + pluginClass.getCanonicalName());
+            throw new ChameleonInstantiationException("Failed to initialise instance of " + pluginClass.getCanonicalName(), e);
         }
         this.plugin.getData().check();
         this.platformData = platformData;

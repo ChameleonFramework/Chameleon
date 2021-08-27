@@ -26,6 +26,7 @@ package dev.hypera.chameleon.spigot;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.CommandManager;
+import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.spigot.commands.SpigotCommandManager;
@@ -50,7 +51,7 @@ public class SpigotChameleon extends Chameleon {
     private final @NotNull BukkitAudiences adventure;
     private final @NotNull CommandManager commandManager;
 
-    public SpigotChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull JavaPlugin spigotPlugin) throws InstantiationException {
+    public SpigotChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull JavaPlugin spigotPlugin) throws ChameleonInstantiationException {
         super(pluginClass, new SpigotData(),
                 new PlayerUUIDTransformer(),
                 new PlayerChatUserTransformer()
@@ -59,8 +60,7 @@ public class SpigotChameleon extends Chameleon {
         this.adventure = BukkitAudiences.create(spigotPlugin);
         try { this.commandManager = new SpigotCommandManager(this); }
         catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-            throw new InstantiationException("Failed to initialise instance of SpigotCommandManager");
+            throw new ChameleonInstantiationException("Failed to initialise instance of SpigotCommandManager", e);
         }
     }
 
