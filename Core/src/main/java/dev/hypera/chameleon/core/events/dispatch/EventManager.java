@@ -32,21 +32,16 @@ import dev.hypera.chameleon.core.events.listener.InlineChameleonListener;
 import dev.hypera.chameleon.core.events.listener.ListenerPriority;
 import dev.hypera.chameleon.core.events.mapping.EventMapper;
 import dev.hypera.chameleon.core.exceptions.MapFailedException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class EventDispatcher {
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+public class EventManager {
 
 	private final Chameleon chameleon;
 	private final EventMapper mapper = new EventMapper();
@@ -55,7 +50,7 @@ public class EventDispatcher {
 	private final Set<Class<? extends ChameleonEvent>> registeredChameleonEvents = new HashSet<>();
 
 	@Internal
-	public EventDispatcher(@NotNull Chameleon chameleon) {
+	public EventManager(@NotNull Chameleon chameleon) {
 		this.chameleon = chameleon;
 	}
 

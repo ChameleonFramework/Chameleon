@@ -23,31 +23,28 @@
 
 package dev.hypera.chameleon.velocity;
 
-import com.velocitypowered.api.command.CommandManager;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.Plugin;
-import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.velocity.commands.VelocityCommand;
+import dev.hypera.chameleon.velocity.commands.VelocityCommandManager;
 import dev.hypera.chameleon.velocity.data.VelocityData;
 import dev.hypera.chameleon.velocity.events.VelocityEventHandler;
 import dev.hypera.chameleon.velocity.objects.VelocityServer;
-import dev.hypera.chameleon.velocity.transformers.PlayerChatUserTransformer;
-import dev.hypera.chameleon.velocity.transformers.PlayerProxyUserTransformer;
-import dev.hypera.chameleon.velocity.transformers.PlayerUUIDTransformer;
-import dev.hypera.chameleon.velocity.transformers.ResultBooleanTransformer;
-import dev.hypera.chameleon.velocity.transformers.ServerTransformer;
+import dev.hypera.chameleon.velocity.transformers.*;
 import dev.hypera.chameleon.velocity.users.ChameleonCommandSource;
 import dev.hypera.chameleon.velocity.users.VelocityUserManager;
-import java.nio.file.Path;
-import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.nio.file.Path;
+import java.util.UUID;
 
 public class VelocityChameleon extends Chameleon {
 
     private final @NotNull VelocityPlugin velocityPlugin;
+    private final @NotNull CommandManager commandManager;
 
     public VelocityChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull VelocityPlugin velocityPlugin) throws InstantiationException {
         super(pluginClass, new VelocityData(velocityPlugin.getServer()),
@@ -58,6 +55,7 @@ public class VelocityChameleon extends Chameleon {
                 new ServerTransformer()
         );
         this.velocityPlugin = velocityPlugin;
+        this.commandManager = new VelocityCommandManager(this);
     }
 
     public @NotNull VelocityPlugin getVelocityPlugin() {
@@ -71,14 +69,13 @@ public class VelocityChameleon extends Chameleon {
     }
 
     @Override
-    public Path getDataFolder() {
+    public @NotNull Path getDataFolder() {
         return velocityPlugin.getDataDirectory();
     }
 
     @Override
-    public void registerPlatformCommand(@NotNull Command command) {
-        CommandManager commandManager = velocityPlugin.getServer().getCommandManager();
-        commandManager.register(commandManager.metaBuilder(command.getName()).aliases(command.getAliases().toArray(new String[0])).build(), new VelocityCommand(command));
+    public @NotNull CommandManager getCommandManager() {
+        return commandManager;
     }
 
     @Override

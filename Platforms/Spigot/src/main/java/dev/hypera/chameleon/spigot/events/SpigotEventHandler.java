@@ -28,16 +28,17 @@ import dev.hypera.chameleon.core.events.Cancellable;
 import dev.hypera.chameleon.core.events.ChameleonEvent;
 import dev.hypera.chameleon.core.exceptions.MapFailedException;
 import dev.hypera.chameleon.spigot.SpigotChameleon;
-import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.Optional;
+
 public class SpigotEventHandler implements Listener {
 
 	public SpigotEventHandler(SpigotChameleon chameleon) {
-		chameleon.getEventDispatcher().getRegisteredEvents().forEach(event -> {
+		chameleon.getEventManager().getRegisteredEvents().forEach(event -> {
 			Optional<Class<?>> bukkitEvent = Optional.empty();
 			for (String className : event.getAnnotation(MappedClass.class).value()) {
 				try {
@@ -54,7 +55,7 @@ public class SpigotEventHandler implements Listener {
 			bukkitEvent.ifPresent(clazz -> Bukkit.getPluginManager()
 					.registerEvent((Class<? extends Event>) clazz, this, EventPriority.NORMAL, (listener, e) -> {
 						try {
-							ChameleonEvent chameleonEvent = chameleon.getEventDispatcher().dispatch(e);
+							ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
 							if (chameleonEvent instanceof Cancellable && e instanceof org.bukkit.event.Cancellable) {
 								if (((Cancellable) chameleonEvent).isCancelled()) {
 									((org.bukkit.event.Cancellable) e).setCancelled(true);

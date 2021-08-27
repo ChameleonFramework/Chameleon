@@ -23,24 +23,17 @@
 
 package dev.hypera.chameleon.bungeecord;
 
-import dev.hypera.chameleon.bungeecord.commands.BungeeCordCommand;
+import dev.hypera.chameleon.bungeecord.commands.BungeeCordCommandManager;
 import dev.hypera.chameleon.bungeecord.data.BungeeCordData;
 import dev.hypera.chameleon.bungeecord.events.BungeeCordEventHandler;
 import dev.hypera.chameleon.bungeecord.objects.BungeeCordServer;
-import dev.hypera.chameleon.bungeecord.transformers.ConnectionChatUserTransformer;
-import dev.hypera.chameleon.bungeecord.transformers.ProxiedPlayerChatUserTransformer;
-import dev.hypera.chameleon.bungeecord.transformers.ProxiedPlayerProxyUserTransformer;
-import dev.hypera.chameleon.bungeecord.transformers.ProxiedPlayerUUIDTransformer;
-import dev.hypera.chameleon.bungeecord.transformers.ServerInfoServerTransformer;
+import dev.hypera.chameleon.bungeecord.transformers.*;
 import dev.hypera.chameleon.bungeecord.users.BungeeCordUserManager;
 import dev.hypera.chameleon.bungeecord.users.ChameleonCommandSender;
 import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.annotations.PlatformSpecific;
-import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
-import java.nio.file.Path;
-import java.util.UUID;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -48,10 +41,14 @@ import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
+import java.util.UUID;
+
 public class BungeeCordChameleon extends Chameleon {
 
     private final @NotNull Plugin bungeePlugin;
     private final @NotNull BungeeAudiences adventure;
+    private final @NotNull CommandManager commandManager;
 
     public BungeeCordChameleon(@NotNull Class<? extends dev.hypera.chameleon.core.Plugin> pluginClass, @NotNull Plugin bungeePlugin) throws InstantiationException {
         super(pluginClass, new BungeeCordData(),
@@ -63,6 +60,7 @@ public class BungeeCordChameleon extends Chameleon {
         );
         this.bungeePlugin = bungeePlugin;
         this.adventure = BungeeAudiences.create(bungeePlugin);
+        this.commandManager = new BungeeCordCommandManager(this);
     }
 
     public @NotNull Plugin getBungeeCordPlugin() {
@@ -80,13 +78,13 @@ public class BungeeCordChameleon extends Chameleon {
     }
 
     @Override
-    public Path getDataFolder() {
+    public @NotNull Path getDataFolder() {
         return bungeePlugin.getDataFolder().toPath();
     }
 
     @Override
-    public void registerPlatformCommand(@NotNull Command command) {
-        bungeePlugin.getProxy().getPluginManager().registerCommand(bungeePlugin, new BungeeCordCommand(this, command));
+    public @NotNull CommandManager getCommandManager() {
+        return commandManager;
     }
 
     @Override

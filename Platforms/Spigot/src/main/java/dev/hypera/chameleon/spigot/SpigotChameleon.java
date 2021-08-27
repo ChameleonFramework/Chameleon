@@ -25,30 +25,30 @@ package dev.hypera.chameleon.spigot;
 
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.Plugin;
-import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.spigot.commands.SpigotCommand;
+import dev.hypera.chameleon.spigot.commands.SpigotCommandManager;
 import dev.hypera.chameleon.spigot.data.SpigotData;
 import dev.hypera.chameleon.spigot.events.SpigotEventHandler;
 import dev.hypera.chameleon.spigot.transformers.PlayerChatUserTransformer;
 import dev.hypera.chameleon.spigot.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.spigot.users.ChameleonCommandSender;
 import dev.hypera.chameleon.spigot.users.SpigotUserManager;
-import java.lang.reflect.Field;
-import java.nio.file.Path;
-import java.util.UUID;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.nio.file.Path;
+import java.util.UUID;
 
 public class SpigotChameleon extends Chameleon {
 
     private final @NotNull JavaPlugin spigotPlugin;
     private final @NotNull BukkitAudiences adventure;
+    private final @NotNull CommandManager commandManager;
 
     public SpigotChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull JavaPlugin spigotPlugin) throws InstantiationException {
         super(pluginClass, new SpigotData(),
@@ -57,6 +57,11 @@ public class SpigotChameleon extends Chameleon {
         );
         this.spigotPlugin = spigotPlugin;
         this.adventure = BukkitAudiences.create(spigotPlugin);
+        try { this.commandManager = new SpigotCommandManager(this); }
+        catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            throw new InstantiationException("Failed to initialise instance of SpigotCommandManager");
+        }
     }
 
     public @NotNull JavaPlugin getSpigotPlugin() {
@@ -74,21 +79,13 @@ public class SpigotChameleon extends Chameleon {
     }
 
     @Override
-    public Path getDataFolder() {
+    public @NotNull Path getDataFolder() {
         return spigotPlugin.getDataFolder().toPath();
     }
 
     @Override
-    public void registerPlatformCommand(@NotNull Command command) {
-        try {
-            Field commandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-            commandMap.setAccessible(true);
-            CommandMap map = (CommandMap) commandMap.get(Bukkit.getServer());
-            SpigotCommand spigotCommand = new SpigotCommand(this, command);
-            map.register(command.getName(), spigotPlugin.getName(), spigotCommand);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public @NotNull CommandManager getCommandManager() {
+        return commandManager;
     }
 
     @Override

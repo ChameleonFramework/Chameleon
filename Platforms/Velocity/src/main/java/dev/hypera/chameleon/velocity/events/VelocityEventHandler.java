@@ -27,13 +27,14 @@ import dev.hypera.chameleon.core.annotations.MappedClass;
 import dev.hypera.chameleon.core.events.ChameleonEvent;
 import dev.hypera.chameleon.core.exceptions.MapFailedException;
 import dev.hypera.chameleon.velocity.VelocityChameleon;
-import java.util.Optional;
 import net.kyori.adventure.bossbar.BossBar.Listener;
+
+import java.util.Optional;
 
 public class VelocityEventHandler implements Listener {
 
 	public VelocityEventHandler(VelocityChameleon chameleon) {
-		chameleon.getEventDispatcher().getRegisteredEvents().forEach(event -> {
+		chameleon.getEventManager().getRegisteredEvents().forEach(event -> {
 			Optional<Class<?>> velocityEvent = Optional.empty();
 			for (String className : event.getAnnotation(MappedClass.class).value()) {
 				try {
@@ -47,7 +48,7 @@ public class VelocityEventHandler implements Listener {
 
 			velocityEvent.ifPresent(clazz -> chameleon.getVelocityPlugin().getServer().getEventManager().register(chameleon.getVelocityPlugin(), clazz, (e) -> {
 				try {
-					ChameleonEvent chameleonEvent = chameleon.getEventDispatcher().dispatch(e);
+					ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
 					// TODO: Cancel events on Velocity.
 				} catch (MapFailedException ignored) {
 					// TODO: Handle this error!

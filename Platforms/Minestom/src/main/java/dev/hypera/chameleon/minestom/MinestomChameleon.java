@@ -25,26 +25,28 @@ package dev.hypera.chameleon.minestom;
 
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.Plugin;
-import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.minestom.commands.MinestomCommand;
+import dev.hypera.chameleon.minestom.commands.MinestomCommandManager;
 import dev.hypera.chameleon.minestom.data.MinestomData;
 import dev.hypera.chameleon.minestom.events.MinestomEventHandler;
 import dev.hypera.chameleon.minestom.transformers.PlayerChatUserTransformer;
 import dev.hypera.chameleon.minestom.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.minestom.users.ChameleonCommandSender;
 import dev.hypera.chameleon.minestom.users.MinestomUserManager;
-import java.nio.file.Path;
-import java.util.UUID;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
+import java.util.UUID;
+
 public class MinestomChameleon extends Chameleon {
 
     private final @NotNull Extension extension;
+    private final @NotNull CommandManager commandManager;
 
     public MinestomChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull Extension extension) throws InstantiationException {
         super(pluginClass, new MinestomData(),
@@ -52,6 +54,7 @@ public class MinestomChameleon extends Chameleon {
                 new PlayerChatUserTransformer()
         );
         this.extension = extension;
+        this.commandManager = new MinestomCommandManager(this);
     }
 
     public @NotNull Extension getExtension() {
@@ -65,13 +68,13 @@ public class MinestomChameleon extends Chameleon {
     }
 
     @Override
-    public Path getDataFolder() {
+    public @NotNull Path getDataFolder() {
         return extension.getDataDirectory();
     }
 
     @Override
-    public void registerPlatformCommand(@NotNull Command command) {
-        MinecraftServer.getCommandManager().register(new MinestomCommand(command));
+    public @NotNull CommandManager getCommandManager() {
+        return commandManager;
     }
 
     @Override
