@@ -32,7 +32,6 @@ import dev.hypera.chameleon.core.events.impl.common.UserJoinEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserLeaveEvent;
 import dev.hypera.chameleon.core.events.impl.proxy.ProxyUserSwitchEvent;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
-import dev.hypera.chameleon.core.exceptions.PEBKACException;
 import dev.hypera.chameleon.core.objects.Platform;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.transformers.ITransformer;
@@ -46,7 +45,6 @@ import dev.hypera.chameleon.core.utils.logging.factory.ChameleonLoggerFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.UUID;
 
@@ -58,29 +56,29 @@ public abstract class Chameleon {
     private final @NotNull ChameleonLoggerFactory factory = new ChameleonLoggerFactory(this);
 
     public Chameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull IPlatformData platformData, ITransformer<?, ?>... transformers) throws ChameleonInstantiationException {
-        Transformer.register(
-                transformers,
-                new StringUUIDTransformer(),
-                new UUIDChatUserTransformer(),
-                new StringComponentTransformer()
-        );
-
-        eventManager = new EventManager(this);
-        eventManager.registerEvents(
-                UserChatEvent.class,
-                UserJoinEvent.class,
-                UserLeaveEvent.class,
-
-                ProxyUserSwitchEvent.class
-        );
-
         try {
+            Transformer.register(
+                    transformers,
+                    new StringUUIDTransformer(),
+                    new UUIDChatUserTransformer(),
+                    new StringComponentTransformer()
+            );
+
+            eventManager = new EventManager(this);
+            eventManager.registerEvents(
+                    UserChatEvent.class,
+                    UserJoinEvent.class,
+                    UserLeaveEvent.class,
+
+                    ProxyUserSwitchEvent.class
+            );
+
             this.plugin = pluginClass.getConstructor(Chameleon.class).newInstance(this);
             this.plugin.getData().check();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | PEBKACException e) {
+            this.platformData = platformData;
+        } catch (Exception e) {
             throw new ChameleonInstantiationException("Failed to initialise instance of " + pluginClass.getCanonicalName(), e);
         }
-        this.platformData = platformData;
     }
 
     // Status

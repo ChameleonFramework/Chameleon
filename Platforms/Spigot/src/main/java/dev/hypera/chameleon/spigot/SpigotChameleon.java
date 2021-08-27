@@ -56,10 +56,12 @@ public class SpigotChameleon extends Chameleon {
                 new PlayerUUIDTransformer(),
                 new PlayerChatUserTransformer()
         );
-        this.spigotPlugin = spigotPlugin;
-        this.adventure = BukkitAudiences.create(spigotPlugin);
-        try { this.commandManager = new SpigotCommandManager(this); }
-        catch (NoSuchFieldException | IllegalAccessException e) {
+        try {
+            this.spigotPlugin = spigotPlugin;
+            this.adventure = BukkitAudiences.create(spigotPlugin);
+            this.commandManager = new SpigotCommandManager(this);
+        }
+        catch (Exception e) {
             throw new ChameleonInstantiationException("Failed to initialise instance of SpigotCommandManager", e);
         }
     }
