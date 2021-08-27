@@ -15,7 +15,7 @@ public class ChameleonProjectMinestom extends Extension {
     @Override
     public void initialize() {
         try { chameleon = new MinestomChameleon(ChameleonProject.class, this); chameleon.onEnable(); }
-        catch (InstantiationException e) { e.printStackTrace(); }
+        catch (ChameleonInstantiationException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -25,4 +25,4 @@ public class ChameleonProjectMinestom extends Extension {
 
 }
 ```
-A full example of a Chameleon plugin supporting Minestom is in [the example project](https://github.com/HyperaOfficial/ChameleonProject/tree/master/ChameleonProject-Minestom).
+A full example of a Chameleon plugin supporting Minestom is in [the example project](https://github.com/HyperaOfficial/ChameleonProject/tree/main/Minestom).

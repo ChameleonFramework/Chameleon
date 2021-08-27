@@ -23,6 +23,7 @@
 
 package dev.hypera.chameleon.core.data;
 
+import dev.hypera.chameleon.core.exceptions.PEBKACException;
 import org.jetbrains.annotations.NotNull;
 
 public class PluginData {
@@ -58,9 +59,9 @@ public class PluginData {
 		return this;
 	}
 
-	public PluginData check() {
+	public PluginData check() throws PEBKACException {
 		if (null == name || null == version || null == author || null == logPrefix) {
-			throw new IllegalStateException("Plugin data is missing");
+			throw new PEBKACException("Some required fields in Plugin Data were not provided");
 		}
 
 		return this;

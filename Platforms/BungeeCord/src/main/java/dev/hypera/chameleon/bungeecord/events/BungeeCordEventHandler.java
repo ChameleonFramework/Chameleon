@@ -28,18 +28,19 @@ import dev.hypera.chameleon.core.annotations.MappedClass;
 import dev.hypera.chameleon.core.events.Cancellable;
 import dev.hypera.chameleon.core.events.ChameleonEvent;
 import dev.hypera.chameleon.core.exceptions.MapFailedException;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Event;
 import net.md_5.bungee.api.plugin.Listener;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class BungeeCordEventHandler implements Listener {
 
 	public BungeeCordEventHandler(BungeeCordChameleon chameleon) {
 		Set<Class<?>> bungeeEvents = new HashSet<>();
-		chameleon.getEventDispatcher().getRegisteredEvents().forEach(event -> {
+		chameleon.getEventManager().getRegisteredEvents().forEach(event -> {
 			Optional<Class<?>> bungeeEvent = Optional.empty();
 			for (String className : event.getAnnotation(MappedClass.class).value()) {
 				try {
@@ -62,7 +63,7 @@ public class BungeeCordEventHandler implements Listener {
 				public void onEvent(Event e) {
 					try {
 						if (bungeeEvents.contains(e.getClass())) {
-							ChameleonEvent chameleonEvent = chameleon.getEventDispatcher().dispatch(e);
+							ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
 							if (chameleonEvent instanceof Cancellable && e instanceof net.md_5.bungee.api.plugin.Cancellable) {
 								if (((Cancellable) chameleonEvent).isCancelled()) {
 									((Cancellable) e).setCancelled(true);

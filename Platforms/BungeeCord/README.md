@@ -15,7 +15,7 @@ public final class ChameleonProjectBungee extends Plugin {
     @Override
     public void onEnable() {
         try { chameleon = new BungeeCordChameleon(ChameleonProject.class, this); chameleon.onEnable(); }
-        catch (InstantiationException e) { e.printStackTrace(); }
+        catch (ChameleonInstantiationException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -25,4 +25,4 @@ public final class ChameleonProjectBungee extends Plugin {
 
 }
 ```
-A full example of a Chameleon plugin supporting BungeeCord is in [the example project](https://github.com/HyperaOfficial/ChameleonProject/tree/master/ChameleonProject-Bungee).
+A full example of a Chameleon plugin supporting BungeeCord is in [the example project](https://github.com/HyperaOfficial/ChameleonProject/tree/main/BungeeCord).

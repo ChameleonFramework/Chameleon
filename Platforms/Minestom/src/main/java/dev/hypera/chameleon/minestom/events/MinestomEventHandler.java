@@ -28,16 +28,17 @@ import dev.hypera.chameleon.core.events.Cancellable;
 import dev.hypera.chameleon.core.events.ChameleonEvent;
 import dev.hypera.chameleon.core.exceptions.MapFailedException;
 import dev.hypera.chameleon.minestom.MinestomChameleon;
-import java.util.Optional;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.trait.CancellableEvent;
+
+import java.util.Optional;
 
 public class MinestomEventHandler {
 
 	public MinestomEventHandler(MinestomChameleon chameleon) {
 		EventNode<Event> eventNode = chameleon.getExtension().getEventNode();
-		chameleon.getEventDispatcher().getRegisteredEvents().forEach(event -> {
+		chameleon.getEventManager().getRegisteredEvents().forEach(event -> {
 			Optional<Class<?>> minestomEvent = Optional.empty();
 			for (String className : event.getAnnotation(MappedClass.class).value()) {
 				try {
@@ -53,7 +54,7 @@ public class MinestomEventHandler {
 
 			minestomEvent.ifPresent(clazz -> eventNode.addListener((Class<Event>) clazz, (e) -> {
 				try {
-					ChameleonEvent chameleonEvent = chameleon.getEventDispatcher().dispatch(e);
+					ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
 					if (chameleonEvent instanceof Cancellable && e instanceof CancellableEvent) {
 						if (((Cancellable) chameleonEvent).isCancelled()) {
 							((CancellableEvent) e).setCancelled(true);

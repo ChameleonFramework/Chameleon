@@ -15,7 +15,7 @@ public final class ChameleonProjectSpigot extends JavaPlugin {
     @Override
     public void onEnable() {
         try { chameleon = new SpigotChameleon(ChameleonProject.class, this); chameleon.onEnable(); }
-        catch (InstantiationException e) { e.printStackTrace(); }
+        catch (ChameleonInstantiationException e) { e.printStackTrace(); }
     }
 
     @Override
@@ -25,4 +25,4 @@ public final class ChameleonProjectSpigot extends JavaPlugin {
 
 }
 ```
-A full example of a Chameleon plugin supporting Spigot is in [the example project](https://github.com/HyperaOfficial/ChameleonProject/tree/master/ChameleonProject-Spigot).
+A full example of a Chameleon plugin supporting Spigot is in [the example project](https://github.com/HyperaOfficial/ChameleonProject/tree/main/Spigot).

@@ -24,13 +24,14 @@
 package dev.hypera.chameleon.core;
 
 import dev.hypera.chameleon.core.annotations.PlatformSpecific;
-import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.data.IPlatformData;
-import dev.hypera.chameleon.core.events.dispatch.EventDispatcher;
+import dev.hypera.chameleon.core.events.dispatch.EventManager;
 import dev.hypera.chameleon.core.events.impl.common.UserChatEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserJoinEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserLeaveEvent;
 import dev.hypera.chameleon.core.events.impl.proxy.ProxyUserSwitchEvent;
+import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.objects.Platform;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.transformers.ITransformer;
@@ -41,45 +42,46 @@ import dev.hypera.chameleon.core.transformers.impl.UUIDChatUserTransformer;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.core.utils.logging.ChameleonLogger;
 import dev.hypera.chameleon.core.utils.logging.factory.ChameleonLoggerFactory;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Path;
-import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.nio.file.Path;
+import java.util.UUID;
 
 public abstract class Chameleon {
 
     protected final @NotNull Plugin plugin;
-    protected final @NotNull EventDispatcher dispatcher;
+    protected final @NotNull EventManager eventManager;
     private final @NotNull IPlatformData platformData;
     private final @NotNull ChameleonLoggerFactory factory = new ChameleonLoggerFactory(this);
 
-    public Chameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull IPlatformData platformData, ITransformer<?, ?>... transformers) throws InstantiationException {
-        Transformer.register(
-                transformers,
-                new StringUUIDTransformer(),
-                new UUIDChatUserTransformer(),
-                new StringComponentTransformer()
-        );
-
-        dispatcher = new EventDispatcher(this);
-        dispatcher.registerEvents(
-                UserChatEvent.class,
-                UserJoinEvent.class,
-                UserLeaveEvent.class,
-
-                ProxyUserSwitchEvent.class
-        );
-
+    public Chameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull IPlatformData platformData, ITransformer<?, ?>... transformers) throws ChameleonInstantiationException {
         try {
+            Transformer.register(
+                    transformers,
+                    new StringUUIDTransformer(),
+                    new UUIDChatUserTransformer(),
+                    new StringComponentTransformer()
+            );
+
+            eventManager = new EventManager(this);
+            eventManager.registerEvents(
+                    UserChatEvent.class,
+                    UserJoinEvent.class,
+                    UserLeaveEvent.class,
+
+                    ProxyUserSwitchEvent.class
+            );
+
             this.plugin = pluginClass.getConstructor(Chameleon.class).newInstance(this);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new InstantiationException("Failed to initialise instance of " + pluginClass.getCanonicalName());
+            this.plugin.getData().check();
+            this.platformData = platformData;
+        } catch (Exception e) {
+            throw new ChameleonInstantiationException("Failed to initialise instance of " + pluginClass.getCanonicalName(), e);
         }
-        this.plugin.getData().check();
-        this.platformData = platformData;
     }
 
+    // Status
     public void onEnable() {
         plugin.onEnable();
     }
@@ -87,29 +89,27 @@ public abstract class Chameleon {
         plugin.onDisable();
     }
 
+    // Logging
     public @NotNull ChameleonLogger getLogger(Class<?> clazz) {
         return factory.getLogger(clazz);
     }
 
+    // Data
     public @NotNull Plugin getPlugin() {
         return plugin;
     }
     public @NotNull IPlatformData getPlatformData() {
         return platformData;
     }
+    public abstract @NotNull Path getDataFolder();
 
-    public abstract Path getDataFolder();
-    public void registerCommand(@NotNull Command command) {
-        if (command.getPlatform().getPlatformTypes().stream().anyMatch(t -> t.equals(platformData.getType()))) {
-            registerPlatformCommand(command);
-        }
-    }
-    protected abstract void registerPlatformCommand(@NotNull Command command);
-
-    public EventDispatcher getEventDispatcher() {
-        return dispatcher;
+    // Managers
+    public abstract @NotNull CommandManager getCommandManager();
+    public @NotNull EventManager getEventManager() {
+        return eventManager;
     }
 
+    // Objects
     public abstract @NotNull ChatUser getConsoleSender();
     public abstract @Nullable ChatUser getPlayer(UUID uuid);
     public abstract @PlatformSpecific(Platform.PROXY) @Nullable Server getServer(String name);
