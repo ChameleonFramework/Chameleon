@@ -25,10 +25,10 @@ package dev.hypera.chameleon.core.transformers;
 
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.exceptions.TransformFailedException;
+import dev.hypera.chameleon.core.utils.misc.PrimitiveConverter;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import org.apache.commons.lang3.ClassUtils;
 
 /**
  * Transformer
@@ -85,21 +85,7 @@ public class Transformer {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T, U> U transform(Chameleon chameleon, T object, Class<U> to) throws TransformFailedException {
-		if (to.isPrimitive()) {
-			to = (Class<U>) ClassUtils.primitiveToWrapper(to);
-		}
-
-		if (to.isInstance(object)) {
-			return (U) object;
-		}
-
-		Class<U> toClass = to;
-		Optional<ITransformer<T, U>> transformer = registeredTransformers.stream().filter(t -> (t.getFrom().isInstance(object) || t.getFrom().equals(object.getClass()) || t.getFrom().isAssignableFrom(object.getClass())) && (t.getTo().equals(toClass) || t.getTo().isAssignableFrom(toClass) || toClass.isInstance(object))).map(t -> (ITransformer<T, U>) t).findFirst();
-		if (!transformer.isPresent()) {
-			throw new TransformFailedException("Failed to transform " + object.getClass().getCanonicalName() + " to " + to.getCanonicalName());
-		} else {
-			return transformer.get().transform(chameleon, object);
-		}
+		return transformWithData(chameleon, object, to);
 	}
 
 	/**
@@ -115,20 +101,25 @@ public class Transformer {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T, U> U transformWithData(Chameleon chameleon, T object, Class<U> to, String... data) throws TransformFailedException {
-		if (to.isPrimitive()) {
-			to = (Class<U>) ClassUtils.primitiveToWrapper(to);
+		if (null == object) {
+			return null;
 		}
+
+		Class<U> toClass = (to.isPrimitive() ? (Class<U>) PrimitiveConverter.wrap(to) : to);
 
 		if (to.isInstance(object)) {
 			return (U) object;
 		}
 
-		Class<U> toClass = to;
 		Optional<ITransformer<T, U>> transformer = registeredTransformers.stream().filter(t -> (t.getFrom().isInstance(object) || t.getFrom().equals(object.getClass()) || t.getFrom().isAssignableFrom(object.getClass())) && (t.getTo().equals(toClass) || t.getTo().isAssignableFrom(toClass) || toClass.isInstance(object))).map(t -> (ITransformer<T, U>) t).findFirst();
 		if (!transformer.isPresent()) {
 			throw new TransformFailedException("Failed to transform " + object.getClass().getCanonicalName() + " to " + to.getCanonicalName());
 		} else {
-			return transformer.get().transformWithData(chameleon, object, data);
+			if (data.length > 0) {
+				return transformer.get().transformWithData(chameleon, object, data);
+			} else {
+				return transformer.get().transform(chameleon, object);
+			}
 		}
 	}
 

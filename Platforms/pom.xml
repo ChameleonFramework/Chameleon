@@ -48,6 +48,7 @@
             <groupId>dev.hypera.chameleon</groupId>
             <artifactId>Core</artifactId>
             <version>${project.parent.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
