@@ -4,7 +4,12 @@
 </div>
 
 -----------
-<!-- Badges go here -->
+<div align="center">
+   <img alt="GitHub" src="https://img.shields.io/github/license/HyperaOfficial/Chameleon?color=%2317aaaa&style=for-the-badge"> <img alt="Libraries.io dependency status for GitHub repo" src="https://img.shields.io/librariesio/github/HyperaOfficial/Chameleon?color=%2317aaaa&&label=Dependencies&style=for-the-badge"><br/>
+   <img alt="GitHub code quality" src="https://img.shields.io/codefactor/grade/github/HyperaOfficial/Chameleon/master?style=for-the-badge&color=%2317aaaa">
+   <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/HyperaOfficial/Chameleon?color=%2317aaaa&style=for-the-badge">
+   <img alt="Snyk Vulnerabilities for GitHub Repo" src="https://img.shields.io/snyk/vulnerabilities/github/HyperaOfficial/Chameleon?color=%2317aaaa&style=for-the-badge">
+</div>
 
 ### What is Chameleon?
 Chameleon is a library created to make creating cross-platform Minecraft plugins as simple and easy as possible.
