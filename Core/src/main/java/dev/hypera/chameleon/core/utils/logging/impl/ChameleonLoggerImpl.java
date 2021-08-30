@@ -54,7 +54,7 @@ public class ChameleonLoggerImpl implements ChameleonLogger {
 	@Override
 	public void log(@NotNull String s) {
 		ImprovedStringBuilder builder = StringUtils.getImprovedStringBuilder();
-		builder.appendIfElse(String.format(chameleon.getPlugin().getData().getLogPrefix(), chameleon.getPlugin().getData().getName()), CHAMELEON_PREFIX, (str) -> !isChameleon).append(RESET).append(" ")
+		builder.append(String.format(chameleon.getPlugin().getData().getLogPrefix(), chameleon.getPlugin().getData().getName())).append(RESET).appendIf(" " + CHAMELEON_PREFIX + RESET, (str) -> isChameleon).append(" ")
 				.append(s);
 		chameleon.getConsoleSender().sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(builder.toString()));
 	}

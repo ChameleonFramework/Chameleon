@@ -70,8 +70,8 @@ public class BungeeCordEventHandler implements Listener {
 								}
 							}
 						}
-					} catch (MapFailedException ignored) {
-						// TODO: Handle this error!
+					} catch (MapFailedException ex) {
+						chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
 					}
 				}
 			});

@@ -60,8 +60,8 @@ public class MinestomEventHandler {
 							((CancellableEvent) e).setCancelled(true);
 						}
 					}
-				} catch (MapFailedException ignored) {
-					// TODO: Handle this error!
+				} catch (MapFailedException ex) {
+					chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
 				}
 			}));
 		});
