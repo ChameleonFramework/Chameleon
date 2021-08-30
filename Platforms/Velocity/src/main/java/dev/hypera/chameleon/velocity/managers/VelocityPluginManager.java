@@ -29,6 +29,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.PlatformPlugin;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +50,7 @@ public class VelocityPluginManager implements PluginManager {
 
 	@Override
 	public @Nullable PlatformPlugin getPlugin(String name) {
-		PluginContainer plugin = server.getPluginManager().getPlugin(name).orElse(null);
+		PluginContainer plugin = server.getPluginManager().getPlugin(name.toLowerCase()).orElse(null);
 		if (null == plugin) {
 			return null;
 		}
