@@ -33,7 +33,7 @@ import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.minestom.commands.MinestomCommandManager;
 import dev.hypera.chameleon.minestom.data.MinestomData;
 import dev.hypera.chameleon.minestom.events.MinestomEventHandler;
-import dev.hypera.chameleon.minestom.manager.MinestomExtensionManager;
+import dev.hypera.chameleon.minestom.managers.MinestomExtensionManager;
 import dev.hypera.chameleon.minestom.transformers.PlayerChatUserTransformer;
 import dev.hypera.chameleon.minestom.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.minestom.users.ChameleonCommandSender;

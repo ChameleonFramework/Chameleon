@@ -21,10 +21,11 @@
  * SOFTWARE.
  */
 
-package dev.hypera.chameleon.minestom.manager;
+package dev.hypera.chameleon.minestom.managers;
 
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.PlatformPlugin;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,7 +38,8 @@ public class MinestomExtensionManager implements PluginManager {
 
 	@Override
 	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return MinecraftServer.getExtensionManager().getExtensions().stream().map(e -> new PlatformPlugin(e.getOrigin().getName(), e.getOrigin().getVersion(), e.getOrigin().getAuthors(), e.getClass(), e.getDependents().stream().toList(), Collections.emptyList())).collect(Collectors.toSet());
+		return MinecraftServer.getExtensionManager().getExtensions().stream().map(e -> new PlatformPlugin(e.getOrigin().getName(), e.getOrigin().getVersion(), Arrays.asList(e.getOrigin()
+				.getAuthors()), e.getClass(), e.getDependents().stream().toList(), Collections.emptyList())).collect(Collectors.toSet());
 	}
 
 	@Override
@@ -46,7 +48,7 @@ public class MinestomExtensionManager implements PluginManager {
 		if (null == extension) {
 			return null;
 		}
-		return new PlatformPlugin(extension.getOrigin().getName(), extension.getOrigin().getVersion(), extension.getOrigin().getAuthors(), extension.getClass(), extension.getDependents().stream().toList(), Collections.emptyList());
+		return new PlatformPlugin(extension.getOrigin().getName(), extension.getOrigin().getVersion(), Arrays.asList(extension.getOrigin().getAuthors()), extension.getClass(), extension.getDependents().stream().toList(), Collections.emptyList());
 	}
 
 	@Override
