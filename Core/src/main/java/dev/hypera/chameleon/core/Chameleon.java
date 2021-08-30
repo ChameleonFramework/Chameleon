@@ -32,6 +32,7 @@ import dev.hypera.chameleon.core.events.impl.common.UserJoinEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserLeaveEvent;
 import dev.hypera.chameleon.core.events.impl.proxy.ProxyUserSwitchEvent;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.Platform;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.transformers.ITransformer;
@@ -108,6 +109,7 @@ public abstract class Chameleon {
     public @NotNull EventManager getEventManager() {
         return eventManager;
     }
+    public abstract @NotNull PluginManager getPluginManager();
 
     // Objects
     public abstract @NotNull ChatUser getConsoleSender();

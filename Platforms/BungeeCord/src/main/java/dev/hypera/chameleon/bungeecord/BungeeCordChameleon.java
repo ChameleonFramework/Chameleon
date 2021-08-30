@@ -26,6 +26,7 @@ package dev.hypera.chameleon.bungeecord;
 import dev.hypera.chameleon.bungeecord.commands.BungeeCordCommandManager;
 import dev.hypera.chameleon.bungeecord.data.BungeeCordData;
 import dev.hypera.chameleon.bungeecord.events.BungeeCordEventHandler;
+import dev.hypera.chameleon.bungeecord.managers.BungeeCordPluginManager;
 import dev.hypera.chameleon.bungeecord.objects.BungeeCordServer;
 import dev.hypera.chameleon.bungeecord.transformers.*;
 import dev.hypera.chameleon.bungeecord.users.BungeeCordUserManager;
@@ -33,6 +34,7 @@ import dev.hypera.chameleon.bungeecord.users.ChameleonCommandSender;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
@@ -50,6 +52,7 @@ public class BungeeCordChameleon extends Chameleon {
     private final @NotNull Plugin bungeePlugin;
     private final @NotNull BungeeAudiences adventure;
     private final @NotNull CommandManager commandManager;
+    private final @NotNull PluginManager pluginManager;
 
     public BungeeCordChameleon(@NotNull Class<? extends dev.hypera.chameleon.core.Plugin> pluginClass, @NotNull Plugin bungeePlugin) throws ChameleonInstantiationException {
         super(pluginClass, new BungeeCordData(),
@@ -62,6 +65,7 @@ public class BungeeCordChameleon extends Chameleon {
         this.bungeePlugin = bungeePlugin;
         this.adventure = BungeeAudiences.create(bungeePlugin);
         this.commandManager = new BungeeCordCommandManager(this);
+        this.pluginManager = new BungeeCordPluginManager();
     }
 
     public @NotNull Plugin getBungeeCordPlugin() {
@@ -86,6 +90,11 @@ public class BungeeCordChameleon extends Chameleon {
     @Override
     public @NotNull CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    @Override
+    public @NotNull PluginManager getPluginManager() {
+        return pluginManager;
     }
 
     @Override

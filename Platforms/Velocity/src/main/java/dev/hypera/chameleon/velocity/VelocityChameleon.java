@@ -27,11 +27,13 @@ import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.velocity.commands.VelocityCommandManager;
 import dev.hypera.chameleon.velocity.data.VelocityData;
 import dev.hypera.chameleon.velocity.events.VelocityEventHandler;
+import dev.hypera.chameleon.velocity.managers.VelocityPluginManager;
 import dev.hypera.chameleon.velocity.objects.VelocityServer;
 import dev.hypera.chameleon.velocity.transformers.*;
 import dev.hypera.chameleon.velocity.users.ChameleonCommandSource;
@@ -46,6 +48,7 @@ public class VelocityChameleon extends Chameleon {
 
     private final @NotNull VelocityPlugin velocityPlugin;
     private final @NotNull CommandManager commandManager;
+    private final @NotNull PluginManager pluginManager;
 
     public VelocityChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull VelocityPlugin velocityPlugin) throws ChameleonInstantiationException {
         super(pluginClass, new VelocityData(velocityPlugin.getServer()),
@@ -57,6 +60,7 @@ public class VelocityChameleon extends Chameleon {
         );
         this.velocityPlugin = velocityPlugin;
         this.commandManager = new VelocityCommandManager(this);
+        this.pluginManager = new VelocityPluginManager(velocityPlugin.getServer());
     }
 
     public @NotNull VelocityPlugin getVelocityPlugin() {
@@ -77,6 +81,11 @@ public class VelocityChameleon extends Chameleon {
     @Override
     public @NotNull CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    @Override
+    public @NotNull PluginManager getPluginManager() {
+        return pluginManager;
     }
 
     @Override
