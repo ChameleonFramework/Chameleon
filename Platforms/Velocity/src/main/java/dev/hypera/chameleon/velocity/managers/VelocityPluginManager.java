@@ -58,7 +58,7 @@ public class VelocityPluginManager implements PluginManager {
 
 	@Override
 	public boolean isPluginEnabled(String name) {
-		return server.getPluginManager().isLoaded(name);
+		return server.getPluginManager().isLoaded(name.toLowerCase());
 	}
 
 }
