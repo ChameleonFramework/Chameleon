@@ -38,6 +38,8 @@ import dev.hypera.chameleon.spigot.transformers.PlayerChatUserTransformer;
 import dev.hypera.chameleon.spigot.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.spigot.users.ChameleonCommandSender;
 import dev.hypera.chameleon.spigot.users.SpigotUserManager;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -106,6 +108,11 @@ public class SpigotChameleon extends Chameleon {
     @Override
     public @Nullable ChatUser getPlayer(UUID uuid) {
         return SpigotUserManager.getUser(this, uuid);
+    }
+
+    @Override
+    public @NotNull Set<ChatUser> getPlayers() {
+        return Bukkit.getOnlinePlayers().stream().map(p -> SpigotUserManager.getUser(this, p)).collect(Collectors.toSet());
     }
 
     @Override

@@ -37,6 +37,8 @@ import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.Server;
 import dev.hypera.chameleon.core.users.ChatUser;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -105,6 +107,11 @@ public class BungeeCordChameleon extends Chameleon {
     @Override
     public @Nullable ChatUser getPlayer(UUID uuid) {
         return BungeeCordUserManager.getUser(this, uuid);
+    }
+
+    @Override
+    public @NotNull Set<ChatUser> getPlayers() {
+        return ProxyServer.getInstance().getPlayers().stream().map(p -> BungeeCordUserManager.getUser(this, p)).collect(Collectors.toSet());
     }
 
     @Override

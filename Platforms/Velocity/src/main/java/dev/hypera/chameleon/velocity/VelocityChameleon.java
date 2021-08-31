@@ -38,6 +38,8 @@ import dev.hypera.chameleon.velocity.objects.VelocityServer;
 import dev.hypera.chameleon.velocity.transformers.*;
 import dev.hypera.chameleon.velocity.users.ChameleonCommandSource;
 import dev.hypera.chameleon.velocity.users.VelocityUserManager;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,6 +98,11 @@ public class VelocityChameleon extends Chameleon {
     @Override
     public @Nullable ChatUser getPlayer(UUID uuid) {
         return VelocityUserManager.getUser(this, uuid);
+    }
+
+    @Override
+    public @NotNull Set<ChatUser> getPlayers() {
+        return velocityPlugin.getServer().getAllPlayers().stream().map(VelocityUserManager::getUser).collect(Collectors.toSet());
     }
 
     @Override

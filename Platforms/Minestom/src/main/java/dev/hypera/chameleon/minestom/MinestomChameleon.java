@@ -38,6 +38,8 @@ import dev.hypera.chameleon.minestom.transformers.PlayerChatUserTransformer;
 import dev.hypera.chameleon.minestom.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.minestom.users.ChameleonCommandSender;
 import dev.hypera.chameleon.minestom.users.MinestomUserManager;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
@@ -95,6 +97,11 @@ public class MinestomChameleon extends Chameleon {
     @Override
     public @Nullable ChatUser getPlayer(UUID uuid) {
         return MinestomUserManager.getUser(uuid);
+    }
+
+    @Override
+    public @NotNull Set<ChatUser> getPlayers() {
+        return MinecraftServer.getConnectionManager().getOnlinePlayers().stream().map(MinestomUserManager::getUser).collect(Collectors.toSet());
     }
 
     @Override

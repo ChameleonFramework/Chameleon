@@ -43,6 +43,7 @@ import dev.hypera.chameleon.core.transformers.impl.UUIDChatUserTransformer;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.core.utils.logging.ChameleonLogger;
 import dev.hypera.chameleon.core.utils.logging.factory.ChameleonLoggerFactory;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -114,6 +115,7 @@ public abstract class Chameleon {
     // Objects
     public abstract @NotNull ChatUser getConsoleSender();
     public abstract @Nullable ChatUser getPlayer(UUID uuid);
+    public abstract @NotNull Set<ChatUser> getPlayers();
     public abstract @PlatformSpecific(Platform.PROXY) @Nullable Server getServer(String name);
 
 }
