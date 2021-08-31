@@ -35,6 +35,7 @@ import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.Platform;
 import dev.hypera.chameleon.core.objects.Server;
+import dev.hypera.chameleon.core.scheduling.Scheduler;
 import dev.hypera.chameleon.core.transformers.ITransformer;
 import dev.hypera.chameleon.core.transformers.Transformer;
 import dev.hypera.chameleon.core.transformers.impl.StringComponentTransformer;
@@ -111,6 +112,7 @@ public abstract class Chameleon {
         return eventManager;
     }
     public abstract @NotNull PluginManager getPluginManager();
+    public abstract @NotNull Scheduler getScheduler();
 
     // Objects
     public abstract @NotNull ChatUser getConsoleSender();

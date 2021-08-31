@@ -29,11 +29,13 @@ import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.Server;
+import dev.hypera.chameleon.core.scheduling.Scheduler;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.spigot.commands.SpigotCommandManager;
 import dev.hypera.chameleon.spigot.data.SpigotData;
 import dev.hypera.chameleon.spigot.events.SpigotEventHandler;
 import dev.hypera.chameleon.spigot.managers.SpigotPluginManager;
+import dev.hypera.chameleon.spigot.scheduling.SpigotScheduler;
 import dev.hypera.chameleon.spigot.transformers.PlayerChatUserTransformer;
 import dev.hypera.chameleon.spigot.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.spigot.users.ChameleonCommandSender;
@@ -55,6 +57,7 @@ public class SpigotChameleon extends Chameleon {
     private final @NotNull BukkitAudiences adventure;
     private final @NotNull CommandManager commandManager;
     private final @NotNull PluginManager pluginManager;
+    private final @NotNull Scheduler scheduler;
 
     public SpigotChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull JavaPlugin spigotPlugin) throws ChameleonInstantiationException {
         super(pluginClass, new SpigotData(),
@@ -66,6 +69,7 @@ public class SpigotChameleon extends Chameleon {
             this.adventure = BukkitAudiences.create(spigotPlugin);
             this.commandManager = new SpigotCommandManager(this);
             this.pluginManager = new SpigotPluginManager();
+            this.scheduler = new SpigotScheduler(spigotPlugin);
         } catch (Exception e) {
             throw new ChameleonInstantiationException("Failed to initialise instance of SpigotCommandManager", e);
         }
@@ -98,6 +102,11 @@ public class SpigotChameleon extends Chameleon {
     @Override
     public @NotNull PluginManager getPluginManager() {
         return pluginManager;
+    }
+
+    @Override
+    public @NotNull Scheduler getScheduler() {
+        return scheduler;
     }
 
     @Override

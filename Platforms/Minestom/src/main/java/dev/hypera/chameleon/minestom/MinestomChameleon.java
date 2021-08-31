@@ -29,11 +29,13 @@ import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.Server;
+import dev.hypera.chameleon.core.scheduling.Scheduler;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.minestom.commands.MinestomCommandManager;
 import dev.hypera.chameleon.minestom.data.MinestomData;
 import dev.hypera.chameleon.minestom.events.MinestomEventHandler;
 import dev.hypera.chameleon.minestom.managers.MinestomExtensionManager;
+import dev.hypera.chameleon.minestom.scheduling.MinestomScheduler;
 import dev.hypera.chameleon.minestom.transformers.PlayerChatUserTransformer;
 import dev.hypera.chameleon.minestom.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.minestom.users.ChameleonCommandSender;
@@ -53,6 +55,7 @@ public class MinestomChameleon extends Chameleon {
     private final @NotNull Extension extension;
     private final @NotNull CommandManager commandManager;
     private final @NotNull PluginManager pluginManager;
+    private final @NotNull Scheduler scheduler;
 
     public MinestomChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull Extension extension) throws ChameleonInstantiationException {
         super(pluginClass, new MinestomData(),
@@ -62,6 +65,7 @@ public class MinestomChameleon extends Chameleon {
         this.extension = extension;
         this.commandManager = new MinestomCommandManager(this);
         this.pluginManager = new MinestomExtensionManager();
+        this.scheduler = new MinestomScheduler();
     }
 
     public @NotNull Extension getExtension() {
@@ -87,6 +91,11 @@ public class MinestomChameleon extends Chameleon {
     @Override
     public @NotNull PluginManager getPluginManager() {
         return pluginManager;
+    }
+
+    @Override
+    public @NotNull Scheduler getScheduler() {
+        return scheduler;
     }
 
     @Override

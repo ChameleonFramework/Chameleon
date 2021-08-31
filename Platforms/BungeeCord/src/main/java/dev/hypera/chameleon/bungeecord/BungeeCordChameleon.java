@@ -28,6 +28,7 @@ import dev.hypera.chameleon.bungeecord.data.BungeeCordData;
 import dev.hypera.chameleon.bungeecord.events.BungeeCordEventHandler;
 import dev.hypera.chameleon.bungeecord.managers.BungeeCordPluginManager;
 import dev.hypera.chameleon.bungeecord.objects.BungeeCordServer;
+import dev.hypera.chameleon.bungeecord.scheduling.BungeeCordScheduler;
 import dev.hypera.chameleon.bungeecord.transformers.*;
 import dev.hypera.chameleon.bungeecord.users.BungeeCordUserManager;
 import dev.hypera.chameleon.bungeecord.users.ChameleonCommandSender;
@@ -36,6 +37,7 @@ import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.Server;
+import dev.hypera.chameleon.core.scheduling.Scheduler;
 import dev.hypera.chameleon.core.users.ChatUser;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,6 +57,7 @@ public class BungeeCordChameleon extends Chameleon {
     private final @NotNull BungeeAudiences adventure;
     private final @NotNull CommandManager commandManager;
     private final @NotNull PluginManager pluginManager;
+    private final @NotNull Scheduler scheduler;
 
     public BungeeCordChameleon(@NotNull Class<? extends dev.hypera.chameleon.core.Plugin> pluginClass, @NotNull Plugin bungeePlugin) throws ChameleonInstantiationException {
         super(pluginClass, new BungeeCordData(),
@@ -68,6 +71,7 @@ public class BungeeCordChameleon extends Chameleon {
         this.adventure = BungeeAudiences.create(bungeePlugin);
         this.commandManager = new BungeeCordCommandManager(this);
         this.pluginManager = new BungeeCordPluginManager();
+        this.scheduler = new BungeeCordScheduler(bungeePlugin);
     }
 
     public @NotNull Plugin getBungeeCordPlugin() {
@@ -97,6 +101,11 @@ public class BungeeCordChameleon extends Chameleon {
     @Override
     public @NotNull PluginManager getPluginManager() {
         return pluginManager;
+    }
+
+    @Override
+    public @NotNull Scheduler getScheduler() {
+        return scheduler;
     }
 
     @Override
