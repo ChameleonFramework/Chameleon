@@ -32,8 +32,10 @@ import dev.hypera.chameleon.core.events.impl.common.UserJoinEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserLeaveEvent;
 import dev.hypera.chameleon.core.events.impl.proxy.ProxyUserSwitchEvent;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.Platform;
 import dev.hypera.chameleon.core.objects.Server;
+import dev.hypera.chameleon.core.scheduling.Scheduler;
 import dev.hypera.chameleon.core.transformers.ITransformer;
 import dev.hypera.chameleon.core.transformers.Transformer;
 import dev.hypera.chameleon.core.transformers.impl.StringComponentTransformer;
@@ -42,6 +44,7 @@ import dev.hypera.chameleon.core.transformers.impl.UUIDChatUserTransformer;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.core.utils.logging.ChameleonLogger;
 import dev.hypera.chameleon.core.utils.logging.factory.ChameleonLoggerFactory;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -108,10 +111,13 @@ public abstract class Chameleon {
     public @NotNull EventManager getEventManager() {
         return eventManager;
     }
+    public abstract @NotNull PluginManager getPluginManager();
+    public abstract @NotNull Scheduler getScheduler();
 
     // Objects
     public abstract @NotNull ChatUser getConsoleSender();
     public abstract @Nullable ChatUser getPlayer(UUID uuid);
+    public abstract @NotNull Set<ChatUser> getPlayers();
     public abstract @PlatformSpecific(Platform.PROXY) @Nullable Server getServer(String name);
 
 }

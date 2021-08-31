@@ -27,15 +27,21 @@ import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.Plugin;
 import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.Server;
+import dev.hypera.chameleon.core.scheduling.Scheduler;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.minestom.commands.MinestomCommandManager;
 import dev.hypera.chameleon.minestom.data.MinestomData;
 import dev.hypera.chameleon.minestom.events.MinestomEventHandler;
+import dev.hypera.chameleon.minestom.managers.MinestomExtensionManager;
+import dev.hypera.chameleon.minestom.scheduling.MinestomScheduler;
 import dev.hypera.chameleon.minestom.transformers.PlayerChatUserTransformer;
 import dev.hypera.chameleon.minestom.transformers.PlayerUUIDTransformer;
 import dev.hypera.chameleon.minestom.users.ChameleonCommandSender;
 import dev.hypera.chameleon.minestom.users.MinestomUserManager;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +54,8 @@ public class MinestomChameleon extends Chameleon {
 
     private final @NotNull Extension extension;
     private final @NotNull CommandManager commandManager;
+    private final @NotNull PluginManager pluginManager;
+    private final @NotNull Scheduler scheduler;
 
     public MinestomChameleon(@NotNull Class<? extends Plugin> pluginClass, @NotNull Extension extension) throws ChameleonInstantiationException {
         super(pluginClass, new MinestomData(),
@@ -56,6 +64,8 @@ public class MinestomChameleon extends Chameleon {
         );
         this.extension = extension;
         this.commandManager = new MinestomCommandManager(this);
+        this.pluginManager = new MinestomExtensionManager();
+        this.scheduler = new MinestomScheduler();
     }
 
     public @NotNull Extension getExtension() {
@@ -79,6 +89,16 @@ public class MinestomChameleon extends Chameleon {
     }
 
     @Override
+    public @NotNull PluginManager getPluginManager() {
+        return pluginManager;
+    }
+
+    @Override
+    public @NotNull Scheduler getScheduler() {
+        return scheduler;
+    }
+
+    @Override
     public @NotNull ChatUser getConsoleSender() {
         return new ChameleonCommandSender(MinecraftServer.getCommandManager().getConsoleSender());
     }
@@ -86,6 +106,11 @@ public class MinestomChameleon extends Chameleon {
     @Override
     public @Nullable ChatUser getPlayer(UUID uuid) {
         return MinestomUserManager.getUser(uuid);
+    }
+
+    @Override
+    public @NotNull Set<ChatUser> getPlayers() {
+        return MinecraftServer.getConnectionManager().getOnlinePlayers().stream().map(MinestomUserManager::getUser).collect(Collectors.toSet());
     }
 
     @Override

@@ -179,8 +179,8 @@ public class EventManager {
 			try {
 				handler.getMethod().setAccessible(true);
 				handler.getMethod().invoke(handler.getOwner(), event);
-			} catch (Exception ignored) {
-				// TODO: Handle this exception.
+			} catch (Exception ex) {
+				chameleon.getLogger(this.getClass()).error("Failed to dispatch %s to %s", ex, event.getClass(), handler.getOwner().getClass());
 			}
 		});
 		registeredInlineListeners.stream().filter(l -> l.getEvent().equals(event.getClass()) || l.getEvent().isAssignableFrom(event.getClass())).forEach(l -> l.getListener().accept(event));

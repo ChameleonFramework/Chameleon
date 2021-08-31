@@ -26,15 +26,21 @@ package dev.hypera.chameleon.bungeecord;
 import dev.hypera.chameleon.bungeecord.commands.BungeeCordCommandManager;
 import dev.hypera.chameleon.bungeecord.data.BungeeCordData;
 import dev.hypera.chameleon.bungeecord.events.BungeeCordEventHandler;
+import dev.hypera.chameleon.bungeecord.managers.BungeeCordPluginManager;
 import dev.hypera.chameleon.bungeecord.objects.BungeeCordServer;
+import dev.hypera.chameleon.bungeecord.scheduling.BungeeCordScheduler;
 import dev.hypera.chameleon.bungeecord.transformers.*;
 import dev.hypera.chameleon.bungeecord.users.BungeeCordUserManager;
 import dev.hypera.chameleon.bungeecord.users.ChameleonCommandSender;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.objects.Server;
+import dev.hypera.chameleon.core.scheduling.Scheduler;
 import dev.hypera.chameleon.core.users.ChatUser;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -50,6 +56,8 @@ public class BungeeCordChameleon extends Chameleon {
     private final @NotNull Plugin bungeePlugin;
     private final @NotNull BungeeAudiences adventure;
     private final @NotNull CommandManager commandManager;
+    private final @NotNull PluginManager pluginManager;
+    private final @NotNull Scheduler scheduler;
 
     public BungeeCordChameleon(@NotNull Class<? extends dev.hypera.chameleon.core.Plugin> pluginClass, @NotNull Plugin bungeePlugin) throws ChameleonInstantiationException {
         super(pluginClass, new BungeeCordData(),
@@ -62,6 +70,8 @@ public class BungeeCordChameleon extends Chameleon {
         this.bungeePlugin = bungeePlugin;
         this.adventure = BungeeAudiences.create(bungeePlugin);
         this.commandManager = new BungeeCordCommandManager(this);
+        this.pluginManager = new BungeeCordPluginManager();
+        this.scheduler = new BungeeCordScheduler(bungeePlugin);
     }
 
     public @NotNull Plugin getBungeeCordPlugin() {
@@ -89,6 +99,16 @@ public class BungeeCordChameleon extends Chameleon {
     }
 
     @Override
+    public @NotNull PluginManager getPluginManager() {
+        return pluginManager;
+    }
+
+    @Override
+    public @NotNull Scheduler getScheduler() {
+        return scheduler;
+    }
+
+    @Override
     public @NotNull ChatUser getConsoleSender() {
         return new ChameleonCommandSender(this, bungeePlugin.getProxy().getConsole());
     }
@@ -96,6 +116,11 @@ public class BungeeCordChameleon extends Chameleon {
     @Override
     public @Nullable ChatUser getPlayer(UUID uuid) {
         return BungeeCordUserManager.getUser(this, uuid);
+    }
+
+    @Override
+    public @NotNull Set<ChatUser> getPlayers() {
+        return ProxyServer.getInstance().getPlayers().stream().map(p -> BungeeCordUserManager.getUser(this, p)).collect(Collectors.toSet());
     }
 
     @Override

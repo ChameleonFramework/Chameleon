@@ -50,8 +50,8 @@ public class VelocityEventHandler implements Listener {
 				try {
 					ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
 					// TODO: Cancel events on Velocity.
-				} catch (MapFailedException ignored) {
-					// TODO: Handle this error!
+				} catch (MapFailedException ex) {
+					chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
 				}
 			}));
 		});
