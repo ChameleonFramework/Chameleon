@@ -23,10 +23,24 @@
 
 package dev.hypera.chameleon.velocity.events;
 
+import com.velocitypowered.api.event.ResultedEvent;
+import com.velocitypowered.api.event.ResultedEvent.Result;
+import com.velocitypowered.api.event.command.CommandExecuteEvent;
+import com.velocitypowered.api.event.command.CommandExecuteEvent.CommandResult;
+import com.velocitypowered.api.event.connection.LoginEvent;
+import com.velocitypowered.api.event.connection.PluginMessageEvent;
+import com.velocitypowered.api.event.player.KickedFromServerEvent;
+import com.velocitypowered.api.event.player.KickedFromServerEvent.ServerKickResult;
+import com.velocitypowered.api.event.player.PlayerChatEvent;
+import com.velocitypowered.api.event.player.PlayerChatEvent.ChatResult;
 import dev.hypera.chameleon.core.annotations.MappedClass;
+import dev.hypera.chameleon.core.events.Cancellable;
 import dev.hypera.chameleon.core.events.ChameleonEvent;
 import dev.hypera.chameleon.core.exceptions.MapFailedException;
+import dev.hypera.chameleon.core.exceptions.TransformFailedException;
+import dev.hypera.chameleon.core.transformers.Transformer;
 import dev.hypera.chameleon.velocity.VelocityChameleon;
+import java.lang.reflect.ParameterizedType;
 import net.kyori.adventure.bossbar.BossBar.Listener;
 
 import java.util.Optional;
@@ -49,12 +63,24 @@ public class VelocityEventHandler implements Listener {
 			velocityEvent.ifPresent(clazz -> chameleon.getVelocityPlugin().getServer().getEventManager().register(chameleon.getVelocityPlugin(), clazz, (e) -> {
 				try {
 					ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
-					// TODO: Cancel events on Velocity.
+					if (chameleonEvent instanceof Cancellable && e instanceof ResultedEvent<?>) {
+						if (((Cancellable) chameleonEvent).isCancelled()) {
+							cancelEvent((ResultedEvent<?>) e);
+						}
+ 					}
 				} catch (MapFailedException ex) {
 					chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
 				}
 			}));
 		});
+	}
+
+	private void cancelEvent(ResultedEvent<?> event) {
+		if (event instanceof CommandExecuteEvent) {
+			((CommandExecuteEvent) event).setResult(CommandResult.denied());
+		} else if (event instanceof PlayerChatEvent) {
+			((PlayerChatEvent) event).setResult(ChatResult.denied());
+		}
 	}
 
 }

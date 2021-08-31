@@ -105,13 +105,14 @@ public class Transformer {
 			return null;
 		}
 
+		Class<T> fromClass = (object.getClass().isPrimitive() ? (Class<T>) PrimitiveConverter.wrap(object.getClass()) : (Class<T>) object.getClass());
 		Class<U> toClass = (to.isPrimitive() ? (Class<U>) PrimitiveConverter.wrap(to) : to);
 
-		if (to.isInstance(object)) {
+		if (to.isInstance(object) || fromClass.equals(toClass)) {
 			return (U) object;
 		}
 
-		Optional<ITransformer<T, U>> transformer = registeredTransformers.stream().filter(t -> (t.getFrom().isInstance(object) || t.getFrom().equals(object.getClass()) || t.getFrom().isAssignableFrom(object.getClass())) && (t.getTo().equals(toClass) || t.getTo().isAssignableFrom(toClass) || toClass.isInstance(object))).map(t -> (ITransformer<T, U>) t).findFirst();
+		Optional<ITransformer<T, U>> transformer = registeredTransformers.stream().filter(t -> (t.getFrom().isInstance(object) || t.getFrom().equals(fromClass) || t.getFrom().isAssignableFrom(fromClass)) && (t.getTo().equals(toClass) || t.getTo().isAssignableFrom(toClass) || toClass.isInstance(object))).map(t -> (ITransformer<T, U>) t).findFirst();
 		if (!transformer.isPresent()) {
 			throw new TransformFailedException("Failed to transform " + object.getClass().getCanonicalName() + " to " + to.getCanonicalName());
 		} else {
