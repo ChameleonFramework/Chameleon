@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,9 +51,10 @@ public class ChameleonPlayer extends AudienceWrapper implements ServerUser {
         return player.hasPermission(permission);
     }
 
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "1.0.0")
     @Override
     public void setPermission(@NotNull String permission, boolean has) {
-        // TODO: Complete this and make it work.
         throw new UnsupportedOperationException("ChameleonPlayer#setPermission(String, boolean) is not implemented yet.");
     }
 

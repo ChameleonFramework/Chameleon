@@ -27,6 +27,7 @@ import com.velocitypowered.api.command.CommandSource;
 import dev.hypera.chameleon.core.internal.utils.AudienceWrapper;
 import dev.hypera.chameleon.core.users.ChatUser;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
 public class ChameleonCommandSource extends AudienceWrapper implements ChatUser {
@@ -44,9 +45,10 @@ public class ChameleonCommandSource extends AudienceWrapper implements ChatUser 
         return commandSource.hasPermission(permission);
     }
 
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "1.0.0")
     @Override
     public void setPermission(@NotNull String permission, boolean has) {
-        // TODO: Complete this and make it work.
         throw new UnsupportedOperationException("ChameleonCommandSource#setPermission(String, boolean) is not implemented yet.");
     }
 

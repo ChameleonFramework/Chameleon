@@ -28,6 +28,7 @@ import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.spigot.SpigotChameleon;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
 public class ChameleonCommandSender extends AudienceWrapper implements ChatUser {
@@ -47,9 +48,10 @@ public class ChameleonCommandSender extends AudienceWrapper implements ChatUser 
         return sender.hasPermission(permission);
     }
 
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "1.0.0")
     @Override
     public void setPermission(@NotNull String permission, boolean has) {
-        // TODO: Complete this and make it work.
         throw new UnsupportedOperationException("ChameleonCommandSender#setPermission(String, boolean) is not implemented yet.");
     }
 

@@ -23,11 +23,15 @@
 
 package dev.hypera.chameleon.core.users.permissions;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
 public interface PermissionHolder {
 
     boolean hasPermission(@NotNull String permission);
+
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "1.0.0")
     void setPermission(@NotNull String permission, boolean has);
 
 }

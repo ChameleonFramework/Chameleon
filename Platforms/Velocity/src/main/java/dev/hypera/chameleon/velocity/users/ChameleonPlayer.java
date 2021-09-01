@@ -40,6 +40,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,9 +59,10 @@ public class ChameleonPlayer extends AudienceWrapper implements ProxyUser {
         return player.hasPermission(permission);
     }
 
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "1.0.0")
     @Override
     public void setPermission(@NotNull String permission, boolean has) {
-        // TODO: Complete this and make it work.
         throw new UnsupportedOperationException("ChameleonPlayer#setPermission(String, boolean) is not implemented yet.");
     }
 
