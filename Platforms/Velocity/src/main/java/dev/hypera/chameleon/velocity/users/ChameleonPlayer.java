@@ -55,7 +55,7 @@ public class ChameleonPlayer extends AudienceWrapper implements ProxyUser {
     }
 
     @Override
-    public boolean hasPermission(String permission) {
+    public boolean hasPermission(@NotNull String permission) {
         return player.hasPermission(permission);
     }
 

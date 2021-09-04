@@ -66,7 +66,7 @@ public class BungeeCordEventHandler implements Listener {
 							ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
 							if (chameleonEvent instanceof Cancellable && e instanceof net.md_5.bungee.api.plugin.Cancellable) {
 								if (((Cancellable) chameleonEvent).isCancelled()) {
-									((Cancellable) e).setCancelled(true);
+									((net.md_5.bungee.api.plugin.Cancellable) e).setCancelled(true);
 								}
 							}
 						}
