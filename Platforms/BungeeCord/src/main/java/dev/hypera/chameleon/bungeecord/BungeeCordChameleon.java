@@ -129,4 +129,9 @@ public class BungeeCordChameleon extends Chameleon {
         return null == info ? null : new BungeeCordServer(this, info);
     }
 
+    @Override
+    public @NotNull Set<Server> getServers() {
+        return ProxyServer.getInstance().getServers().values().stream().map(serverInfo -> new BungeeCordServer(this, serverInfo)).collect(Collectors.toSet());
+    }
+
 }

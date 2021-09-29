@@ -119,4 +119,9 @@ public class VelocityChameleon extends Chameleon {
         return getVelocityPlugin().getServer().getServer(name).map(VelocityServer::new).orElse(null);
     }
 
+    @Override
+    public @NotNull Set<Server> getServers() {
+        return getVelocityPlugin().getServer().getAllServers().stream().map(VelocityServer::new).collect(Collectors.toSet());
+    }
+
 }

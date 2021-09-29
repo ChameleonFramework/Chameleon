@@ -119,5 +119,6 @@ public abstract class Chameleon {
     public abstract @Nullable ChatUser getPlayer(UUID uuid);
     public abstract @NotNull Set<ChatUser> getPlayers();
     public abstract @PlatformSpecific(Platform.PROXY) @Nullable Server getServer(String name);
+    public abstract @PlatformSpecific(Platform.PROXY) @NotNull Set<Server> getServers();
 
 }

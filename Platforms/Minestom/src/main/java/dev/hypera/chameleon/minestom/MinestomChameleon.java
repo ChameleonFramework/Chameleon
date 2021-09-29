@@ -118,4 +118,9 @@ public class MinestomChameleon extends Chameleon {
         throw new UnsupportedOperationException("This method is not supported on this platform.");
     }
 
+    @Override
+    public @NotNull Set<Server> getServers() {
+        throw new UnsupportedOperationException("This method is not supported on this platform.");
+    }
+
 }
