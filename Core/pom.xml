@@ -139,7 +139,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-legacy</artifactId>
-            <version>4.8.1</version>
+            <version>4.9.2</version>
         </dependency>
 
         <!-- Snake YAML -->
