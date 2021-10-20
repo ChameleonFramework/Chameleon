@@ -41,7 +41,7 @@ public class SpigotPluginManager implements PluginManager {
 	}
 
 	@Override
-	public @Nullable PlatformPlugin getPlugin(String name) {
+	public @Nullable PlatformPlugin getPlugin(@NotNull String name) {
 		Plugin plugin = Bukkit.getPluginManager().getPlugin(name);
 		if (null == plugin) {
 			return null;
@@ -50,7 +50,7 @@ public class SpigotPluginManager implements PluginManager {
 	}
 
 	@Override
-	public boolean isPluginEnabled(String name) {
+	public boolean isPluginEnabled(@NotNull String name) {
 		return Bukkit.getPluginManager().isPluginEnabled(name);
 	}
 

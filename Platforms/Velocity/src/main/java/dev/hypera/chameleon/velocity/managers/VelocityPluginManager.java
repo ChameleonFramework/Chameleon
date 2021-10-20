@@ -48,7 +48,7 @@ public class VelocityPluginManager implements PluginManager {
 	}
 
 	@Override
-	public @Nullable PlatformPlugin getPlugin(String name) {
+	public @Nullable PlatformPlugin getPlugin(@NotNull String name) {
 		PluginContainer plugin = server.getPluginManager().getPlugin(name.toLowerCase()).orElse(null);
 		if (null == plugin) {
 			return null;
@@ -57,7 +57,7 @@ public class VelocityPluginManager implements PluginManager {
 	}
 
 	@Override
-	public boolean isPluginEnabled(String name) {
+	public boolean isPluginEnabled(@NotNull String name) {
 		return server.getPluginManager().isLoaded(name.toLowerCase());
 	}
 

@@ -39,6 +39,14 @@ public abstract class CommandManager {
             registerPlatformCommand(command);
         }
     }
+
+    public void unregisterCommand(@NotNull Command command) {
+        if (command.getPlatform().getPlatformTypes().stream().anyMatch(t -> t.equals(chameleon.getPlatformData().getType()))) {
+            unregisterPlatformCommand(command);
+        }
+    }
+
     protected abstract void registerPlatformCommand(@NotNull Command command);
+    protected abstract void unregisterPlatformCommand(@NotNull Command command);
 
 }

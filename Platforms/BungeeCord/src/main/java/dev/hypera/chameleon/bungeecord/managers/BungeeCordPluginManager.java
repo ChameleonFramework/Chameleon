@@ -42,7 +42,7 @@ public class BungeeCordPluginManager implements PluginManager {
 	}
 
 	@Override
-	public @Nullable PlatformPlugin getPlugin(String name) {
+	public @Nullable PlatformPlugin getPlugin(@NotNull String name) {
 		Plugin plugin = ProxyServer.getInstance().getPluginManager().getPlugin(name);
 		if (null == plugin) {
 			return null;
@@ -51,7 +51,7 @@ public class BungeeCordPluginManager implements PluginManager {
 	}
 
 	@Override
-	public boolean isPluginEnabled(String name) {
+	public boolean isPluginEnabled(@NotNull String name) {
 		return null != ProxyServer.getInstance().getPluginManager().getPlugin(name);
 	}
 

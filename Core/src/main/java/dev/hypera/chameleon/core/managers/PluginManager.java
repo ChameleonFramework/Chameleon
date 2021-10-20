@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 public interface PluginManager {
 
 	@NotNull Set<PlatformPlugin> getPlugins();
-	@Nullable PlatformPlugin getPlugin(String name);
-	boolean isPluginEnabled(String name);
+	@Nullable PlatformPlugin getPlugin(@NotNull String name);
+	boolean isPluginEnabled(@NotNull String name);
 
 }

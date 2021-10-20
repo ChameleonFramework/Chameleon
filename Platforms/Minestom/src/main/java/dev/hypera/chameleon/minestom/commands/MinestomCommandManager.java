@@ -26,6 +26,7 @@ package dev.hypera.chameleon.minestom.commands;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.commands.CommandManager;
+import java.util.Objects;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +42,11 @@ public class MinestomCommandManager extends CommandManager {
     @Override
     protected void registerPlatformCommand(@NotNull Command command) {
         commandManager.register(new MinestomCommand(command));
+    }
+
+    @Override
+    protected void unregisterPlatformCommand(@NotNull Command command) {
+        commandManager.unregister(Objects.requireNonNull(commandManager.getCommand(command.getName())));
     }
 
 }

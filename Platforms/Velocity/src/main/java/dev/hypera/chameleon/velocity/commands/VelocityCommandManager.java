@@ -42,4 +42,9 @@ public class VelocityCommandManager extends CommandManager {
         commandManager.register(commandManager.metaBuilder(command.getName()).aliases(command.getAliases().toArray(new String[0])).build(), new VelocityCommand(command));
     }
 
+    @Override
+    protected void unregisterPlatformCommand(@NotNull Command command) {
+        commandManager.unregister(command.getName());
+    }
+
 }

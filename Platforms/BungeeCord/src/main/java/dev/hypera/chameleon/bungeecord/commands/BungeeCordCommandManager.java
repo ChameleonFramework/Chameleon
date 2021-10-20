@@ -26,6 +26,7 @@ package dev.hypera.chameleon.bungeecord.commands;
 import dev.hypera.chameleon.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.commands.CommandManager;
+import java.util.Map.Entry;
 import net.md_5.bungee.api.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +44,11 @@ public class BungeeCordCommandManager extends CommandManager {
     @Override
     protected void registerPlatformCommand(@NotNull Command command) {
         pluginManager.registerCommand(chameleon.getBungeeCordPlugin(), new BungeeCordCommand(chameleon, command));
+    }
+
+    @Override
+    protected void unregisterPlatformCommand(@NotNull Command command) {
+        pluginManager.unregisterCommand(pluginManager.getCommands().stream().filter(c -> c.getKey().equals(command.getName())).map(Entry::getValue).findFirst().orElseThrow(() -> new IllegalArgumentException("Failed to find command with name '" + command.getName() + "'")));
     }
 
 }

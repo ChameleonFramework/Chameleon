@@ -43,7 +43,7 @@ public class MinestomExtensionManager implements PluginManager {
 	}
 
 	@Override
-	public @Nullable PlatformPlugin getPlugin(String name) {
+	public @Nullable PlatformPlugin getPlugin(@NotNull String name) {
 		Extension extension = MinecraftServer.getExtensionManager().getExtension(name);
 		if (null == extension) {
 			return null;
@@ -52,7 +52,7 @@ public class MinestomExtensionManager implements PluginManager {
 	}
 
 	@Override
-	public boolean isPluginEnabled(String name) {
+	public boolean isPluginEnabled(@NotNull String name) {
 		return MinecraftServer.getExtensionManager().hasExtension(name);
 	}
 

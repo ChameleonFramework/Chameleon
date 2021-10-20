@@ -26,6 +26,7 @@ package dev.hypera.chameleon.spigot.commands;
 import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.commands.CommandManager;
 import dev.hypera.chameleon.spigot.SpigotChameleon;
+import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +49,12 @@ public class SpigotCommandManager extends CommandManager {
 
     @Override
     protected void registerPlatformCommand(@NotNull Command command) {
-        SpigotCommand spigotCommand = new SpigotCommand(chameleon, command);
-        map.register(command.getName(), chameleon.getSpigotPlugin().getName(), spigotCommand);
+        map.register(command.getName(), chameleon.getSpigotPlugin().getName(), new SpigotCommand(chameleon, command));
     }
+
+    @Override
+    protected void unregisterPlatformCommand(@NotNull Command command) {
+        Objects.requireNonNull(map.getCommand(command.getName())).unregister(map);
+    }
+
 }
