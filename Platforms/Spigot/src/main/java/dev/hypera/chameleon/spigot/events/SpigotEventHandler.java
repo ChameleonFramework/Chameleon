@@ -54,18 +54,26 @@ public class SpigotEventHandler implements Listener {
 
 			bukkitEvent.ifPresent(clazz -> Bukkit.getPluginManager()
 					.registerEvent((Class<? extends Event>) clazz, this, EventPriority.NORMAL, (listener, e) -> {
-						try {
-							ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
-							if (chameleonEvent instanceof Cancellable && e instanceof org.bukkit.event.Cancellable) {
-								if (((Cancellable) chameleonEvent).isCancelled()) {
-									((org.bukkit.event.Cancellable) e).setCancelled(true);
-								}
-							}
-						} catch (MapFailedException ex) {
-							chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
+						if (chameleon.getPlugin().getData().isAsyncEvents()) {
+							chameleon.getScheduler().runAsync(() -> handleEvent(chameleon, e));
+						} else {
+							handleEvent(chameleon, e);
 						}
 					}, chameleon.getSpigotPlugin()));
 		});
+	}
+
+	private void handleEvent(SpigotChameleon chameleon, Event e) {
+		try {
+			ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
+			if (chameleonEvent instanceof Cancellable && e instanceof org.bukkit.event.Cancellable) {
+				if (((Cancellable) chameleonEvent).isCancelled()) {
+					((org.bukkit.event.Cancellable) e).setCancelled(true);
+				}
+			}
+		} catch (MapFailedException ex) {
+			chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
+		}
 	}
 
 }

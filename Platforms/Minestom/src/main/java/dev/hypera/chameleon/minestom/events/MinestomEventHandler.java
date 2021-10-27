@@ -53,18 +53,26 @@ public class MinestomEventHandler {
 			}
 
 			minestomEvent.ifPresent(clazz -> eventNode.addListener((Class<Event>) clazz, (e) -> {
-				try {
-					ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
-					if (chameleonEvent instanceof Cancellable && e instanceof CancellableEvent) {
-						if (((Cancellable) chameleonEvent).isCancelled()) {
-							((CancellableEvent) e).setCancelled(true);
-						}
-					}
-				} catch (MapFailedException ex) {
-					chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
+				if (chameleon.getPlugin().getData().isAsyncEvents()) {
+					chameleon.getScheduler().runAsync(() -> handleEvent(chameleon, e));
+				} else {
+					handleEvent(chameleon, e);
 				}
 			}));
 		});
+	}
+
+	private void handleEvent(MinestomChameleon chameleon, Event e) {
+		try {
+			ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
+			if (chameleonEvent instanceof Cancellable && e instanceof CancellableEvent) {
+				if (((Cancellable) chameleonEvent).isCancelled()) {
+					((CancellableEvent) e).setCancelled(true);
+				}
+			}
+		} catch (MapFailedException ex) {
+			chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
+		}
 	}
 
 }

@@ -32,6 +32,7 @@ public class PluginData {
 	private String version;
 	private String author;
 	private String logPrefix = "[%s]";
+	private boolean asyncEvents = false;
 
 
 	public static PluginData builder() {
@@ -59,6 +60,11 @@ public class PluginData {
 		return this;
 	}
 
+	public PluginData asyncEvents(boolean asyncEvents) {
+		this.asyncEvents = asyncEvents;
+		return this;
+	}
+
 	public PluginData check() throws PEBKACException {
 		if (null == name || null == version || null == author || null == logPrefix) {
 			throw new PEBKACException("Some required fields in Plugin Data were not provided");
@@ -82,6 +88,10 @@ public class PluginData {
 
 	public String getLogPrefix() {
 		return logPrefix;
+	}
+
+	public boolean isAsyncEvents() {
+		return asyncEvents;
 	}
 
 }

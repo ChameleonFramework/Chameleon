@@ -61,20 +61,28 @@ public class BungeeCordEventHandler implements Listener {
 			ProxyServer.getInstance().getPluginManager().registerListener(chameleon.getBungeeCordPlugin(), new BungeeCordListenerAdapter() {
 				@Override
 				public void onEvent(Event e) {
-					try {
-						if (bungeeEvents.contains(e.getClass())) {
-							ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
-							if (chameleonEvent instanceof Cancellable && e instanceof net.md_5.bungee.api.plugin.Cancellable) {
-								if (((Cancellable) chameleonEvent).isCancelled()) {
-									((net.md_5.bungee.api.plugin.Cancellable) e).setCancelled(true);
-								}
-							}
+					if (bungeeEvents.contains(e.getClass())) {
+						if (chameleon.getPlugin().getData().isAsyncEvents()) {
+							chameleon.getScheduler().runAsync(() -> handleEvent(chameleon, e));
+						} else {
+							handleEvent(chameleon, e);
 						}
-					} catch (MapFailedException ex) {
-						chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
 					}
 				}
 			});
+		}
+	}
+
+	private void handleEvent(BungeeCordChameleon chameleon, Event e) {
+		try {
+			ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
+			if (chameleonEvent instanceof Cancellable && e instanceof net.md_5.bungee.api.plugin.Cancellable) {
+				if (((Cancellable) chameleonEvent).isCancelled()) {
+					((net.md_5.bungee.api.plugin.Cancellable) e).setCancelled(true);
+				}
+			}
+		} catch (MapFailedException ex) {
+			chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
 		}
 	}
 

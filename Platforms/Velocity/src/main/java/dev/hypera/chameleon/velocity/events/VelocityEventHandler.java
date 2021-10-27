@@ -61,18 +61,26 @@ public class VelocityEventHandler implements Listener {
 			}
 
 			velocityEvent.ifPresent(clazz -> chameleon.getVelocityPlugin().getServer().getEventManager().register(chameleon.getVelocityPlugin(), clazz, (e) -> {
-				try {
-					ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
-					if (chameleonEvent instanceof Cancellable && e instanceof ResultedEvent<?>) {
-						if (((Cancellable) chameleonEvent).isCancelled()) {
-							cancelEvent((ResultedEvent<?>) e);
-						}
- 					}
-				} catch (MapFailedException ex) {
-					chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
+				if (chameleon.getPlugin().getData().isAsyncEvents()) {
+					chameleon.getScheduler().runAsync(() -> handleEvent(chameleon, e));
+				} else {
+					handleEvent(chameleon, e);
 				}
 			}));
 		});
+	}
+
+	private void handleEvent(VelocityChameleon chameleon, Object e) {
+		try {
+			ChameleonEvent chameleonEvent = chameleon.getEventManager().dispatch(e);
+			if (chameleonEvent instanceof Cancellable && e instanceof ResultedEvent<?>) {
+				if (((Cancellable) chameleonEvent).isCancelled()) {
+					cancelEvent((ResultedEvent<?>) e);
+				}
+			}
+		} catch (MapFailedException ex) {
+			chameleon.getLogger(this.getClass()).error(ex.getMessage(), ex);
+		}
 	}
 
 	private void cancelEvent(ResultedEvent<?> event) {
