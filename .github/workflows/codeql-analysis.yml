@@ -58,7 +58,7 @@ jobs:
         java-version: '16'
 
     - name: Cache Maven Dependencies
-      uses: actions/cache@v2.1.6
+      uses: actions/cache@v2.1.7
       with:
         path: ~/.m2
         key: ubuntu-latest-m2-${{ hashFiles('**/pom.xml') }}
