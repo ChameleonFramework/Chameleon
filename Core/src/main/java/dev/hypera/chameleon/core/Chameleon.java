@@ -24,10 +24,13 @@
 package dev.hypera.chameleon.core;
 
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.logging.ChameleonLogger;
+import dev.hypera.chameleon.core.logging.factory.ChameleonLoggerFactory;
 import dev.hypera.chameleon.core.managers.CommandManager;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.platform.Platform;
+import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.core.wrappers.AudienceProvider;
 import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +39,7 @@ public abstract class Chameleon {
 
 	private static final @NotNull String VERSION = "0.4.0-SNAPSHOT";
 	private final @NotNull ChameleonPlugin plugin;
+	private final @NotNull ChameleonLoggerFactory loggerFactory = new ChameleonLoggerFactory(this);
 
 	public Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin) throws ChameleonInstantiationException {
 		try {
@@ -46,23 +50,39 @@ public abstract class Chameleon {
 	}
 
 	/* -- Status -- */
-	public void onEnable() {
+	public final void onEnable() {
 		plugin.onEnable();
 	}
 
-	public void onDisable() {
+	public final void onDisable() {
 		plugin.onDisable();
 	}
 
 
+
+	public final @NotNull ChameleonPlugin getPlugin() {
+		return plugin;
+	}
+
+	public final @NotNull ChameleonLogger getLogger() {
+		return loggerFactory.getLogger();
+	}
+
+	public final @NotNull ChameleonLogger getLogger(@NotNull Class<?> clazz) {
+		return loggerFactory.getLogger(clazz);
+	}
+
+
+
+	public abstract @NotNull ChatUser getConsole();
 	public abstract @NotNull AudienceProvider getAdventure();
 	public abstract @NotNull Platform getPlatform();
-
 	public abstract @NotNull CommandManager getCommandManager();
 	public abstract @NotNull PluginManager getPluginManager();
 	public abstract @NotNull Scheduler getScheduler();
-
 	public abstract @NotNull Path getDataFolder();
+
+
 
 	public static @NotNull String getVersion() {
 		return VERSION;

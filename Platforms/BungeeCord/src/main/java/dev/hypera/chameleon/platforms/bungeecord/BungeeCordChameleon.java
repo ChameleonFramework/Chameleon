@@ -30,11 +30,13 @@ import dev.hypera.chameleon.core.managers.CommandManager;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.platform.Platform;
+import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.core.wrappers.AudienceProvider;
 import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordCommandManager;
 import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordPluginManager;
 import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordScheduler;
 import dev.hypera.chameleon.platforms.bungeecord.platform.BungeeCordPlatform;
+import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordConsoleUser;
 import dev.hypera.chameleon.platforms.bungeecord.wrappers.BungeeCordAudienceProvider;
 import java.nio.file.Path;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
@@ -57,6 +59,10 @@ public final class BungeeCordChameleon extends Chameleon {
 	}
 
 
+	@Override
+	public @NotNull ChatUser getConsole() {
+		return new BungeeCordConsoleUser(this);
+	}
 
 	@Override
 	public @NotNull AudienceProvider getAdventure() {

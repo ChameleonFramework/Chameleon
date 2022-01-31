@@ -9,7 +9,7 @@
 
 |            Platform             | BungeeCord | Spigot | Velocity | Minestom | Sponge |
 |:-------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|
-|       [Logging](#Logging)       |            |        |          |          |        |
+|       [Logging](#Logging)       |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |
 |      [Commands](#Commands)      |     ✓      |        |          |          |        |
 |        [Events](#Events)        |            |        |          |          |        |
 |         [Users](#Users)         |     ✓      |        |          |          |        |
@@ -27,7 +27,20 @@ All examples below are taken from [the example Chameleon project](https://github
  - [ ] Sponge
 
 ## Logging
-Work in progress
+ - [x] Info
+ - [x] Debug
+ - [x] Warning
+ - [x] Error
+
+**ChameleonProject.java**
+```java
+@Override
+public void onEnable(){
+        // ...
+        chameleon.getLogger().info("Hello %s!", "world");
+        // ...
+}
+```
 
 ## Commands
  - [x] Name
