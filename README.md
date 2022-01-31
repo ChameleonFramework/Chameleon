@@ -12,16 +12,17 @@
 </div>
 
 ### What is Chameleon?
-Chameleon is a library created to make creating cross-platform Minecraft plugins as simple and easy as possible.
+Chameleon is a framework created to aid in the creation of cross-platform Minecraft platforms.
 
 
 ### Supported Platforms
 Chameleon plans to support every platform in this list. If you have ideas for other platforms that we could support, please suggest them on our [Official Feedback Site][Feedback].
-* [x] [BungeeCord]
-* [x] [Spigot]
-* [x] [Velocity]
-* [x] [Minestom]
-* [ ] [Sponge]
+> Note: This branch is being used to rewrite Chameleon and does not support all the platforms master supports yet.
+ - [x] [BungeeCord]
+ - [ ] [Spigot]
+ - [ ] [Velocity]
+ - [ ] [Minestom]
+ - [ ] [Sponge]
 
 ### How do I use Chameleon?
 As this is hard to explain, we have created an [Example Project][Example]. In short, you have a common module with non-platform-specific code (this would only be Chameleon code), then you have a module for each platform you would like to support.  
@@ -29,11 +30,10 @@ You can also check out our [Development Roadmap][Roadmap] or various examples of
 
 ### Project Structure
  * **Core** - Most of Chameleon's non-platform-specific code belongs here.
+ * **Features** - Features that are not deemed to be a core part of Chameleon.
+   * *Configuration* - YAML and JSON configuration file loaders. 
  * **Platforms** - Any platform-specific code belongs inside here.
    * *BungeeCord* - Any code that interacts with BungeeCord belongs here.
-   * *Minestom* - Any code that interacts with Minestom belongs here.
-   * *Spigot* - Any code that interacts with Bukkit or Spigot belongs here.
-   * *Velocity* - Any code that interacts with Velocity belongs here.
 
 
 ### Contributing

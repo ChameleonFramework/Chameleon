@@ -4,7 +4,23 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+      time: "00:00"
+      timezone: "Europe/London"
+    target-branch: "development"
+    reviewers:
+      - joshuasing
+      - SLLCoding
+    commit-message:
+      prefix: "chore(deps):"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+    time: "00:00"
+      timezone: "Europe/London"
+    target-branch: "development"
+    reviewers:
+      - joshuasing
+      - SLLCoding
+    commit-message:
+      prefix: "chore(actions):"

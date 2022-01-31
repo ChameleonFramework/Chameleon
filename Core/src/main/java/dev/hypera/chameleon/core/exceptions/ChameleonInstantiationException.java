@@ -1,6 +1,6 @@
 /*
- * Chameleon - Cross-platform Minecraft plugin creation library
- *  Copyright (c) 2021 SLLCoding <luisjk266@gmail.com>
+ * Chameleon Framework - Cross-platform Minecraft plugin framework
+ *  Copyright (c) 2021-present The Chameleon Framework Authors.
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,26 @@
 
 package dev.hypera.chameleon.core.exceptions;
 
-public class ChameleonInstantiationException extends Exception {
+public class ChameleonInstantiationException extends ChameleonException {
 
-    public ChameleonInstantiationException(String message) {
-        super(message);
-    }
+	public ChameleonInstantiationException() {
+		super();
+	}
 
-    public ChameleonInstantiationException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public ChameleonInstantiationException(String message) {
+		super(message);
+	}
+
+	public ChameleonInstantiationException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public ChameleonInstantiationException(Throwable cause) {
+		super(cause);
+	}
+
+	public ChameleonInstantiationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
 
 }

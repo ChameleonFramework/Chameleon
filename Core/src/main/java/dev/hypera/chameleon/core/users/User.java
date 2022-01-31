@@ -1,6 +1,6 @@
 /*
- * Chameleon - Cross-platform Minecraft plugin creation library
- *  Copyright (c) 2021 SLLCoding <luisjk266@gmail.com>
+ * Chameleon Framework - Cross-platform Minecraft plugin framework
+ *  Copyright (c) 2021-present The Chameleon Framework Authors.
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -23,22 +23,15 @@
 
 package dev.hypera.chameleon.core.users;
 
-import java.util.Locale;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-/**
- * A client-side user.
- */
 public interface User extends ChatUser {
 
 	@NotNull UUID getUniqueId();
-	@Nullable Locale getLocale();
 	int getPing();
 
 	void chat(@NotNull String message);
 	void sendData(@NotNull String channel, byte[] data);
-
 
 }

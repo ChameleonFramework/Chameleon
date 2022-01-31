@@ -1,6 +1,6 @@
 /*
- * Chameleon - Cross-platform Minecraft plugin creation library
- *  Copyright (c) 2021 SLLCoding <luisjk266@gmail.com>
+ * Chameleon Framework - Cross-platform Minecraft plugin framework
+ *  Copyright (c) 2021-present The Chameleon Framework Authors.
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,41 @@
 
 package dev.hypera.chameleon.core.users;
 
-import dev.hypera.chameleon.core.users.permissions.PermissionHolder;
+import dev.hypera.chameleon.core.users.permissions.IPermissionHolder;
+import dev.hypera.chameleon.core.users.platforms.ProxyUser;
+import dev.hypera.chameleon.core.users.platforms.ServerUser;
 import net.kyori.adventure.audience.Audience;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * Something that can send messages, receive messages and have permissions.
- */
-public interface ChatUser extends Audience, PermissionHolder {
+public interface ChatUser extends Audience, IPermissionHolder {
 
-    String getName();
+	@NotNull String getName();
+
+
+
+	/* Utils */
+	default @NotNull User user() {
+		if (this instanceof User) {
+			return (User) this;
+		} else {
+			throw new IllegalStateException("Cannot cast to User");
+		}
+	}
+
+	default @NotNull ProxyUser proxy() {
+		if (this instanceof ProxyUser) {
+			return (ProxyUser) this;
+		} else {
+			throw new IllegalStateException("Cannot cast to ProxyUser");
+		}
+	}
+
+	default @NotNull ServerUser server() {
+		if (this instanceof ServerUser) {
+			return (ServerUser) this;
+		} else {
+			throw new IllegalStateException("Cannot cast to ServerUser");
+		}
+	}
 
 }

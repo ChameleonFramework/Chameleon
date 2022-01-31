@@ -1,97 +1,98 @@
 /*
- * Chameleon - Cross-platform Minecraft plugin framework
- * Copyright (c) 2021 Joshua Sing <joshua@hypera.dev>
+ * Chameleon Framework - Cross-platform Minecraft plugin framework
+ *  Copyright (c) 2021-present The Chameleon Framework Authors.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  SOFTWARE.
  */
 
 package dev.hypera.chameleon.core.data;
 
-import dev.hypera.chameleon.core.exceptions.PEBKACException;
 import org.jetbrains.annotations.NotNull;
 
-public class PluginData {
+public interface PluginData {
 
-	private String name;
-	private String version;
-	private String author;
-	private String logPrefix = "[%s]";
-	private boolean asyncEvents = false;
+	@NotNull String getName();
+	@NotNull String getVersion();
+	@NotNull String getAuthor();
+	@NotNull String getLogPrefix();
 
-
-	public static PluginData builder() {
-		return new PluginData();
+	static Builder builder() {
+		return new Builder();
 	}
 
+	class Builder {
 
-	public PluginData name(@NotNull String name) {
-		this.name = name;
-		return this;
-	}
+		private String name;
+		private String version;
+		private String author;
+		private String logPrefix = "[%s]";
 
-	public PluginData version(@NotNull String version) {
-		this.version = version;
-		return this;
-	}
-
-	public PluginData author(@NotNull String author) {
-		this.author = author;
-		return this;
-	}
-
-	public PluginData logPrefix(@NotNull String logPrefix) {
-		this.logPrefix = logPrefix;
-		return this;
-	}
-
-	public PluginData asyncEvents(boolean asyncEvents) {
-		this.asyncEvents = asyncEvents;
-		return this;
-	}
-
-	public PluginData check() throws PEBKACException {
-		if (null == name || null == version || null == author || null == logPrefix) {
-			throw new PEBKACException("Some required fields in Plugin Data were not provided");
+		public @NotNull Builder name(@NotNull String name) {
+			this.name = name;
+			return this;
 		}
 
-		return this;
-	}
+		public @NotNull Builder version(@NotNull String version) {
+			this.version = version;
+			return this;
+		}
 
+		public @NotNull Builder author(@NotNull String author) {
+			this.author = author;
+			return this;
+		}
 
-	public String getName() {
-		return name;
-	}
+		public @NotNull Builder logPrefix(@NotNull String logPrefix) {
+			this.logPrefix = logPrefix;
+			return this;
+		}
 
-	public String getVersion() {
-		return version;
-	}
+		public @NotNull PluginData build() {
+			if (null == name || null == version) {
+				throw new IllegalStateException("Name and version must be set");
+			}
 
-	public String getAuthor() {
-		return author;
-	}
+			return new PluginData() {
 
-	public String getLogPrefix() {
-		return logPrefix;
-	}
+				@Override
+				public @NotNull String getName() {
+					return name;
+				}
 
-	public boolean isAsyncEvents() {
-		return asyncEvents;
+				@Override
+				public @NotNull String getVersion() {
+					return version;
+				}
+
+				@Override
+				public @NotNull String getAuthor() {
+					return author;
+				}
+
+				@Override
+				public @NotNull String getLogPrefix() {
+					return logPrefix;
+				}
+
+			};
+		}
+
 	}
 
 }

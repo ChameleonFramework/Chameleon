@@ -7,9 +7,10 @@
 
 ### Supported Versions
 | Version | Supported          |
-| ------- | ------------------ |
-| 0.2.0   | :white_check_mark: |
-| < 0.2   | :x:                |
+|---------|--------------------|
+| 0.4.0   | :white_check_mark: |
+| < 0.4   | :x:                |
+<br>
 
 ### Reporting a Vulnerability
 Please direct all security related issues to [security@hypera.dev](mailto:security@hypera.dev).

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Chameleon - Cross-platform Minecraft plugin creation library
-  ~  Copyright (c) 2021 SLLCoding <luisjk266@gmail.com>
+  ~ Chameleon Framework - Cross-platform Minecraft plugin framework
+  ~  Copyright (c) 2021-present The Chameleon Framework Authors.
   ~
   ~  Permission is hereby granted, free of charge, to any person obtaining a copy
   ~  of this software and associated documentation files (the "Software"), to deal
@@ -23,131 +23,136 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>Platforms</artifactId>
-        <groupId>dev.hypera.chameleon</groupId>
-        <version>0.3.1-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>Chameleon</artifactId>
+    <groupId>dev.hypera</groupId>
+    <version>0.4.0-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.hypera.chameleon.platforms</groupId>
-    <artifactId>BungeeCord</artifactId>
+  <groupId>dev.hypera.chameleon.platforms</groupId>
+  <artifactId>BungeeCord</artifactId>
 
-    <name>Chameleon BungeeCord</name>
-    <description>Cross-platform Minecraft plugin framework</description>
-    <url>https://github.com/HyperaOfficial/Chameleon</url>
+  <name>Chameleon BungeeCord</name>
+  <description>Cross-platform Minecraft plugin framework</description>
+  <url>https://github.com/HyperaOfficial/Chameleon</url>
 
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>https://opensource.org/licenses/MIT</url>
-        </license>
-    </licenses>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
 
-    <developers>
-        <developer>
-            <id>joshuasing</id>
-            <name>Joshua Sing</name>
-            <email>joshua@hypera.dev</email>
-        </developer>
-        <developer>
-            <id>sllcoding</id>
-            <name>SLLCoding</name>
-            <email>luisjk266@gmail.com</email>
-        </developer>
-    </developers>
+  <developers>
+    <developer>
+      <id>joshuasing</id>
+      <name>Joshua Sing</name>
+      <email>joshua@hypera.dev</email>
+    </developer>
+    <developer>
+      <id>sllcoding</id>
+      <name>SLLCoding</name>
+      <email>luisjk266@gmail.com</email>
+    </developer>
+  </developers>
 
-    <scm>
-        <connection>scm:git:git://github.com/HyperaOfficial/Chameleon.git</connection>
-        <developerConnection>scm:git:ssh://github.com:HyperaOfficial/Chameleon.git</developerConnection>
-        <url>http://github.com/HyperaOfficial/Chameleon/tree/master</url>
-    </scm>
+  <scm>
+    <connection>scm:git:git://github.com/HyperaOfficial/Chameleon.git</connection>
+    <developerConnection>scm:git:ssh://github.com:HyperaOfficial/Chameleon.git</developerConnection>
+    <url>http://github.com/HyperaOfficial/Chameleon/tree/master</url>
+  </scm>
 
-    <issueManagement>
-        <system>GitHub</system>
-        <url>https://github.com/HyperaOfficial/Chameleon/issues</url>
-    </issueManagement>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/HyperaOfficial/Chameleon/issues</url>
+  </issueManagement>
 
-    <properties>
-        <java.version>8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+  <properties>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>hypera-snapshots</id>
-            <url>https://repo.hypera.dev/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>hypera-releases</id>
-            <url>https://repo.hypera.dev/releases/</url>
-        </repository>
-    </distributionManagement>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>hypera-snapshots</id>
+      <url>https://repo.hypera.dev/snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>hypera-releases</id>
+      <url>https://repo.hypera.dev/releases/</url>
+    </repository>
+  </distributionManagement>
 
-    <build>
-        <defaultGoal>clean package</defaultGoal>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <shadeTestJar>false</shadeTestJar>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>deploy</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
-    <repositories>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-    </repositories>
+  <dependencies>
+    <!-- Chameleon Core -->
+    <dependency>
+      <groupId>dev.hypera.chameleon</groupId>
+      <artifactId>Core</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+    </dependency>
 
-    <dependencies>
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.18-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-platform-bungeecord</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-    </dependencies>
+    <!-- BungeeCord API -->
+    <dependency>
+      <groupId>net.md-5</groupId>
+      <artifactId>bungeecord-api</artifactId>
+      <version>1.18-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Adventure BungeeCord -->
+    <dependency>
+      <groupId>net.kyori</groupId>
+      <artifactId>adventure-platform-bungeecord</artifactId>
+      <version>4.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
 
 </project>
