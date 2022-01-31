@@ -10,9 +10,9 @@
 |            Platform             | BungeeCord | Spigot | Velocity | Minestom | Sponge |
 |:-------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|
 |       [Logging](#Logging)       |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |
-|      [Commands](#Commands)      |     ✓      |        |          |          |        |
+|      [Commands](#Commands)      |     ✓      |   ✓    |          |          |        |
 |        [Events](#Events)        |            |        |          |          |        |
-|         [Users](#Users)         |     ✓      |        |          |          |        |
+|         [Users](#Users)         |     ✓      |  WIP   |          |          |        |
 | [Configuration](#Configuration) |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |
 
 ### Extra Information
@@ -21,7 +21,7 @@ All examples below are taken from [the example Chameleon project](https://github
 
 ## Platforms
  - [x] BungeeCord
- - [ ] Spigot
+ - [x] Spigot
  - [ ] Velocity
  - [ ] Minestom
  - [ ] Sponge

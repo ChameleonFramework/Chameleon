@@ -25,23 +25,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>Chameleon</artifactId>
+    <groupId>dev.hypera</groupId>
+    <version>0.4.0-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>dev.hypera</groupId>
-  <artifactId>Chameleon</artifactId>
-  <version>0.4.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <groupId>dev.hypera.chameleon.platforms</groupId>
+  <artifactId>Spigot</artifactId>
 
-  <name>Chameleon</name>
+  <name>Chameleon Spigot</name>
   <description>Cross-platform Minecraft plugin framework</description>
   <url>https://github.com/HyperaOfficial/Chameleon</url>
-
-  <modules>
-    <module>Core</module>
-    <module>Platforms/BungeeCord</module>
-    <module>Features/Configuration</module>
-    <module>Platforms/Spigot</module>
-  </modules>
 
   <licenses>
     <license>
@@ -133,12 +130,29 @@
   </build>
 
   <dependencies>
+    <!-- Chameleon Core -->
     <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-      <version>23.0.0</version>
+      <groupId>dev.hypera.chameleon</groupId>
+      <artifactId>Core</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Spigot API -->
+    <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot-api</artifactId>
+      <version>1.18-R0.1-SNAPSHOT</version>
+    </dependency>
+
+    <!-- Adventure Bukkit -->
+    <dependency>
+      <groupId>net.kyori</groupId>
+      <artifactId>adventure-platform-bukkit</artifactId>
+      <version>4.0.1</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
+
 
 </project>

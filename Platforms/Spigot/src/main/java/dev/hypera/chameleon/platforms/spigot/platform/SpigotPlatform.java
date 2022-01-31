@@ -21,36 +21,32 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.managers;
+package dev.hypera.chameleon.platforms.spigot.platform;
 
-import dev.hypera.chameleon.core.managers.Scheduler;
-import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
-import java.util.concurrent.TimeUnit;
-import net.md_5.bungee.api.ProxyServer;
+import dev.hypera.chameleon.core.platform.server.ServerPlatform;
+import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
-public final class BungeeCordScheduler extends Scheduler {
+public final class SpigotPlatform extends ServerPlatform {
 
-	private final @NotNull BungeeCordChameleon chameleon;
+	public SpigotPlatform(@NotNull SpigotChameleon chameleon) {
 
-	public BungeeCordScheduler(@NotNull BungeeCordChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
-
-
-	@Override
-	public void schedule(@NotNull Runnable runnable) {
-		ProxyServer.getInstance().getScheduler().runAsync(chameleon.getBungeePlugin(), runnable);
 	}
 
 	@Override
-	public void schedule(@NotNull Runnable runnable, long delay, @NotNull TimeUnit unit) {
-		ProxyServer.getInstance().getScheduler().schedule(chameleon.getBungeePlugin(), runnable, delay, unit);
+	public @NotNull String getName() {
+		return Bukkit.getName();
 	}
 
 	@Override
-	public void scheduleRepeating(@NotNull Runnable runnable, long delay, long period, @NotNull TimeUnit unit) {
-		ProxyServer.getInstance().getScheduler().schedule(chameleon.getBungeePlugin(), runnable, delay, period, unit);
+	public @NotNull String getVersion() {
+		return Bukkit.getVersion();
+	}
+
+	@Override
+	public @NotNull Type getType() {
+		return Type.SERVER;
 	}
 
 }

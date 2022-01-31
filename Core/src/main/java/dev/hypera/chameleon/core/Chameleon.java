@@ -33,6 +33,7 @@ import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.core.wrappers.AudienceProvider;
 import java.nio.file.Path;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Chameleon {
@@ -68,8 +69,9 @@ public abstract class Chameleon {
 		return loggerFactory.getLogger();
 	}
 
-	public final @NotNull ChameleonLogger getLogger(@NotNull Class<?> clazz) {
-		return loggerFactory.getLogger(clazz);
+	@Internal
+	public final @NotNull ChameleonLogger getInternalLogger() {
+		return loggerFactory.getInternalLogger();
 	}
 
 

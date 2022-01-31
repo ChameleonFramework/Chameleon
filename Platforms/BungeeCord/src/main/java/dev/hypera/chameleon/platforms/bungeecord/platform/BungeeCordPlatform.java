@@ -23,15 +23,8 @@
 
 package dev.hypera.chameleon.platforms.bungeecord.platform;
 
-import dev.hypera.chameleon.core.managers.CommandManager;
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.managers.Scheduler;
-import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
 import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
-import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordCommandManager;
-import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordPluginManager;
-import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordScheduler;
 import net.md_5.bungee.api.ProxyServer;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +36,6 @@ public final class BungeeCordPlatform extends ProxyPlatform {
 	}
 
 
-	/* -- Info -- */
 	@Override
 	public @NotNull String getName() {
 		return ProxyServer.getInstance().getName();

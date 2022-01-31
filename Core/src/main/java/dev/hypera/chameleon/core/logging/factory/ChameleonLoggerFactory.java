@@ -44,12 +44,9 @@ public class ChameleonLoggerFactory {
 		return new ChameleonLoggerImpl(chameleon, debug);
 	}
 
-	public @NotNull ChameleonLogger getLogger(@NotNull Class<?> clazz) {
-		if (clazz.getCanonicalName().startsWith("dev.hypera.chameleon")) {
-			return new InternalChameleonLoggerImpl(chameleon, debug);
-		} else {
-			return new ChameleonLoggerImpl(chameleon, debug);
-		}
+	@Internal
+	public @NotNull ChameleonLogger getInternalLogger() {
+		return new InternalChameleonLoggerImpl(chameleon, debug);
 	}
 
 	public boolean isDebugEnabled() {

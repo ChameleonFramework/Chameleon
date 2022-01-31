@@ -21,7 +21,7 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord;
+package dev.hypera.chameleon.platforms.spigot;
 
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.ChameleonPlugin;
@@ -32,36 +32,36 @@ import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.core.wrappers.AudienceProvider;
-import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordCommandManager;
-import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordPluginManager;
-import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordScheduler;
-import dev.hypera.chameleon.platforms.bungeecord.platform.BungeeCordPlatform;
-import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordConsoleUser;
-import dev.hypera.chameleon.platforms.bungeecord.wrappers.BungeeCordAudienceProvider;
+import dev.hypera.chameleon.platforms.spigot.managers.SpigotCommandManager;
+import dev.hypera.chameleon.platforms.spigot.managers.SpigotPluginManager;
+import dev.hypera.chameleon.platforms.spigot.managers.SpigotScheduler;
+import dev.hypera.chameleon.platforms.spigot.platform.SpigotPlatform;
+import dev.hypera.chameleon.platforms.spigot.user.SpigotConsoleUser;
+import dev.hypera.chameleon.platforms.spigot.wrappers.SpigotAudienceProvider;
 import java.nio.file.Path;
-import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
-import net.md_5.bungee.api.plugin.Plugin;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public final class BungeeCordChameleon extends Chameleon {
+public final class SpigotChameleon extends Chameleon {
 
-	private final @NotNull Plugin plugin;
+	private final @NotNull JavaPlugin plugin;
 	private final @NotNull AudienceProvider audienceProvider;
-	private final @NotNull BungeeCordPlatform platform = new BungeeCordPlatform(this);
-	private final @NotNull BungeeCordCommandManager commandManager = new BungeeCordCommandManager(this);
-	private final @NotNull BungeeCordPluginManager pluginManager = new BungeeCordPluginManager();
-	private final @NotNull BungeeCordScheduler scheduler = new BungeeCordScheduler(this);
+	private final @NotNull SpigotPlatform platform = new SpigotPlatform(this);
+	private final @NotNull SpigotCommandManager commandManager = new SpigotCommandManager(this);
+	private final @NotNull SpigotPluginManager pluginManager = new SpigotPluginManager();
+	private final @NotNull SpigotScheduler scheduler = new SpigotScheduler(this);
 
-	public BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin) throws ChameleonInstantiationException {
+	public SpigotChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin) throws ChameleonInstantiationException {
 		super(chameleonPlugin);
-		this.plugin = bungeePlugin;
-		this.audienceProvider = new BungeeCordAudienceProvider(BungeeAudiences.create(bungeePlugin));
+		this.plugin = spigotPlugin;
+		this.audienceProvider = new SpigotAudienceProvider(BukkitAudiences.create(spigotPlugin));
 	}
 
 
 	@Override
 	public @NotNull ChatUser getConsole() {
-		return new BungeeCordConsoleUser(this);
+		return new SpigotConsoleUser(this);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public final class BungeeCordChameleon extends Chameleon {
 	}
 
 
-	public @NotNull Plugin getBungeePlugin() {
+	public @NotNull JavaPlugin getSpigotPlugin() {
 		return plugin;
 	}
 

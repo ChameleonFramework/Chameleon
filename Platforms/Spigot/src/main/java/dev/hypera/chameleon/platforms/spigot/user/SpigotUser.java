@@ -21,29 +21,66 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.users;
+package dev.hypera.chameleon.platforms.spigot.user;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.core.platform.server.GameMode;
+import dev.hypera.chameleon.core.users.platforms.ServerUser;
 import dev.hypera.chameleon.core.wrappers.AudienceWrapper;
-import net.md_5.bungee.api.ProxyServer;
+import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
+import java.util.UUID;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class BungeeCordConsoleUser extends AudienceWrapper implements ChatUser {
+public class SpigotUser extends AudienceWrapper implements ServerUser {
 
-	public BungeeCordConsoleUser(@NotNull Chameleon chameleon) {
-		super(chameleon.getAdventure().console());
+	private final @NotNull SpigotChameleon chameleon;
+	private final @NotNull Player player;
+
+	public SpigotUser(@NotNull SpigotChameleon chameleon, @NotNull Player player) {
+		super(chameleon.getAdventure().player(player.getUniqueId()));
+		this.chameleon = chameleon;
+		this.player = player;
 	}
 
 
 	@Override
 	public @NotNull String getName() {
-		return ProxyServer.getInstance().getConsole().getName();
+		return player.getName();
+	}
+
+	@Override
+	public @NotNull UUID getUniqueId() {
+		return player.getUniqueId();
+	}
+
+	@Override
+	public int getPing() {
+		return player.getPing();
+	}
+
+	@Override
+	public void chat(@NotNull String message) {
+		player.chat(message);
+	}
+
+	@Override
+	public void sendData(@NotNull String channel, byte[] data) {
+		player.sendPluginMessage(chameleon.getSpigotPlugin(), channel, data);
 	}
 
 	@Override
 	public boolean hasPermission(@NotNull String permission) {
-		return true;
+		return player.hasPermission(permission);
+	}
+
+	@Override
+	public @NotNull GameMode getGameMode() {
+		return GameMode.valueOf(player.getGameMode().name());
+	}
+
+	@Override
+	public void setGameMode(@NotNull GameMode gameMode) {
+		player.setGameMode(org.bukkit.GameMode.valueOf(gameMode.name()));
 	}
 
 }

@@ -19,7 +19,7 @@ Chameleon is a framework created to aid in the creation of cross-platform Minecr
 Chameleon plans to support every platform in this list. If you have ideas for other platforms that we could support, please suggest them on our [Official Feedback Site][Feedback].
 > Note: This branch is being used to rewrite Chameleon and does not support all the platforms master supports yet.
  - [x] [BungeeCord]
- - [ ] [Spigot]
+ - [x] [Spigot]
  - [ ] [Velocity]
  - [ ] [Minestom]
  - [ ] [Sponge]

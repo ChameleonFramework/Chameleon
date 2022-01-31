@@ -21,36 +21,35 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.managers;
+package dev.hypera.chameleon.platforms.spigot.managers;
 
-import dev.hypera.chameleon.core.managers.Scheduler;
-import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
-import java.util.concurrent.TimeUnit;
-import net.md_5.bungee.api.ProxyServer;
+import dev.hypera.chameleon.core.managers.PluginManager;
+import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.platforms.spigot.platform.objects.SpigotPlugin;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public final class BungeeCordScheduler extends Scheduler {
-
-	private final @NotNull BungeeCordChameleon chameleon;
-
-	public BungeeCordScheduler(@NotNull BungeeCordChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
-
+public final class SpigotPluginManager extends PluginManager {
 
 	@Override
-	public void schedule(@NotNull Runnable runnable) {
-		ProxyServer.getInstance().getScheduler().runAsync(chameleon.getBungeePlugin(), runnable);
+	public @NotNull Set<PlatformPlugin> getPlugins() {
+		return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
 	}
 
 	@Override
-	public void schedule(@NotNull Runnable runnable, long delay, @NotNull TimeUnit unit) {
-		ProxyServer.getInstance().getScheduler().schedule(chameleon.getBungeePlugin(), runnable, delay, unit);
+	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
+		Plugin plugin = Bukkit.getPluginManager().getPlugin(name);
+		return null == plugin ? Optional.empty() : Optional.of(new SpigotPlugin(plugin));
 	}
 
 	@Override
-	public void scheduleRepeating(@NotNull Runnable runnable, long delay, long period, @NotNull TimeUnit unit) {
-		ProxyServer.getInstance().getScheduler().schedule(chameleon.getBungeePlugin(), runnable, delay, period, unit);
+	public boolean isPluginEnabled(@NotNull String name) {
+		return Bukkit.getPluginManager().isPluginEnabled(name);
 	}
 
 }

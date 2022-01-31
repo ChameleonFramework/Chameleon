@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 // TODO: Find a better name for this!
 public class BasicUtil {
 
-	public static @NotNull String getOrDefault(@Nullable String s, @NotNull String defaultValue) {
+	public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
 		return null == s ? defaultValue : s;
 	}
 
