@@ -25,28 +25,27 @@ package dev.hypera.chameleon.platforms.bungeecord;
 
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.ChameleonPlugin;
+import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.managers.CommandManager;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.wrappers.AudienceProvider;
+import dev.hypera.chameleon.platforms.bungeecord.adventure.BungeeCordAudienceProvider;
 import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordCommandManager;
 import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordPluginManager;
 import dev.hypera.chameleon.platforms.bungeecord.managers.BungeeCordScheduler;
 import dev.hypera.chameleon.platforms.bungeecord.platform.BungeeCordPlatform;
 import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordConsoleUser;
-import dev.hypera.chameleon.platforms.bungeecord.wrappers.BungeeCordAudienceProvider;
 import java.nio.file.Path;
-import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 public final class BungeeCordChameleon extends Chameleon {
 
 	private final @NotNull Plugin plugin;
-	private final @NotNull AudienceProvider audienceProvider;
+	private final @NotNull ChameleonAudienceProvider audienceProvider;
 	private final @NotNull BungeeCordPlatform platform = new BungeeCordPlatform(this);
 	private final @NotNull BungeeCordCommandManager commandManager = new BungeeCordCommandManager(this);
 	private final @NotNull BungeeCordPluginManager pluginManager = new BungeeCordPluginManager();
@@ -55,7 +54,7 @@ public final class BungeeCordChameleon extends Chameleon {
 	public BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin) throws ChameleonInstantiationException {
 		super(chameleonPlugin);
 		this.plugin = bungeePlugin;
-		this.audienceProvider = new BungeeCordAudienceProvider(BungeeAudiences.create(bungeePlugin));
+		this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);
 	}
 
 
@@ -65,7 +64,7 @@ public final class BungeeCordChameleon extends Chameleon {
 	}
 
 	@Override
-	public @NotNull AudienceProvider getAdventure() {
+	public @NotNull ChameleonAudienceProvider getAdventure() {
 		return audienceProvider;
 	}
 

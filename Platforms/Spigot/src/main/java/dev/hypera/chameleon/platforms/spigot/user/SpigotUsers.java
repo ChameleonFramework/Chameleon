@@ -21,41 +21,23 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.spigot.commands;
+package dev.hypera.chameleon.platforms.spigot.user;
 
 import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.core.commands.context.impl.ContextImpl;
-import dev.hypera.chameleon.platforms.spigot.user.SpigotUsers;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public final class SpigotCommand extends org.bukkit.command.Command {
+public final class SpigotUsers {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull Command command;
-
-	public SpigotCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
-		super(command.getName(), "", "", new ArrayList<>(command.getAliases()));
-		this.chameleon = chameleon;
-		this.command = command;
-	}
-
-	@Override
-	public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
-		if (args.length < 1 || !command.executeSubCommand(new ContextImpl(SpigotUsers.wrap(chameleon, sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
-			command.executeCommand(new ContextImpl(SpigotUsers.wrap(chameleon, sender), chameleon, args));
+	public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSender sender) {
+		if (sender instanceof Player) {
+			return new SpigotUser((SpigotChameleon) chameleon, (Player) sender);
+		} else {
+			return new SpigotConsoleUser(chameleon);
 		}
-
-		return true;
-	}
-
-	@Override
-	public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
-		return command.tabComplete(new ContextImpl(SpigotUsers.wrap(chameleon, sender), chameleon, args));
 	}
 
 }

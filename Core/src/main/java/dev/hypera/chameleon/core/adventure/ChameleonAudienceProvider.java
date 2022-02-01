@@ -21,22 +21,16 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.users.platforms;
+package dev.hypera.chameleon.core.adventure;
 
-import dev.hypera.chameleon.core.annotations.PlatformSpecific;
-import dev.hypera.chameleon.core.platform.Platform.Type;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.User;
-import java.util.function.BiConsumer;
+import dev.hypera.chameleon.core.users.ChatUser;
+import java.util.function.Predicate;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.platform.AudienceProvider;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-@PlatformSpecific(Type.PROXY)
-public interface ProxyUser extends User {
+public interface ChameleonAudienceProvider extends AudienceProvider {
 
-	@Nullable Server getServer();
-
-	void connect(@NotNull Server server);
-	void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback);
+	@NotNull Audience filter(@NotNull Predicate<ChatUser> filter);
 
 }

@@ -7,7 +7,7 @@
 
 
 ### Welcome
-Welcome to [Chameleon](https://github.com/HyperaOfficial/Chameleon), first off, thank you for taking the time to consider contributing.  
+Welcome to [Chameleon](https://github.com/ChameleonFramework/Chameleon), first off, thank you for taking the time to consider contributing.  
 Please be sure to read this repository's [Code of Conduct] before contributing.
 
 
@@ -54,5 +54,5 @@ You can communicate with us on [Discord].
 [Code of Conduct]: CODE_OF_CONDUCT.md
 [MIT License]: LICENSE
 [AUTHORS]: AUTHORS
-[Pull Request]: https://github.com/HyperaOfficial/Chameleon/compare
+[Pull Request]: https://github.com/ChameleonFramework/Chameleon/compare
 [Discord]: https://discord.hypera.dev/

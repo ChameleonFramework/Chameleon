@@ -23,9 +23,6 @@
 
 package dev.hypera.chameleon.core.platform;
 
-import dev.hypera.chameleon.core.managers.CommandManager;
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.managers.Scheduler;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Platform {

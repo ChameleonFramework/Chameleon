@@ -21,23 +21,22 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.wrappers;
+package dev.hypera.chameleon.platforms.bungeecord.users;
 
-import java.util.UUID;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.flattener.ComponentFlattener;
+import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.users.ChatUser;
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AudienceProvider implements AutoCloseable {
+public final class BungeeCordUsers {
 
-	public abstract @NotNull Audience all();
-	public abstract @NotNull Audience console();
-	public abstract @NotNull Audience player(@NotNull UUID id);
-	public abstract @NotNull Audience permission(@NotNull Key permission);
-	public abstract @NotNull Audience permission(@NotNull String permission);
-	public abstract @NotNull Audience world(@NotNull Key world);
-	public abstract @NotNull Audience server(@NotNull String serverName);
-	public abstract @NotNull ComponentFlattener flattener();
+	public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSender sender) {
+		if (sender instanceof ProxiedPlayer) {
+			return new BungeeCordUser(chameleon, (ProxiedPlayer) sender);
+		} else {
+			return new BungeeCordConsoleUser(chameleon);
+		}
+	}
 
 }

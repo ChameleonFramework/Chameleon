@@ -23,6 +23,7 @@
 
 package dev.hypera.chameleon.core;
 
+import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.logging.ChameleonLogger;
 import dev.hypera.chameleon.core.logging.factory.ChameleonLoggerFactory;
@@ -31,7 +32,6 @@ import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.wrappers.AudienceProvider;
 import java.nio.file.Path;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -69,15 +69,14 @@ public abstract class Chameleon {
 		return loggerFactory.getLogger();
 	}
 
-	@Internal
-	public final @NotNull ChameleonLogger getInternalLogger() {
+	public final @Internal @NotNull ChameleonLogger getInternalLogger() {
 		return loggerFactory.getInternalLogger();
 	}
 
 
 
 	public abstract @NotNull ChatUser getConsole();
-	public abstract @NotNull AudienceProvider getAdventure();
+	public abstract @NotNull ChameleonAudienceProvider getAdventure();
 	public abstract @NotNull Platform getPlatform();
 	public abstract @NotNull CommandManager getCommandManager();
 	public abstract @NotNull PluginManager getPluginManager();

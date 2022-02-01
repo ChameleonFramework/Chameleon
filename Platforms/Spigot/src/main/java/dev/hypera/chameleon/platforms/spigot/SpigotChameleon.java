@@ -25,28 +25,27 @@ package dev.hypera.chameleon.platforms.spigot;
 
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.ChameleonPlugin;
+import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.core.exceptions.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.managers.CommandManager;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.wrappers.AudienceProvider;
+import dev.hypera.chameleon.platforms.spigot.adventure.SpigotAudienceProvider;
 import dev.hypera.chameleon.platforms.spigot.managers.SpigotCommandManager;
 import dev.hypera.chameleon.platforms.spigot.managers.SpigotPluginManager;
 import dev.hypera.chameleon.platforms.spigot.managers.SpigotScheduler;
 import dev.hypera.chameleon.platforms.spigot.platform.SpigotPlatform;
 import dev.hypera.chameleon.platforms.spigot.user.SpigotConsoleUser;
-import dev.hypera.chameleon.platforms.spigot.wrappers.SpigotAudienceProvider;
 import java.nio.file.Path;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public final class SpigotChameleon extends Chameleon {
 
 	private final @NotNull JavaPlugin plugin;
-	private final @NotNull AudienceProvider audienceProvider;
+	private final @NotNull ChameleonAudienceProvider audienceProvider;
 	private final @NotNull SpigotPlatform platform = new SpigotPlatform(this);
 	private final @NotNull SpigotCommandManager commandManager = new SpigotCommandManager(this);
 	private final @NotNull SpigotPluginManager pluginManager = new SpigotPluginManager();
@@ -55,7 +54,7 @@ public final class SpigotChameleon extends Chameleon {
 	public SpigotChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin) throws ChameleonInstantiationException {
 		super(chameleonPlugin);
 		this.plugin = spigotPlugin;
-		this.audienceProvider = new SpigotAudienceProvider(BukkitAudiences.create(spigotPlugin));
+		this.audienceProvider = new SpigotAudienceProvider(this, spigotPlugin);
 	}
 
 
@@ -65,7 +64,7 @@ public final class SpigotChameleon extends Chameleon {
 	}
 
 	@Override
-	public @NotNull AudienceProvider getAdventure() {
+	public @NotNull ChameleonAudienceProvider getAdventure() {
 		return audienceProvider;
 	}
 

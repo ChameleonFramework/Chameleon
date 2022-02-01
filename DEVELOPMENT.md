@@ -17,7 +17,7 @@
 
 ### Extra Information
 
-All examples below are taken from [the example Chameleon project](https://github.com/HyperaOfficial/ChameleonProject).
+All examples below are taken from [the example Chameleon project](https://github.com/ChameleonFramework/Example).
 
 ## Platforms
  - [x] BungeeCord

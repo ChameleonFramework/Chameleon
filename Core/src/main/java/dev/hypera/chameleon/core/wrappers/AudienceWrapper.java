@@ -38,9 +38,9 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class AudienceWrapper implements Audience {
 
-	private final Audience audience;
+	private final @NotNull Audience audience;
 
-	public AudienceWrapper(Audience audience) {
+	public AudienceWrapper(@NotNull Audience audience) {
 		this.audience = audience;
 	}
 

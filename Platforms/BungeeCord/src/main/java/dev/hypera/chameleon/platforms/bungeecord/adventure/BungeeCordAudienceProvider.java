@@ -21,67 +21,79 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.spigot.wrappers;
+package dev.hypera.chameleon.platforms.bungeecord.adventure;
 
-import dev.hypera.chameleon.core.wrappers.AudienceProvider;
+import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
+import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUsers;
 import java.util.UUID;
+import java.util.function.Predicate;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
+import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public class SpigotAudienceProvider extends AudienceProvider {
+public final class BungeeCordAudienceProvider implements ChameleonAudienceProvider {
 
-	private final @NotNull BukkitAudiences provider;
+	private final @NotNull Chameleon chameleon;
+	private final @NotNull BungeeAudiences adventure;
 
-	public SpigotAudienceProvider(@NotNull BukkitAudiences provider) {
-		this.provider = provider;
+	public BungeeCordAudienceProvider(@NotNull Chameleon chameleon, @NotNull Plugin plugin) {
+		this.chameleon = chameleon;
+		this.adventure = BungeeAudiences.create(plugin);
 	}
 
 	@Override
 	public @NotNull Audience all() {
-		return provider.all();
+		return adventure.all();
 	}
 
 	@Override
 	public @NotNull Audience console() {
-		return provider.console();
+		return adventure.console();
 	}
 
 	@Override
-	public @NotNull Audience player(@NotNull UUID id) {
-		return provider.player(id);
+	public @NotNull Audience players() {
+		return adventure.players();
 	}
 
 	@Override
-	public @NotNull Audience permission(@NotNull Key permission) {
-		return provider.permission(permission);
+	public @NotNull Audience player(@NotNull UUID playerId) {
+		return adventure.player(playerId);
+	}
+
+	@Override
+	public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
+		return adventure.filter(c -> filter.test(BungeeCordUsers.wrap(chameleon, c)));
 	}
 
 	@Override
 	public @NotNull Audience permission(@NotNull String permission) {
-		return provider.permission(permission);
+		return adventure.permission(permission);
 	}
 
 	@Override
 	public @NotNull Audience world(@NotNull Key world) {
-		return provider.world(world);
+		return adventure.world(world);
 	}
 
 	@Override
 	public @NotNull Audience server(@NotNull String serverName) {
-		return provider.server(serverName);
+		return adventure.server(serverName);
 	}
 
 	@Override
 	public @NotNull ComponentFlattener flattener() {
-		return provider.flattener();
+		return adventure.flattener();
 	}
 
 	@Override
-	public void close() throws Exception {
-		provider.close();
+	public void close() {
+		adventure.close();
 	}
 
 }

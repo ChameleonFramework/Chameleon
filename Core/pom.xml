@@ -37,7 +37,7 @@
 
   <name>Chameleon Core</name>
   <description>Cross-platform Minecraft plugin framework</description>
-  <url>https://github.com/HyperaOfficial/Chameleon</url>
+  <url>https://github.com/ChameleonFramework/Chameleon</url>
 
   <licenses>
     <license>
@@ -60,14 +60,14 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git://github.com/HyperaOfficial/Chameleon.git</connection>
-    <developerConnection>scm:git:ssh://github.com:HyperaOfficial/Chameleon.git</developerConnection>
-    <url>http://github.com/HyperaOfficial/Chameleon/tree/master</url>
+    <connection>scm:git:git://github.com/ChameleonFramework/Chameleon.git</connection>
+    <developerConnection>scm:git:ssh://github.com:ChameleonFramework/Chameleon.git</developerConnection>
+    <url>http://github.com/ChameleonFramework/Chameleon/tree/master</url>
   </scm>
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/HyperaOfficial/Chameleon/issues</url>
+    <url>https://github.com/ChameleonFramework/Chameleon/issues</url>
   </issueManagement>
 
   <properties>
@@ -137,7 +137,12 @@
     <dependency>
       <groupId>net.kyori</groupId>
       <artifactId>adventure-text-serializer-legacy</artifactId>
-      <version>4.7.0</version>
+      <version>4.9.3</version>
+    </dependency>
+    <dependency>
+      <groupId>net.kyori</groupId>
+      <artifactId>adventure-platform-api</artifactId>
+      <version>4.0.1</version>
     </dependency>
   </dependencies>
 

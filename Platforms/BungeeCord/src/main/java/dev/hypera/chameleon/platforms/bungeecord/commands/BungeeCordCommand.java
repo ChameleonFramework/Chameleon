@@ -25,14 +25,10 @@ package dev.hypera.chameleon.platforms.bungeecord.commands;
 
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.core.commands.context.Context;
 import dev.hypera.chameleon.core.commands.context.impl.ContextImpl;
-import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordConsoleUser;
-import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUser;
+import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUsers;
 import java.util.Arrays;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,18 +46,14 @@ public final class BungeeCordCommand extends net.md_5.bungee.api.plugin.Command 
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if (args.length < 1 || !command.executeSubCommand(new ContextImpl(wrap(sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
-			command.executeCommand(new ContextImpl(wrap(sender), chameleon, args));
+		if (args.length < 1 || !command.executeSubCommand(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
+			command.executeCommand(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, args));
 		}
 	}
 
 	@Override
 	public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
-		return command.tabComplete(new ContextImpl(wrap(sender), chameleon, args));
-	}
-
-	private @NotNull ChatUser wrap(@NotNull CommandSender sender) {
-		return sender instanceof ProxiedPlayer ? new BungeeCordUser(chameleon, (ProxiedPlayer) sender) : new BungeeCordConsoleUser(chameleon);
+		return command.tabComplete(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, args));
 	}
 
 }
