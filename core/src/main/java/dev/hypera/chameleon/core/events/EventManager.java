@@ -1,0 +1,117 @@
+/*
+ * Chameleon Framework - Cross-platform Minecraft plugin framework
+ *  Copyright (c) 2021-present The Chameleon Framework Authors.
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  SOFTWARE.
+ */
+
+package dev.hypera.chameleon.core.events;
+
+import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.events.listener.ChameleonListener;
+import dev.hypera.chameleon.core.events.listener.InlineChameleonListener;
+import dev.hypera.chameleon.core.events.listener.annotations.EventHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+
+public class EventManager {
+
+	private final @NotNull Chameleon chameleon;
+	private final @NotNull Set<ChameleonListener> registeredListeners = new HashSet<>();
+
+	public EventManager(@NotNull Chameleon chameleon) {
+		this.chameleon = chameleon;
+	}
+
+	public void registerListener(@NotNull ChameleonListener listener) {
+		registeredListeners.add(listener);
+	}
+
+	public void registerListener(@NotNull Consumer<? extends ChameleonEvent> event) {
+		registerListener(InlineChameleonListener.create(event));
+	}
+
+
+	@Internal
+	public void dispatch(@NotNull ChameleonEvent event) {
+		registeredListeners.stream().map(listener -> {
+			if (listener instanceof InlineChameleonListener) {
+				try {
+					Class<?> type = listener.getClass().getMethod("getType").getReturnType();
+					if (type.isInstance(event)) {
+						return new EventMethod(listener.getClass().getMethod("handle", type), listener);
+					} else {
+						return null;
+					}
+				} catch (NoSuchMethodException ex) {
+					return null;
+				}
+			} else {
+				return Arrays.stream(listener.getClass().getDeclaredMethods()).filter(method ->
+						method.isAnnotationPresent(EventHandler.class) &&
+								method.getParameterCount() == 1 &&
+								method.getParameterTypes()[0].isInstance(event)
+				).findFirst().map(m -> new EventMethod(m, listener)).orElse(null);
+			}
+		}).filter(Objects::nonNull).sorted(Comparator.comparingInt(m -> m.getMethod().getAnnotation(EventHandler.class).value().getPriority())).forEachOrdered(method -> {
+			try {
+				method.getMethod().invoke(method.getListener(), event);
+			} catch (IllegalAccessException | InvocationTargetException ex) {
+				chameleon.getInternalLogger().error(
+						"Failed to dispatch event '%s' to method '%s' of '%s'", ex,
+						event.getClass().getSimpleName(),
+						method.getMethod().toGenericString(),
+						method.getListener().getClass().getCanonicalName()
+				);
+			}
+		});
+	}
+
+	@Internal
+	private static class EventMethod {
+
+		private final @NotNull Method method;
+		private final @NotNull ChameleonListener listener;
+
+		public EventMethod(@NotNull Method method, @NotNull ChameleonListener listener) {
+			this.method = method;
+			this.listener = listener;
+		}
+
+		public @NotNull Method getMethod() {
+			return method;
+		}
+
+		public @NotNull ChameleonListener getListener() {
+			return listener;
+		}
+
+	}
+
+}

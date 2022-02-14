@@ -25,23 +25,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <groupId>dev.hypera</groupId>
+    <artifactId>chameleon</artifactId>
+    <version>0.4.0-SNAPSHOT</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>dev.hypera</groupId>
-  <artifactId>chameleon</artifactId>
-  <version>0.4.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <groupId>dev.hypera.chameleon</groupId>
+  <artifactId>core</artifactId>
 
-  <name>Chameleon</name>
+  <name>Chameleon Core</name>
   <description>Cross-platform Minecraft plugin framework</description>
   <url>https://github.com/ChameleonFramework/Chameleon</url>
-
-  <modules>
-    <module>core</module>
-    <module>platform-bungeecord</module>
-    <module>platform-spigot</module>
-    <module>feature-configuration</module>
-  </modules>
 
   <licenses>
     <license>
@@ -134,10 +130,19 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-      <version>23.0.0</version>
-      <scope>compile</scope>
+      <groupId>net.kyori</groupId>
+      <artifactId>adventure-api</artifactId>
+      <version>4.9.3</version>
+    </dependency>
+    <dependency>
+      <groupId>net.kyori</groupId>
+      <artifactId>adventure-text-serializer-legacy</artifactId>
+      <version>4.9.3</version>
+    </dependency>
+    <dependency>
+      <groupId>net.kyori</groupId>
+      <artifactId>adventure-platform-api</artifactId>
+      <version>4.0.1</version>
     </dependency>
   </dependencies>
 
