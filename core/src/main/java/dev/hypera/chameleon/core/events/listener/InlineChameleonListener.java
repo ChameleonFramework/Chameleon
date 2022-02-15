@@ -28,17 +28,22 @@ import dev.hypera.chameleon.core.events.listener.annotations.EventHandler;
 import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 
-public class InlineChameleonListener {
+public class InlineChameleonListener<T extends ChameleonEvent> implements ChameleonListener {
 
-	public static <T extends ChameleonEvent> @NotNull ChameleonListener create(@NotNull Consumer<T> listener) {
-		return new ChameleonListener() {
+	private final @NotNull Class<T> type;
+	private final @NotNull Consumer<T> listener;
 
-			@EventHandler
-			public void handle(@NotNull T event) {
-				listener.accept(event);
-			}
+	public InlineChameleonListener(@NotNull Class<T> type, @NotNull Consumer<T> listener) {
+		this.type = type;
+		this.listener = listener;
+	}
 
-		};
+
+	@EventHandler
+	public void onEvent(@NotNull ChameleonEvent event) {
+		if (type.isInstance(event)) {
+			listener.accept(type.cast(event));
+		}
 	}
 
 }

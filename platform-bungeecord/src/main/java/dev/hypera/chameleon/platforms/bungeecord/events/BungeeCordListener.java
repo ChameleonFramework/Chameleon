@@ -26,9 +26,7 @@ package dev.hypera.chameleon.platforms.bungeecord.events;
 import dev.hypera.chameleon.core.events.impl.common.UserConnectEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserDisconnectEvent;
 import dev.hypera.chameleon.core.events.impl.proxy.ProxyUserSwitchEvent;
-import dev.hypera.chameleon.core.events.listener.annotations.EventHandler;
 import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.User;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platforms.bungeecord.platform.objects.BungeeCordServer;
@@ -39,6 +37,7 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.event.EventHandler;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,6 +66,7 @@ public class BungeeCordListener implements Listener {
 	public void onServerSwitchEvent(@NotNull ServerSwitchEvent event) {
 		chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), wrap(event.getFrom()), wrap(event.getPlayer().getServer().getInfo())));
 	}
+
 
 	private @NotNull ProxyUser wrap(@NotNull ProxiedPlayer player) {
 		return new BungeeCordUser(chameleon, player);

@@ -25,11 +25,11 @@ package dev.hypera.chameleon.platforms.bungeecord.users;
 
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.wrappers.AudienceWrapper;
+import dev.hypera.chameleon.core.wrappers.AbstractAudience;
 import net.md_5.bungee.api.ProxyServer;
 import org.jetbrains.annotations.NotNull;
 
-public class BungeeCordConsoleUser extends AudienceWrapper implements ChatUser {
+public class BungeeCordConsoleUser extends AbstractAudience implements ChatUser {
 
 	public BungeeCordConsoleUser(@NotNull Chameleon chameleon) {
 		super(chameleon.getAdventure().console());

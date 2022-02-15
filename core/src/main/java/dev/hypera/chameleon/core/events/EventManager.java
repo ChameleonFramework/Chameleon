@@ -39,6 +39,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EventManager {
 
@@ -53,33 +54,18 @@ public class EventManager {
 		registeredListeners.add(listener);
 	}
 
-	public void registerListener(@NotNull Consumer<? extends ChameleonEvent> event) {
-		registerListener(InlineChameleonListener.create(event));
+	public <T extends ChameleonEvent> void registerListener(@NotNull Class<T> type, @NotNull Consumer<T> event) {
+		registerListener(new InlineChameleonListener<>(type, event));
 	}
 
 
 	@Internal
 	public void dispatch(@NotNull ChameleonEvent event) {
-		registeredListeners.stream().map(listener -> {
-			if (listener instanceof InlineChameleonListener) {
-				try {
-					Class<?> type = listener.getClass().getMethod("getType").getReturnType();
-					if (type.isInstance(event)) {
-						return new EventMethod(listener.getClass().getMethod("handle", type), listener);
-					} else {
-						return null;
-					}
-				} catch (NoSuchMethodException ex) {
-					return null;
-				}
-			} else {
-				return Arrays.stream(listener.getClass().getDeclaredMethods()).filter(method ->
-						method.isAnnotationPresent(EventHandler.class) &&
-								method.getParameterCount() == 1 &&
-								method.getParameterTypes()[0].isInstance(event)
-				).findFirst().map(m -> new EventMethod(m, listener)).orElse(null);
-			}
-		}).filter(Objects::nonNull).sorted(Comparator.comparingInt(m -> m.getMethod().getAnnotation(EventHandler.class).value().getPriority())).forEachOrdered(method -> {
+		registeredListeners.stream().map(listener -> Arrays.stream(listener.getClass().getDeclaredMethods()).filter(method ->
+				method.isAnnotationPresent(EventHandler.class) &&
+					method.getParameterCount() == 1 &&
+					method.getParameterTypes()[0].isInstance(event)
+		).findFirst().map(m -> new EventMethod(m, listener)).orElse(null)).filter(Objects::nonNull).sorted(Comparator.comparingInt(m -> m.getMethod().getAnnotation(EventHandler.class).value().getPriority())).forEachOrdered(method -> {
 			try {
 				method.getMethod().invoke(method.getListener(), event);
 			} catch (IllegalAccessException | InvocationTargetException ex) {

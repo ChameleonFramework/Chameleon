@@ -25,11 +25,11 @@ package dev.hypera.chameleon.platforms.spigot.user;
 
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.wrappers.AudienceWrapper;
+import dev.hypera.chameleon.core.wrappers.AbstractAudience;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
-public class SpigotConsoleUser extends AudienceWrapper implements ChatUser {
+public class SpigotConsoleUser extends AbstractAudience implements ChatUser {
 
 	public SpigotConsoleUser(@NotNull Chameleon chameleon) {
 		super(chameleon.getAdventure().console());
