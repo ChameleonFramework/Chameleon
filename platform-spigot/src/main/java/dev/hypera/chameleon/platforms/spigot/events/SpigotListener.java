@@ -23,6 +23,7 @@
 
 package dev.hypera.chameleon.platforms.spigot.events;
 
+import dev.hypera.chameleon.core.events.impl.common.UserChatEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserConnectEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserDisconnectEvent;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
@@ -31,6 +32,7 @@ import dev.hypera.chameleon.platforms.spigot.user.SpigotUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
@@ -50,9 +52,15 @@ public class SpigotListener implements Listener {
 	}
 
 	@EventHandler
+	public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
+		chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+	}
+
+	@EventHandler
 	public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
 		chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
 	}
+
 
 	private @NotNull ServerUser wrap(@NotNull Player player) {
 		return new SpigotUser(chameleon, player);
