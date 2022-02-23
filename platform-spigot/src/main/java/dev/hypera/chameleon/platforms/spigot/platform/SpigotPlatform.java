@@ -34,6 +34,12 @@ public final class SpigotPlatform extends ServerPlatform {
 
 	}
 
+
+	@Override
+	public @NotNull String getAPIName() {
+		return "Spigot";
+	}
+
 	@Override
 	public @NotNull String getName() {
 		return Bukkit.getName();

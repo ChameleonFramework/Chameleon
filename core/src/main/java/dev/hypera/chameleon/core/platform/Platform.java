@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Platform {
 
 	/* -- Info -- */
+	public abstract @NotNull String getAPIName();
 	public abstract @NotNull String getName();
 	public abstract @NotNull String getVersion();
 	public abstract @NotNull Type getType();

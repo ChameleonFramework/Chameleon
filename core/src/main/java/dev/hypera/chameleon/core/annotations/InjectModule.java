@@ -21,40 +21,15 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.platform;
+package dev.hypera.chameleon.core.annotations;
 
-import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
-import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
-import net.md_5.bungee.api.ProxyServer;
-import org.jetbrains.annotations.NotNull;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public final class BungeeCordPlatform extends ProxyPlatform {
-
-
-	public BungeeCordPlatform(@NotNull BungeeCordChameleon chameleon) {
-
-	}
-
-
-	@Override
-	public @NotNull String getAPIName() {
-		return "BungeeCord";
-	}
-
-	@Override
-	public @NotNull String getName() {
-		return ProxyServer.getInstance().getName();
-	}
-
-	@Override
-	public @NotNull String getVersion() {
-		return ProxyServer.getInstance().getVersion();
-	}
-
-	@Override
-	public @NotNull Type getType() {
-		return Type.PROXY;
-	}
-
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface InjectModule {
 
 }

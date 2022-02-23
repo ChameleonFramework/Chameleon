@@ -21,40 +21,40 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.platform;
+package dev.hypera.chameleon.core.modules.platform;
 
-import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
-import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
-import net.md_5.bungee.api.ProxyServer;
+import dev.hypera.chameleon.core.Chameleon;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
-public final class BungeeCordPlatform extends ProxyPlatform {
+public class PlatformModuleLoader {
 
+	private final @NotNull Chameleon chameleon;
 
-	public BungeeCordPlatform(@NotNull BungeeCordChameleon chameleon) {
-
+	@Internal
+	public PlatformModuleLoader(@NotNull Chameleon chameleon) {
+		this.chameleon = chameleon;
 	}
 
 
-	@Override
-	public @NotNull String getAPIName() {
-		return "BungeeCord";
-	}
+	@SafeVarargs
+	public final @NotNull Optional<PlatformModule<?>> load(@NotNull Class<PlatformModule<?>>... modules) {
+		for (Class<PlatformModule<?>> module : modules) {
+			try {
+				for (Constructor<?> constructor : module.getDeclaredConstructors()) {
+					if (constructor.getParameterCount() == 1 && chameleon.getClass().isAssignableFrom(constructor.getParameterTypes()[0])) {
+						return Optional.of(module.cast(constructor.newInstance(constructor.getParameterTypes()[0].cast(chameleon))));
+					}
+				}
+			} catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+				throw new IllegalStateException(ex);
+			}
+		}
 
-	@Override
-	public @NotNull String getName() {
-		return ProxyServer.getInstance().getName();
+		return Optional.empty();
 	}
-
-	@Override
-	public @NotNull String getVersion() {
-		return ProxyServer.getInstance().getVersion();
-	}
-
-	@Override
-	public @NotNull Type getType() {
-		return Type.PROXY;
-	}
-
 
 }
