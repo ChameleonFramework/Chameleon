@@ -21,25 +21,26 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.platform.objects;
+package dev.hypera.chameleon.platforms.velocity.platform.objects;
 
-import dev.hypera.chameleon.core.Chameleon;
+import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
-import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUser;
+import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
+import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
 import java.net.SocketAddress;
 import java.util.Set;
 import java.util.stream.Collectors;
-import net.md_5.bungee.api.config.ServerInfo;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
-public class BungeeCordServer implements Server {
+public class VelocityServer implements Server {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull ServerInfo server;
+	private final @NotNull VelocityChameleon chameleon;
+	private final @NotNull RegisteredServer server;
 
-	public BungeeCordServer(@NotNull Chameleon chameleon, @NotNull ServerInfo server) {
+	public VelocityServer(@NotNull VelocityChameleon chameleon, @NotNull RegisteredServer server) {
 		this.chameleon = chameleon;
 		this.server = server;
 	}
@@ -47,26 +48,27 @@ public class BungeeCordServer implements Server {
 
 	@Override
 	public @NotNull String getName() {
-		return server.getName();
+		return server.getServerInfo().getName();
 	}
 
 	@Override
 	public @NotNull SocketAddress getSocketAddress() {
-		return server.getSocketAddress();
+		return server.getServerInfo().getAddress();
 	}
 
 	@Override
 	public @NotNull Set<ProxyUser> getPlayers() {
-		return server.getPlayers().stream().map(p -> new BungeeCordUser(chameleon, p)).collect(Collectors.toSet());
+		return server.getPlayersConnected().stream().map(p -> new VelocityUser(chameleon, p)).collect(Collectors.toSet());
 	}
 
 	@Override
 	public void sendData(@NotNull String channel, byte[] data) {
-		server.sendData(channel, data);
+		server.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
 	}
 
+
 	@Internal
-	public @NotNull ServerInfo getBungeeCord() {
+	public @NotNull RegisteredServer getVelocity() {
 		return server;
 	}
 

@@ -41,6 +41,7 @@
     <module>platform-bungeecord</module>
     <module>platform-spigot</module>
     <module>feature-configuration</module>
+    <module>platform-velocity</module>
   </modules>
 
   <licenses>

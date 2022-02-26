@@ -21,34 +21,34 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.users;
+package dev.hypera.chameleon.platforms.velocity.user;
 
-import dev.hypera.chameleon.core.Chameleon;
+import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
+import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
 import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
-import dev.hypera.chameleon.core.adventure.AbstractAudience;
-import dev.hypera.chameleon.platforms.bungeecord.platform.objects.BungeeCordServer;
+import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
+import dev.hypera.chameleon.platforms.velocity.platform.objects.VelocityServer;
 import java.util.UUID;
 import java.util.function.BiConsumer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BungeeCordUser extends AbstractAudience implements ProxyUser {
+public class VelocityUser extends AbstractReflectedAudience implements ProxyUser {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull ProxiedPlayer player;
+	private final @NotNull VelocityChameleon chameleon;
+	private final @NotNull Player player;
 
-	public BungeeCordUser(@NotNull Chameleon chameleon, @NotNull ProxiedPlayer player) {
-		super(chameleon.getAdventure().player(player.getUniqueId()));
+	public VelocityUser(@NotNull VelocityChameleon chameleon, @NotNull Player player) {
+		super(player);
 		this.chameleon = chameleon;
 		this.player = player;
 	}
 
-
 	@Override
 	public @NotNull String getName() {
-		return player.getName();
+		return player.getUsername();
 	}
 
 	@Override
@@ -58,17 +58,17 @@ public class BungeeCordUser extends AbstractAudience implements ProxyUser {
 
 	@Override
 	public int getPing() {
-		return player.getPing();
+		return player.getPing() > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) player.getPing();
 	}
 
 	@Override
 	public void chat(@NotNull String message) {
-		player.chat(message);
+		player.spoofChatInput(message);
 	}
 
 	@Override
 	public void sendData(@NotNull String channel, byte[] data) {
-		player.sendData(channel, data);
+		player.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
 	}
 
 	@Override
@@ -78,17 +78,18 @@ public class BungeeCordUser extends AbstractAudience implements ProxyUser {
 
 	@Override
 	public @Nullable Server getServer() {
-		return new BungeeCordServer(chameleon, player.getServer().getInfo());
+		return player.getCurrentServer().map(s -> new VelocityServer(chameleon, s.getServer())).orElse(null);
 	}
 
 	@Override
 	public void connect(@NotNull Server server) {
-		player.connect(((BungeeCordServer) server).getBungeeCord());
+		player.createConnectionRequest(((VelocityServer) server).getVelocity());
 	}
 
 	@Override
 	public void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback) {
-		player.connect(((BungeeCordServer) server).getBungeeCord(), callback::accept);
+		player.createConnectionRequest(((VelocityServer) server).getVelocity());
+		callback.accept(true, null);
 	}
 
 }

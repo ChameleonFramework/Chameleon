@@ -21,53 +21,39 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.platform.objects;
+package dev.hypera.chameleon.platforms.velocity.platform;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
-import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUser;
-import java.net.SocketAddress;
-import java.util.Set;
-import java.util.stream.Collectors;
-import net.md_5.bungee.api.config.ServerInfo;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
+import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import org.jetbrains.annotations.NotNull;
 
-public class BungeeCordServer implements Server {
+public final class VelocityPlatform extends ProxyPlatform {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull ServerInfo server;
+	private final @NotNull VelocityChameleon chameleon;
 
-	public BungeeCordServer(@NotNull Chameleon chameleon, @NotNull ServerInfo server) {
+	public VelocityPlatform(@NotNull VelocityChameleon chameleon) {
 		this.chameleon = chameleon;
-		this.server = server;
 	}
 
+
+	@Override
+	public @NotNull String getAPIName() {
+		return "Velocity";
+	}
 
 	@Override
 	public @NotNull String getName() {
-		return server.getName();
+		return chameleon.getVelocityPlugin().getServer().getVersion().getName();
 	}
 
 	@Override
-	public @NotNull SocketAddress getSocketAddress() {
-		return server.getSocketAddress();
+	public @NotNull String getVersion() {
+		return chameleon.getVelocityPlugin().getServer().getVersion().getVersion();
 	}
 
 	@Override
-	public @NotNull Set<ProxyUser> getPlayers() {
-		return server.getPlayers().stream().map(p -> new BungeeCordUser(chameleon, p)).collect(Collectors.toSet());
-	}
-
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		server.sendData(channel, data);
-	}
-
-	@Internal
-	public @NotNull ServerInfo getBungeeCord() {
-		return server;
+	public @NotNull Type getType() {
+		return Type.PROXY;
 	}
 
 }

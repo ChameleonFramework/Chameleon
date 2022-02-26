@@ -21,53 +21,31 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.platform.objects;
+package dev.hypera.chameleon.platforms.velocity.managers;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
-import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUser;
-import java.net.SocketAddress;
-import java.util.Set;
-import java.util.stream.Collectors;
-import net.md_5.bungee.api.config.ServerInfo;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.managers.CommandManager;
+import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
+import dev.hypera.chameleon.platforms.velocity.commands.VelocityCommand;
 import org.jetbrains.annotations.NotNull;
 
-public class BungeeCordServer implements Server {
+public final class VelocityCommandManager extends CommandManager {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull ServerInfo server;
+	private final @NotNull VelocityChameleon chameleon;
 
-	public BungeeCordServer(@NotNull Chameleon chameleon, @NotNull ServerInfo server) {
+	public VelocityCommandManager(@NotNull VelocityChameleon chameleon) {
+		super(chameleon);
 		this.chameleon = chameleon;
-		this.server = server;
-	}
-
-
-	@Override
-	public @NotNull String getName() {
-		return server.getName();
 	}
 
 	@Override
-	public @NotNull SocketAddress getSocketAddress() {
-		return server.getSocketAddress();
+	protected void registerCommand(@NotNull Command command) {
+		chameleon.getVelocityPlugin().getServer().getCommandManager().register(command.getName(), new VelocityCommand(chameleon, command), command.getAliases().toArray(new String[0]));
 	}
 
 	@Override
-	public @NotNull Set<ProxyUser> getPlayers() {
-		return server.getPlayers().stream().map(p -> new BungeeCordUser(chameleon, p)).collect(Collectors.toSet());
-	}
-
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		server.sendData(channel, data);
-	}
-
-	@Internal
-	public @NotNull ServerInfo getBungeeCord() {
-		return server;
+	protected void unregisterCommand(@NotNull Command command) {
+		chameleon.getVelocityPlugin().getServer().getCommandManager().unregister(command.getName());
 	}
 
 }

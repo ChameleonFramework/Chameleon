@@ -21,53 +21,35 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.platform.objects;
+package dev.hypera.chameleon.core.adventure.conversion.impl.title;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
-import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUser;
-import java.net.SocketAddress;
-import java.util.Set;
-import java.util.stream.Collectors;
-import net.md_5.bungee.api.config.ServerInfo;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
+import dev.hypera.chameleon.core.adventure.conversion.IConverter;
+import java.lang.reflect.Method;
+import java.time.Duration;
+import net.kyori.adventure.title.Title.Times;
 import org.jetbrains.annotations.NotNull;
 
-public class BungeeCordServer implements Server {
+public class TimesConverter implements IConverter<Times> {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull ServerInfo server;
+	private final @NotNull Method CREATE_METHOD;
 
-	public BungeeCordServer(@NotNull Chameleon chameleon, @NotNull ServerInfo server) {
-		this.chameleon = chameleon;
-		this.server = server;
-	}
-
-
-	@Override
-	public @NotNull String getName() {
-		return server.getName();
+	public TimesConverter() {
+		try {
+			Class<?> timesClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title$Times");
+			CREATE_METHOD = timesClass.getMethod("of", Duration.class, Duration.class, Duration.class);
+		} catch (ReflectiveOperationException ex) {
+			throw new ExceptionInInitializerError(ex);
+		}
 	}
 
 	@Override
-	public @NotNull SocketAddress getSocketAddress() {
-		return server.getSocketAddress();
-	}
-
-	@Override
-	public @NotNull Set<ProxyUser> getPlayers() {
-		return server.getPlayers().stream().map(p -> new BungeeCordUser(chameleon, p)).collect(Collectors.toSet());
-	}
-
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		server.sendData(channel, data);
-	}
-
-	@Internal
-	public @NotNull ServerInfo getBungeeCord() {
-		return server;
+	public Object convert(Times times) {
+		try {
+			return CREATE_METHOD.invoke(null, times.fadeIn(), times.stay(), times.fadeOut());
+		} catch (ReflectiveOperationException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 }

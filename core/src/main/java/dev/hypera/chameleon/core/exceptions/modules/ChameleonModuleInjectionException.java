@@ -21,29 +21,30 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.users;
+package dev.hypera.chameleon.core.exceptions.modules;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.adventure.AbstractAudience;
-import net.md_5.bungee.api.ProxyServer;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.core.exceptions.ChameleonException;
 
-public class BungeeCordConsoleUser extends AbstractAudience implements ChatUser {
+public class ChameleonModuleInjectionException extends ChameleonException {
 
-	public BungeeCordConsoleUser(@NotNull Chameleon chameleon) {
-		super(chameleon.getAdventure().console());
+	public ChameleonModuleInjectionException() {
+		super();
 	}
 
-
-	@Override
-	public @NotNull String getName() {
-		return ProxyServer.getInstance().getConsole().getName();
+	public ChameleonModuleInjectionException(String message) {
+		super(message);
 	}
 
-	@Override
-	public boolean hasPermission(@NotNull String permission) {
-		return true;
+	public ChameleonModuleInjectionException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public ChameleonModuleInjectionException(Throwable cause) {
+		super(cause);
+	}
+
+	public ChameleonModuleInjectionException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
 }

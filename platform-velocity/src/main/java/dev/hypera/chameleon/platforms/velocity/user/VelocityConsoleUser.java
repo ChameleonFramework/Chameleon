@@ -21,53 +21,27 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.platform.objects;
+package dev.hypera.chameleon.platforms.velocity.user;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
-import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUser;
-import java.net.SocketAddress;
-import java.util.Set;
-import java.util.stream.Collectors;
-import net.md_5.bungee.api.config.ServerInfo;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
+import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import org.jetbrains.annotations.NotNull;
 
-public class BungeeCordServer implements Server {
+public class VelocityConsoleUser extends AbstractReflectedAudience implements ChatUser {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull ServerInfo server;
-
-	public BungeeCordServer(@NotNull Chameleon chameleon, @NotNull ServerInfo server) {
-		this.chameleon = chameleon;
-		this.server = server;
+	public VelocityConsoleUser(@NotNull VelocityChameleon chameleon) {
+		super(chameleon.getVelocityPlugin().getServer().getConsoleCommandSource());
 	}
-
 
 	@Override
 	public @NotNull String getName() {
-		return server.getName();
+		return "Console";
 	}
 
 	@Override
-	public @NotNull SocketAddress getSocketAddress() {
-		return server.getSocketAddress();
-	}
-
-	@Override
-	public @NotNull Set<ProxyUser> getPlayers() {
-		return server.getPlayers().stream().map(p -> new BungeeCordUser(chameleon, p)).collect(Collectors.toSet());
-	}
-
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		server.sendData(channel, data);
-	}
-
-	@Internal
-	public @NotNull ServerInfo getBungeeCord() {
-		return server;
+	public boolean hasPermission(@NotNull String permission) {
+		return true;
 	}
 
 }

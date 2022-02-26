@@ -21,53 +21,38 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.platform.objects;
+package dev.hypera.chameleon.platforms.velocity.commands;
 
+import com.velocitypowered.api.command.SimpleCommand;
 import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
-import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUser;
-import java.net.SocketAddress;
-import java.util.Set;
-import java.util.stream.Collectors;
-import net.md_5.bungee.api.config.ServerInfo;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.commands.context.impl.ContextImpl;
+import dev.hypera.chameleon.platforms.velocity.user.VelocityUsers;
+import java.util.Arrays;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
-public class BungeeCordServer implements Server {
+public final class VelocityCommand implements SimpleCommand {
 
 	private final @NotNull Chameleon chameleon;
-	private final @NotNull ServerInfo server;
+	private final @NotNull Command command;
 
-	public BungeeCordServer(@NotNull Chameleon chameleon, @NotNull ServerInfo server) {
+	public VelocityCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
 		this.chameleon = chameleon;
-		this.server = server;
+		this.command = command;
 	}
 
 
 	@Override
-	public @NotNull String getName() {
-		return server.getName();
+	public void execute(Invocation invocation) {
+		if (invocation.arguments().length < 1 || !command.executeSubCommand(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, Arrays.copyOfRange(invocation.arguments(), 1, invocation.arguments().length)), invocation.arguments()[0])) {
+			command.executeCommand(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, invocation.arguments()));
+		}
 	}
 
 	@Override
-	public @NotNull SocketAddress getSocketAddress() {
-		return server.getSocketAddress();
-	}
-
-	@Override
-	public @NotNull Set<ProxyUser> getPlayers() {
-		return server.getPlayers().stream().map(p -> new BungeeCordUser(chameleon, p)).collect(Collectors.toSet());
-	}
-
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		server.sendData(channel, data);
-	}
-
-	@Internal
-	public @NotNull ServerInfo getBungeeCord() {
-		return server;
+	public List<String> suggest(Invocation invocation) {
+		return command.tabComplete(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, invocation.arguments()));
 	}
 
 }

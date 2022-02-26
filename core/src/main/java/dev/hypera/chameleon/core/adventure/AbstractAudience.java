@@ -21,7 +21,7 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.wrappers;
+package dev.hypera.chameleon.core.adventure;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.MessageType;

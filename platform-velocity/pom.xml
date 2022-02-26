@@ -33,9 +33,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>dev.hypera.chameleon</groupId>
-  <artifactId>core</artifactId>
+  <artifactId>platform-velocity</artifactId>
 
-  <name>Chameleon Core</name>
+  <name>Chameleon Velocity</name>
   <description>Cross-platform Minecraft plugin framework</description>
   <url>https://github.com/ChameleonFramework/Chameleon</url>
 
@@ -128,26 +128,28 @@
     </plugins>
   </build>
 
+  <repositories>
+    <repository>
+      <id>velocity</id>
+      <url>https://nexus.velocitypowered.com/repository/maven-public/</url>
+    </repository>
+  </repositories>
+
   <dependencies>
+    <!-- Chameleon Core -->
     <dependency>
-      <groupId>net.kyori</groupId>
-      <artifactId>adventure-api</artifactId>
-      <version>4.9.3</version>
+      <groupId>dev.hypera.chameleon</groupId>
+      <artifactId>core</artifactId>
+      <version>${project.parent.version}</version>
+      <scope>provided</scope>
     </dependency>
+
+    <!-- Velocity API -->
     <dependency>
-      <groupId>net.kyori</groupId>
-      <artifactId>adventure-text-serializer-legacy</artifactId>
-      <version>4.9.3</version>
-    </dependency>
-    <dependency>
-      <groupId>net.kyori</groupId>
-      <artifactId>adventure-text-serializer-gson</artifactId>
-      <version>4.9.3</version>
-    </dependency>
-    <dependency>
-      <groupId>net.kyori</groupId>
-      <artifactId>adventure-platform-api</artifactId>
-      <version>4.0.1</version>
+      <groupId>com.velocitypowered</groupId>
+      <artifactId>velocity-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 

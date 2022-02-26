@@ -43,16 +43,12 @@ public class ModuleLoader {
 	}
 
 
-	public void injectModule(@NotNull Field field, @NotNull Object obj) {
-		try {
-			if (field.isAnnotationPresent(InjectModule.class) && Module.class.isAssignableFrom(field.getType())) {
-				field.setAccessible(true);
-				if (null == field.get(obj)) {
-					field.set(obj, loadModule(field.getType().asSubclass(Module.class)));
-				}
+	public void injectModule(@NotNull Field field, @NotNull Object obj) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
+		if (field.isAnnotationPresent(InjectModule.class) && Module.class.isAssignableFrom(field.getType())) {
+			field.setAccessible(true);
+			if (null == field.get(obj)) {
+				field.set(obj, loadModule(field.getType().asSubclass(Module.class)));
 			}
-		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException ex) {
-			chameleon.getInternalLogger().error("Failed to inject module for field '" + field.getName() + "' of '" + obj.getClass().getCanonicalName() + "'");
 		}
 	}
 

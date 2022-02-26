@@ -25,7 +25,7 @@ package dev.hypera.chameleon.platforms.spigot.user;
 
 import dev.hypera.chameleon.core.platform.server.GameMode;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
-import dev.hypera.chameleon.core.wrappers.AbstractAudience;
+import dev.hypera.chameleon.core.adventure.AbstractAudience;
 import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
 import java.util.UUID;
 import org.bukkit.entity.Player;

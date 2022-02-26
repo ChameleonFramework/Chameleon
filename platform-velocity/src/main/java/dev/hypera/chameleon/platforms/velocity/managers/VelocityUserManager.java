@@ -21,53 +21,41 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.platform.objects;
+package dev.hypera.chameleon.platforms.velocity.managers;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
-import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUser;
-import java.net.SocketAddress;
+import dev.hypera.chameleon.core.managers.UserManager;
+import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.core.users.User;
+import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
+import dev.hypera.chameleon.platforms.velocity.user.VelocityConsoleUser;
+import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
-import net.md_5.bungee.api.config.ServerInfo;
-import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
-public class BungeeCordServer implements Server {
+public final class VelocityUserManager extends UserManager {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull ServerInfo server;
+	private final @NotNull VelocityChameleon chameleon;
 
-	public BungeeCordServer(@NotNull Chameleon chameleon, @NotNull ServerInfo server) {
+	public VelocityUserManager(@NotNull VelocityChameleon chameleon) {
 		this.chameleon = chameleon;
-		this.server = server;
 	}
 
 
 	@Override
-	public @NotNull String getName() {
-		return server.getName();
+	public @NotNull ChatUser getConsole() {
+		return new VelocityConsoleUser(chameleon);
 	}
 
 	@Override
-	public @NotNull SocketAddress getSocketAddress() {
-		return server.getSocketAddress();
+	public @NotNull Set<User> getPlayers() {
+		return chameleon.getVelocityPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(chameleon, p)).collect(Collectors.toSet());
 	}
 
 	@Override
-	public @NotNull Set<ProxyUser> getPlayers() {
-		return server.getPlayers().stream().map(p -> new BungeeCordUser(chameleon, p)).collect(Collectors.toSet());
-	}
-
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		server.sendData(channel, data);
-	}
-
-	@Internal
-	public @NotNull ServerInfo getBungeeCord() {
-		return server;
+	public @NotNull User getPlayer(@NotNull UUID uniqueId) {
+		return chameleon.getVelocityPlugin().getServer().getPlayer(uniqueId).map(p -> new VelocityUser(chameleon, p)).orElseThrow(() -> new IllegalArgumentException("Cannot find user with id '" + uniqueId + "'"));
 	}
 
 }

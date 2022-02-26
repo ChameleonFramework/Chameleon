@@ -21,29 +21,15 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.bungeecord.users;
+package dev.hypera.chameleon.platforms.velocity;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.adventure.AbstractAudience;
-import net.md_5.bungee.api.ProxyServer;
+import com.velocitypowered.api.proxy.ProxyServer;
+import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
 
-public class BungeeCordConsoleUser extends AbstractAudience implements ChatUser {
+public interface VelocityPlugin {
 
-	public BungeeCordConsoleUser(@NotNull Chameleon chameleon) {
-		super(chameleon.getAdventure().console());
-	}
-
-
-	@Override
-	public @NotNull String getName() {
-		return ProxyServer.getInstance().getConsole().getName();
-	}
-
-	@Override
-	public boolean hasPermission(@NotNull String permission) {
-		return true;
-	}
+	@NotNull ProxyServer getServer();
+	@NotNull Path getDataDirectory();
 
 }

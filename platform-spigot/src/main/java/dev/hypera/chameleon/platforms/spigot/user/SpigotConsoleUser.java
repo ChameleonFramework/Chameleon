@@ -25,7 +25,7 @@ package dev.hypera.chameleon.platforms.spigot.user;
 
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.wrappers.AbstractAudience;
+import dev.hypera.chameleon.core.adventure.AbstractAudience;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
