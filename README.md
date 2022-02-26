@@ -20,7 +20,7 @@ Chameleon plans to support every platform in this list. If you have ideas for ot
 > Note: This branch is being used to rewrite Chameleon and does not support all the platforms master supports yet.
  - [x] [BungeeCord]
  - [x] [Spigot]
- - [ ] [Velocity]
+ - [x] [Velocity]
  - [ ] [Minestom]
  - [ ] [Sponge]
 
@@ -34,6 +34,8 @@ You can also check out our [Development Roadmap][Roadmap] or various examples of
    * *Configuration* - YAML and JSON configuration file loaders. 
  * **Platforms** - Any platform-specific code belongs inside here.
    * *BungeeCord* - Any code that interacts with BungeeCord belongs here.
+   * *Spigot* - Any code that interacts with Spigot belongs here.
+   * *Velocity* - Any code that interacts with Velocity belongs here.
 
 
 ### Contributing

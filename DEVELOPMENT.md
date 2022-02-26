@@ -10,9 +10,9 @@
 |            Platform             | BungeeCord | Spigot | Velocity | Minestom | Sponge |
 |:-------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|
 |       [Logging](#Logging)       |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |
-|      [Commands](#Commands)      |     ✓      |   ✓    |          |          |        |
-|        [Events](#Events)        |            |        |          |          |        |
-|         [Users](#Users)         |     ✓      |  WIP   |          |          |        |
+|      [Commands](#Commands)      |     ✓      |   ✓    |    ✓     |          |        |
+|        [Events](#Events)        |     ✓      |   ✓    |    ✓     |          |        |
+|         [Users](#Users)         |     ✓      |  WIP   |    ✓     |          |        |
 | [Configuration](#Configuration) |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |
 
 ### Extra Information
@@ -22,7 +22,7 @@ All examples below are taken from [the example Chameleon project](https://github
 ## Platforms
  - [x] BungeeCord
  - [x] Spigot
- - [ ] Velocity
+ - [x] Velocity
  - [ ] Minestom
  - [ ] Sponge
 
@@ -85,19 +85,41 @@ public class ExampleCommand extends Command {
 ```java
 @Override
 public void onEnable(){
-        // ...
-        chameleon.getCommandManager().register(new ExampleCommand());
-        // ...
+	// ...
+    chameleon.getCommandManager().register(new ExampleCommand());
+    // ...
 }
 ```
 
 ## Events
 
-* [ ] Event
-* [ ] Listener
-* [ ] Cross-platform events
+* [x] Event
+* [x] Listener
+* [x] Cross-platform events
 
-Work in progress
+**ExampleListener.java**
+```java
+public class ExampleListener implements ChameleonListener {
+
+	@EventHandler
+	public void onConnectEvent(@NotNull UserConnectEvent event) {
+		event.getUser().sendMessage(Component.text("Welcome to my server!", NamedTextColor.GREEN));
+	}
+
+}
+```
+
+
+**ChameleonProject.java**
+```java
+@Override
+public void onEnable(){
+	// ...
+	chameleon.getCommandManager().register(new ExampleCommand());
+	chameleon.getEventManager().registerListener(UserDisconnectEvent.class, event -> chameleon.getLogger().info("%s left the server!", event.getUser().getName()));
+	// ...
+}
+```
 
 ## Users
 
