@@ -5,8 +5,9 @@
 
 -----------
 <div align="center">
-   <img alt="GitHub" src="https://img.shields.io/github/license/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge"> <img alt="Libraries.io dependency status for GitHub repo" src="https://img.shields.io/librariesio/github/ChameleonFramework/Chameleon?color=%2317aaaa&&label=Dependencies&style=for-the-badge"><br/>
-   <img alt="GitHub code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/master?style=for-the-badge&color=%2317aaaa">
+   <img alt="GitHub license" src="https://img.shields.io/github/license/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge">
+   <img alt="Libraries.io dependency status for GitHub repo" src="https://img.shields.io/librariesio/github/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge"><br />
+   <img alt="GitHub code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/main?style=for-the-badge&color=%2317aaaa">
    <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge">
    <img alt="Snyk Vulnerabilities for GitHub Repo" src="https://img.shields.io/snyk/vulnerabilities/github/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge">
 </div>

@@ -26,7 +26,6 @@ package dev.hypera.chameleon.core.utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-// TODO: Find a better name for this!
 public class BasicUtil {
 
 	public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
