@@ -53,8 +53,8 @@ The contents of this repository is licensed under the [MIT License](LICENSE).
 [Feedback]: https://feedback.hypera.dev/
 [Example]: https://github.com/ChameleonFramework/Example
 [Roadmap]: DEVELOPMENT.md
-[BungeeCord-project]: platforms/BungeeCord/README.md
-[Spigot-project]: platforms/Spigot/README.md
-[Velocity-project]: platforms/Velocity/README.md
-[Minestom-project]: platforms/Minestom/README.md
+[BungeeCord-project]: platform-bungeecord/
+[Spigot-project]: platform-spigot/
+[Velocity-project]: platform-velocity/
+[Minestom-project]: platform-minestom/
 [CONTRIBUTING]: CONTRIBUTING.md
