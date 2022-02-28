@@ -23,10 +23,13 @@
 
 package dev.hypera.chameleon.core.events.impl.server;
 
+import dev.hypera.chameleon.core.annotations.PlatformSpecific;
 import dev.hypera.chameleon.core.events.ChameleonEvent;
+import dev.hypera.chameleon.core.platform.Platform.Type;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
 import org.jetbrains.annotations.NotNull;
 
+@PlatformSpecific(Type.SERVER)
 public interface ServerUserEvent extends ChameleonEvent {
 
 	@NotNull ServerUser getUser();
