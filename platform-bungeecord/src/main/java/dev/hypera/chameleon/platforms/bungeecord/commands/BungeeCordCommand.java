@@ -46,7 +46,7 @@ public final class BungeeCordCommand extends net.md_5.bungee.api.plugin.Command 
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if (args.length < 1 || !command.executeSubCommand(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
+		if (args.length < 1 || command.executeSubCommand(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
 			command.executeCommand(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, args));
 		}
 	}

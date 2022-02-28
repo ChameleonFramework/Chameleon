@@ -21,35 +21,44 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.adventure.conversion.impl.sound;
+package dev.hypera.chameleon.core.adventure.conversion.impl;
 
 import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IConverter;
+import dev.hypera.chameleon.core.adventure.conversion.IMapper;
 import java.lang.reflect.Method;
-import java.util.Objects;
-import net.kyori.adventure.sound.SoundStop;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 
-public class SoundStopConverter implements IConverter<SoundStop> {
+/**
+ * Maps shaded to platform net.kyori.adventure.text.Component
+ */
+public class ComponentMapper implements IMapper<Component> {
 
-	private final @NotNull Method ALL_METHOD;
-	private final @NotNull Method CREATE_METHOD;
+	private final @NotNull Method GSON_SERIALIZER_DESERIALIZE;
+	private final @NotNull Object GSON_SERIALIZER_INSTANCE;
 
-	public SoundStopConverter() {
+	public ComponentMapper() {
 		try {
-			Class<?> soundStopClass = Class.forName(new String(AdventureConverter.PACKAGE) + "sound.SoundStop");
-			Class<?> keyClass = Class.forName(new String(AdventureConverter.PACKAGE) + "key.Key");
-			ALL_METHOD = soundStopClass.getMethod("all");
-			CREATE_METHOD = soundStopClass.getMethod("named", keyClass);
+			Class<?> serializerClass = Class.forName(new String(AdventureConverter.PACKAGE) + "text.serializer.gson.GsonComponentSerializer");
+			GSON_SERIALIZER_DESERIALIZE = serializerClass.getMethod("deserialize", Object.class);
+			GSON_SERIALIZER_INSTANCE = serializerClass.getMethod("gson").invoke(null);
 		} catch (ReflectiveOperationException ex) {
 			throw new ExceptionInInitializerError(ex);
 		}
 	}
 
+	/**
+	 * Map Component to the platform version of Adventure
+	 *
+	 * @param component Component to be mapped
+	 * @return Platform Component
+	 */
 	@Override
-	public Object convert(SoundStop soundStop) {
+	public @NotNull Object map(@NotNull Component component) {
+		String json = GsonComponentSerializer.gson().serialize(component);
 		try {
-			return null == soundStop.sound() ? ALL_METHOD.invoke(null) : CREATE_METHOD.invoke(null, AdventureConverter.convertKey(Objects.requireNonNull(soundStop.sound())));
+			return GSON_SERIALIZER_DESERIALIZE.invoke(GSON_SERIALIZER_INSTANCE, json);
 		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException(ex);
 		}

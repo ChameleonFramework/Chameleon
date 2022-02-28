@@ -30,6 +30,9 @@ import java.util.Optional;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Platform module loader
+ */
 public class PlatformModuleLoader {
 
 	private final @NotNull Chameleon chameleon;
@@ -39,7 +42,12 @@ public class PlatformModuleLoader {
 		this.chameleon = chameleon;
 	}
 
-
+	/**
+	 * Load platform modules
+	 *
+	 * @param modules Platform modules to be loaded
+	 * @return Loaded module for the current platform
+	 */
 	@SafeVarargs
 	public final @NotNull Optional<PlatformModule<?>> load(@NotNull Class<PlatformModule<?>>... modules) {
 		for (Class<PlatformModule<?>> module : modules) {

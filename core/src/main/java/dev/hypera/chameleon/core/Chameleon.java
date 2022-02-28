@@ -41,6 +41,9 @@ import java.nio.file.Path;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Chameleon
+ */
 public abstract class Chameleon {
 
 	private static final @NotNull String VERSION = "0.4.0-SNAPSHOT";
@@ -49,7 +52,8 @@ public abstract class Chameleon {
 	private final @NotNull EventManager eventMapper = new EventManager(this);
 	private final @NotNull ModuleLoader moduleLoader = new ModuleLoader(this);
 
-	public Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin) throws ChameleonInstantiationException {
+	@Internal
+	protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin) throws ChameleonInstantiationException {
 		try {
 			this.plugin = plugin.getConstructor(Chameleon.class).newInstance(this);
 			for (Field field : plugin.getDeclaredFields()) {
@@ -64,7 +68,8 @@ public abstract class Chameleon {
 		}
 	}
 
-	/* -- Status -- */
+
+
 	public final void onEnable() {
 		plugin.onEnable();
 	}
@@ -94,6 +99,7 @@ public abstract class Chameleon {
 	public @NotNull ModuleLoader getModuleLoader() {
 		return moduleLoader;
 	}
+
 
 	public abstract @NotNull ChameleonAudienceProvider getAdventure();
 	public abstract @NotNull Platform getPlatform();

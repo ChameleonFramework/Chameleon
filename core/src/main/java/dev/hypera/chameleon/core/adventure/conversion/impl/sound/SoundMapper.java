@@ -24,17 +24,20 @@
 package dev.hypera.chameleon.core.adventure.conversion.impl.sound;
 
 import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IConverter;
+import dev.hypera.chameleon.core.adventure.conversion.IMapper;
 import java.lang.reflect.Method;
 import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 
-public class SoundConverter implements IConverter<Sound> {
+/**
+ * Maps shaded to platform net.kyori.adventure.sound.Sound
+ */
+public class SoundMapper implements IMapper<Sound> {
 
 	private final @NotNull Method CREATE_METHOD;
 	private final @NotNull Method SOURCE_VALUE_OF;
 
-	public SoundConverter() {
+	public SoundMapper() {
 		try {
 			Class<?> soundClass = Class.forName(new String(AdventureConverter.PACKAGE) + "sound.Sound");
 			Class<?> keyClass = Class.forName(new String(AdventureConverter.PACKAGE) + "key.Key");
@@ -46,8 +49,14 @@ public class SoundConverter implements IConverter<Sound> {
 		}
 	}
 
+	/**
+	 * Map Key to the platform version of Adventure
+	 *
+	 * @param sound Sound to be mapped
+	 * @return Platform Sound
+	 */
 	@Override
-	public Object convert(Sound sound) {
+	public @NotNull Object map(@NotNull Sound sound) {
 		try {
 			return CREATE_METHOD.invoke(
 					null,

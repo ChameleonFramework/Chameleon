@@ -27,6 +27,9 @@ import dev.hypera.chameleon.core.events.ChameleonEvent;
 import dev.hypera.chameleon.core.users.User;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * User event
+ */
 public interface UserEvent extends ChameleonEvent {
 
 	@NotNull User getUser();

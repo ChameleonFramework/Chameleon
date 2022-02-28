@@ -31,6 +31,9 @@ import java.util.function.BiConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * In-game player on a proxy
+ */
 @PlatformSpecific(Type.PROXY)
 public interface ProxyUser extends User {
 

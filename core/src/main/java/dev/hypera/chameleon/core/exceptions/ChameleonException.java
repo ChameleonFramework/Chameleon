@@ -23,6 +23,9 @@
 
 package dev.hypera.chameleon.core.exceptions;
 
+/**
+ * Chameleon exception
+ */
 public class ChameleonException extends Exception {
 
 	public ChameleonException() {

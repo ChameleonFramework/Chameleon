@@ -26,6 +26,9 @@ package dev.hypera.chameleon.core;
 import dev.hypera.chameleon.core.data.PluginData;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Chameleon plugin
+ */
 public abstract class ChameleonPlugin {
 
 	protected final @NotNull Chameleon chameleon;

@@ -29,6 +29,9 @@ import dev.hypera.chameleon.core.platform.server.GameMode;
 import dev.hypera.chameleon.core.users.User;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * In-game player on a server
+ */
 @PlatformSpecific(Type.SERVER)
 public interface ServerUser extends User {
 

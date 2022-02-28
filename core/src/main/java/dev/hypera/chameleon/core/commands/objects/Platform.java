@@ -23,6 +23,9 @@
 
 package dev.hypera.chameleon.core.commands.objects;
 
+/**
+ * Command platform
+ */
 public enum Platform {
 
 	ALL,

@@ -29,6 +29,9 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Command condition
+ */
 public interface Condition {
 
 	boolean test(@NotNull Context context);

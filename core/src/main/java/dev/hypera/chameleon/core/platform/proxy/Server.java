@@ -30,6 +30,9 @@ import java.net.SocketAddress;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Proxy sub-server
+ */
 @PlatformSpecific(Type.PROXY)
 public interface Server {
 

@@ -28,6 +28,9 @@ import java.util.Optional;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Plugin manager
+ */
 public abstract class PluginManager {
 
 	public abstract @NotNull Set<PlatformPlugin> getPlugins();

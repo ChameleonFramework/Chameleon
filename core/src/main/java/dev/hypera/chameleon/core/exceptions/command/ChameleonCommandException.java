@@ -25,6 +25,9 @@ package dev.hypera.chameleon.core.exceptions.command;
 
 import dev.hypera.chameleon.core.exceptions.ChameleonRuntimeException;
 
+/**
+ * Chameleon command exception
+ */
 public class ChameleonCommandException extends ChameleonRuntimeException {
 
 	public ChameleonCommandException() {

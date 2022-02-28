@@ -29,6 +29,9 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.AudienceProvider;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Chameleon Audience Provider
+ */
 public interface ChameleonAudienceProvider extends AudienceProvider {
 
 	@NotNull Audience filter(@NotNull Predicate<ChatUser> filter);

@@ -27,6 +27,9 @@ import dev.hypera.chameleon.core.events.ChameleonEvent;
 import dev.hypera.chameleon.core.users.User;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Dispatched when a user sends a chat message
+ */
 public class UserChatEvent implements ChameleonEvent {
 
 	private final @NotNull User user;

@@ -26,6 +26,9 @@ package dev.hypera.chameleon.core.platform.server;
 import dev.hypera.chameleon.core.annotations.PlatformSpecific;
 import dev.hypera.chameleon.core.platform.Platform.Type;
 
+/**
+ * Game mode
+ */
 @PlatformSpecific(Type.SERVER)
 public enum GameMode {
 

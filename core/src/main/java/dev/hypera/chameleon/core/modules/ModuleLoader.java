@@ -27,7 +27,6 @@ import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.annotations.Module;
 import dev.hypera.chameleon.core.modules.platform.PlatformModuleLoader;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,8 +41,14 @@ public class ModuleLoader {
 		this.platformModuleLoader = new PlatformModuleLoader(chameleon);
 	}
 
-
-	public void injectModule(@NotNull Field field, @NotNull Object obj) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
+	/**
+	 * Attempt to inject a module into a field
+	 *
+	 * @param field Field to attempt injection on
+	 * @param obj   Object to attempt injection on
+	 * @throws ReflectiveOperationException if something goes wrong during the injection
+	 */
+	public void injectModule(@NotNull Field field, @NotNull Object obj) throws ReflectiveOperationException {
 		if (field.isAnnotationPresent(Module.class) && AbstractModule.class.isAssignableFrom(field.getType())) {
 			field.setAccessible(true);
 			if (null == field.get(obj)) {
@@ -52,9 +57,16 @@ public class ModuleLoader {
 		}
 	}
 
-
-	private @NotNull AbstractModule loadModule(@NotNull Class<? extends AbstractModule> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-		return clazz.getConstructor(Chameleon.class, PlatformModuleLoader.class).newInstance(chameleon, platformModuleLoader);
+	/**
+	 * Load a module
+	 *
+	 * @param clazz Module type
+	 * @return Loaded module
+	 * @throws ReflectiveOperationException if something goes wrong while loading the module
+	 */
+	private @NotNull AbstractModule loadModule(@NotNull Class<? extends AbstractModule> clazz) throws ReflectiveOperationException {
+		return clazz.getConstructor(Chameleon.class, PlatformModuleLoader.class)
+				.newInstance(chameleon, platformModuleLoader);
 	}
 
 }

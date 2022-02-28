@@ -23,6 +23,9 @@
 
 package dev.hypera.chameleon.core.exceptions;
 
+/**
+ * Chameleon runtime exception
+ */
 public class ChameleonRuntimeException extends RuntimeException {
 
 	public ChameleonRuntimeException() {

@@ -24,17 +24,20 @@
 package dev.hypera.chameleon.core.adventure.conversion.impl.title;
 
 import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IConverter;
+import dev.hypera.chameleon.core.adventure.conversion.IMapper;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import net.kyori.adventure.title.Title.Times;
 import org.jetbrains.annotations.NotNull;
 
-public class TimesConverter implements IConverter<Times> {
+/**
+ * Maps shaded to platform net.kyori.adventure.title.Title$Times
+ */
+public class TimesMapper implements IMapper<Times> {
 
 	private final @NotNull Method CREATE_METHOD;
 
-	public TimesConverter() {
+	public TimesMapper() {
 		try {
 			Class<?> timesClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title$Times");
 			CREATE_METHOD = timesClass.getMethod("of", Duration.class, Duration.class, Duration.class);
@@ -43,8 +46,14 @@ public class TimesConverter implements IConverter<Times> {
 		}
 	}
 
+	/**
+	 * Map Title$Times to the platform version of Adventure
+	 *
+	 * @param times Title$Times to be mapped
+	 * @return Platform Title$Times
+	 */
 	@Override
-	public Object convert(Times times) {
+	public @NotNull Object map(@NotNull Times times) {
 		try {
 			return CREATE_METHOD.invoke(null, times.fadeIn(), times.stay(), times.fadeOut());
 		} catch (ReflectiveOperationException ex) {

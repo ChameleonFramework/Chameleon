@@ -25,6 +25,9 @@ package dev.hypera.chameleon.core.exceptions.instantiation;
 
 import dev.hypera.chameleon.core.exceptions.ChameleonException;
 
+/**
+ * Chameleon instantiation exception
+ */
 public class ChameleonInstantiationException extends ChameleonException {
 
 	public ChameleonInstantiationException() {

@@ -32,51 +32,71 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class EventManager {
+/**
+ * Event manager
+ */
+public final class EventManager {
 
 	private final @NotNull Chameleon chameleon;
 	private final @NotNull Set<ChameleonListener> registeredListeners = new HashSet<>();
 
+	@Internal
 	public EventManager(@NotNull Chameleon chameleon) {
 		this.chameleon = chameleon;
 	}
 
+	/**
+	 * Register a listener
+	 *
+	 * @param listener Listener to be registered
+	 */
 	public void registerListener(@NotNull ChameleonListener listener) {
 		registeredListeners.add(listener);
 	}
 
+	/**
+	 * Register an inline listener
+	 *
+	 * @param type  Event type
+	 * @param event Event consumer
+	 * @param <T>   Event type
+	 */
 	public <T extends ChameleonEvent> void registerListener(@NotNull Class<T> type, @NotNull Consumer<T> event) {
 		registerListener(new InlineChameleonListener<>(type, event));
 	}
 
 
+	/**
+	 * Dispatch an event to registered listeners
+	 *
+	 * @param event Event to be dispatched
+	 */
 	@Internal
 	public void dispatch(@NotNull ChameleonEvent event) {
-		registeredListeners.stream().map(listener -> Arrays.stream(listener.getClass().getDeclaredMethods()).filter(method ->
-				method.isAnnotationPresent(EventHandler.class) &&
-					method.getParameterCount() == 1 &&
-					method.getParameterTypes()[0].isInstance(event)
-		).findFirst().map(m -> new EventMethod(m, listener)).orElse(null)).filter(Objects::nonNull).sorted(Comparator.comparingInt(m -> m.getMethod().getAnnotation(EventHandler.class).value().getPriority())).forEachOrdered(method -> {
-			try {
-				method.getMethod().invoke(method.getListener(), event);
-			} catch (IllegalAccessException | InvocationTargetException ex) {
-				chameleon.getInternalLogger().error(
-						"Failed to dispatch event '%s' to method '%s' of '%s'", ex,
-						event.getClass().getSimpleName(),
-						method.getMethod().toGenericString(),
-						method.getListener().getClass().getCanonicalName()
-				);
-			}
-		});
+		registeredListeners.stream()
+				.map(listener -> Arrays.stream(listener.getClass().getDeclaredMethods()).filter(method ->
+						method.isAnnotationPresent(EventHandler.class) &&
+								method.getParameterCount() == 1 &&
+								method.getParameterTypes()[0].isInstance(event)
+				).findFirst().map(m -> new EventMethod(m, listener)).orElse(null)).filter(Objects::nonNull)
+				.sorted(Comparator.comparingInt(m -> m.getMethod().getAnnotation(EventHandler.class).value().getPriority())).forEachOrdered(method -> {
+					try {
+						method.getMethod().invoke(method.getListener(), event);
+					} catch (IllegalAccessException | InvocationTargetException ex) {
+						chameleon.getInternalLogger().error(
+								"Failed to dispatch event '%s' to method '%s' of '%s'", ex,
+								event.getClass().getSimpleName(),
+								method.getMethod().toGenericString(),
+								method.getListener().getClass().getCanonicalName()
+						);
+					}
+				});
 	}
 
 	@Internal

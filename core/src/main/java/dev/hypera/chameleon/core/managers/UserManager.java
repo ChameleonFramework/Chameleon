@@ -29,6 +29,9 @@ import java.util.Set;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * User manager
+ */
 public abstract class UserManager {
 
 	public abstract @NotNull ChatUser getConsole();

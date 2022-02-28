@@ -25,6 +25,9 @@ package dev.hypera.chameleon.core.platform.server;
 
 import dev.hypera.chameleon.core.platform.Platform;
 
+/**
+ * Server platform
+ */
 public abstract class ServerPlatform extends Platform {
 
 }

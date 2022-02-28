@@ -27,6 +27,9 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Command permission
+ */
 public interface Permission {
 
 	@Nullable String value();

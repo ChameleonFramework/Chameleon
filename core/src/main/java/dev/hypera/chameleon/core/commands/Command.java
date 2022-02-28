@@ -41,6 +41,9 @@ import java.util.Optional;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Abstract command
+ */
 public abstract class Command {
 
 	private final @NotNull String name;
@@ -104,9 +107,9 @@ public abstract class Command {
 		Optional<SubCommand> subCommand = subCommands.stream().filter(c -> c.getNames().stream().anyMatch(n -> command.toLowerCase().matches(n))).findFirst();
 		if (subCommand.isPresent()) {
 			subCommand.get().execute(context, this);
-			return true;
-		} else {
 			return false;
+		} else {
+			return true;
 		}
 	}
 

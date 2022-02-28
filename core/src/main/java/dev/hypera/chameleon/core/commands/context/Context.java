@@ -27,6 +27,9 @@ import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.users.ChatUser;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Command context
+ */
 public interface Context {
 
 	@NotNull ChatUser getSender();

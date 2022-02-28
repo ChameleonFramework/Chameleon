@@ -30,6 +30,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Marks a method or class as only working on a particular platform type
+ */
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PlatformSpecific {

@@ -27,6 +27,9 @@ import dev.hypera.chameleon.core.users.User;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Dispatched when a user leaves the proxy/server
+ */
 public class UserDisconnectEvent implements UserEvent {
 
 	private final @NotNull User user;

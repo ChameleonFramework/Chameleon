@@ -45,7 +45,7 @@ public final class VelocityCommand implements SimpleCommand {
 
 	@Override
 	public void execute(Invocation invocation) {
-		if (invocation.arguments().length < 1 || !command.executeSubCommand(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, Arrays.copyOfRange(invocation.arguments(), 1, invocation.arguments().length)), invocation.arguments()[0])) {
+		if (invocation.arguments().length < 1 || command.executeSubCommand(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, Arrays.copyOfRange(invocation.arguments(), 1, invocation.arguments().length)), invocation.arguments()[0])) {
 			command.executeCommand(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, invocation.arguments()));
 		}
 	}

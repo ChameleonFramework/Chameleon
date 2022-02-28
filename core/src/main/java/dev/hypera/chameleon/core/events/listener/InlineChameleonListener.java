@@ -28,6 +28,10 @@ import dev.hypera.chameleon.core.events.listener.annotations.EventHandler;
 import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Inline listener
+ * @param <T> Event type
+ */
 public class InlineChameleonListener<T extends ChameleonEvent> implements ChameleonListener {
 
 	private final @NotNull Class<T> type;

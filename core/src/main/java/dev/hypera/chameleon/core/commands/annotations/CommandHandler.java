@@ -29,6 +29,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Command handler annotation
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CommandHandler {

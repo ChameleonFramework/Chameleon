@@ -21,57 +21,50 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.adventure.conversion.impl.bossbar;
+package dev.hypera.chameleon.core.adventure.conversion.impl.book;
 
 import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IConverter;
+import dev.hypera.chameleon.core.adventure.conversion.IMapper;
 import java.lang.reflect.Method;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.stream.Collectors;
-import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.inventory.Book;
 import org.jetbrains.annotations.NotNull;
 
-public class BossBarConverter implements IConverter<BossBar> {
+/**
+ * Maps shaded to platform net.kyori.adventure.inventory.Book
+ */
+public class BookMapper implements IMapper<Book> {
 
 	private final @NotNull Method CREATE_METHOD;
-	private final @NotNull Method COLOR_VALUE_OF;
-	private final @NotNull Method OVERLAY_VALUE_OF;
-	private final @NotNull Method FLAG_VALUE_OF;
 
-	public BossBarConverter() {
+	public BookMapper() {
 		try {
-			Class<?> componentLikeClass = Class.forName(new String(AdventureConverter.PACKAGE) + "text.ComponentLike");
-			Class<?> bossBarClass = Class.forName(new String(AdventureConverter.PACKAGE) + "bossbar.BossBar");
-
-			Class<?> colorEnum = Class.forName(bossBarClass.getCanonicalName() + "$Color");
-			Class<?> overlayEnum  = Class.forName(bossBarClass.getCanonicalName() + "$Overlay");
-			Class<?> flagEnum  = Class.forName(bossBarClass.getCanonicalName() + "$Flag");
-
-			CREATE_METHOD = bossBarClass.getMethod("bossBar", componentLikeClass, float.class, colorEnum, overlayEnum, Set.class);
-			COLOR_VALUE_OF = colorEnum.getMethod("valueOf", String.class);
-			OVERLAY_VALUE_OF = overlayEnum.getMethod("valueOf", String.class);
-			FLAG_VALUE_OF = flagEnum.getMethod("valueOf", String.class);
+			Class<?> componentClass = Class.forName(new String(AdventureConverter.PACKAGE) + "text.Component");
+			Class<?> bookClass = Class.forName(new String(AdventureConverter.PACKAGE) + "inventory.Book");
+			CREATE_METHOD = bookClass.getMethod("book", componentClass, componentClass, Collection.class);
 		} catch (ReflectiveOperationException ex) {
 			throw new ExceptionInInitializerError(ex);
 		}
 	}
 
+
+	/**
+	 * Map Book to the platform version of Adventure
+	 *
+	 * @param book Book to be mapped
+	 * @return Platform Book
+	 */
 	@Override
-	public Object convert(BossBar bossBar) {
+	public @NotNull Object map(@NotNull Book book) {
 		try {
 			return CREATE_METHOD.invoke(
 					null,
-					AdventureConverter.convertComponent(bossBar.name()),
-					bossBar.progress(),
-					COLOR_VALUE_OF.invoke(null, bossBar.color().name()),
-					OVERLAY_VALUE_OF.invoke(null, bossBar.overlay().name()),
-					bossBar.flags().stream().map(f -> {
-						try {
-							return FLAG_VALUE_OF.invoke(null, f.name());
-						} catch (ReflectiveOperationException ex) {
-							throw new RuntimeException(ex);
-						}
-					}).collect(Collectors.toSet())
+					AdventureConverter.convertComponent(book.title()),
+					AdventureConverter.convertComponent(book.author()),
+					book.pages().stream().map(AdventureConverter::convertComponent)
+							.collect(Collectors.toCollection(ArrayList::new))
 			);
 		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException(ex);

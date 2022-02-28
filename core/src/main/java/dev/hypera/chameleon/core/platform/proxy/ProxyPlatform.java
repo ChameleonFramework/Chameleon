@@ -25,6 +25,9 @@ package dev.hypera.chameleon.core.platform.proxy;
 
 import dev.hypera.chameleon.core.platform.Platform;
 
+/**
+ * Proxy platform
+ */
 public abstract class ProxyPlatform extends Platform {
 
 }

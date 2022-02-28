@@ -36,6 +36,9 @@ import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Implements the Audience methods to prevent duplicate code.
+ */
 public abstract class AbstractAudience implements Audience {
 
 	private final @NotNull Audience audience;

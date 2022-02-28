@@ -38,6 +38,9 @@ import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Implements the Audience methods and uses Reflection to map objects to the non-shaded versions of themselves.
+ */
 public abstract class AbstractReflectedAudience implements Audience {
 
 	private final static @NotNull Class<?> AUDIENCE_CLASS;

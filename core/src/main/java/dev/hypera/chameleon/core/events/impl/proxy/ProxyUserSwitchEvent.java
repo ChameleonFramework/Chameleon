@@ -31,6 +31,9 @@ import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Dispatched when a user switches server
+ */
 @PlatformSpecific(Type.PROXY)
 public class ProxyUserSwitchEvent implements ProxyUserEvent {
 

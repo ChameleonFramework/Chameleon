@@ -25,6 +25,9 @@ package dev.hypera.chameleon.core.data;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Plugin data
+ */
 public interface PluginData {
 
 	@NotNull String getName();

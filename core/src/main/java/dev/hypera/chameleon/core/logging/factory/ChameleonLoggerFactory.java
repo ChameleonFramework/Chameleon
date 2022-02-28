@@ -30,6 +30,9 @@ import dev.hypera.chameleon.core.logging.impl.InternalChameleonLoggerImpl;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Chameleon logger factory
+ */
 public class ChameleonLoggerFactory {
 
 	private final @NotNull Chameleon chameleon;

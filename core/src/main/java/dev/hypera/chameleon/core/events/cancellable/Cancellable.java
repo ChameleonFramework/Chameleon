@@ -23,6 +23,9 @@
 
 package dev.hypera.chameleon.core.events.cancellable;
 
+/**
+ * Cancellable
+ */
 public interface Cancellable {
 
 	void setCancelled(boolean cancelled);

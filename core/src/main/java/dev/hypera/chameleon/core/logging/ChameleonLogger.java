@@ -26,6 +26,9 @@ package dev.hypera.chameleon.core.logging;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Chameleon logger
+ */
 public interface ChameleonLogger {
 
 	void info(@NotNull String s, @Nullable Object... o);

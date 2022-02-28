@@ -25,6 +25,9 @@ package dev.hypera.chameleon.core.exceptions.modules;
 
 import dev.hypera.chameleon.core.exceptions.ChameleonException;
 
+/**
+ * Chameleon module injection exception
+ */
 public class ChameleonModuleInjectionException extends ChameleonException {
 
 	public ChameleonModuleInjectionException() {

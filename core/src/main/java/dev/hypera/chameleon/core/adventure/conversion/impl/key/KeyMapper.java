@@ -21,40 +21,40 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.adventure.conversion.impl.title;
+package dev.hypera.chameleon.core.adventure.conversion.impl.key;
 
 import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IConverter;
+import dev.hypera.chameleon.core.adventure.conversion.IMapper;
 import java.lang.reflect.Method;
-import java.util.Objects;
-import net.kyori.adventure.title.Title;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
-public class TitleConverter implements IConverter<Title> {
+/**
+ * Maps shaded to platform net.kyori.adventure.key.Key
+ */
+public class KeyMapper implements IMapper<Key> {
 
-	private final @NotNull TimesConverter timesConverter = new TimesConverter();
 	private final @NotNull Method CREATE_METHOD;
 
-	public TitleConverter() {
+	public KeyMapper() {
 		try {
-			Class<?> titleClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title");
-			Class<?> timesClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title$Times");
-			Class<?> componentClass = Class.forName(new String(AdventureConverter.PACKAGE) + "text.Component");
-			CREATE_METHOD = titleClass.getMethod("title", componentClass, componentClass, timesClass);
+			Class<?> keyClass = Class.forName(new String(AdventureConverter.PACKAGE) + "key.Key");
+			CREATE_METHOD = keyClass.getMethod("key", String.class);
 		} catch (ReflectiveOperationException ex) {
 			throw new ExceptionInInitializerError(ex);
 		}
 	}
 
+	/**
+	 * Map Key to the platform version of Adventure
+	 *
+	 * @param key Key to be mapped
+	 * @return Platform Key
+	 */
 	@Override
-	public Object convert(Title title) {
+	public @NotNull Object map(@NotNull Key key) {
 		try {
-			return CREATE_METHOD.invoke(
-					null,
-					AdventureConverter.convertComponent(title.title()),
-					AdventureConverter.convertComponent(title.subtitle()),
-					timesConverter.convert(null == title.times() ? Title.DEFAULT_TIMES : Objects.requireNonNull(title.times()))
-			);
+			return CREATE_METHOD.invoke(null, key.asString());
 		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException(ex);
 		}

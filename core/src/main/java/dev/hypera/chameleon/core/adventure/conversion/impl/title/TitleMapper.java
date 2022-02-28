@@ -21,39 +21,48 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.adventure.conversion.impl.book;
+package dev.hypera.chameleon.core.adventure.conversion.impl.title;
 
 import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IConverter;
+import dev.hypera.chameleon.core.adventure.conversion.IMapper;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
-import net.kyori.adventure.inventory.Book;
+import java.util.Objects;
+import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.NotNull;
 
-public class BookConverter implements IConverter<Book> {
+/**
+ * Maps shaded to platform net.kyori.adventure.title.Title
+ */
+public class TitleMapper implements IMapper<Title> {
 
+	private final @NotNull TimesMapper timesConverter = new TimesMapper();
 	private final @NotNull Method CREATE_METHOD;
 
-	public BookConverter() {
+	public TitleMapper() {
 		try {
+			Class<?> titleClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title");
+			Class<?> timesClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title$Times");
 			Class<?> componentClass = Class.forName(new String(AdventureConverter.PACKAGE) + "text.Component");
-			Class<?> bookClass = Class.forName(new String(AdventureConverter.PACKAGE) + "inventory.Book");
-			CREATE_METHOD = bookClass.getMethod("book", componentClass, componentClass, Collection.class);
+			CREATE_METHOD = titleClass.getMethod("title", componentClass, componentClass, timesClass);
 		} catch (ReflectiveOperationException ex) {
 			throw new ExceptionInInitializerError(ex);
 		}
 	}
 
+	/**
+	 * Map Title to the platform version of Adventure
+	 *
+	 * @param title Title to be mapped
+	 * @return Platform Title
+	 */
 	@Override
-	public Object convert(Book book) {
+	public @NotNull Object map(@NotNull Title title) {
 		try {
 			return CREATE_METHOD.invoke(
 					null,
-					AdventureConverter.convertComponent(book.title()),
-					AdventureConverter.convertComponent(book.author()),
-					book.pages().stream().map(AdventureConverter::convertComponent).collect(Collectors.toCollection(ArrayList::new))
+					AdventureConverter.convertComponent(title.title()),
+					AdventureConverter.convertComponent(title.subtitle()),
+					timesConverter.map(null == title.times() ? Title.DEFAULT_TIMES : Objects.requireNonNull(title.times()))
 			);
 		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException(ex);

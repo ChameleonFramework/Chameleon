@@ -23,6 +23,9 @@
 
 package dev.hypera.chameleon.core.events.cancellable;
 
+/**
+ * Cancellable implementation
+ */
 public abstract class AbstractCancellable implements Cancellable {
 
 	private boolean cancelled;

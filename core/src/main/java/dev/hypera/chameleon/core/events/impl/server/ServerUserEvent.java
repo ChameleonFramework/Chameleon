@@ -29,6 +29,9 @@ import dev.hypera.chameleon.core.platform.Platform.Type;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Server-only event
+ */
 @PlatformSpecific(Type.SERVER)
 public interface ServerUserEvent extends ChameleonEvent {
 

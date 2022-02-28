@@ -28,6 +28,9 @@ import dev.hypera.chameleon.core.commands.context.Context;
 import dev.hypera.chameleon.core.users.ChatUser;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Command context implementation
+ */
 public final class ContextImpl implements Context {
 
 	private final @NotNull ChatUser sender;

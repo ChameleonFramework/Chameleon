@@ -30,6 +30,9 @@ import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Platform plugin
+ */
 public interface PlatformPlugin {
 
 	@NotNull String getName();

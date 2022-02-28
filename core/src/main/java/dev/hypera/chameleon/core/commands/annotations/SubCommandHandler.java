@@ -29,6 +29,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Sub command handler annotation
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SubCommandHandler {

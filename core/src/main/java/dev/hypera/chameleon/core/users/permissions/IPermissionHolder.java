@@ -25,6 +25,9 @@ package dev.hypera.chameleon.core.users.permissions;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Permission holder
+ */
 public interface IPermissionHolder {
 
 	boolean hasPermission(@NotNull String permission);

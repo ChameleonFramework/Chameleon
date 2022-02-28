@@ -23,6 +23,9 @@
 
 package dev.hypera.chameleon.core.events.listener;
 
+/**
+ * Listener
+ */
 public interface ChameleonListener {
 
 }

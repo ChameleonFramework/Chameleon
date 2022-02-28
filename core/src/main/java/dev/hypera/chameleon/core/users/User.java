@@ -26,6 +26,9 @@ package dev.hypera.chameleon.core.users;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * In-game player
+ */
 public interface User extends ChatUser {
 
 	@NotNull UUID getUniqueId();

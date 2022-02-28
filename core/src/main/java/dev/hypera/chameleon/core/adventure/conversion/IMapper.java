@@ -21,34 +21,17 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.core.adventure.conversion.impl.key;
+package dev.hypera.chameleon.core.adventure.conversion;
 
-import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IConverter;
-import java.lang.reflect.Method;
-import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
-public class KeyConverter implements IConverter<Key> {
+public interface IMapper<I> {
 
-	private final @NotNull Method CREATE_METHOD;
-
-	public KeyConverter() {
-		try {
-			Class<?> keyClass = Class.forName(new String(AdventureConverter.PACKAGE) + "key.Key");
-			CREATE_METHOD = keyClass.getMethod("key", String.class);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
-
-	@Override
-	public Object convert(Key key) {
-		try {
-			return CREATE_METHOD.invoke(null, key.asString());
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+	/**
+	 * Map i to the platform version of Adventure
+	 * @param i i to be mapped
+	 * @return Platform i
+	 */
+	@NotNull Object map(@NotNull I i);
 
 }

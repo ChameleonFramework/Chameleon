@@ -46,7 +46,7 @@ public final class SpigotCommand extends org.bukkit.command.Command {
 
 	@Override
 	public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
-		if (args.length < 1 || !command.executeSubCommand(new ContextImpl(SpigotUsers.wrap(chameleon, sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
+		if (args.length < 1 || command.executeSubCommand(new ContextImpl(SpigotUsers.wrap(chameleon, sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
 			command.executeCommand(new ContextImpl(SpigotUsers.wrap(chameleon, sender), chameleon, args));
 		}
 

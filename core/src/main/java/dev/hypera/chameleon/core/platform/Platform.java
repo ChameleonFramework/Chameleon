@@ -23,17 +23,42 @@
 
 package dev.hypera.chameleon.core.platform;
 
+import dev.hypera.chameleon.core.annotations.PlatformSpecific;
+import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
+import dev.hypera.chameleon.core.platform.server.ServerPlatform;
+import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Platform
+ */
 public abstract class Platform {
 
-	/* -- Info -- */
 	public abstract @NotNull String getAPIName();
 	public abstract @NotNull String getName();
 	public abstract @NotNull String getVersion();
 	public abstract @NotNull Type getType();
 
-	/* -- Enums -- */
+
+	@PlatformSpecific(Type.PROXY)
+	public final @NotNull ProxyPlatform proxy() {
+		if (this instanceof ProxyPlatform) {
+			return (ProxyPlatform) this;
+		} else {
+			throw new IllegalStateException("Cannot cast to ProxyPlatform");
+		}
+	}
+
+	@PlatformSpecific(Type.SERVER)
+	public final @NotNull ServerPlatform server() {
+		if (this instanceof ServerPlatform) {
+			return (ServerPlatform) this;
+		} else {
+			throw new IllegalStateException("Cannot cast to ServerPlatform");
+		}
+	}
+
+
 	public enum Type {
 		SERVER, PROXY
 	}

@@ -26,6 +26,9 @@ package dev.hypera.chameleon.core.managers;
 import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Scheduler
+ */
 public abstract class Scheduler {
 
 	public abstract void schedule(@NotNull Runnable runnable);

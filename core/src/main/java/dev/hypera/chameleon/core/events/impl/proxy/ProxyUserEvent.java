@@ -29,6 +29,9 @@ import dev.hypera.chameleon.core.platform.Platform.Type;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Proxy-only event
+ */
 @PlatformSpecific(Type.PROXY)
 public interface ProxyUserEvent extends ChameleonEvent {
 

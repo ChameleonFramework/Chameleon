@@ -27,6 +27,9 @@ import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.modules.platform.PlatformModuleLoader;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Abstract module
+ */
 public abstract class AbstractModule {
 
 	protected final @NotNull Chameleon chameleon;

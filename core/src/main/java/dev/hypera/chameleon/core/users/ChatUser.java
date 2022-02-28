@@ -23,19 +23,22 @@
 
 package dev.hypera.chameleon.core.users;
 
+import dev.hypera.chameleon.core.annotations.PlatformSpecific;
+import dev.hypera.chameleon.core.platform.Platform.Type;
 import dev.hypera.chameleon.core.users.permissions.IPermissionHolder;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * User, can be a player or console
+ */
 public interface ChatUser extends Audience, IPermissionHolder {
 
 	@NotNull String getName();
 
 
-
-	/* Utils */
 	default @NotNull User user() {
 		if (this instanceof User) {
 			return (User) this;
@@ -44,6 +47,7 @@ public interface ChatUser extends Audience, IPermissionHolder {
 		}
 	}
 
+	@PlatformSpecific(Type.PROXY)
 	default @NotNull ProxyUser proxy() {
 		if (this instanceof ProxyUser) {
 			return (ProxyUser) this;
@@ -52,6 +56,7 @@ public interface ChatUser extends Audience, IPermissionHolder {
 		}
 	}
 
+	@PlatformSpecific(Type.SERVER)
 	default @NotNull ServerUser server() {
 		if (this instanceof ServerUser) {
 			return (ServerUser) this;

@@ -32,6 +32,9 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Internal Chameleon logger implementation
+ */
 public class InternalChameleonLoggerImpl implements ChameleonLogger {
 
 	private static final @NotNull String CHAMELEON_PREFIX = " &3[Chameleon] &r";
@@ -48,7 +51,7 @@ public class InternalChameleonLoggerImpl implements ChameleonLogger {
 	}
 
 	private void log(@NotNull String s) {
-		chameleon.getAdventure().console().sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(
+		chameleon.getUserManager().getConsole().sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(
 				String.format(chameleon.getPlugin().getData().getLogPrefix(), chameleon.getPlugin().getData().getName()) + CHAMELEON_PREFIX + s
 		));
 	}

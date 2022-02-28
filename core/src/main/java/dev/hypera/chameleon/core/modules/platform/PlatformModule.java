@@ -26,6 +26,10 @@ package dev.hypera.chameleon.core.modules.platform;
 import dev.hypera.chameleon.core.Chameleon;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Platform module
+ * @param <C> Platform Chameleon
+ */
 public abstract class PlatformModule<C extends Chameleon> {
 
 	protected final @NotNull C chameleon;
