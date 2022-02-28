@@ -24,7 +24,7 @@
 package dev.hypera.chameleon.core.modules;
 
 import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.annotations.InjectModule;
+import dev.hypera.chameleon.core.annotations.Module;
 import dev.hypera.chameleon.core.modules.platform.PlatformModuleLoader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -44,16 +44,16 @@ public class ModuleLoader {
 
 
 	public void injectModule(@NotNull Field field, @NotNull Object obj) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, InstantiationException {
-		if (field.isAnnotationPresent(InjectModule.class) && Module.class.isAssignableFrom(field.getType())) {
+		if (field.isAnnotationPresent(Module.class) && AbstractModule.class.isAssignableFrom(field.getType())) {
 			field.setAccessible(true);
 			if (null == field.get(obj)) {
-				field.set(obj, loadModule(field.getType().asSubclass(Module.class)));
+				field.set(obj, loadModule(field.getType().asSubclass(AbstractModule.class)));
 			}
 		}
 	}
 
 
-	private @NotNull Module loadModule(@NotNull Class<? extends Module> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+	private @NotNull AbstractModule loadModule(@NotNull Class<? extends AbstractModule> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 		return clazz.getConstructor(Chameleon.class, PlatformModuleLoader.class).newInstance(chameleon, platformModuleLoader);
 	}
 

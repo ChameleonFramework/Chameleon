@@ -27,12 +27,12 @@ import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.modules.platform.PlatformModuleLoader;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class Module {
+public abstract class AbstractModule {
 
 	protected final @NotNull Chameleon chameleon;
 	protected final @NotNull PlatformModuleLoader platformModuleLoader;
 
-	public Module(@NotNull Chameleon chameleon, @NotNull PlatformModuleLoader platformModuleLoader) {
+	public AbstractModule(@NotNull Chameleon chameleon, @NotNull PlatformModuleLoader platformModuleLoader) {
 		this.chameleon = chameleon;
 		this.platformModuleLoader = platformModuleLoader;
 	}
