@@ -58,6 +58,7 @@ public class VelocityChameleon extends Chameleon {
 	public VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin) throws ChameleonInstantiationException {
 		super(chameleonPlugin);
 		this.plugin = velocityPlugin;
+		this.plugin.getServer().getEventManager().register(plugin, new VelocityListener(this));
 	}
 
 	@Override
