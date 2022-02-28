@@ -32,6 +32,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity plugin manager
+ */
 public final class VelocityPluginManager extends PluginManager {
 
 	private final @NotNull VelocityChameleon chameleon;

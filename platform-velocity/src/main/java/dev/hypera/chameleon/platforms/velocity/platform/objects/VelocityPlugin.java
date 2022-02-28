@@ -34,6 +34,9 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Velocity plugin implementation
+ */
 public class VelocityPlugin implements PlatformPlugin {
 
 	private final @NotNull PluginContainer plugin;

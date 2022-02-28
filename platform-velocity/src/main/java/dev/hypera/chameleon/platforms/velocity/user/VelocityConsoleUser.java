@@ -28,6 +28,9 @@ import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity console user
+ */
 public class VelocityConsoleUser extends AbstractReflectedAudience implements ChatUser {
 
 	public VelocityConsoleUser(@NotNull VelocityChameleon chameleon) {

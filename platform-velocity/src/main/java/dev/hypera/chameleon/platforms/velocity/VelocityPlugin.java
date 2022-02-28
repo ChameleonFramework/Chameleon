@@ -27,6 +27,9 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity plugin
+ */
 public interface VelocityPlugin {
 
 	@NotNull ProxyServer getServer();

@@ -34,6 +34,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity user manager
+ */
 public final class VelocityUserManager extends UserManager {
 
 	private final @NotNull VelocityChameleon chameleon;

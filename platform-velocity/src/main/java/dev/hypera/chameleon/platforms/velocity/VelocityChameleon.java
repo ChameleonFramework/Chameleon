@@ -33,6 +33,7 @@ import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.managers.UserManager;
 import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.platforms.velocity.adventure.VelocityAudienceProvider;
+import dev.hypera.chameleon.platforms.velocity.listeners.VelocityListener;
 import dev.hypera.chameleon.platforms.velocity.managers.VelocityCommandManager;
 import dev.hypera.chameleon.platforms.velocity.managers.VelocityPluginManager;
 import dev.hypera.chameleon.platforms.velocity.managers.VelocityScheduler;
@@ -41,6 +42,9 @@ import dev.hypera.chameleon.platforms.velocity.platform.VelocityPlatform;
 import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity Chameleon
+ */
 public class VelocityChameleon extends Chameleon {
 
 	private final @NotNull VelocityPlugin plugin;

@@ -29,6 +29,9 @@ import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.commands.VelocityCommand;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity command manager
+ */
 public final class VelocityCommandManager extends CommandManager {
 
 	private final @NotNull VelocityChameleon chameleon;

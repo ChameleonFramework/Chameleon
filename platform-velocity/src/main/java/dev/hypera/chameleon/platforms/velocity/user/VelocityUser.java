@@ -35,6 +35,9 @@ import java.util.function.BiConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Velocity user
+ */
 public class VelocityUser extends AbstractReflectedAudience implements ProxyUser {
 
 	private final @NotNull VelocityChameleon chameleon;

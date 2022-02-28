@@ -28,6 +28,9 @@ import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity scheduler
+ */
 public final class VelocityScheduler extends Scheduler {
 
 	private final @NotNull VelocityChameleon chameleon;

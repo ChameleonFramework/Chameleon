@@ -27,6 +27,9 @@ import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity platform
+ */
 public final class VelocityPlatform extends ProxyPlatform {
 
 	private final @NotNull VelocityChameleon chameleon;

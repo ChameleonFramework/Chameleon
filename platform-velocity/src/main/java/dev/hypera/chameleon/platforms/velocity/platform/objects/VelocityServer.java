@@ -35,6 +35,9 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity server implementation
+ */
 public class VelocityServer implements Server {
 
 	private final @NotNull VelocityChameleon chameleon;

@@ -38,6 +38,9 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity audience provider implementation
+ */
 public class VelocityAudienceProvider implements ChameleonAudienceProvider {
 
 	private final @NotNull VelocityChameleon chameleon;

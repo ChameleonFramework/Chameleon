@@ -44,6 +44,9 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Velocity listener
+ */
 public class VelocityListener {
 
 	private final @NotNull VelocityChameleon chameleon;

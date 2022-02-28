@@ -32,6 +32,9 @@ import java.util.Arrays;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity command
+ */
 public final class VelocityCommand implements SimpleCommand {
 
 	private final @NotNull Chameleon chameleon;

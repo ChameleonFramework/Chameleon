@@ -30,6 +30,9 @@ import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Velocity user utils
+ */
 public final class VelocityUsers {
 
 	public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSource source) {
