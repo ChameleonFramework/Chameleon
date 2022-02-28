@@ -28,26 +28,38 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Configuration
+ */
 public interface Configuration {
 
 	@Nullable Class<?> getType(@NotNull String path);
 	@Nullable Class<?> getType(@NotNull String path, @Nullable Class<?> def);
+
 	boolean isType(@NotNull String path, @NotNull Class<?> type);
+
 	@Nullable <T> T get(@NotNull String path, @NotNull Class<T> type);
 	@Nullable Object get(@NotNull String path);
 	@Nullable Object get(@NotNull String path, @Nullable Object def);
+
 	@Nullable String getString(@NotNull String path);
 	@NotNull String getString(@NotNull String path, @NotNull String def);
+
 	@Nullable Integer getInt(@NotNull String path);
 	int getInt(@NotNull String path, int def);
+
 	@Nullable Double getDouble(@NotNull String path);
 	double getDouble(@NotNull String path, double def);
+
 	@Nullable Long getLong(@NotNull String path);
 	long getLong(@NotNull String path, long def);
+
 	@Nullable Boolean getBoolean(@NotNull String path);
 	boolean getBoolean(@NotNull String path, boolean def);
+
 	@Nullable List<?> getList(@NotNull String path);
 	@NotNull List<?> getList(@NotNull String path, @NotNull List<?> def);
+
 	@NotNull Path getPath();
 
 }

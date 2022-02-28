@@ -36,6 +36,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
 
+/**
+ * YAML configuration implementation
+ */
 public class YamlConfiguration implements Configuration {
 
 	private Path file;

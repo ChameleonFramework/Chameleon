@@ -38,6 +38,9 @@ import org.jetbrains.annotations.Nullable;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * JSON configuration implementation
+ */
 public class JsonConfiguration implements Configuration {
 
 
