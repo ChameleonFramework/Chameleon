@@ -45,7 +45,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord chameleon
+ * BungeeCord Chameleon
  */
 public final class BungeeCordChameleon extends Chameleon {
 

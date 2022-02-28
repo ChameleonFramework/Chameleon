@@ -35,6 +35,9 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Spigot plugin implementation
+ */
 public class SpigotPlugin implements PlatformPlugin {
 
 	private final @NotNull Plugin plugin;

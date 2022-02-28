@@ -29,6 +29,9 @@ import dev.hypera.chameleon.core.adventure.AbstractAudience;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot console user
+ */
 public class SpigotConsoleUser extends AbstractAudience implements ChatUser {
 
 	public SpigotConsoleUser(@NotNull Chameleon chameleon) {

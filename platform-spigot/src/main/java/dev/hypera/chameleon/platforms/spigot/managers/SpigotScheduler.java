@@ -29,6 +29,9 @@ import java.util.concurrent.TimeUnit;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot scheduler
+ */
 public final class SpigotScheduler extends Scheduler {
 
 	private final @NotNull SpigotChameleon chameleon;

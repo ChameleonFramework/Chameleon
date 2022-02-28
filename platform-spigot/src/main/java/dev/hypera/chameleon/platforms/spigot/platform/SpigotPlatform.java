@@ -28,6 +28,9 @@ import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot platform
+ */
 public final class SpigotPlatform extends ServerPlatform {
 
 	public SpigotPlatform(@NotNull SpigotChameleon chameleon) {

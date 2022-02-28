@@ -44,6 +44,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot Chameleon
+ */
 public final class SpigotChameleon extends Chameleon {
 
 	private final @NotNull JavaPlugin plugin;

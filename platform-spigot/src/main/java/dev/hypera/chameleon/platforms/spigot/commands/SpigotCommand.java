@@ -33,6 +33,9 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot command
+ */
 public final class SpigotCommand extends org.bukkit.command.Command {
 
 	private final @NotNull Chameleon chameleon;

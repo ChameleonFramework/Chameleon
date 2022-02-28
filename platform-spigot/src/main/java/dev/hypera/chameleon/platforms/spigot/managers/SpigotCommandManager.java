@@ -33,6 +33,9 @@ import org.bukkit.command.CommandMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Spigot command manager
+ */
 public final class SpigotCommandManager extends CommandManager {
 
 	private final @NotNull SpigotChameleon chameleon;

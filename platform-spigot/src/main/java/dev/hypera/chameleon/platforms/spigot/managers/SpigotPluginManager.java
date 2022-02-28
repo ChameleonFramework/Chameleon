@@ -34,6 +34,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot plugin manager
+ */
 public final class SpigotPluginManager extends PluginManager {
 
 	@Override

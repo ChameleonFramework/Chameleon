@@ -36,6 +36,9 @@ import net.kyori.adventure.text.flattener.ComponentFlattener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot audience provider implementation
+ */
 public final class SpigotAudienceProvider implements ChameleonAudienceProvider {
 
 	private final @NotNull Chameleon chameleon;

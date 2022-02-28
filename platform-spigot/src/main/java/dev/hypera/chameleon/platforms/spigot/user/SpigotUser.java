@@ -31,6 +31,9 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot user
+ */
 public class SpigotUser extends AbstractAudience implements ServerUser {
 
 	private final @NotNull SpigotChameleon chameleon;

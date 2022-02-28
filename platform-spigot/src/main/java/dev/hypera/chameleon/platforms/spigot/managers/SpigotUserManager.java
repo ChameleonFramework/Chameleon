@@ -36,6 +36,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot user manager
+ */
 public final class SpigotUserManager extends UserManager {
 
 	private final @NotNull SpigotChameleon chameleon;

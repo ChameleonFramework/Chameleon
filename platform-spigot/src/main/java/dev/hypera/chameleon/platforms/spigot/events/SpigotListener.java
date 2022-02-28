@@ -37,6 +37,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot listener
+ */
 public class SpigotListener implements Listener {
 
 	private final @NotNull SpigotChameleon chameleon;
