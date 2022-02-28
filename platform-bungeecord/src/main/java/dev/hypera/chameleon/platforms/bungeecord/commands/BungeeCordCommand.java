@@ -32,6 +32,9 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord command
+ */
 public final class BungeeCordCommand extends net.md_5.bungee.api.plugin.Command implements TabExecutor {
 
 	private final @NotNull Chameleon chameleon;

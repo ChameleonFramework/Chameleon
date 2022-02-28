@@ -44,6 +44,9 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord chameleon
+ */
 public final class BungeeCordChameleon extends Chameleon {
 
 	private final @NotNull Plugin plugin;

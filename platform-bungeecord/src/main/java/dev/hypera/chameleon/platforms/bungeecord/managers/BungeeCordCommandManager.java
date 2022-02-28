@@ -31,6 +31,9 @@ import java.util.Map.Entry;
 import net.md_5.bungee.api.ProxyServer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord command manager
+ */
 public final class BungeeCordCommandManager extends CommandManager {
 
 	private final @NotNull BungeeCordChameleon chameleon;

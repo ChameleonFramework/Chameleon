@@ -36,6 +36,9 @@ import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord audience provider implementation
+ */
 public final class BungeeCordAudienceProvider implements ChameleonAudienceProvider {
 
 	private final @NotNull Chameleon chameleon;

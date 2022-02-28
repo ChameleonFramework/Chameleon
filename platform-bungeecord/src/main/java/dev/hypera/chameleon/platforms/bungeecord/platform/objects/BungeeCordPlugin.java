@@ -34,6 +34,9 @@ import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * BungeeCord plugin implementation
+ */
 public class BungeeCordPlugin implements PlatformPlugin {
 
 	private final @NotNull Plugin plugin;

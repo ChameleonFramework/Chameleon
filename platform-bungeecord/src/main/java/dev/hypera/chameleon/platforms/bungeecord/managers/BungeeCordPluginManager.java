@@ -33,6 +33,9 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord plugin manager
+ */
 public final class BungeeCordPluginManager extends PluginManager {
 
 	@Override

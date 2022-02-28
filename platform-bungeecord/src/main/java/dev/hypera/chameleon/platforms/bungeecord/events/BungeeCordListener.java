@@ -43,6 +43,9 @@ import net.md_5.bungee.event.EventHandler;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord listener
+ */
 @Internal
 @SuppressWarnings("unused")
 public class BungeeCordListener implements Listener {

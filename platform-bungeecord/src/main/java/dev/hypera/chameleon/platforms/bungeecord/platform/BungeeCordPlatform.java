@@ -28,6 +28,9 @@ import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
 import net.md_5.bungee.api.ProxyServer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord platform
+ */
 public final class BungeeCordPlatform extends ProxyPlatform {
 
 

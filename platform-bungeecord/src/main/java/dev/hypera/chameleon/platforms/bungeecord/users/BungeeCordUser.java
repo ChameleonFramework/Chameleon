@@ -34,6 +34,9 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * BungeeCord user
+ */
 public class BungeeCordUser extends AbstractAudience implements ProxyUser {
 
 	private final @NotNull Chameleon chameleon;

@@ -29,6 +29,9 @@ import java.util.concurrent.TimeUnit;
 import net.md_5.bungee.api.ProxyServer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord scheduler
+ */
 public final class BungeeCordScheduler extends Scheduler {
 
 	private final @NotNull BungeeCordChameleon chameleon;

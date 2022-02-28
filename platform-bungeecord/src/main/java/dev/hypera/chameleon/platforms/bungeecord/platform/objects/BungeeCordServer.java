@@ -34,6 +34,9 @@ import net.md_5.bungee.api.config.ServerInfo;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord server implementation
+ */
 public class BungeeCordServer implements Server {
 
 	private final @NotNull Chameleon chameleon;

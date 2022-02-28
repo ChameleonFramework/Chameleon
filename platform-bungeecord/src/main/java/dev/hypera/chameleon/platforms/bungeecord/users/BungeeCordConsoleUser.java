@@ -29,6 +29,9 @@ import dev.hypera.chameleon.core.adventure.AbstractAudience;
 import net.md_5.bungee.api.ProxyServer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord console user
+ */
 public class BungeeCordConsoleUser extends AbstractAudience implements ChatUser {
 
 	public BungeeCordConsoleUser(@NotNull Chameleon chameleon) {

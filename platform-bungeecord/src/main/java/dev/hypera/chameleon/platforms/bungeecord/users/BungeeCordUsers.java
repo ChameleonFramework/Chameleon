@@ -29,6 +29,9 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord user utils
+ */
 public final class BungeeCordUsers {
 
 	public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSender sender) {
