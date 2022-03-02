@@ -40,7 +40,7 @@ public class TimesMapper implements IMapper<Times> {
 	public TimesMapper() {
 		try {
 			Class<?> timesClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title$Times");
-			CREATE_METHOD = timesClass.getMethod("of", Duration.class, Duration.class, Duration.class);
+			CREATE_METHOD = timesClass.getMethod("times", Duration.class, Duration.class, Duration.class);
 		} catch (ReflectiveOperationException ex) {
 			throw new ExceptionInInitializerError(ex);
 		}
