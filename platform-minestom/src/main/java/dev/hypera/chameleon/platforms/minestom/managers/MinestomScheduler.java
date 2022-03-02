@@ -21,37 +21,42 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.spigot.managers;
+package dev.hypera.chameleon.platforms.minestom.managers;
 
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.platforms.spigot.platform.objects.SpigotPlugin;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import dev.hypera.chameleon.core.managers.Scheduler;
+import dev.hypera.chameleon.platforms.minestom.MinestomChameleon;
+import java.util.concurrent.TimeUnit;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.timer.ExecutionType;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Spigot plugin manager
- */
-public final class SpigotPluginManager extends PluginManager {
+public final class MinestomScheduler extends Scheduler {
 
 	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
+	public void schedule(@NotNull Runnable runnable) {
+		MinecraftServer.getSchedulerManager()
+				.buildTask(runnable)
+				.executionType(ExecutionType.ASYNC)
+				.schedule();
 	}
 
 	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(SpigotPlugin::new);
+	public void schedule(@NotNull Runnable runnable, long delay, @NotNull TimeUnit unit) {
+		MinecraftServer.getSchedulerManager()
+				.buildTask(runnable)
+				.delay(delay, unit.toChronoUnit())
+				.executionType(ExecutionType.ASYNC)
+				.schedule();
 	}
 
 	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return Bukkit.getPluginManager().isPluginEnabled(name);
+	public void scheduleRepeating(@NotNull Runnable runnable, long delay, long period, @NotNull TimeUnit unit) {
+		MinecraftServer.getSchedulerManager()
+				.buildTask(runnable)
+				.delay(delay, unit.toChronoUnit())
+				.repeat(period, unit.toChronoUnit())
+				.executionType(ExecutionType.ASYNC)
+				.schedule();
 	}
 
 }

@@ -21,33 +21,22 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.velocity.adventure;
+package dev.hypera.chameleon.platforms.minestom.adventure;
 
 import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
-import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
-import dev.hypera.chameleon.platforms.velocity.user.VelocityConsoleUser;
-import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
-import dev.hypera.chameleon.platforms.velocity.user.VelocityUsers;
+import dev.hypera.chameleon.platforms.minestom.users.MinestomUsers;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Velocity audience provider implementation
- */
-public class VelocityAudienceProvider implements ChameleonAudienceProvider {
-
-	private final @NotNull VelocityChameleon chameleon;
-
-	public VelocityAudienceProvider(@NotNull VelocityChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+public class MinestomAudienceProvider implements ChameleonAudienceProvider {
 
 	@Override
 	public @NotNull Audience all() {
@@ -56,17 +45,23 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
 
 	@Override
 	public @NotNull Audience console() {
-		return new VelocityConsoleUser(chameleon);
+		return MinestomUsers.console();
 	}
 
 	@Override
 	public @NotNull Audience players() {
-		return Audience.audience(chameleon.getVelocityPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(chameleon, p)).collect(Collectors.toSet()));
+		return Audience.audience(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().map(MinestomUsers::wrap).collect(Collectors.toSet()));
 	}
 
 	@Override
 	public @NotNull Audience player(@NotNull UUID playerId) {
-		return VelocityUsers.wrap(chameleon, chameleon.getVelocityPlugin().getServer().getPlayer(playerId).orElseThrow(() -> new IllegalArgumentException("Cannot find player with id '" + playerId + "'")));
+		Player player = MinecraftServer.getConnectionManager().getPlayer(playerId);
+
+		if (null != player) {
+			return MinestomUsers.wrap(player);
+		} else {
+			throw new IllegalArgumentException("Cannot find player with id '" + playerId + "'");
+		}
 	}
 
 	@Override
@@ -86,7 +81,7 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
 
 	@Override
 	public @NotNull Audience server(@NotNull String serverName) {
-		return filter(p -> p instanceof ProxyUser && null != ((ProxyUser) p).getServer() && ((ProxyUser) p).getServer().getName().equals(serverName));
+		return all();
 	}
 
 	@Override

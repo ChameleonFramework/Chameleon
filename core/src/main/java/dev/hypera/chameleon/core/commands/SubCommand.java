@@ -29,6 +29,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -37,18 +38,26 @@ import org.jetbrains.annotations.NotNull;
  * Sub command
  */
 @Internal
-final class SubCommand {
+public final class SubCommand {
 
-	private final @NotNull Set<String> names;
+	private final @NotNull List<String> names;
 	private final @NotNull Method method;
 
 	SubCommand(@NotNull String names, @NotNull Method method) {
-		this.names = new HashSet<>(Arrays.asList(names.split("\\|")));
+		this.names = Arrays.asList(names.split("\\|"));
 		this.method = method;
 	}
 
-	public @NotNull Set<String> getNames() {
+	public @NotNull List<String> getNames() {
 		return names;
+	}
+
+	public @NotNull String getName() {
+		return names.get(0);
+	}
+
+	public @NotNull List<String> getAliases() {
+		return names.subList(1, names.size());
 	}
 
 	public void execute(@NotNull Context context, @NotNull Command parent) {

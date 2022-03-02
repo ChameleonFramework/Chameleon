@@ -21,37 +21,27 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.spigot.managers;
+package dev.hypera.chameleon.platforms.minestom.users;
 
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.platforms.spigot.platform.objects.SpigotPlugin;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
+import dev.hypera.chameleon.core.users.ChatUser;
+import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Spigot plugin manager
- */
-public final class SpigotPluginManager extends PluginManager {
+public class MinestomConsoleUser extends AbstractReflectedAudience implements ChatUser {
 
-	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
+	public MinestomConsoleUser() {
+		super(MinecraftServer.getCommandManager().getConsoleSender());
 	}
 
 	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(SpigotPlugin::new);
+	public @NotNull String getName() {
+		return "Console";
 	}
 
 	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return Bukkit.getPluginManager().isPluginEnabled(name);
+	public boolean hasPermission(@NotNull String permission) {
+		return true;
 	}
 
 }

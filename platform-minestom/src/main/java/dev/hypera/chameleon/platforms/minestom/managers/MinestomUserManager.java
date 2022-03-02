@@ -21,37 +21,40 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.spigot.managers;
+package dev.hypera.chameleon.platforms.minestom.managers;
 
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.platforms.spigot.platform.objects.SpigotPlugin;
-import java.util.Arrays;
-import java.util.Optional;
+import dev.hypera.chameleon.core.managers.UserManager;
+import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.core.users.User;
+import dev.hypera.chameleon.platforms.minestom.users.MinestomUser;
+import dev.hypera.chameleon.platforms.minestom.users.MinestomUsers;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Spigot plugin manager
- */
-public final class SpigotPluginManager extends PluginManager {
+public final class MinestomUserManager extends UserManager {
 
 	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
+	public @NotNull ChatUser getConsole() {
+		return MinestomUsers.console();
 	}
 
 	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(SpigotPlugin::new);
+	public @NotNull Set<User> getPlayers() {
+		return MinecraftServer.getConnectionManager().getOnlinePlayers().stream().map(MinestomUser::new).collect(Collectors.toSet());
 	}
 
 	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return Bukkit.getPluginManager().isPluginEnabled(name);
+	public @NotNull User getPlayer(@NotNull UUID uniqueId) {
+		Player player = MinecraftServer.getConnectionManager().getPlayer(uniqueId);
+		if (null == player) {
+			throw new IllegalArgumentException("Cannot find user with id '" + uniqueId + "'");
+		} else {
+			return new MinestomUser(player);
+		}
 	}
 
 }

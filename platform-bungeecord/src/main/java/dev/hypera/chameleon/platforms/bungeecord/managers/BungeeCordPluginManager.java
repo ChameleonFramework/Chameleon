@@ -45,8 +45,7 @@ public final class BungeeCordPluginManager extends PluginManager {
 
 	@Override
 	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		Plugin plugin = ProxyServer.getInstance().getPluginManager().getPlugin(name);
-		return null == plugin ? Optional.empty() : Optional.of(new BungeeCordPlugin(plugin));
+		return Optional.ofNullable(ProxyServer.getInstance().getPluginManager().getPlugin(name)).map(BungeeCordPlugin::new);
 	}
 
 	@Override

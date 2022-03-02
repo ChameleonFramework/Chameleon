@@ -21,37 +21,37 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.spigot.managers;
+package dev.hypera.chameleon.platforms.minestom.managers;
 
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.platforms.spigot.platform.objects.SpigotPlugin;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.managers.CommandManager;
+import dev.hypera.chameleon.platforms.minestom.command.MinestomCommand;
+import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Spigot plugin manager
- */
-public final class SpigotPluginManager extends PluginManager {
+public final class MinestomCommandManager extends CommandManager {
 
-	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
+	private final @NotNull Chameleon chameleon;
+
+	public MinestomCommandManager(@NotNull Chameleon chameleon) {
+		super(chameleon);
+		this.chameleon = chameleon;
 	}
 
 	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(SpigotPlugin::new);
+	protected void registerCommand(@NotNull Command command) {
+		MinecraftServer.getCommandManager().register(new MinestomCommand(chameleon, command));
 	}
 
 	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return Bukkit.getPluginManager().isPluginEnabled(name);
+	protected void unregisterCommand(@NotNull Command command) {
+		net.minestom.server.command.builder.Command minestomCommand = MinecraftServer.getCommandManager().getCommand(command.getName());
+		if (null != minestomCommand) {
+			MinecraftServer.getCommandManager().unregister(minestomCommand);
+		} else {
+			throw new IllegalArgumentException("Cannot find command with name '" + command.getName() + "'");
+		}
 	}
 
 }

@@ -21,37 +21,27 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.spigot.managers;
+package dev.hypera.chameleon.platforms.minestom.users;
 
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.platforms.spigot.platform.objects.SpigotPlugin;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import dev.hypera.chameleon.core.users.ChatUser;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Spigot plugin manager
- */
-public final class SpigotPluginManager extends PluginManager {
+public final class MinestomUsers {
 
-	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
+	private static final @NotNull MinestomConsoleUser CONSOLE = new MinestomConsoleUser();
+
+	public static @NotNull ChatUser wrap(@NotNull CommandSender sender) {
+		if (sender instanceof Player) {
+			return new MinestomUser((Player) sender);
+		} else {
+			return CONSOLE;
+		}
 	}
 
-	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(SpigotPlugin::new);
-	}
-
-	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return Bukkit.getPluginManager().isPluginEnabled(name);
+	public static @NotNull ChatUser console() {
+		return CONSOLE;
 	}
 
 }

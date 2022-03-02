@@ -21,37 +21,77 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.spigot.managers;
+package dev.hypera.chameleon.platforms.minestom.platform.objects;
 
-import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.platforms.spigot.platform.objects.SpigotPlugin;
+import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import javax.management.MXBean;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * Spigot plugin manager
- */
-public final class SpigotPluginManager extends PluginManager {
+public class MinestomPlugin implements PlatformPlugin {
 
-	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
+	private final @NotNull Extension extension;
+
+	public MinestomPlugin(@NotNull Extension extension) {
+		this.extension = extension;
 	}
 
 	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(SpigotPlugin::new);
+	public @NotNull String getName() {
+		return extension.getOrigin().getName();
 	}
 
 	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return Bukkit.getPluginManager().isPluginEnabled(name);
+	public @NotNull String getVersion() {
+		return extension.getOrigin().getVersion();
+	}
+
+	@Override
+	public @Nullable String getDescription() {
+		return null;
+	}
+
+	@Override
+	public @NotNull Class<?> getMainClass() {
+		return extension.getClass();
+	}
+
+	@Override
+	public @NotNull List<String> getAuthors() {
+		return Arrays.asList(extension.getOrigin().getAuthors());
+	}
+
+	@Override
+	public @NotNull Set<String> getDependencies() {
+		return new HashSet<>(Arrays.asList(extension.getOrigin().getDependencies()));
+	}
+
+	@Override
+	public @NotNull Set<String> getSoftDependencies() {
+		return Collections.emptySet();
+	}
+
+	@Override
+	public @NotNull Path getDataFolder() {
+		return extension.getDataDirectory();
+	}
+
+	@Override
+	public void enable() {
+
+	}
+
+	@Override
+	public void disable() {
+
 	}
 
 }

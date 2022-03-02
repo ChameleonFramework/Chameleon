@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -144,6 +145,11 @@ public abstract class Command {
 
 	public final void setConditions(@NotNull Condition... conditions) {
 		this.conditions = Arrays.asList(conditions);
+	}
+
+	@Internal
+	public @NotNull Set<SubCommand> getSubCommands() {
+		return subCommands;
 	}
 
 }

@@ -21,37 +21,27 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.spigot.managers;
+package dev.hypera.chameleon.platforms.minestom.command;
 
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.platforms.spigot.platform.objects.SpigotPlugin;
+import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.commands.context.impl.ContextImpl;
+import dev.hypera.chameleon.platforms.minestom.users.MinestomUsers;
 import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Spigot plugin manager
- */
-public final class SpigotPluginManager extends PluginManager {
+public class MinestomCommand extends net.minestom.server.command.builder.Command {
 
-	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
-	}
 
-	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(SpigotPlugin::new);
-	}
+	public MinestomCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
+		super(command.getName(), command.getAliases().toArray(new String[0]));
 
-	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return Bukkit.getPluginManager().isPluginEnabled(name);
+		setDefaultExecutor((sender, context) -> {
+			String[] args = context.getInput().replace(context.getCommandName(), "").trim().split(" ");
+			if (args.length < 1 || command.executeSubCommand(new ContextImpl(MinestomUsers.wrap(sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
+				command.executeCommand(new ContextImpl(MinestomUsers.wrap(sender), chameleon, args));
+			}
+		});
 	}
 
 }

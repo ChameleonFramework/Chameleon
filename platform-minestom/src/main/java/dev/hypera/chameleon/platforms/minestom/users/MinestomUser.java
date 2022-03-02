@@ -21,37 +21,64 @@
  *  SOFTWARE.
  */
 
-package dev.hypera.chameleon.platforms.spigot.managers;
+package dev.hypera.chameleon.platforms.minestom.users;
 
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.platforms.spigot.platform.objects.SpigotPlugin;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
+import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
+import dev.hypera.chameleon.core.platform.server.GameMode;
+import dev.hypera.chameleon.core.users.platforms.ServerUser;
+import java.util.UUID;
+import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Spigot plugin manager
- */
-public final class SpigotPluginManager extends PluginManager {
+public class MinestomUser extends AbstractReflectedAudience implements ServerUser {
+
+	private final @NotNull Player player;
+
+	public MinestomUser(@NotNull Player player) {
+		super(player);
+		this.player = player;
+	}
+
 
 	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
+	public @NotNull String getName() {
+		return player.getUsername();
 	}
 
 	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(SpigotPlugin::new);
+	public @NotNull UUID getUniqueId() {
+		return player.getUuid();
 	}
 
 	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return Bukkit.getPluginManager().isPluginEnabled(name);
+	public int getPing() {
+		return player.getLatency();
+	}
+
+	@Override
+	public void chat(@NotNull String message) {
+		player.chat(message);
+	}
+
+	@Override
+	public void sendData(@NotNull String channel, byte[] data) {
+		player.sendPluginMessage(channel, data);
+	}
+
+	@Override
+	public boolean hasPermission(@NotNull String permission) {
+		return player.hasPermission(permission);
+	}
+
+
+	@Override
+	public @NotNull GameMode getGameMode() {
+		return GameMode.valueOf(player.getGameMode().name());
+	}
+
+	@Override
+	public void setGameMode(@NotNull GameMode gameMode) {
+		player.setGameMode(net.minestom.server.entity.GameMode.valueOf(gameMode.name()));
 	}
 
 }
