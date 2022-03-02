@@ -17,17 +17,17 @@ Chameleon is a framework created to aid in the creation of cross-platform Minecr
 
 
 ### Supported Platforms
-Chameleon plans to support every platform in this list. If you have ideas for other platforms that we could support, please suggest them on our [Official Feedback Site][Feedback].
-> Note: This branch is being used to rewrite Chameleon and does not support all the platforms master supports yet.
+Chameleon plans to support every platform in this list. If you have ideas for other platforms that we could support, please suggest them in our [Official Discord Server][Discord].
  - [x] [BungeeCord]
  - [x] [Spigot]
  - [x] [Velocity]
- - [ ] [Minestom]
+ - [x] [Minestom]
  - [ ] [Sponge]
+ - [ ] [Nukkit]
 
 ### How do I use Chameleon?
 As this is hard to explain, we have created an [Example Project][Example]. In short, you have a common module with non-platform-specific code (this would only be Chameleon code), then you have a module for each platform you would like to support.  
-You can also check out our [Development Roadmap][Roadmap] or various examples of [BungeeCord support][BungeeCord-project], [Spigot support][Spigot-project], [Velocity support][Velocity-project] and [Minestom support][Minestom-project] for reference.
+You can also check out our [Development Roadmap][Roadmap] or various examples of [BungeeCord support][platform-bungeecord], [Spigot support][platform-spigot], [Velocity support][platform-velocity] and [Minestom support][platform-minestom] for reference.
 
 ### Project Structure
  * **Core** - Most of Chameleon's non-platform-specific code belongs here.
@@ -35,6 +35,7 @@ You can also check out our [Development Roadmap][Roadmap] or various examples of
    * *Configuration* - YAML and JSON configuration file loaders. 
  * **Platforms** - Any platform-specific code belongs inside here.
    * *BungeeCord* - Any code that interacts with BungeeCord belongs here.
+   * *Minestom* - Any code that interacts with Minestom belongs here.
    * *Spigot* - Any code that interacts with Spigot belongs here.
    * *Velocity* - Any code that interacts with Velocity belongs here.
 
@@ -51,11 +52,12 @@ The contents of this repository is licensed under the [MIT License](LICENSE).
 [Velocity]: https://velocitypowered.com/
 [Minestom]: https://www.minestom.net/
 [Sponge]: https://www.spongepowered.org/
-[Feedback]: https://feedback.hypera.dev/
+[Nukkit]: https://github.com/CloudburstMC/Nukkit
 [Example]: https://github.com/ChameleonFramework/Example
 [Roadmap]: DEVELOPMENT.md
-[BungeeCord-project]: platform-bungeecord/
-[Spigot-project]: platform-spigot/
-[Velocity-project]: platform-velocity/
-[Minestom-project]: platform-minestom/
+[Discord]: https://discord.hypera.dev/
+[platform-bungeecord]: platform-bungeecord/
+[platform-spigot]: platform-spigot/
+[platform-velocity]: platform-velocity/
+[platform-minestom]: platform-minestom/
 [CONTRIBUTING]: CONTRIBUTING.md

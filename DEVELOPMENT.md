@@ -7,13 +7,13 @@
 
 # Development Progress
 
-|            Platform             | BungeeCord | Spigot | Velocity | Minestom | Sponge |
-|:-------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|
-|       [Logging](#Logging)       |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |
-|      [Commands](#Commands)      |     ✓      |   ✓    |    ✓     |          |        |
-|        [Events](#Events)        |     ✓      |   ✓    |    ✓     |          |        |
-|         [Users](#Users)         |     ✓      |  WIP   |    ✓     |          |        |
-| [Configuration](#Configuration) |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |
+|            Platform             | BungeeCord | Spigot | Velocity | Minestom | Sponge | Nukkit |
+|:-------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|:------:|
+|       [Logging](#Logging)       |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |   ✓    |
+|      [Commands](#Commands)      |     ✓      |   ✓    |    ✓     |    ✓     |        |        |
+|        [Events](#Events)        |     ✓      |   ✓    |    ✓     |    ✓     |        |        |
+|         [Users](#Users)         |     ✓      |  WIP   |    ✓     |    ✓     |        |        |
+| [Configuration](#Configuration) |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |   ✓    |
 
 ### Extra Information
 
@@ -23,8 +23,9 @@ All examples below are taken from [the example Chameleon project](https://github
  - [x] BungeeCord
  - [x] Spigot
  - [x] Velocity
- - [ ] Minestom
+ - [x] Minestom
  - [ ] Sponge
+ - [ ] Nukkit
 
 ## Logging
  - [x] Info
@@ -35,7 +36,7 @@ All examples below are taken from [the example Chameleon project](https://github
 **ChameleonProject.java**
 ```java
 @Override
-public void onEnable(){
+public void onEnable() {
         // ...
         chameleon.getLogger().info("Hello %s!", "world");
         // ...
@@ -84,7 +85,7 @@ public class ExampleCommand extends Command {
 **ChameleonProject.java**
 ```java
 @Override
-public void onEnable(){
+public void onEnable() {
 	// ...
     chameleon.getCommandManager().register(new ExampleCommand());
     // ...
@@ -113,7 +114,7 @@ public class ExampleListener implements ChameleonListener {
 **ChameleonProject.java**
 ```java
 @Override
-public void onEnable(){
+public void onEnable() {
 	// ...
 	chameleon.getCommandManager().register(new ExampleCommand());
 	chameleon.getEventManager().registerListener(UserDisconnectEvent.class, event -> chameleon.getLogger().info("%s left the server!", event.getUser().getName()));
@@ -126,7 +127,7 @@ public void onEnable(){
  - [x] ChatUser
  - [x] User
  - [x] ProxyUser
- - [ ] ServerUser
+ - [ ] ServerUser (WIP)
 
 ## Configuration
 
@@ -152,7 +153,7 @@ private static Configuration yamlConfig;
 private static Configuration jsonTest;
 
 @Override
-public void onEnable(){
+public void onEnable() {
         // ...
         yamlConfig = new YamlConfiguration(chameleon.getDataFolder(), "config.yml", true);
         jsonTest = new JsonConfiguration(chameleon.getDataFolder(), "test.json", true);
