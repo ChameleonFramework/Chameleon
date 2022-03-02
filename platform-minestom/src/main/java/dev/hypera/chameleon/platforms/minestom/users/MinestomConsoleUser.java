@@ -28,6 +28,9 @@ import dev.hypera.chameleon.core.users.ChatUser;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom console user
+ */
 public class MinestomConsoleUser extends AbstractReflectedAudience implements ChatUser {
 
 	public MinestomConsoleUser() {

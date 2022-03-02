@@ -24,12 +24,14 @@
 package dev.hypera.chameleon.platforms.minestom.managers;
 
 import dev.hypera.chameleon.core.managers.Scheduler;
-import dev.hypera.chameleon.platforms.minestom.MinestomChameleon;
 import java.util.concurrent.TimeUnit;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.timer.ExecutionType;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom scheduler
+ */
 public final class MinestomScheduler extends Scheduler {
 
 	@Override

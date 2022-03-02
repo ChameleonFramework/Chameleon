@@ -43,6 +43,9 @@ import java.nio.file.Path;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom Chameleon
+ */
 public final class MinestomChameleon extends Chameleon {
 
 	private final @NotNull Extension extension;

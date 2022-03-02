@@ -30,8 +30,10 @@ import dev.hypera.chameleon.platforms.minestom.users.MinestomUsers;
 import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom command
+ */
 public class MinestomCommand extends net.minestom.server.command.builder.Command {
-
 
 	public MinestomCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
 		super(command.getName(), command.getAliases().toArray(new String[0]));

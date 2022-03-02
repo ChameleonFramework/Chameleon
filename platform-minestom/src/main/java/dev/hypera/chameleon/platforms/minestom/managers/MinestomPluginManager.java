@@ -32,6 +32,9 @@ import java.util.stream.Collectors;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom plugin manager
+ */
 public final class MinestomPluginManager extends PluginManager {
 
 	@Override

@@ -28,6 +28,9 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom user utils
+ */
 public final class MinestomUsers {
 
 	private static final @NotNull MinestomConsoleUser CONSOLE = new MinestomConsoleUser();

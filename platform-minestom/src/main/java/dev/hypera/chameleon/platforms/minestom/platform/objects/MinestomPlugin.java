@@ -30,12 +30,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.management.MXBean;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Minestom plugin implementation
+ */
 public class MinestomPlugin implements PlatformPlugin {
 
 	private final @NotNull Extension extension;

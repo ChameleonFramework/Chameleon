@@ -35,6 +35,9 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom user manager
+ */
 public final class MinestomUserManager extends UserManager {
 
 	@Override

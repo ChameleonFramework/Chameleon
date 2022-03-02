@@ -37,6 +37,9 @@ import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom listener
+ */
 public class MinestomListener {
 
 	public MinestomListener(@NotNull Chameleon chameleon) {

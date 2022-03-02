@@ -30,6 +30,9 @@ import java.util.UUID;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom user
+ */
 public class MinestomUser extends AbstractReflectedAudience implements ServerUser {
 
 	private final @NotNull Player player;

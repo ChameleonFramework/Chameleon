@@ -30,6 +30,9 @@ import dev.hypera.chameleon.platforms.minestom.command.MinestomCommand;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom command manager
+ */
 public final class MinestomCommandManager extends CommandManager {
 
 	private final @NotNull Chameleon chameleon;

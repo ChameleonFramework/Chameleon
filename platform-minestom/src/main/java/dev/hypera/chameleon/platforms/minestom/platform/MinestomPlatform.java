@@ -27,6 +27,9 @@ import dev.hypera.chameleon.core.platform.server.ServerPlatform;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom platform
+ */
 public final class MinestomPlatform extends ServerPlatform {
 
 	@Override

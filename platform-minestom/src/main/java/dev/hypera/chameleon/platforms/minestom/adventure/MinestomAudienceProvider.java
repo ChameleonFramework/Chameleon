@@ -36,6 +36,9 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Minestom audience provider implementation
+ */
 public class MinestomAudienceProvider implements ChameleonAudienceProvider {
 
 	@Override
