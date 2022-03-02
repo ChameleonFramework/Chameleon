@@ -12,7 +12,7 @@
 |       [Logging](#Logging)       |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |   ✓    |
 |      [Commands](#Commands)      |     ✓      |   ✓    |    ✓     |    ✓     |        |        |
 |        [Events](#Events)        |     ✓      |   ✓    |    ✓     |    ✓     |        |        |
-|         [Users](#Users)         |     ✓      |  WIP   |    ✓     |    ✓     |        |        |
+|         [Users](#Users)         |     ✓      |  WIP   |    ✓     |   WIP    |        |        |
 | [Configuration](#Configuration) |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |   ✓    |
 
 ### Extra Information
