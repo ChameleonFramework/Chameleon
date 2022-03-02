@@ -26,7 +26,6 @@ package dev.hypera.chameleon.core.platform;
 import dev.hypera.chameleon.core.annotations.PlatformSpecific;
 import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
 import dev.hypera.chameleon.core.platform.server.ServerPlatform;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import org.jetbrains.annotations.NotNull;
 
 /**

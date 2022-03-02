@@ -24,8 +24,8 @@
 package dev.hypera.chameleon.platforms.bungeecord.users;
 
 import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.core.adventure.AbstractAudience;
+import dev.hypera.chameleon.core.users.ChatUser;
 import net.md_5.bungee.api.ProxyServer;
 import org.jetbrains.annotations.NotNull;
 
