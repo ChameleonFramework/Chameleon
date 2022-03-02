@@ -141,8 +141,8 @@ public void onEnable() {
 
 ```xml
 <dependency>
-  <groupId>dev.hypera.chameleon.features</groupId>
-  <artifactId>Configuration</artifactId>
+  <groupId>dev.hypera.chameleon</groupId>
+  <artifactId>feature-configuration</artifactId>
   <version>VERSION</version>
 </dependency>
 ```
