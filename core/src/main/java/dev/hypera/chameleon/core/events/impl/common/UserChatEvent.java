@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Dispatched when a user sends a chat message
  */
-public class UserChatEvent implements ChameleonEvent {
+public class UserChatEvent implements UserEvent {
 
 	private final @NotNull User user;
 	private final @NotNull String message;
