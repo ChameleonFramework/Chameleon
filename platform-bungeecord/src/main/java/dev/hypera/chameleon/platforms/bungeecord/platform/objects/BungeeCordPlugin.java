@@ -95,6 +95,7 @@ public class BungeeCordPlugin implements PlatformPlugin {
 	public void disable() {
 		ProxyServer.getInstance().getPluginManager().unregisterCommands(plugin);
 		ProxyServer.getInstance().getPluginManager().unregisterListeners(plugin);
+		plugin.onDisable();
 	}
 
 }
