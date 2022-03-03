@@ -88,12 +88,12 @@ public class VelocityPlugin implements PlatformPlugin {
 
 	@Override
 	public void enable() {
-
+		throw new UnsupportedOperationException("Velocity plugins cannot be enabled");
 	}
 
 	@Override
 	public void disable() {
-
+		throw new UnsupportedOperationException("Velocity plugins cannot be disabled");
 	}
 
 }
