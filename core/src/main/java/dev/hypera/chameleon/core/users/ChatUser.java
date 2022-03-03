@@ -25,7 +25,7 @@ package dev.hypera.chameleon.core.users;
 
 import dev.hypera.chameleon.core.annotations.PlatformSpecific;
 import dev.hypera.chameleon.core.platform.Platform.Type;
-import dev.hypera.chameleon.core.users.permissions.IPermissionHolder;
+import dev.hypera.chameleon.core.users.permissions.PermissionHolder;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
 import net.kyori.adventure.audience.Audience;
@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * User, can be a player or console
  */
-public interface ChatUser extends Audience, IPermissionHolder {
+public interface ChatUser extends Audience, PermissionHolder {
 
 	@NotNull String getName();
 

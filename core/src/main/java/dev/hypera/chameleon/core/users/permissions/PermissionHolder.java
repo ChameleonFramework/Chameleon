@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Permission holder
  */
-public interface IPermissionHolder {
+public interface PermissionHolder {
 
 	boolean hasPermission(@NotNull String permission);
 
