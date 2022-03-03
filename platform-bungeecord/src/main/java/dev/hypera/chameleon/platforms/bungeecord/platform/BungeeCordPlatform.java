@@ -33,12 +33,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BungeeCordPlatform extends ProxyPlatform {
 
-
-	public BungeeCordPlatform(@NotNull BungeeCordChameleon chameleon) {
-
-	}
-
-
 	@Override
 	public @NotNull String getAPIName() {
 		return "BungeeCord";
@@ -58,6 +52,5 @@ public final class BungeeCordPlatform extends ProxyPlatform {
 	public @NotNull Type getType() {
 		return Type.PROXY;
 	}
-
 
 }

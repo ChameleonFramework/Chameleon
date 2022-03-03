@@ -51,7 +51,7 @@ public final class BungeeCordChameleon extends Chameleon {
 
 	private final @NotNull Plugin plugin;
 	private final @NotNull ChameleonAudienceProvider audienceProvider;
-	private final @NotNull BungeeCordPlatform platform = new BungeeCordPlatform(this);
+	private final @NotNull BungeeCordPlatform platform = new BungeeCordPlatform();
 	private final @NotNull BungeeCordCommandManager commandManager = new BungeeCordCommandManager(this);
 	private final @NotNull BungeeCordPluginManager pluginManager = new BungeeCordPluginManager();
 	private final @NotNull BungeeCordUserManager userManager = new BungeeCordUserManager(this);
