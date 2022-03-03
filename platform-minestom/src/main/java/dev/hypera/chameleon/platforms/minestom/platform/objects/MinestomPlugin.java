@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -87,12 +88,12 @@ public class MinestomPlugin implements PlatformPlugin {
 
 	@Override
 	public void enable() {
-
+		throw new UnsupportedOperationException("Minestom extensions cannot be enabled");
 	}
 
 	@Override
 	public void disable() {
-
+		throw new UnsupportedOperationException("Minestom extensions cannot be disabled");
 	}
 
 }
