@@ -28,6 +28,7 @@ import dev.hypera.chameleon.core.platform.server.GameMode;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
 import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
 import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,6 +69,10 @@ public class SpigotUser extends AbstractAudience implements ServerUser {
 
 	@Override
 	public void sendData(@NotNull String channel, byte[] data) {
+		if (!Bukkit.getMessenger().isOutgoingChannelRegistered(chameleon.getSpigotPlugin(), channel)) {
+			Bukkit.getMessenger().registerOutgoingPluginChannel(chameleon.getSpigotPlugin(), channel);
+		}
+
 		player.sendPluginMessage(chameleon.getSpigotPlugin(), channel, data);
 	}
 
