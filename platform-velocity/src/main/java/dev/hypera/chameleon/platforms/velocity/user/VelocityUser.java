@@ -86,13 +86,14 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
 
 	@Override
 	public void connect(@NotNull Server server) {
-		player.createConnectionRequest(((VelocityServer) server).getVelocity());
+		player.createConnectionRequest(((VelocityServer) server).getVelocity()).fireAndForget();
 	}
 
 	@Override
 	public void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback) {
-		player.createConnectionRequest(((VelocityServer) server).getVelocity());
-		callback.accept(true, null);
+		player.createConnectionRequest(((VelocityServer) server).getVelocity()).connect().whenComplete((result, ex) -> {
+			callback.accept(result.isSuccessful(), ex);
+		});
 	}
 
 }
