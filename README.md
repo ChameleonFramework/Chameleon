@@ -13,7 +13,7 @@
 </div>
 
 ### What is Chameleon?
-Chameleon is a framework created to aid in the creation of cross-platform Minecraft platforms.
+Chameleon is a framework created to aid in the creation of cross-platform Minecraft plugins.
 
 
 ### Supported Platforms
