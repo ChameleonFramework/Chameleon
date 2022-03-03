@@ -33,11 +33,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class SpigotPlatform extends ServerPlatform {
 
-	public SpigotPlatform(@NotNull SpigotChameleon chameleon) {
-
-	}
-
-
 	@Override
 	public @NotNull String getAPIName() {
 		return "Spigot";

@@ -51,7 +51,7 @@ public final class SpigotChameleon extends Chameleon {
 
 	private final @NotNull JavaPlugin plugin;
 	private final @NotNull ChameleonAudienceProvider audienceProvider;
-	private final @NotNull SpigotPlatform platform = new SpigotPlatform(this);
+	private final @NotNull SpigotPlatform platform = new SpigotPlatform();
 	private final @NotNull SpigotCommandManager commandManager = new SpigotCommandManager(this);
 	private final @NotNull SpigotPluginManager pluginManager = new SpigotPluginManager();
 	private final @NotNull SpigotUserManager userManager = new SpigotUserManager(this);
