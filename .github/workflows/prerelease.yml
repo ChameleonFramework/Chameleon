@@ -39,3 +39,4 @@ jobs:
             platform-bungeecord/target/*-SNAPSHOT.jar
             platform-spigot/target/*-SNAPSHOT.jar
             platform-velocity/target/*-SNAPSHOT.jar
+            platform-minestom/target/*-SNAPSHOT.jar
