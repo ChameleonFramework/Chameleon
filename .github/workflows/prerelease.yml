@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
@@ -35,8 +35,7 @@ jobs:
           title: "Development Build"
           files: |
             LICENSE.md
-            Core/target/*-SNAPSHOT.jar
-            Platforms/BungeeCord/target/*-SNAPSHOT.jar
-            Platforms/Minestom/target/*-SNAPSHOT.jar
-            Platforms/Spigot/target/*-SNAPSHOT.jar
-            Platforms/Velocity/target/*-SNAPSHOT.jar
+            core/target/*-SNAPSHOT.jar
+            platform-bungeecord/target/*-SNAPSHOT.jar
+            platform-spigot/target/*-SNAPSHOT.jar
+            platform-velocity/target/*-SNAPSHOT.jar

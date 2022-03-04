@@ -7,7 +7,7 @@
 
 
 ### Welcome
-Welcome to [Chameleon](https://github.com/HyperaOfficial/Chameleon), first off, thank you for taking the time to consider contributing.  
+Welcome to [Chameleon](https://github.com/ChameleonFramework/Chameleon), first off, thank you for taking the time to consider contributing.  
 Please be sure to read this repository's [Code of Conduct] before contributing.
 
 
@@ -17,8 +17,7 @@ Please don't create an issue to ask a question, instead please contact us on [Di
 
 ### Getting started
 **Note**: All code contributions to this repository must be under the [MIT License].  
-If you contribute more than 10% of a file, please add your name and email address to the copyright notice, in the format:  
-`Copyright (c) 2021 My Name <myname@email.com>`
+If you contribute a significant amount to the project, please add your name and email address to the [AUTHORS] file.
 
 
 *Working on your first Pull Request?*  
@@ -32,12 +31,12 @@ If you wish to contribute code to this repository, please:
 
 
 ### Reporting Bugs
-Bug reports should be submitted to the [Official Feedback Site].  
+Bug reports should be submitted using GitHub Issues.  
 **Any security related issues should be directly submitted to [security@hypera.dev](mailto:security@hypera.dev).**
 
 
 ### Feature Requests
-Feature requests should be submitted to the [Official Feedback Site].
+Feature requests should be submitted using GitHub Issues or using `/suggest` in our [Discord] server.
 
 ### Code review
 All contributions, including contributions by the Hypera developers, require review.  
@@ -54,6 +53,6 @@ You can communicate with us on [Discord].
 [Discord]: https://discord.hypera.dev
 [Code of Conduct]: CODE_OF_CONDUCT.md
 [MIT License]: LICENSE
-[Pull Request]: https://github.com/HyperaOfficial/Chameleon/compare
-[Official Feedback Site]: https://feedback.hypera.dev/
+[AUTHORS]: AUTHORS
+[Pull Request]: https://github.com/ChameleonFramework/Chameleon/compare
 [Discord]: https://discord.hypera.dev/
