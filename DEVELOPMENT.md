@@ -5,137 +5,158 @@
 
 -----------
 
-
-
 # Development Progress
-| Platform                                | BungeeCord | Spigot | Velocity | Minestom | Sponge |
-|:---------------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|
-| [Commands](#Commands)                   | ✓          | ✓      | ✓        | ✓        |        |
-| [Events](#Events)                       | ✓          | ✓      | ✓        | ✓        |        |
-| [Users](#Users)                         |            |        |          |          |        |
-| [Configuration](#Configuration)         | ✓          | ✓      | ✓        | ✓        |        |
+
+|            Platform             | BungeeCord | Spigot | Velocity | Minestom | Sponge | Nukkit |
+|:-------------------------------:|:----------:|:------:|:--------:|:--------:|:------:|:------:|
+|       [Logging](#Logging)       |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |   ✓    |
+|      [Commands](#Commands)      |     ✓      |   ✓    |    ✓     |    ✓     |        |        |
+|        [Events](#Events)        |     ✓      |   ✓    |    ✓     |    ✓     |        |        |
+|         [Users](#Users)         |     ✓      |  WIP   |    ✓     |   WIP    |        |        |
+| [Configuration](#Configuration) |     ✓      |   ✓    |    ✓     |    ✓     |   ✓    |   ✓    |
 
 ### Extra Information
-All examples below are taken from [the example Chameleon project](https://github.com/HyperaOfficial/ChameleonProject).
+
+All examples below are taken from [the example Chameleon project](https://github.com/ChameleonFramework/Example).
+
+## Platforms
+ - [x] BungeeCord
+ - [x] Spigot
+ - [x] Velocity
+ - [x] Minestom
+ - [ ] Sponge
+ - [ ] Nukkit
+
+## Logging
+ - [x] Info
+ - [x] Debug
+ - [x] Warning
+ - [x] Error
+
+**ChameleonProject.java**
+```java
+@Override
+public void onEnable() {
+        // ...
+        chameleon.getLogger().info("Hello %s!", "world");
+        // ...
+}
+```
 
 ## Commands
-* [x] Name
-* [x] Aliases
-* [x] Executing
-* [x] Tab Complete
+ - [x] Name
+ - [x] Aliases
+ - [x] Executing
+ - [x] Tab Complete
 
-#### ExampleCommand.java
+**ExampleCommand.java**
 ```java
-package org.example.chameleonproject.commands;
-
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.core.objects.Platform;
-import dev.hypera.chameleon.core.users.ChatUser;
-import java.util.Collections;
-import java.util.List;
-import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
-
+@CommandHandler("example|ex")
 public class ExampleCommand extends Command {
 
-	@Override
-	public void execute(ChatUser chatUser, String[] args) {
-		chatUser.sendMessage(Component.text("You ran the example command!"));
+	public ExampleCommand() {
+		setPermission(Permission.of("example.command", Component.text("No permission.", NamedTextColor.RED)));
+		setConditions(Condition.of(c -> c.getSender() instanceof User, Component.text("This command can only be used in-game.", NamedTextColor.RED)));
+		setPlatform(Platform.ALL);
 	}
 
 	@Override
-	public List<String> tabComplete(ChatUser chatUser, String[] args) {
+	public void execute(@NotNull Context context) {
+		context.getSender().sendMessage(Component.text("Hello, world!"));
+	}
+
+	@SubCommandHandler("sub|test")
+	public void sub(@NotNull Context context) {
+		if (context.getSender().hasPermission("example.test")) {
+			context.getSender().sendMessage(Component.text("Hello, " + (context.getArgs().length > 0 ? context.getArgs()[0] : context.getSender().getName()) + "!"));
+		} else {
+			context.getSender().sendMessage(Component.text("No permission.", NamedTextColor.RED));
+		}
+	}
+
+	@Override
+	public @NotNull List<String> tabComplete(@NotNull Context context) {
 		return Collections.singletonList("tabcomplete");
-	}
-
-	@Override
-	public @NotNull String getName() {
-		return "example";
-	}
-
-	@Override
-	public @NotNull List<String> getAliases() {
-		return Collections.singletonList("ex");
-	}
-
-	@Override
-	public @NotNull Platform getPlatform() {
-		return Platform.ALL;
 	}
 
 }
 ```
 
-#### ChameleonProject.java
+**ChameleonProject.java**
 ```java
 @Override
 public void onEnable() {
-    // ...
-    chameleon.registerCommand(new ExampleCommand());
+	// ...
+    chameleon.getCommandManager().register(new ExampleCommand());
     // ...
 }
 ```
 
 ## Events
+
 * [x] Event
 * [x] Listener
 * [x] Cross-platform events
 
-#### ExampleListener.java
+**ExampleListener.java**
 ```java
-package org.example.chameleonproject.events;
-
-import dev.hypera.chameleon.core.events.impl.common.UserJoinEvent;
-import dev.hypera.chameleon.core.events.listener.ChameleonListener;
-import dev.hypera.chameleon.core.events.listener.EventHandler;
-import net.kyori.adventure.text.Component;
-
 public class ExampleListener implements ChameleonListener {
 
 	@EventHandler
-	public void onJoin(UserJoinEvent event) {
-		event.getPlayer().sendMessage(Component.text("Welcome to my server!"));
+	public void onConnectEvent(@NotNull UserConnectEvent event) {
+		event.getUser().sendMessage(Component.text("Welcome to my server!", NamedTextColor.GREEN));
 	}
 
 }
 ```
 
-#### ChameleonProject.java
+
+**ChameleonProject.java**
 ```java
 @Override
 public void onEnable() {
-    // ...
-    chameleon.getEventDispatcher().registerListener(new ExampleListener(this));
-    // ...
+	// ...
+	chameleon.getCommandManager().register(new ExampleCommand());
+	chameleon.getEventManager().registerListener(UserDisconnectEvent.class, event -> chameleon.getLogger().info("%s left the server!", event.getUser().getName()));
+	// ...
 }
 ```
 
 ## Users
-* [x] ChatUser
-* [ ] User
-* [ ] ProxyUser
-* [ ] ServerUser
-* [x] AudienceWrapper
+
+ - [x] ChatUser
+ - [x] User
+ - [x] ProxyUser
+ - [ ] ServerUser (WIP)
 
 ## Configuration
-* [x] Data folders
-* [x] Config
-* [x] Yaml support
-* [x] Json support
-* [x] Copy default from resources
-* [ ] Setters
-* [ ] Saving
 
-#### ChameleonProject.java
+ - [x] Data folders
+ - [x] Config
+ - [x] YAML support
+ - [x] JSON support
+ - [x] Copy default from resources
+ - [ ] Setters
+ - [ ] Saving
+
+```xml
+<dependency>
+  <groupId>dev.hypera.chameleon</groupId>
+  <artifactId>feature-configuration</artifactId>
+  <version>VERSION</version>
+</dependency>
+```
+
+**ChameleonProject.java**
 ```java
 private static Configuration yamlConfig;
 private static Configuration jsonTest;
 
 @Override
 public void onEnable() {
-    // ...
-    yamlConfig = new YamlConfiguration(chameleon, "config.yml", true);
-    jsonTest = new JsonConfiguration(chameleon, "test.json", true);
-    // ...
+        // ...
+        yamlConfig = new YamlConfiguration(chameleon.getDataFolder(), "config.yml", true);
+        jsonTest = new JsonConfiguration(chameleon.getDataFolder(), "test.json", true);
+        // ...
 }
 ```
