@@ -1,0 +1,26 @@
+name: "Build"
+on: [push, pull_request]
+
+env:
+  JAVA_VERSION: 17
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "windows-latest", "macos-latest"]
+    runs-on: "${{ matrix.os }}"
+    steps:
+      - uses: "actions/checkout@v2"
+
+      - name: "Set up JDK ${{ env.JAVA_VERSION }}"
+        uses: "actions/setup-java@v2"
+        with:
+          java-version: "${{ env.RUNTIME_VERSION }}"
+          distribution: "adopt"
+
+      - name: "Gradle build"
+        uses: "gradle/gradle-build-action@v2"
+        with:
+          cache-read-only: "${{ github.ref != 'refs/heads/main' }}"
+          arguments: "build"

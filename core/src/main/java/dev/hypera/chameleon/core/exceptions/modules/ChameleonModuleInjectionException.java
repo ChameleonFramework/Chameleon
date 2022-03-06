@@ -20,7 +20,6 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-
 package dev.hypera.chameleon.core.exceptions.modules;
 
 import dev.hypera.chameleon.core.exceptions.ChameleonException;
@@ -29,6 +28,8 @@ import dev.hypera.chameleon.core.exceptions.ChameleonException;
  * Chameleon module injection exception
  */
 public class ChameleonModuleInjectionException extends ChameleonException {
+
+	private static final long serialVersionUID = -7069863802076540971L;
 
 	public ChameleonModuleInjectionException() {
 		super();

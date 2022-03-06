@@ -20,7 +20,6 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-
 package dev.hypera.chameleon.platforms.velocity.user;
 
 import com.velocitypowered.api.command.CommandSource;
