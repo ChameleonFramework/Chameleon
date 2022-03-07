@@ -89,6 +89,7 @@ fabric.properties
 
 !.idea/codeStyles
 !.idea/runConfigurations
+!.idea/copyright
 
 ### Java ###
 # Compiled class file
