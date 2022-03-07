@@ -58,11 +58,6 @@ public class AdventureConverter {
 	private static final @NotNull SoundStopMapper SOUND_STOP_CONVERTER = new SoundStopMapper();
 	private static final @NotNull BookMapper BOOK_CONVERTER = new BookMapper();
 
-	/**
-	 * Convert Key to platform adventure
-	 * @param key
-	 * @return
-	 */
 	public static @NotNull Object convertKey(@NotNull Key key) {
 		return KEY_CONVERTER.map(key);
 	}
