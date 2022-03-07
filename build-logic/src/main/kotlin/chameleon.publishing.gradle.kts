@@ -20,15 +20,13 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-import net.kyori.indra.IndraExtension
-import org.gradle.kotlin.dsl.configure
 
 plugins {
     id("net.kyori.indra")
     id("net.kyori.indra.publishing")
 }
 
-configure<IndraExtension> {
+indra {
 
     javaVersions {
         if (project.name == "platform-minestom") {
