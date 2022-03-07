@@ -22,9 +22,12 @@
  */
 pluginManagement {
     includeBuild("build-logic")
+    repositories {
+        gradlePluginPortal()
+    }
 }
 
-rootProject.name = "chameleon"
+rootProject.name = "chameleon-parent"
 
 include(
     "core",

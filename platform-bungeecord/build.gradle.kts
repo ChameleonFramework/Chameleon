@@ -20,18 +20,15 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
+import net.kyori.indra.repository.sonatypeSnapshots
+
 plugins {
     id("java-library")
     id("chameleon.api")
 }
 
 repositories {
-    maven(url = "https://oss.sonatype.org/content/repositories/snapshots/") {
-        name = "sonatype"
-        mavenContent {
-            snapshotsOnly()
-        }
-    }
+    sonatypeSnapshots()
 }
 
 dependencies {

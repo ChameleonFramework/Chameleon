@@ -31,6 +31,7 @@ indra {
     javaVersions {
         if (project.name == "platform-minestom") {
             target(17)
+            testWith(17)
         } else {
             target(8)
             testWith(8, 11, 17)
