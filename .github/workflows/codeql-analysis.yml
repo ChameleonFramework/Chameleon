@@ -57,15 +57,11 @@ jobs:
         distribution: 'adopt' # See 'Supported distributions' for available options
         java-version: '17'
 
-    - name: Cache Maven Dependencies
-      uses: actions/cache@v2.1.7
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
       with:
-        path: ~/.m2
-        key: ubuntu-latest-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ubuntu-latest-m2
-
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+        gradle-version: "release-nightly"
+        arguments: build
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1

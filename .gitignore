@@ -4,6 +4,6 @@
 *.ipr
 *.iws
 
-# Maven
-target/
-dependency-reduced-pom.xml
+# Gradle
+.gradle
+build/

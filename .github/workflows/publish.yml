@@ -1,0 +1,50 @@
+name: "Publish"
+on:
+  push:
+    branches: ["main", "development"]
+
+env:
+  JAVA_VERSION: 17
+
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v3"
+
+      - name: "Set up JDK ${{ env.JAVA_VERSION }}"
+        uses: "actions/setup-java@v2"
+        with:
+          java-version: "${{ env.JAVA_VERSION }}"
+          distribution: "adopt"
+
+      - name: "Gradle build"
+        uses: "gradle/gradle-build-action@v2"
+        with:
+          cache-read-only: "${{ github.ref != 'refs/heads/main' }}"
+          gradle-version: "release-nightly"
+          arguments: "build"
+
+      - name: "Determine version"
+        run: |
+          echo "VERSION=$(./gradlew properties | awk '/^version:/ { print $2; }')" >> $GITHUB_ENV
+
+      - name: "Create release"
+        if: "${{ endsWith(env.VERSION, 'SNAPSHOT') || startsWith(github.ref, 'ref/heads/main/') }}"
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ endsWith(env.VERSION, 'SNAPSHOT') && 'latest' || 'v' + env.VERSION }}"
+          prerelease: "${{ endsWith(env.VERSION, 'SNAPSHOT') }}"
+          title: "${{ endsWith(env.VERSION, 'SNAPSHOT') && 'Development Build' || 'Chameleon v' + env.VERSION }}"
+          files: |
+            **/build/*.jar
+
+      - name: "Publish"
+        if: "${{ endsWith(env.VERSION, 'SNAPSHOT') || startsWith(github.ref, 'ref/heads/main/') }}"
+        run: "./gradlew publish"
+        env:
+          ORG_GRADLE_PROJECT_hyperaReleasesUsername: "${{ secrets.HYPERA_RELEASES_USERNAME }}"
+          ORG_GRADLE_PROJECT_hyperaReleasesPassword: "${{ secrets.HYPERA_RELEASES_PASSWORD }}"
+          ORG_GRADLE_PROJECT_hyperaSnapshotsUsername: "${{ secrets.HYPERA_SNAPSHOTS_USERNAME }}"
+          ORG_GRADLE_PROJECT_hyperaSnapshotsPassword: "${{ secrets.HYPERA_SNAPSHOTS_PASSWORD }}"

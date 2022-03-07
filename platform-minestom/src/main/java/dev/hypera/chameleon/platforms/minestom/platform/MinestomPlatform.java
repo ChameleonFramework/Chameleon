@@ -20,7 +20,6 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-
 package dev.hypera.chameleon.platforms.minestom.platform;
 
 import dev.hypera.chameleon.core.platform.server.ServerPlatform;

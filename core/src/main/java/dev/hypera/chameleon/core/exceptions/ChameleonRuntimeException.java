@@ -20,13 +20,14 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-
 package dev.hypera.chameleon.core.exceptions;
 
 /**
  * Chameleon runtime exception
  */
 public class ChameleonRuntimeException extends RuntimeException {
+
+	private static final long serialVersionUID = -5120195040769782664L;
 
 	public ChameleonRuntimeException() {
 		super();
