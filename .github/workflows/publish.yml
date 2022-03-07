@@ -34,9 +34,9 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ endsWith(env.VERSION, 'SNAPSHOT') && 'latest' || 'v' + env.VERSION }}"
+          automatic_release_tag: "${{ endsWith(env.VERSION, 'SNAPSHOT') && 'latest' || format(`{0}{1}`, 'v', env.VERSION) }}"
           prerelease: "${{ endsWith(env.VERSION, 'SNAPSHOT') }}"
-          title: "${{ endsWith(env.VERSION, 'SNAPSHOT') && 'Development Build' || 'Chameleon v' + env.VERSION }}"
+          title: "${{ endsWith(env.VERSION, 'SNAPSHOT') && 'Development Build' || format(`{0}{1}`, 'Chameleon v', env.VERSION) }}"
           files: |
             **/build/*.jar
 
