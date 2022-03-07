@@ -26,7 +26,7 @@ plugins {
 }
 
 dependencies {
-    implementation("org.yaml:snakeyaml:1.29") {
+    implementation("org.yaml:snakeyaml:1.30") {
         exclude(group = "joda-time", module = "joda-time")
         exclude(group = "junit", module = "joda-time")
         exclude(group = "org.apache", module = "velocity")
