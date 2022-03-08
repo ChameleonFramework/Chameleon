@@ -22,14 +22,14 @@
  */
 package dev.hypera.chameleon.core.events.impl.common;
 
-import dev.hypera.chameleon.core.events.ChameleonEvent;
+import dev.hypera.chameleon.core.events.cancellable.AbstractCancellable;
 import dev.hypera.chameleon.core.users.User;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Dispatched when a user sends a chat message
  */
-public class UserChatEvent implements UserEvent {
+public class UserChatEvent extends AbstractCancellable implements UserEvent {
 
 	private final @NotNull User user;
 	private final @NotNull String message;

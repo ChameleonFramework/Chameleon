@@ -20,21 +20,49 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.managers;
+package dev.hypera.chameleon.core.scheduling;
 
-import dev.hypera.chameleon.core.scheduling.Task;
-import dev.hypera.chameleon.core.scheduling.TaskImpl;
+import java.time.Duration;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Scheduler
- */
-public abstract class Scheduler {
+public interface Schedule {
 
-	public final @NotNull Task.Builder createBuilder(@NotNull Runnable runnable) {
-		return new Task.Builder(this::schedule, runnable);
+	@NotNull Type getType();
+
+	static @NotNull Schedule none() {
+		return ScheduleImpl.NONE;
 	}
 
-	protected abstract void schedule(@NotNull TaskImpl task);
+	static @NotNull Schedule duration(@NotNull Duration duration) {
+		return new ScheduleImpl.DurationSchedule(duration);
+	}
+
+	static @NotNull Schedule tick(int tick) {
+		return new ScheduleImpl.TickSchedule(tick);
+	}
+
+	static @NotNull Schedule hours(long hours) {
+		return duration(Duration.ofHours(hours));
+	}
+
+	static @NotNull Schedule minutes(long minutes) {
+		return duration(Duration.ofMinutes(minutes));
+	}
+
+	static @NotNull Schedule seconds(long seconds) {
+		return duration(Duration.ofSeconds(seconds));
+	}
+
+	static @NotNull Schedule millis(long millis) {
+		return duration(Duration.ofMillis(millis));
+	}
+
+	enum Type {
+
+		DURATION,
+		TICK,
+		NONE
+
+	}
 
 }

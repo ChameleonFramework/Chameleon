@@ -55,7 +55,9 @@ public class SpigotListener implements Listener {
 
 	@EventHandler
 	public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
-		chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+		if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
+			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler

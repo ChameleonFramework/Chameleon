@@ -23,9 +23,14 @@
 package dev.hypera.chameleon.platforms.minestom.managers;
 
 import dev.hypera.chameleon.core.managers.Scheduler;
-import java.util.concurrent.TimeUnit;
+import dev.hypera.chameleon.core.scheduling.Schedule;
+import dev.hypera.chameleon.core.scheduling.Schedule.Type;
+import dev.hypera.chameleon.core.scheduling.ScheduleImpl.DurationSchedule;
+import dev.hypera.chameleon.core.scheduling.ScheduleImpl.TickSchedule;
+import dev.hypera.chameleon.core.scheduling.TaskImpl;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.timer.ExecutionType;
+import net.minestom.server.timer.TaskSchedule;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -34,30 +39,25 @@ import org.jetbrains.annotations.NotNull;
 public final class MinestomScheduler extends Scheduler {
 
 	@Override
-	public void schedule(@NotNull Runnable runnable) {
+	protected void schedule(@NotNull TaskImpl task) {
 		MinecraftServer.getSchedulerManager()
-				.buildTask(runnable)
-				.executionType(ExecutionType.ASYNC)
+				.buildTask(task.getRunnable())
+				.executionType(ExecutionType.valueOf(task.getType().name()))
+				.delay(convert(task.getDelay(), false))
+				.repeat(convert(task.getRepeat(), true))
 				.schedule();
 	}
 
-	@Override
-	public void schedule(@NotNull Runnable runnable, long delay, @NotNull TimeUnit unit) {
-		MinecraftServer.getSchedulerManager()
-				.buildTask(runnable)
-				.delay(delay, unit.toChronoUnit())
-				.executionType(ExecutionType.ASYNC)
-				.schedule();
-	}
-
-	@Override
-	public void scheduleRepeating(@NotNull Runnable runnable, long delay, long period, @NotNull TimeUnit unit) {
-		MinecraftServer.getSchedulerManager()
-				.buildTask(runnable)
-				.delay(delay, unit.toChronoUnit())
-				.repeat(period, unit.toChronoUnit())
-				.executionType(ExecutionType.ASYNC)
-				.schedule();
+	private @NotNull TaskSchedule convert(@NotNull Schedule schedule, boolean repeat) {
+		if (schedule.getType().equals(Type.NONE)) {
+			return repeat ? TaskSchedule.stop() : TaskSchedule.immediate();
+		} else if (schedule.getType().equals(Type.DURATION)) {
+			return TaskSchedule.duration(((DurationSchedule) schedule).getDuration());
+		} else if (schedule.getType().equals(Type.TICK)) {
+			return TaskSchedule.tick(((TickSchedule) schedule).getTicks());
+		} else {
+			throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
+		}
 	}
 
 }

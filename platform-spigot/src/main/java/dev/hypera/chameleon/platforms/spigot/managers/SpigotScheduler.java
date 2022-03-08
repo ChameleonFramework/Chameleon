@@ -23,8 +23,13 @@
 package dev.hypera.chameleon.platforms.spigot.managers;
 
 import dev.hypera.chameleon.core.managers.Scheduler;
+import dev.hypera.chameleon.core.scheduling.Schedule;
+import dev.hypera.chameleon.core.scheduling.Schedule.Type;
+import dev.hypera.chameleon.core.scheduling.ScheduleImpl.DurationSchedule;
+import dev.hypera.chameleon.core.scheduling.ScheduleImpl.TickSchedule;
+import dev.hypera.chameleon.core.scheduling.Task;
+import dev.hypera.chameleon.core.scheduling.TaskImpl;
 import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
-import java.util.concurrent.TimeUnit;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,18 +46,51 @@ public final class SpigotScheduler extends Scheduler {
 
 
 	@Override
-	public void schedule(@NotNull Runnable runnable) {
-		Bukkit.getScheduler().runTaskAsynchronously(chameleon.getSpigotPlugin(), runnable);
+	protected void schedule(@NotNull TaskImpl task) {
+		if (task.getRepeat().getType().equals(Type.NONE)) {
+			if (task.getDelay().getType().equals(Type.NONE)) {
+				if (task.getType().equals(Task.Type.ASYNC)) {
+					Bukkit.getScheduler().runTaskAsynchronously(chameleon.getSpigotPlugin(), task.getRunnable());
+				} else {
+					Bukkit.getScheduler().runTask(chameleon.getSpigotPlugin(), task.getRunnable());
+				}
+			} else {
+				if (task.getType().equals(Task.Type.ASYNC)) {
+					Bukkit.getScheduler().runTaskLaterAsynchronously(
+							chameleon.getSpigotPlugin(),
+							task.getRunnable(),
+							convert(task.getDelay())
+					);
+				} else {
+					Bukkit.getScheduler().runTaskLater(
+							chameleon.getSpigotPlugin(),
+							task.getRunnable(),
+							convert(task.getDelay())
+					);
+				}
+			}
+		} else {
+			Bukkit.getScheduler().scheduleSyncRepeatingTask(
+					chameleon.getSpigotPlugin(),
+					task.getType().equals(Task.Type.ASYNC) ?
+							() -> Bukkit.getScheduler().runTaskAsynchronously(chameleon.getSpigotPlugin(), task.getRunnable())
+							: task.getRunnable(),
+					convert(task.getDelay()),
+					convert(task.getRepeat())
+			);
+		}
 	}
 
-	@Override
-	public void schedule(@NotNull Runnable runnable, long delay, @NotNull TimeUnit unit) {
-		Bukkit.getScheduler().runTaskLaterAsynchronously(chameleon.getSpigotPlugin(), runnable, unit.toSeconds(delay) * 20);
-	}
-
-	@Override
-	public void scheduleRepeating(@NotNull Runnable runnable, long delay, long period, @NotNull TimeUnit unit) {
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(chameleon.getSpigotPlugin(), () -> schedule(runnable), unit.toSeconds(delay) * 20, unit.toSeconds(period) * 20);
+	private long convert(@NotNull Schedule schedule) {
+		if (schedule.getType().equals(Type.NONE)) {
+			return 0;
+		} else if (schedule.getType().equals(Type.DURATION)) {
+			return ((DurationSchedule) schedule).getDuration().toMillis() / 50;
+		} else if (schedule.getType().equals(Type.TICK)) {
+			return ((TickSchedule) schedule).getTicks();
+		} else {
+			throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
+		}
 	}
 
 }

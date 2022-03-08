@@ -32,7 +32,7 @@ import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.managers.UserManager;
 import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.platforms.velocity.adventure.VelocityAudienceProvider;
-import dev.hypera.chameleon.platforms.velocity.listeners.VelocityListener;
+import dev.hypera.chameleon.platforms.velocity.events.VelocityListener;
 import dev.hypera.chameleon.platforms.velocity.managers.VelocityCommandManager;
 import dev.hypera.chameleon.platforms.velocity.managers.VelocityPluginManager;
 import dev.hypera.chameleon.platforms.velocity.managers.VelocityScheduler;

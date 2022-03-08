@@ -5,7 +5,7 @@
 
 -----------
 <div align="center">
-   <img alt="GitHub license" src="https://img.shields.io/github/license/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge">
+   <img alt="GitHub license" src="https://img.shields.io/badge/License-MIT%20LICENSE-%2317aaaa?style=for-the-badge">
    <img alt="Libraries.io dependency status for GitHub repo" src="https://img.shields.io/librariesio/github/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge"><br />
    <img alt="GitHub code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/main?style=for-the-badge&color=%2317aaaa">
    <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge">
