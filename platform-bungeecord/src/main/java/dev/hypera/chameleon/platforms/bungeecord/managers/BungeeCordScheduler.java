@@ -23,6 +23,11 @@
 package dev.hypera.chameleon.platforms.bungeecord.managers;
 
 import dev.hypera.chameleon.core.managers.Scheduler;
+import dev.hypera.chameleon.core.scheduling.Schedule;
+import dev.hypera.chameleon.core.scheduling.Schedule.Type;
+import dev.hypera.chameleon.core.scheduling.ScheduleImpl.DurationSchedule;
+import dev.hypera.chameleon.core.scheduling.ScheduleImpl.TickSchedule;
+import dev.hypera.chameleon.core.scheduling.TaskImpl;
 import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
 import java.util.concurrent.TimeUnit;
 import net.md_5.bungee.api.ProxyServer;
@@ -41,18 +46,39 @@ public final class BungeeCordScheduler extends Scheduler {
 
 
 	@Override
-	public void schedule(@NotNull Runnable runnable) {
-		ProxyServer.getInstance().getScheduler().runAsync(chameleon.getBungeePlugin(), runnable);
+	protected void schedule(@NotNull TaskImpl task) {
+		if (task.getRepeat().getType().equals(Type.NONE)) {
+			if (task.getDelay().getType().equals(Type.NONE)) {
+				ProxyServer.getInstance().getScheduler().runAsync(chameleon.getBungeePlugin(), task.getRunnable());
+			} else {
+				ProxyServer.getInstance().getScheduler().schedule(
+						chameleon.getBungeePlugin(),
+						task.getRunnable(),
+						convert(task.getDelay()),
+						TimeUnit.MILLISECONDS
+				);
+			}
+		} else {
+			ProxyServer.getInstance().getScheduler().schedule(
+					chameleon.getBungeePlugin(),
+					task.getRunnable(),
+					convert(task.getDelay()),
+					convert(task.getRepeat()),
+					TimeUnit.MILLISECONDS
+			);
+		}
 	}
 
-	@Override
-	public void schedule(@NotNull Runnable runnable, long delay, @NotNull TimeUnit unit) {
-		ProxyServer.getInstance().getScheduler().schedule(chameleon.getBungeePlugin(), runnable, delay, unit);
-	}
-
-	@Override
-	public void scheduleRepeating(@NotNull Runnable runnable, long delay, long period, @NotNull TimeUnit unit) {
-		ProxyServer.getInstance().getScheduler().schedule(chameleon.getBungeePlugin(), runnable, delay, period, unit);
+	private long convert(@NotNull Schedule schedule) {
+		if (schedule.getType().equals(Type.NONE)) {
+			return 0;
+		} else if (schedule.getType().equals(Type.DURATION)) {
+			return ((DurationSchedule) schedule).getDuration().toMillis();
+		} else if (schedule.getType().equals(Type.TICK)) {
+			return (long) ((TickSchedule) schedule).getTicks() * 50;
+		} else {
+			throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
+		}
 	}
 
 }

@@ -20,21 +20,38 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.managers;
+package dev.hypera.chameleon.core.scheduling;
 
-import dev.hypera.chameleon.core.scheduling.Task;
-import dev.hypera.chameleon.core.scheduling.TaskImpl;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Scheduler
- */
-public abstract class Scheduler {
+public class TaskImpl implements Task {
 
-	public final @NotNull Task.Builder createBuilder() {
-		return new Task.Builder(this::schedule);
+	private final @NotNull Runnable runnable;
+	private final @NotNull Type type;
+	private final @NotNull Schedule delay;
+	private final @NotNull Schedule repeat;
+
+	TaskImpl(@NotNull Runnable runnable, @NotNull Type type, @NotNull Schedule delay, @NotNull Schedule repeat) {
+		this.runnable = runnable;
+		this.type = type;
+		this.delay = delay;
+		this.repeat = repeat;
 	}
 
-	protected abstract void schedule(@NotNull TaskImpl task);
+	public @NotNull Runnable getRunnable() {
+		return runnable;
+	}
+
+	public @NotNull Type getType() {
+		return type;
+	}
+
+	public @NotNull Schedule getDelay() {
+		return delay;
+	}
+
+	public @NotNull Schedule getRepeat() {
+		return repeat;
+	}
 
 }
