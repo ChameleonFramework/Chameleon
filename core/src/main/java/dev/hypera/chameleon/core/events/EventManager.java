@@ -61,15 +61,6 @@ public final class EventManager {
 	}
 
 	/**
-	 * Unregister a listener
-	 *
-	 * @param listener Listener to be unregistered
-	 */
-	public void unregisterListener(@NotNull ChameleonListener listener) {
-		registeredListeners.remove(listener);
-	}
-
-	/**
 	 * Register an inline listener
 	 *
 	 * @param type  Event type
@@ -78,6 +69,15 @@ public final class EventManager {
 	 */
 	public <T extends ChameleonEvent> void registerListener(@NotNull Class<T> type, @NotNull Consumer<T> event) {
 		registerListener(new InlineChameleonListener<>(type, event));
+	}
+
+	/**
+	 * Unregister a listener
+	 *
+	 * @param listener Listener to be unregistered
+	 */
+	public void unregisterListener(@NotNull ChameleonListener listener) {
+		registeredListeners.remove(listener);
 	}
 
 
