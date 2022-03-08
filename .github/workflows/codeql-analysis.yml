@@ -58,7 +58,7 @@ jobs:
         java-version: '17'
 
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@db5c4250043af20d97cb4298ed4311aac2915b13
+      uses: gradle/gradle-build-action@v2
       with:
         gradle-version: "release-nightly"
         arguments: build
