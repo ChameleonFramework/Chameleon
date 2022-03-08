@@ -23,10 +23,14 @@
 package dev.hypera.chameleon.core.platform.proxy;
 
 import dev.hypera.chameleon.core.platform.Platform;
+import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Proxy platform
  */
 public abstract class ProxyPlatform extends Platform {
+
+	public abstract @NotNull Set<Server> getServers();
 
 }
