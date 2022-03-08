@@ -23,6 +23,11 @@
 package dev.hypera.chameleon.platforms.velocity.managers;
 
 import dev.hypera.chameleon.core.managers.Scheduler;
+import dev.hypera.chameleon.core.scheduling.Schedule;
+import dev.hypera.chameleon.core.scheduling.Schedule.Type;
+import dev.hypera.chameleon.core.scheduling.ScheduleImpl.DurationSchedule;
+import dev.hypera.chameleon.core.scheduling.ScheduleImpl.TickSchedule;
+import dev.hypera.chameleon.core.scheduling.TaskImpl;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.NotNull;
@@ -40,18 +45,24 @@ public final class VelocityScheduler extends Scheduler {
 
 
 	@Override
-	public void schedule(@NotNull Runnable runnable) {
-		chameleon.getVelocityPlugin().getServer().getScheduler().buildTask(chameleon.getVelocityPlugin(), runnable).schedule();
+	protected void schedule(@NotNull TaskImpl task) {
+		chameleon.getVelocityPlugin().getServer().getScheduler().buildTask(chameleon.getVelocityPlugin(), task.getRunnable())
+				.delay(convert(task.getDelay()), TimeUnit.MILLISECONDS)
+				.repeat(convert(task.getRepeat()), TimeUnit.MILLISECONDS)
+				.schedule();
 	}
 
-	@Override
-	public void schedule(@NotNull Runnable runnable, long delay, @NotNull TimeUnit unit) {
-		chameleon.getVelocityPlugin().getServer().getScheduler().buildTask(chameleon.getVelocityPlugin(), runnable).delay(delay, unit).schedule();
-	}
 
-	@Override
-	public void scheduleRepeating(@NotNull Runnable runnable, long delay, long period, @NotNull TimeUnit unit) {
-		chameleon.getVelocityPlugin().getServer().getScheduler().buildTask(chameleon.getVelocityPlugin(), runnable).delay(delay, unit).repeat(period, unit).schedule();
+	private long convert(@NotNull Schedule schedule) {
+		if (schedule.getType().equals(Type.NONE)) {
+			return 0;
+		} else if (schedule.getType().equals(Type.DURATION)) {
+			return ((DurationSchedule) schedule).getDuration().toMillis();
+		} else if (schedule.getType().equals(Type.TICK)) {
+			return (long) ((TickSchedule) schedule).getTicks() * 50;
+		} else {
+			throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
+		}
 	}
 
 }
