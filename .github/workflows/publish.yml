@@ -39,6 +39,8 @@ jobs:
           title: "${{ endsWith(env.VERSION, 'SNAPSHOT') && 'Development Build' || format('{0}{1}', 'Chameleon v', env.VERSION) }}"
           files: |
             **/build/libs/*.jar
+            !build/libs/*.jar
+            !build-logic/libs/*.jar
             LICENSE
             SECURITY.md
             AUTHORS
