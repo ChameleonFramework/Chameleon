@@ -23,7 +23,11 @@
 package dev.hypera.chameleon.platforms.bungeecord.platform;
 
 import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
+import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
+import dev.hypera.chameleon.platforms.bungeecord.platform.objects.BungeeCordServer;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.md_5.bungee.api.ProxyServer;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +35,13 @@ import org.jetbrains.annotations.NotNull;
  * BungeeCord platform
  */
 public final class BungeeCordPlatform extends ProxyPlatform {
+
+	private final @NotNull BungeeCordChameleon chameleon;
+
+	public BungeeCordPlatform(@NotNull BungeeCordChameleon chameleon) {
+		this.chameleon = chameleon;
+	}
+
 
 	@Override
 	public @NotNull String getAPIName() {
@@ -50,6 +61,12 @@ public final class BungeeCordPlatform extends ProxyPlatform {
 	@Override
 	public @NotNull Type getType() {
 		return Type.PROXY;
+	}
+
+
+	@Override
+	public @NotNull Set<Server> getServers() {
+		return ProxyServer.getInstance().getServers().values().stream().map(s -> new BungeeCordServer(chameleon, s)).collect(Collectors.toSet());
 	}
 
 }

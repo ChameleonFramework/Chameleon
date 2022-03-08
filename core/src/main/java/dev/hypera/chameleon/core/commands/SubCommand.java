@@ -22,6 +22,7 @@
  */
 package dev.hypera.chameleon.core.commands;
 
+import dev.hypera.chameleon.core.commands.annotations.Permission;
 import dev.hypera.chameleon.core.commands.context.Context;
 import dev.hypera.chameleon.core.exceptions.command.ChameleonCommandException;
 import java.lang.reflect.InvocationTargetException;
@@ -30,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Sub command
@@ -38,11 +40,14 @@ import org.jetbrains.annotations.NotNull;
 public final class SubCommand {
 
 	private final @NotNull List<String> names;
+	private final @Nullable Permission permission;
 	private final @NotNull Method method;
 
 	SubCommand(@NotNull String names, @NotNull Method method) {
 		this.names = Arrays.asList(names.split("\\|"));
 		this.method = method;
+
+		this.permission = method.isAnnotationPresent(Permission.class) ? method.getAnnotation(Permission.class) : null;
 	}
 
 	public @NotNull List<String> getNames() {
@@ -59,6 +64,13 @@ public final class SubCommand {
 
 	public void execute(@NotNull Context context, @NotNull Command parent) {
 		try {
+			if (null != permission && !permission.value().isEmpty() && !context.getSender().hasPermission(permission.value())) {
+				if (null != parent.getPermissionErrorMessage()) {
+					context.getSender().sendMessage(parent.getPermissionErrorMessage());
+				}
+				return;
+			}
+
 			if (!method.isAccessible()) {
 				method.setAccessible(true);
 			}

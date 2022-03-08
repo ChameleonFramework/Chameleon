@@ -23,7 +23,11 @@
 package dev.hypera.chameleon.platforms.velocity.platform;
 
 import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
+import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
+import dev.hypera.chameleon.platforms.velocity.platform.objects.VelocityServer;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -56,6 +60,12 @@ public final class VelocityPlatform extends ProxyPlatform {
 	@Override
 	public @NotNull Type getType() {
 		return Type.PROXY;
+	}
+
+
+	@Override
+	public @NotNull Set<Server> getServers() {
+		return chameleon.getVelocityPlugin().getServer().getAllServers().stream().map(s -> new VelocityServer(chameleon, s)).collect(Collectors.toSet());
 	}
 
 }

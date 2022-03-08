@@ -23,6 +23,7 @@
 package dev.hypera.chameleon.core.events;
 
 import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.events.cancellable.Cancellable;
 import dev.hypera.chameleon.core.events.listener.ChameleonListener;
 import dev.hypera.chameleon.core.events.listener.InlineChameleonListener;
 import dev.hypera.chameleon.core.events.listener.annotations.EventHandler;
@@ -70,6 +71,15 @@ public final class EventManager {
 		registerListener(new InlineChameleonListener<>(type, event));
 	}
 
+	/**
+	 * Unregister a listener
+	 *
+	 * @param listener Listener to be unregistered
+	 */
+	public void unregisterListener(@NotNull ChameleonListener listener) {
+		registeredListeners.remove(listener);
+	}
+
 
 	/**
 	 * Dispatch an event to registered listeners
@@ -77,7 +87,7 @@ public final class EventManager {
 	 * @param event Event to be dispatched
 	 */
 	@Internal
-	public void dispatch(@NotNull ChameleonEvent event) {
+	public boolean dispatch(@NotNull ChameleonEvent event) {
 		registeredListeners.stream()
 				.map(listener -> Arrays.stream(listener.getClass().getDeclaredMethods()).filter(method ->
 						method.isAnnotationPresent(EventHandler.class) &&
@@ -96,6 +106,12 @@ public final class EventManager {
 						);
 					}
 				});
+
+		if (event instanceof Cancellable) {
+			return ((Cancellable) event).isCancelled();
+		} else {
+			return true;
+		}
 	}
 
 	@Internal

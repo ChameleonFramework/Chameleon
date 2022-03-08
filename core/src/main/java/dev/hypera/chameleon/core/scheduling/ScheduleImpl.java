@@ -20,21 +20,58 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.managers;
+package dev.hypera.chameleon.core.scheduling;
 
-import dev.hypera.chameleon.core.scheduling.Task;
-import dev.hypera.chameleon.core.scheduling.TaskImpl;
+import dev.hypera.chameleon.core.scheduling.Schedule.Type;
+import java.time.Duration;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Scheduler
- */
-public abstract class Scheduler {
+@Internal
+public class ScheduleImpl {
 
-	public final @NotNull Task.Builder createBuilder(@NotNull Runnable runnable) {
-		return new Task.Builder(this::schedule, runnable);
+	static @NotNull Schedule NEXT_TICK = new TickSchedule(1);
+	static @NotNull Schedule NONE = () -> Type.NONE;
+
+
+	@Internal
+	public static class DurationSchedule implements Schedule {
+
+		private final @NotNull Duration duration;
+
+		public DurationSchedule(@NotNull Duration duration) {
+			this.duration = duration;
+		}
+
+		@Override
+		public @NotNull Type getType() {
+			return Type.DURATION;
+		}
+
+		public @NotNull Duration getDuration() {
+			return duration;
+		}
+
 	}
 
-	protected abstract void schedule(@NotNull TaskImpl task);
+	@Internal
+	public static class TickSchedule implements Schedule {
+
+		private final int ticks;
+
+		public TickSchedule(int ticks) {
+			this.ticks = ticks;
+		}
+
+		@Override
+		public @NotNull Type getType() {
+			return Type.TICK;
+		}
+
+		public int getTicks() {
+			return ticks;
+		}
+
+	}
 
 }

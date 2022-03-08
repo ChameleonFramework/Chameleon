@@ -23,23 +23,26 @@
 package dev.hypera.chameleon.core.commands;
 
 import dev.hypera.chameleon.core.commands.annotations.CommandHandler;
+import dev.hypera.chameleon.core.commands.annotations.Permission;
 import dev.hypera.chameleon.core.commands.annotations.SubCommandHandler;
 import dev.hypera.chameleon.core.commands.context.Context;
 import dev.hypera.chameleon.core.commands.objects.Condition;
-import dev.hypera.chameleon.core.commands.objects.Permission;
 import dev.hypera.chameleon.core.commands.objects.Platform;
 import dev.hypera.chameleon.core.exceptions.command.ChameleonCommandException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Abstract command
@@ -47,11 +50,13 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Command {
 
 	private final @NotNull String name;
-	private final @NotNull Set<String> aliases;
+	private final @NotNull Set<String> aliases = new HashSet<>();
 	private final @NotNull Set<SubCommand> subCommands = new HashSet<>();
+	private final @Nullable Permission permission;
+
 	private @NotNull Platform platform = Platform.ALL;
-	private @NotNull Permission permission = Permission.none();
 	private @NotNull List<Condition> conditions = new ArrayList<>();
+	private @Nullable Component permissionErrorMessage;
 
 	public Command() {
 		if (!getClass().isAnnotationPresent(CommandHandler.class)) {
@@ -61,7 +66,12 @@ public abstract class Command {
 		try {
 			String[] names = getClass().getAnnotation(CommandHandler.class).value().split("\\|");
 			this.name = names[0];
-			this.aliases = names.length > 1 ? new HashSet<>(Arrays.asList(Arrays.copyOfRange(names, 1, names.length))) : Collections.emptySet();
+			this.aliases.addAll(
+					names.length > 1
+							? new HashSet<>(Arrays.asList(Arrays.copyOfRange(names, 1, names.length)))
+							: Collections.emptySet()
+			);
+			this.permission = getClass().isAnnotationPresent(Permission.class) ? getClass().getAnnotation(Permission.class) : null;
 
 			for (Method method : getClass().getDeclaredMethods()) {
 				if (method.isAnnotationPresent(SubCommandHandler.class) && method.getParameterCount() == 1 && method.getParameterTypes()[0] == Context.class) {
@@ -81,9 +91,9 @@ public abstract class Command {
 
 
 	public final void executeCommand(@NotNull Context context) {
-		if (null != permission.value() && !context.getSender().hasPermission(Objects.requireNonNull(permission.value()))) {
-			if (null != permission.getErrorMessage()) {
-				context.getSender().sendMessage(permission.getErrorMessage());
+		if (null != permission && !permission.value().isEmpty() && !context.getSender().hasPermission(Objects.requireNonNull(permission.value()))) {
+			if (null != permissionErrorMessage) {
+				context.getSender().sendMessage(permissionErrorMessage);
 			}
 
 			return;
@@ -122,20 +132,25 @@ public abstract class Command {
 		return aliases;
 	}
 
+	public final void addAliases(@NotNull Collection<String> aliases) {
+		this.aliases.addAll(aliases);
+	}
+
+	@Internal
+	public final @NotNull Set<SubCommand> getSubCommands() {
+		return subCommands;
+	}
+
+	public final @Nullable Permission getPermission() {
+		return permission;
+	}
+
 	public final @NotNull Platform getPlatform() {
 		return platform;
 	}
 
 	public final void setPlatform(@NotNull Platform platform) {
 		this.platform = platform;
-	}
-
-	public final @NotNull Permission getPermission() {
-		return permission;
-	}
-
-	public final void setPermission(@NotNull Permission permission) {
-		this.permission = permission;
 	}
 
 	public final @NotNull List<Condition> getConditions() {
@@ -146,9 +161,12 @@ public abstract class Command {
 		this.conditions = Arrays.asList(conditions);
 	}
 
-	@Internal
-	public @NotNull Set<SubCommand> getSubCommands() {
-		return subCommands;
+	public final @Nullable Component getPermissionErrorMessage() {
+		return permissionErrorMessage;
+	}
+
+	public final void setPermissionErrorMessage(@NotNull Component permissionErrorMessage) {
+		this.permissionErrorMessage = permissionErrorMessage;
 	}
 
 }

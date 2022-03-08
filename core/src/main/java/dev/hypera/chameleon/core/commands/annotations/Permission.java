@@ -20,21 +20,18 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.managers;
+package dev.hypera.chameleon.core.commands.annotations;
 
-import dev.hypera.chameleon.core.scheduling.Task;
-import dev.hypera.chameleon.core.scheduling.TaskImpl;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Scheduler
- */
-public abstract class Scheduler {
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Permission {
 
-	public final @NotNull Task.Builder createBuilder(@NotNull Runnable runnable) {
-		return new Task.Builder(this::schedule, runnable);
-	}
-
-	protected abstract void schedule(@NotNull TaskImpl task);
+	@NotNull String value();
 
 }

@@ -20,44 +20,38 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.commands.objects;
+package dev.hypera.chameleon.core.scheduling;
 
-import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-/**
- * Command permission
- */
-public interface Permission {
+public class TaskImpl implements Task {
 
-	@Nullable String value();
-	default @Nullable Component getErrorMessage() {
-		return null;
+	private final @NotNull Runnable runnable;
+	private final @NotNull Type type;
+	private final @NotNull Schedule delay;
+	private final @NotNull Schedule repeat;
+
+	TaskImpl(@NotNull Runnable runnable, @NotNull Type type, @NotNull Schedule delay, @NotNull Schedule repeat) {
+		this.runnable = runnable;
+		this.type = type;
+		this.delay = delay;
+		this.repeat = repeat;
 	}
 
-	static @NotNull Permission none() {
-		return () -> null;
+	public @NotNull Runnable getRunnable() {
+		return runnable;
 	}
 
-	static @NotNull Permission of(@NotNull String permission) {
-		return () -> permission;
+	public @NotNull Type getType() {
+		return type;
 	}
 
-	static @NotNull Permission of(@NotNull String permission, @NotNull Component errorMessage) {
-		return new Permission() {
+	public @NotNull Schedule getDelay() {
+		return delay;
+	}
 
-			@Override
-			public String value() {
-				return permission;
-			}
-
-			@Override
-			public @NotNull Component getErrorMessage() {
-				return errorMessage;
-			}
-
-		};
+	public @NotNull Schedule getRepeat() {
+		return repeat;
 	}
 
 }
