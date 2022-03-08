@@ -31,8 +31,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class Scheduler {
 
-	public final @NotNull Task.Builder createBuilder() {
-		return new Task.Builder(this::schedule);
+	public final @NotNull Task.Builder createBuilder(@NotNull Runnable runnable) {
+		return new Task.Builder(this::schedule, runnable);
 	}
 
 	protected abstract void schedule(@NotNull TaskImpl task);

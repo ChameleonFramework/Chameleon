@@ -35,7 +35,7 @@ public interface Task {
 		private final @NotNull Runnable runnable;
 
 		private @NotNull Type type = Type.ASYNC;
-		private @NotNull Schedule delay = Schedule.immediate();
+		private @NotNull Schedule delay = Schedule.none();
 		private @NotNull Schedule repeat = Schedule.none();
 
 		@Internal
