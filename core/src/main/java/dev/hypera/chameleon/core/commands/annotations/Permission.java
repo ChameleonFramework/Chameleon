@@ -20,44 +20,18 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.commands.objects;
+package dev.hypera.chameleon.core.commands.annotations;
 
-import net.kyori.adventure.text.Component;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-/**
- * Command permission
- */
-public interface Permission {
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Permission {
 
-	@Nullable String value();
-	default @Nullable Component getErrorMessage() {
-		return null;
-	}
-
-	static @NotNull Permission none() {
-		return () -> null;
-	}
-
-	static @NotNull Permission of(@NotNull String permission) {
-		return () -> permission;
-	}
-
-	static @NotNull Permission of(@NotNull String permission, @NotNull Component errorMessage) {
-		return new Permission() {
-
-			@Override
-			public String value() {
-				return permission;
-			}
-
-			@Override
-			public @NotNull Component getErrorMessage() {
-				return errorMessage;
-			}
-
-		};
-	}
+	@NotNull String value();
 
 }
