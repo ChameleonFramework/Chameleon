@@ -58,13 +58,16 @@ public abstract class Command {
 	private @NotNull List<Condition> conditions = new ArrayList<>();
 	private @Nullable Component permissionErrorMessage;
 
-	public Command() {
-		if (!getClass().isAnnotationPresent(CommandHandler.class)) {
-			throw new IllegalStateException("Classes extending Command must be annotated with @CommandHandler");
-		}
-
+	public Command(@NotNull String... names) {
 		try {
-			String[] names = getClass().getAnnotation(CommandHandler.class).value().split("\\|");
+			if (names.length < 1) {
+				if (!getClass().isAnnotationPresent(CommandHandler.class)) {
+					throw new IllegalStateException("Classes extending Command must either be annotated with @CommandHandler or provide names in the constructor");
+				}
+
+				names = getClass().getAnnotation(CommandHandler.class).value().split("\\|");
+			}
+
 			this.name = names[0];
 			this.aliases.addAll(
 					names.length > 1
@@ -82,7 +85,6 @@ public abstract class Command {
 			throw new ChameleonCommandException("Failed to create command", ex);
 		}
 	}
-
 
 	public abstract void execute(@NotNull Context context);
 	public @NotNull List<String> tabComplete(@NotNull Context context) {
