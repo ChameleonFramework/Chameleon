@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Minestom user manager
@@ -50,13 +51,9 @@ public final class MinestomUserManager extends UserManager {
 	}
 
 	@Override
-	public @NotNull User getPlayer(@NotNull UUID uniqueId) {
+	public @Nullable User getPlayer(@NotNull UUID uniqueId) {
 		Player player = MinecraftServer.getConnectionManager().getPlayer(uniqueId);
-		if (null == player) {
-			throw new IllegalArgumentException("Cannot find user with id '" + uniqueId + "'");
-		} else {
-			return new MinestomUser(player);
-		}
+		return null == player ? null : new MinestomUser(player);
 	}
 
 }

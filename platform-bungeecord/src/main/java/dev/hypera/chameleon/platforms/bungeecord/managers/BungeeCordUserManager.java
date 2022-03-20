@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * BungeeCord user manager
@@ -58,13 +59,9 @@ public final class BungeeCordUserManager extends UserManager {
 	}
 
 	@Override
-	public @NotNull User getPlayer(@NotNull UUID uniqueId) {
+	public @Nullable User getPlayer(@NotNull UUID uniqueId) {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uniqueId);
-		if (null == player) {
-			throw new IllegalArgumentException("Cannot find user with id '" + uniqueId + "'");
-		} else {
-			return new BungeeCordUser(chameleon, player);
-		}
+		return null == player ? null : new BungeeCordUser(chameleon, player);
 	}
 
 }

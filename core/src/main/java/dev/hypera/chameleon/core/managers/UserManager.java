@@ -27,6 +27,7 @@ import dev.hypera.chameleon.core.users.User;
 import java.util.Set;
 import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * User manager
@@ -35,6 +36,6 @@ public abstract class UserManager {
 
 	public abstract @NotNull ChatUser getConsole();
 	public abstract @NotNull Set<User> getPlayers();
-	public abstract @NotNull User getPlayer(@NotNull UUID uniqueId);
+	public abstract @Nullable User getPlayer(@NotNull UUID uniqueId);
 
 }

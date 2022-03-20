@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Spigot user manager
@@ -58,13 +59,9 @@ public final class SpigotUserManager extends UserManager {
 	}
 
 	@Override
-	public @NotNull User getPlayer(@NotNull UUID uniqueId) {
+	public @Nullable User getPlayer(@NotNull UUID uniqueId) {
 		Player player = Bukkit.getPlayer(uniqueId);
-		if (null == player || !player.isOnline()) {
-			throw new IllegalArgumentException("Cannot find user with id '" + uniqueId + "'");
-		} else {
-			return new SpigotUser(chameleon, player);
-		}
+		return null == player ? null : new SpigotUser(chameleon, player);
 	}
 
 }
