@@ -26,6 +26,7 @@ import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
 import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platforms.bungeecord.platform.objects.BungeeCordServer;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.md_5.bungee.api.ProxyServer;
@@ -67,6 +68,11 @@ public final class BungeeCordPlatform extends ProxyPlatform {
 	@Override
 	public @NotNull Set<Server> getServers() {
 		return ProxyServer.getInstance().getServers().values().stream().map(s -> new BungeeCordServer(chameleon, s)).collect(Collectors.toSet());
+	}
+
+	@Override
+	public @NotNull Optional<Server> getServer(@NotNull String name) {
+		return Optional.ofNullable(ProxyServer.getInstance().getServerInfo(name)).map(s -> new BungeeCordServer(chameleon, s));
 	}
 
 }
