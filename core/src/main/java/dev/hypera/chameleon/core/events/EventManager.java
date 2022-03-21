@@ -108,7 +108,7 @@ public final class EventManager {
 				});
 
 		if (event instanceof Cancellable) {
-			return ((Cancellable) event).isCancelled();
+			return !((Cancellable) event).isCancelled();
 		} else {
 			return true;
 		}
