@@ -75,7 +75,13 @@ public class BungeeCordListener implements Listener {
 
 	@EventHandler
 	public void onServerSwitchEvent(@NotNull ServerSwitchEvent event) {
-		chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), wrap(event.getFrom()), wrap(event.getPlayer().getServer().getInfo())));
+		if (null != event.getFrom()) {
+			chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(
+					wrap(event.getPlayer()),
+					wrap(event.getFrom()),
+					wrap(event.getPlayer().getServer().getInfo())
+			));
+		}
 	}
 
 
