@@ -22,42 +22,52 @@
  */
 package dev.hypera.chameleon.features.configuration;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import java.util.Optional;
 
 /**
  * Configuration
  */
 public interface Configuration {
 
-	@Nullable Class<?> getType(@NotNull String path);
-	@Nullable Class<?> getType(@NotNull String path, @Nullable Class<?> def);
+	@NotNull Optional<Object> get(@NotNull String path);
+	default <T> @NotNull Optional<T> get(@NotNull String path, @NotNull Class<T> type) {
+		Optional<Object> o = get(path);
+		if (!o.isPresent() || type.isInstance(o.get())) return Optional.empty();
+		return Optional.of(type.cast(o.get()));
+	}
 
-	boolean isType(@NotNull String path, @NotNull Class<?> type);
+	default @NotNull Optional<Class<?>> getType(@NotNull String path) {
+		return get(path).map(Object::getClass);
+	}
+	default boolean isType(@NotNull String path, @NotNull Class<?> type) {
+		return get(path).filter(type::isInstance).isPresent();
+	}
 
-	@Nullable <T> T get(@NotNull String path, @NotNull Class<T> type);
-	@Nullable Object get(@NotNull String path);
-	@Nullable Object get(@NotNull String path, @Nullable Object def);
-
-	@Nullable String getString(@NotNull String path);
-	@NotNull String getString(@NotNull String path, @NotNull String def);
-
-	@Nullable Integer getInt(@NotNull String path);
-	int getInt(@NotNull String path, int def);
-
-	@Nullable Double getDouble(@NotNull String path);
-	double getDouble(@NotNull String path, double def);
-
-	@Nullable Long getLong(@NotNull String path);
-	long getLong(@NotNull String path, long def);
-
-	@Nullable Boolean getBoolean(@NotNull String path);
-	boolean getBoolean(@NotNull String path, boolean def);
-
-	@Nullable List<?> getList(@NotNull String path);
-	@NotNull List<?> getList(@NotNull String path, @NotNull List<?> def);
+	default @NotNull Optional<String> getString(@NotNull String path) {
+		return get(path).map(o -> (String) o);
+	}
+	default @NotNull Optional<Integer> getInt(@NotNull String path) {
+		return get(path).map(o -> {
+			if (o instanceof Long) return ((Long) o).intValue();
+			return (Integer) o;
+		});
+	}
+	default @NotNull Optional<Double> getDouble(@NotNull String path) {
+		return get(path).map(o -> (Double) o);
+	}
+	default @NotNull Optional<Long> getLong(@NotNull String path) {
+		return get(path).map(o -> (Long) o);
+	}
+	default @NotNull Optional<Boolean> getBoolean(@NotNull String path) {
+		return get(path).map(o -> (Boolean) o);
+	}
+	default @NotNull Optional<List<?>> getList(@NotNull String path) {
+		return get(path).map(o -> (List<?>) o);
+	}
 
 	@NotNull Path getPath();
 

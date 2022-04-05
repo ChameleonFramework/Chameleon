@@ -27,11 +27,12 @@ import dev.hypera.chameleon.core.adventure.AbstractAudience;
 import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import dev.hypera.chameleon.platforms.bungeecord.platform.objects.BungeeCordServer;
-import java.util.UUID;
-import java.util.function.BiConsumer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.BiConsumer;
 
 /**
  * BungeeCord user
@@ -79,8 +80,10 @@ public class BungeeCordUser extends AbstractAudience implements ProxyUser {
 	}
 
 	@Override
-	public @Nullable Server getServer() {
-		return new BungeeCordServer(chameleon, player.getServer().getInfo());
+	public @NotNull Optional<Server> getServer() {
+		net.md_5.bungee.api.connection.Server server = player.getServer();
+		if (server == null) return Optional.empty();
+		return Optional.of(new BungeeCordServer(chameleon, server.getInfo()));
 	}
 
 	@Override

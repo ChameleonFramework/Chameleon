@@ -24,15 +24,12 @@ package dev.hypera.chameleon.platforms.spigot.platform.objects;
 
 import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
 import dev.hypera.chameleon.core.utils.BasicUtil;
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.nio.file.Path;
+import java.util.*;
 
 /**
  * Spigot plugin implementation
@@ -56,8 +53,8 @@ public class SpigotPlugin implements PlatformPlugin {
 	}
 
 	@Override
-	public @Nullable String getDescription() {
-		return plugin.getDescription().getDescription();
+	public @NotNull Optional<String> getDescription() {
+		return Optional.ofNullable(plugin.getDescription().getDescription());
 	}
 
 	@Override

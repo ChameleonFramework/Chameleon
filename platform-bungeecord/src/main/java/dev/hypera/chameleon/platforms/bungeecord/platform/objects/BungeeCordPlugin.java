@@ -24,14 +24,15 @@ package dev.hypera.chameleon.platforms.bungeecord.platform.objects;
 
 import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
 import dev.hypera.chameleon.core.utils.BasicUtil;
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * BungeeCord plugin implementation
@@ -56,8 +57,8 @@ public class BungeeCordPlugin implements PlatformPlugin {
 	}
 
 	@Override
-	public @Nullable String getDescription() {
-		return plugin.getDescription().getDescription();
+	public @NotNull Optional<String> getDescription() {
+		return Optional.ofNullable(plugin.getDescription().getDescription());
 	}
 
 	@Override

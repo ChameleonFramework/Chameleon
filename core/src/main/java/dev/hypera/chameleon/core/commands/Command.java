@@ -29,20 +29,13 @@ import dev.hypera.chameleon.core.commands.context.Context;
 import dev.hypera.chameleon.core.commands.objects.Condition;
 import dev.hypera.chameleon.core.commands.objects.Platform;
 import dev.hypera.chameleon.core.exceptions.command.ChameleonCommandException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Abstract command
@@ -104,10 +97,7 @@ public abstract class Command {
 		if (!conditions.isEmpty()) {
 			Optional<Condition> failedCondition = conditions.stream().filter(condition -> !condition.test(context)).findFirst();
 			if (failedCondition.isPresent()) {
-				if (null != failedCondition.get().getErrorMessage()) {
-					context.getSender().sendMessage(failedCondition.get().getErrorMessage());
-				}
-
+				failedCondition.get().getErrorMessage().ifPresent(errorMessage -> context.getSender().sendMessage(errorMessage));
 				return;
 			}
 		}
@@ -143,8 +133,8 @@ public abstract class Command {
 		return subCommands;
 	}
 
-	public final @Nullable Permission getPermission() {
-		return permission;
+	public final @NotNull Optional<Permission> getPermission() {
+		return Optional.ofNullable(permission);
 	}
 
 	public final @NotNull Platform getPlatform() {
@@ -163,8 +153,8 @@ public abstract class Command {
 		this.conditions = Arrays.asList(conditions);
 	}
 
-	public final @Nullable Component getPermissionErrorMessage() {
-		return permissionErrorMessage;
+	public final @NotNull Optional<Component> getPermissionErrorMessage() {
+		return Optional.ofNullable(permissionErrorMessage);
 	}
 
 	public final void setPermissionErrorMessage(@NotNull Component permissionErrorMessage) {
