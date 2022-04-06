@@ -20,43 +20,23 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.adventure.conversion.impl.key;
 
-import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IMapper;
-import java.lang.reflect.Method;
-import net.kyori.adventure.key.Key;
+package dev.hypera.chameleon.core.annotations.processing.generation;
+
+import com.squareup.javapoet.ClassName;
+import dev.hypera.chameleon.core.annotations.Plugin;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.TypeElement;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Maps shaded to platform net.kyori.adventure.key.Key
- */
-public class KeyMapper implements IMapper<Key> {
+public abstract class Generator {
 
-	private final @NotNull Method CREATE_METHOD;
+    public static final @NotNull String INDENT = "    ";
 
-	public KeyMapper() {
-		try {
-			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-			CREATE_METHOD = keyClass.getMethod("key", String.class);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
+    public abstract void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception;
 
-	/**
-	 * Map Key to the platform version of Adventure
-	 *
-	 * @param key Key to be mapped
-	 * @return Platform Key
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Key key) {
-		try {
-			return CREATE_METHOD.invoke(null, key.asString());
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    protected @NotNull ClassName clazz(@NotNull String p, @NotNull String n) {
+        return ClassName.get(p, n);
+    }
 
 }

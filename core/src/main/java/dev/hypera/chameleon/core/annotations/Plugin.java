@@ -20,43 +20,51 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.adventure.conversion.impl.key;
 
-import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IMapper;
-import java.lang.reflect.Method;
-import net.kyori.adventure.key.Key;
+package dev.hypera.chameleon.core.annotations;
+
+import dev.hypera.chameleon.core.annotations.processing.generation.Generator;
+import dev.hypera.chameleon.core.annotations.processing.generation.impl.velocity.VelocityGenerator;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Maps shaded to platform net.kyori.adventure.key.Key
- */
-public class KeyMapper implements IMapper<Key> {
+@Retention(RetentionPolicy.SOURCE)
+@Target(ElementType.TYPE)
+public @interface Plugin {
 
-	private final @NotNull Method CREATE_METHOD;
+	@NotNull String id();
+	@NotNull String name() default "";
+	@NotNull String version();
+	@NotNull String description() default "";
+	@NotNull String url() default "";
+	@NotNull String[] authors() default {};
+	@NotNull PlatformDependency[] dependencies() default {};
 
-	public KeyMapper() {
-		try {
-			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-			CREATE_METHOD = keyClass.getMethod("key", String.class);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
+	@NotNull String logPrefix() default "[%s]";
+	@NotNull Platform[] platforms();
+
+
+	enum Platform {
+
+		BUNGEECORD(null),
+		MINESTOM(null),
+		SPIGOT(null),
+		VELOCITY(VelocityGenerator.class);
+
+		private final @NotNull Class<? extends Generator> generator;
+
+		Platform(@NotNull Class<? extends Generator> generator) {
+			this.generator = generator;
 		}
+
+		public @NotNull Class<? extends Generator> getGenerator() {
+			return generator;
+		}
+
 	}
 
-	/**
-	 * Map Key to the platform version of Adventure
-	 *
-	 * @param key Key to be mapped
-	 * @return Platform Key
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Key key) {
-		try {
-			return CREATE_METHOD.invoke(null, key.asString());
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
 
 }

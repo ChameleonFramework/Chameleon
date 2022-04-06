@@ -40,8 +40,8 @@ public class BookMapper implements IMapper<Book> {
 
 	public BookMapper() {
 		try {
-			Class<?> componentClass = Class.forName(new String(AdventureConverter.PACKAGE) + "text.Component");
-			Class<?> bookClass = Class.forName(new String(AdventureConverter.PACKAGE) + "inventory.Book");
+			Class<?> componentClass = Class.forName(AdventureConverter.PACKAGE + "text.Component");
+			Class<?> bookClass = Class.forName(AdventureConverter.PACKAGE + "inventory.Book");
 			CREATE_METHOD = bookClass.getMethod("book", componentClass, componentClass, Collection.class);
 		} catch (ReflectiveOperationException ex) {
 			throw new ExceptionInInitializerError(ex);

@@ -39,7 +39,7 @@ public class TimesMapper implements IMapper<Times> {
 
 	public TimesMapper() {
 		try {
-			Class<?> timesClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title$Times");
+			Class<?> timesClass = Class.forName(AdventureConverter.PACKAGE + "title.Title$Times");
 			if (Arrays.stream(timesClass.getMethods()).anyMatch(m -> m.getName().equals("times"))) {
 				CREATE_METHOD = timesClass.getMethod("times", Duration.class, Duration.class, Duration.class);
 			} else {
