@@ -20,21 +20,15 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
-    }
+package dev.hypera.chameleon.annotations;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+@Retention(RetentionPolicy.SOURCE)
+public @interface PlatformDependency {
+
+    String name();
+    boolean soft();
+
 }
-
-rootProject.name = "chameleon-parent"
-
-include(
-    "core",
-    "annotations",
-    "feature-configuration",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-spigot",
-    "platform-velocity"
-)

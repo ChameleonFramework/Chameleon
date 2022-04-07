@@ -20,10 +20,10 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.annotations.processing.generation;
+package dev.hypera.chameleon.annotations.processing.generation;
 
 import com.squareup.javapoet.ClassName;
-import dev.hypera.chameleon.core.annotations.Plugin;
+import dev.hypera.chameleon.annotations.Plugin;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 import org.jetbrains.annotations.NotNull;

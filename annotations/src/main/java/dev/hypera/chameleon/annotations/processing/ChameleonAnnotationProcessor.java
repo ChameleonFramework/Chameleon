@@ -20,10 +20,10 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.annotations.processing;
+package dev.hypera.chameleon.annotations.processing;
 
-import dev.hypera.chameleon.core.annotations.Plugin;
-import dev.hypera.chameleon.core.annotations.Plugin.Platform;
+import dev.hypera.chameleon.annotations.Plugin;
+import dev.hypera.chameleon.annotations.Plugin.Platform;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;

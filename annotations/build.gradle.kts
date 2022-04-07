@@ -20,50 +20,11 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.annotations;
+plugins {
+    id("chameleon.api")
+}
 
-import dev.hypera.chameleon.core.annotations.processing.generation.Generator;
-import dev.hypera.chameleon.core.annotations.processing.generation.impl.velocity.VelocityGenerator;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import org.jetbrains.annotations.NotNull;
-
-@Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.TYPE)
-public @interface Plugin {
-
-	@NotNull String id();
-	@NotNull String name() default "";
-	@NotNull String version();
-	@NotNull String description() default "";
-	@NotNull String url() default "";
-	@NotNull String[] authors() default {};
-	@NotNull PlatformDependency[] dependencies() default {};
-
-	@NotNull String logPrefix() default "[%s]";
-	@NotNull Platform[] platforms();
-
-
-	enum Platform {
-
-		BUNGEECORD(null),
-		MINESTOM(null),
-		SPIGOT(null),
-		VELOCITY(VelocityGenerator.class);
-
-		private final @NotNull Class<? extends Generator> generator;
-
-		Platform(@NotNull Class<? extends Generator> generator) {
-			this.generator = generator;
-		}
-
-		public @NotNull Class<? extends Generator> getGenerator() {
-			return generator;
-		}
-
-	}
-
-
+dependencies {
+    implementation(project(":core"))
+    implementation("com.squareup:javapoet:1.13.0")
 }

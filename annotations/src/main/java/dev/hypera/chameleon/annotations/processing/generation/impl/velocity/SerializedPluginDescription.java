@@ -20,9 +20,9 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.annotations.processing.generation.impl.velocity;
+package dev.hypera.chameleon.annotations.processing.generation.impl.velocity;
 
-import dev.hypera.chameleon.core.annotations.PlatformDependency;
+import dev.hypera.chameleon.annotations.PlatformDependency;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;

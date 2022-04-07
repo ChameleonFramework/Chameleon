@@ -20,7 +20,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.annotations.processing.generation.impl.velocity;
+package dev.hypera.chameleon.annotations.processing.generation.impl.velocity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,9 +30,9 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeSpec;
-import dev.hypera.chameleon.core.annotations.PlatformDependency;
-import dev.hypera.chameleon.core.annotations.Plugin;
-import dev.hypera.chameleon.core.annotations.processing.generation.Generator;
+import dev.hypera.chameleon.annotations.PlatformDependency;
+import dev.hypera.chameleon.annotations.Plugin;
+import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.nio.file.Files;
