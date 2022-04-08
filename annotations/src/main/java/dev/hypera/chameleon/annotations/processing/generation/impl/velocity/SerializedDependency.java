@@ -20,17 +20,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.annotations.processing.generation.impl.velocity;
 
-import dev.hypera.chameleon.annotations.Plugin.Platform;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import org.jetbrains.annotations.NotNull;
 
-@Retention(RetentionPolicy.SOURCE)
-public @interface PlatformDependency {
+@SuppressWarnings({ "unused", "FieldCanBeLocal" })
+public class SerializedDependency {
 
-    String name();
-    boolean soft();
-    Platform[] platforms() default {};
+    private final @NotNull String name;
+    private final boolean optional;
+
+    public SerializedDependency(@NotNull String name, boolean optional) {
+        this.name = name;
+        this.optional = optional;
+    }
 
 }

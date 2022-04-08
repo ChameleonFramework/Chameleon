@@ -25,6 +25,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation("com.squareup:javapoet:1.13.0")
+    compileOnly(project(":core"))
+    compileOnly("com.squareup:javapoet:1.13.0")
+    compileOnly("org.spongepowered:configurate-gson:4.1.2")
+    compileOnly("org.spongepowered:configurate-yaml:4.1.2")
 }
