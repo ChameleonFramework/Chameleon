@@ -23,6 +23,8 @@
 package dev.hypera.chameleon.annotations;
 
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
+import dev.hypera.chameleon.annotations.processing.generation.impl.bungeecord.BungeeCordGenerator;
+import dev.hypera.chameleon.annotations.processing.generation.impl.spigot.SpigotGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.impl.velocity.VelocityGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -48,9 +50,9 @@ public @interface Plugin {
 
 	enum Platform {
 
-		BUNGEECORD(null),
+		BUNGEECORD(BungeeCordGenerator.class),
 		MINESTOM(null),
-		SPIGOT(null),
+		SPIGOT(SpigotGenerator.class),
 		VELOCITY(VelocityGenerator.class);
 
 		private final @NotNull Class<? extends Generator> generator;
