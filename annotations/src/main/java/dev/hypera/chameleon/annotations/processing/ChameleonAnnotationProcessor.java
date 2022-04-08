@@ -35,7 +35,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
-@SupportedAnnotationTypes("dev.hypera.chameleon.core.annotations.Plugin")
+@SupportedAnnotationTypes("dev.hypera.chameleon.annotations.Plugin")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class ChameleonAnnotationProcessor extends AbstractProcessor {
 
@@ -44,6 +44,7 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
 	@Override
 	public synchronized boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Plugin.class);
+		System.out.println("Running annotation processing...");
 
 		if (elements.size() >= 1) {
 			if (elements.size() > 1) {
@@ -55,13 +56,20 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
 				throw new RuntimeException("@Plugin cannot be used on abstract classes");
 			}
 
+			System.out.println("Found @Plugin");
 			plugin = (TypeElement) element;
 		}
 
 		if (roundEnv.processingOver() && null != plugin) {
 			Plugin data = plugin.getAnnotation(Plugin.class);
-			for (Platform platform : data.platforms()) {
+			Platform[] platforms = data.platforms();
+			if (platforms.length < 1) {
+				platforms = Platform.values();
+			}
+
+			for (Platform platform : platforms) {
 				try {
+					System.out.println("Generating " + platform.name());
 					platform.getGenerator().getConstructor().newInstance().generate(data, plugin, processingEnv);
 				} catch (Exception ex) {
 					throw new RuntimeException("Failed to generate platform data", ex);

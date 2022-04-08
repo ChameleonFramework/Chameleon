@@ -20,14 +20,28 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-plugins {
-    id("chameleon.api")
-}
+package dev.hypera.chameleon.annotations.processing.generation.impl.minestom;
 
-dependencies {
-    api("net.kyori:adventure-api:4.10.1")
-    api("net.kyori:adventure-text-serializer-legacy:4.10.1")
-    api("net.kyori:adventure-text-serializer-gson:4.10.1")
-    api("net.kyori:adventure-platform-api:4.1.0")
-    implementation("org.jetbrains:annotations:23.0.0")
+import dev.hypera.chameleon.annotations.PlatformDependency;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
+
+@SuppressWarnings({ "unused", "FieldCanBeLocal" })
+public class ExtensionDescription {
+
+    private final @NotNull String name;
+    private final @NotNull String entrypoint;
+    private final @NotNull String version;
+    private final @NotNull List<String> authors;
+    private final @NotNull List<String> dependencies;
+
+    public ExtensionDescription(@NotNull String name, @NotNull String entrypoint, @NotNull String version, @NotNull List<String> authors, @NotNull List<PlatformDependency> dependencies) {
+        this.name = name;
+        this.entrypoint = entrypoint;
+        this.version = version;
+        this.authors = authors;
+        this.dependencies = dependencies.stream().map(PlatformDependency::name).collect(Collectors.toList());
+    }
+
 }

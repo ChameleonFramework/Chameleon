@@ -25,8 +25,14 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":core"))
-    compileOnly("com.squareup:javapoet:1.13.0")
-    compileOnly("org.spongepowered:configurate-gson:4.1.2")
-    compileOnly("org.spongepowered:configurate-yaml:4.1.2")
+    implementation(project(":core"))
+    implementation("com.squareup:javapoet:1.13.0")
+
+    implementation("org.yaml:snakeyaml:1.30") {
+        exclude(group = "joda-time", module = "joda-time")
+        exclude(group = "junit", module = "joda-time")
+        exclude(group = "org.apache", module = "velocity")
+    }
+
+    implementation("com.google.code.gson:gson:2.9.0")
 }

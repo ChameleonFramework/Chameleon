@@ -46,7 +46,7 @@ public @interface Plugin {
 	@NotNull PlatformDependency[] dependencies() default {};
 
 	@NotNull String logPrefix() default "[%s]";
-	@NotNull Platform[] platforms();
+	@NotNull Platform[] platforms() default {};
 
 
 	enum Platform {

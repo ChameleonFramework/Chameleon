@@ -30,8 +30,11 @@ import dev.hypera.chameleon.annotations.PlatformDependency;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.Plugin.Platform;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
+import dev.hypera.chameleon.annotations.utils.MapBuilder;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -41,8 +44,7 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
+import org.yaml.snakeyaml.Yaml;
 
 public class SpigotGenerator extends Generator {
 
@@ -69,6 +71,7 @@ public class SpigotGenerator extends Generator {
 
         TypeSpec spigotMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Spigot")
                 .addModifiers(Modifier.PUBLIC)
+                .superclass(clazz("org.bukkit.plugin.java", "JavaPlugin"))
                 .addField(FieldSpec.builder(
                         clazz("dev.hypera.chameleon.platforms.spigot", "SpigotChameleon"),
                         "chameleon",
@@ -89,27 +92,26 @@ public class SpigotGenerator extends Generator {
     }
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {
-        YamlConfigurationLoader configurationLoader = YamlConfigurationLoader.builder()
-                .path(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))
-                .build();
-
-        CommentedConfigurationNode node = configurationLoader.createNode()
-                .node("name").set(data.name().isEmpty() ? data.id() : data.name())
-                .node("main").set(packageName + plugin.getSimpleName() + "Spigot")
-                .node("version").set(data.version())
-                .node("api-version").set("1.13")
-                .node("author").set(data.authors().length > 0 ? String.join(", ", data.authors()) : "Unknown")
-                .node("authors").set(data.authors())
-                .node("website").set(data.url())
-                .node("depend").set(Arrays.stream(data.dependencies())
-                        .filter(d -> !d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.SPIGOT)))
-                        .map(PlatformDependency::name).collect(Collectors.toList())
-                ).node("softdepend").set(Arrays.stream(data.dependencies())
-                        .filter(d -> d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.SPIGOT)))
-                        .map(PlatformDependency::name).collect(Collectors.toList())
-                ).node("description").set(data.description());
-
-        configurationLoader.save(node);
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))) {
+            new Yaml().dump(
+                    new MapBuilder<String, Object>()
+                            .add("name", data.name().isEmpty() ? data.id() : data.name())
+                            .add("main", packageName + "." + plugin.getSimpleName() + "Spigot")
+                            .add("version", data.version())
+                            .add("api-version", "1.13")
+                            .add("author", data.authors().length > 0 ? String.join(", ", data.authors()) : "Unknown")
+                            .add("authors", data.authors())
+                            .add("website", data.url())
+                            .add("depend", Arrays.stream(data.dependencies())
+                                    .filter(d -> !d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.SPIGOT)))
+                                    .map(PlatformDependency::name).collect(Collectors.toList())
+                            ).add("softdepend", Arrays.stream(data.dependencies())
+                                    .filter(d -> d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.SPIGOT)))
+                                    .map(PlatformDependency::name).collect(Collectors.toList())
+                            ).add("description", data.description()),
+                    writer
+            );
+        }
     }
 
 }

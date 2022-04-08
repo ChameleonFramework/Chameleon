@@ -20,19 +20,18 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations.processing.generation.impl.velocity;
+package dev.hypera.chameleon.annotations.utils;
 
+import java.util.HashMap;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings({ "unused", "FieldCanBeLocal" })
-public class SerializedDependency {
+public class MapBuilder<K, V> extends HashMap<K, V> {
 
-    private final @NotNull String name;
-    private final boolean optional;
+    private static final long serialVersionUID = 5845273231221036448L;
 
-    public SerializedDependency(@NotNull String name, boolean optional) {
-        this.name = name;
-        this.optional = optional;
+    public @NotNull MapBuilder<K, V> add(@NotNull K k, @NotNull V v) {
+        put(k, v);
+        return this;
     }
 
 }

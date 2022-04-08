@@ -30,8 +30,11 @@ import dev.hypera.chameleon.annotations.PlatformDependency;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.Plugin.Platform;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
+import dev.hypera.chameleon.annotations.utils.MapBuilder;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -41,8 +44,7 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
+import org.yaml.snakeyaml.Yaml;
 
 public class BungeeCordGenerator extends Generator {
 
@@ -69,6 +71,7 @@ public class BungeeCordGenerator extends Generator {
 
         TypeSpec bungeeCordMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "BungeeCord")
                 .addModifiers(Modifier.PUBLIC)
+                .superclass(clazz("net.md_5.bungee.api.plugin", "Plugin"))
                 .addField(FieldSpec.builder(
                         clazz("dev.hypera.chameleon.platforms.bungeecord", "BungeeCordChameleon"),
                         "chameleon",
@@ -89,24 +92,23 @@ public class BungeeCordGenerator extends Generator {
     }
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {
-        YamlConfigurationLoader configurationLoader = YamlConfigurationLoader.builder()
-                .path(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))
-                .build();
-
-        CommentedConfigurationNode node = configurationLoader.createNode()
-                .node("name").set(data.name().isEmpty() ? data.id() : data.name())
-                .node("main").set(packageName + plugin.getSimpleName() + "BungeeCord")
-                .node("version").set(data.version())
-                .node("author").set(data.authors().length > 0 ? String.join(", ", data.authors()) : "Unknown")
-                .node("depends").set(Arrays.stream(data.dependencies())
-                        .filter(d -> !d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.BUNGEECORD)))
-                        .map(PlatformDependency::name).collect(Collectors.toList())
-                ).node("softDepends").set(Arrays.stream(data.dependencies())
-                        .filter(d -> d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.BUNGEECORD)))
-                        .map(PlatformDependency::name).collect(Collectors.toList())
-                ).node("description").set(data.description());
-
-        configurationLoader.save(node);
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))) {
+            new Yaml().dump(
+                    new MapBuilder<String, Object>()
+                            .add("name", data.name().isEmpty() ? data.id() : data.name())
+                            .add("main", packageName + "." + plugin.getSimpleName() + "BungeeCord")
+                            .add("version", data.version())
+                            .add("author", data.authors().length > 0 ? String.join(", ", data.authors()) : "Unknown")
+                            .add("depends", Arrays.stream(data.dependencies())
+                                    .filter(d -> !d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.BUNGEECORD)))
+                                    .map(PlatformDependency::name).collect(Collectors.toList())
+                            ).add("softDepends", Arrays.stream(data.dependencies())
+                                    .filter(d -> d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.BUNGEECORD)))
+                                    .map(PlatformDependency::name).collect(Collectors.toList())
+                            ).add("description", data.description()),
+                    writer
+            );
+        }
     }
 
 }

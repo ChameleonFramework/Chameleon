@@ -32,21 +32,19 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeSpec;
 import dev.hypera.chameleon.annotations.PlatformDependency;
 import dev.hypera.chameleon.annotations.Plugin;
-import dev.hypera.chameleon.annotations.Plugin.Platform;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.configurate.BasicConfigurationNode;
-import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 
 public class VelocityGenerator extends Generator {
 
@@ -55,8 +53,8 @@ public class VelocityGenerator extends Generator {
 
     public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
         MethodSpec constructorSpec = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(clazz("com.google.inject", "Inject"))
+                .addModifiers(Modifier.PUBLIC)
                 .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.proxy", "ProxyServer"), "server").build())
                 .addParameter(ParameterSpec.builder(clazz("java.nio.file", "Path"), "dataDirectory").addAnnotation(clazz("com.velocitypowered.api.plugin.annotation", "DataDirectory")).build())
                 .addStatement("this.$N = $N", "server", "server")
@@ -64,8 +62,8 @@ public class VelocityGenerator extends Generator {
                 .build();
 
         MethodSpec initEventSpec = MethodSpec.methodBuilder("onProxyInitialization")
-                .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(clazz("com.velocitypowered.api.event", "Subscribe"))
+                .addModifiers(Modifier.PUBLIC)
                 .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.event.proxy", "ProxyInitializeEvent"), "event").build())
                 .beginControlFlow("try")
                 .addStatement("this.$N = new $T($T.class, this)", "chameleon", clazz("dev.hypera.chameleon.platforms.velocity", "VelocityChameleon"), plugin)
@@ -117,8 +115,9 @@ public class VelocityGenerator extends Generator {
         }
 
         TypeSpec velocityMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Velocity")
-                .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(pluginAnnotationSpecBuilder.build())
+                .addModifiers(Modifier.PUBLIC)
+                .addSuperinterface(clazz("dev.hypera.chameleon.platforms.velocity", "VelocityPlugin"))
                 .addField(FieldSpec.builder(
                         clazz("com.velocitypowered.api.proxy", "ProxyServer"),
                         "server",
@@ -134,7 +133,6 @@ public class VelocityGenerator extends Generator {
                         "chameleon",
                         Modifier.PRIVATE
                 ).build())
-                .addSuperinterface(clazz("dev.hypera.chameleon.platforms.velocity", "VelocityPlugin"))
                 .addMethod(constructorSpec)
                 .addMethod(initEventSpec)
                 .addMethod(shutdownEventSpec)
@@ -153,23 +151,13 @@ public class VelocityGenerator extends Generator {
     }
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {
-        GsonConfigurationLoader configurationLoader = GsonConfigurationLoader.builder()
-                .path(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))
-                .build();
-
-        BasicConfigurationNode node = configurationLoader.createNode()
-                .node("id").set(data.id())
-                .node("name").set(data.name())
-                .node("version").set(data.version())
-                .node("description").set(data.description())
-                .node("url").set(data.url())
-                .node("authors").set(Arrays.asList(data.authors()))
-                .node("dependencies").set(Arrays.stream(data.dependencies())
-                        .filter(d -> Arrays.asList(d.platforms()).contains(Platform.VELOCITY))
-                        .map(d -> new SerializedDependency(d.name(), d.soft())).collect(Collectors.toList())
-                ).node("main").set(packageName + plugin.getSimpleName() + "Velocity");
-
-        configurationLoader.save(node);
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))) {
+            GSON.toJson(new SerializedPluginDescription(
+                    data.id(), data.name(), data.version(), data.description(),
+                    data.url(), Arrays.asList(data.authors()), Arrays.asList(data.dependencies()),
+                    packageName + "." + plugin.getSimpleName() + "Velocity"
+            ), writer);
+        }
     }
 
 }
