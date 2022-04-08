@@ -20,7 +20,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations.processing.generation.impl.spigot;
+package dev.hypera.chameleon.annotations.processing.generation.impl.minestom;
 
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
@@ -41,73 +41,67 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
+import org.spongepowered.configurate.BasicConfigurationNode;
+import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 
-public class SpigotGenerator extends Generator {
+public class MinestomGenerator extends Generator {
 
     private static final @NotNull String DESCRIPTION_FILE = "plugin.yml";
 
     @Override
     public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
-        MethodSpec enableSpec = MethodSpec.methodBuilder("onEnable")
+        MethodSpec initializeSpec = MethodSpec.methodBuilder("initialize")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .beginControlFlow("try")
-                .addStatement("this.$N = new $T($T.class, this)", "chameleon", clazz("dev.hypera.chameleon.platforms.spigot", "SpigotChameleon"), plugin)
+                .addStatement("this.$N = new $T($T.class, this)", "chameleon", clazz("dev.hypera.chameleon.platforms.minestom", "MinestomChameleon"), plugin)
                 .addStatement("this.$N.onEnable()", "chameleon")
                 .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
                 .addStatement("$N.printStackTrace()", "ex")
                 .endControlFlow()
                 .build();
 
-        MethodSpec disableSpec = MethodSpec.methodBuilder("onDisable")
+        MethodSpec terminateSpec = MethodSpec.methodBuilder("terminate")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .addStatement("this.$N.onDisable()", "chameleon")
                 .build();
 
-        TypeSpec spigotMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Spigot")
+        TypeSpec minestomMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Spigot")
                 .addModifiers(Modifier.PUBLIC)
                 .addField(FieldSpec.builder(
-                        clazz("dev.hypera.chameleon.platforms.spigot", "SpigotChameleon"),
+                        clazz("dev.hypera.chameleon.platforms.minestom", "MinestomChameleon"),
                         "chameleon",
                         Modifier.PRIVATE
                 ).build())
-                .addMethod(enableSpec)
-                .addMethod(disableSpec)
+                .addMethod(initializeSpec)
+                .addMethod(terminateSpec)
                 .build();
 
         String packageName = ((PackageElement) plugin.getEnclosingElement()).getQualifiedName().toString();
         if (packageName.endsWith("core") || packageName.endsWith("common")) {
             packageName = packageName.substring(0, packageName.lastIndexOf("."));
         }
-        packageName = packageName + ".platform.spigot";
+        packageName = packageName + ".platform.minestom";
 
-        JavaFile.builder(packageName, spigotMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
+        JavaFile.builder(packageName, minestomMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
         generateDescriptionFile(data, plugin, env, packageName);
     }
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {
-        YamlConfigurationLoader configurationLoader = YamlConfigurationLoader.builder()
+        GsonConfigurationLoader configurationLoader = GsonConfigurationLoader.builder()
                 .path(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))
                 .build();
 
-        CommentedConfigurationNode node = configurationLoader.createNode()
+        BasicConfigurationNode node = configurationLoader.createNode()
                 .node("name").set(data.name().isEmpty() ? data.id() : data.name())
-                .node("main").set(packageName + plugin.getSimpleName() + "Spigot")
+                .node("entrypoint").set(packageName + plugin.getSimpleName() + "Minestom")
                 .node("version").set(data.version())
-                .node("api-version").set("1.13")
-                .node("author").set(data.authors().length > 0 ? String.join(", ", data.authors()) : "Unknown")
                 .node("authors").set(data.authors())
-                .node("website").set(data.url())
-                .node("depend").set(Arrays.stream(data.dependencies())
-                        .filter(d -> !d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.SPIGOT)))
+                .node("dependencies").set(Arrays.stream(data.dependencies())
+                        .filter(d -> Arrays.asList(d.platforms()).contains(Platform.MINESTOM))
                         .map(PlatformDependency::name).collect(Collectors.toList())
-                ).node("softdepend").set(Arrays.stream(data.dependencies())
-                        .filter(d -> d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.SPIGOT)))
-                        .map(PlatformDependency::name).collect(Collectors.toList())
-                ).node("description").set(data.description());
+                );
 
         configurationLoader.save(node);
     }

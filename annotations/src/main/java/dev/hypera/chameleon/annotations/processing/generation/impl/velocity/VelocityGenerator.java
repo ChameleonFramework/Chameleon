@@ -163,11 +163,11 @@ public class VelocityGenerator extends Generator {
                 .node("version").set(data.version())
                 .node("description").set(data.description())
                 .node("url").set(data.url())
-                .node("authors", Arrays.asList(data.authors()))
-                .node("dependencies", Arrays.stream(data.dependencies())
+                .node("authors").set(Arrays.asList(data.authors()))
+                .node("dependencies").set(Arrays.stream(data.dependencies())
                         .filter(d -> Arrays.asList(d.platforms()).contains(Platform.VELOCITY))
                         .map(d -> new SerializedDependency(d.name(), d.soft())).collect(Collectors.toList())
-                ).node("main", packageName + plugin.getSimpleName() + "Velocity");
+                ).node("main").set(packageName + plugin.getSimpleName() + "Velocity");
 
         configurationLoader.save(node);
     }
