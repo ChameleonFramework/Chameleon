@@ -23,6 +23,7 @@
 package dev.hypera.chameleon.features.configuration.tests;
 
 import dev.hypera.chameleon.features.configuration.impl.JsonConfiguration;
+import dev.hypera.chameleon.features.configuration.util.CastingList;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -30,7 +31,6 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -50,9 +50,13 @@ public class JsonTests {
                     "  \"integer\": 42,\n" +
                     "  \"double\": 69.420,\n" +
                     "  \"long\": 2028743837545,\n" +
+                    "  \"boolean\": false\n" +
+                    "  \"nested\": {\n" +
+                    "    \"item\": \"yes\"\n" +
+                    "  },\n" +
                     "  \"string_list\": [\n" +
                     "    \"item1\",\n" +
-                    "\t\"item2\"\n" +
+                    "    \"2\"\n" +
                     "  ]\n" +
                     "}").getBytes());
         } catch (IOException e) {
@@ -67,10 +71,13 @@ public class JsonTests {
         assertEquals(42, config.getInt("integer").orElseThrow(IllegalStateException::new));
         assertEquals(69.420, config.getDouble("double").orElseThrow(IllegalStateException::new));
         assertEquals(2028743837545L, config.getLong("long").orElseThrow(IllegalStateException::new));
+        assertEquals(false, config.getBoolean("boolean").orElseThrow(IllegalStateException::new));
 
-        List<?> list = config.getList("string_list").orElseThrow(IllegalStateException::new);
-        assertEquals("item1", list.get(0));
-        assertEquals("item2", list.get(1));
+        assertEquals("yes", config.getString("nested.item").orElseThrow(IllegalStateException::new));
+
+        CastingList list = config.getList("string_list").orElseThrow(IllegalStateException::new);
+        assertEquals("item1", list.getString(0).orElseThrow(IllegalStateException::new));
+        assertEquals(2, list.getInt(1).orElseThrow(IllegalStateException::new));
     }
 
 }

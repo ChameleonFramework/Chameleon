@@ -22,6 +22,7 @@
  */
 package dev.hypera.chameleon.features.configuration;
 
+import dev.hypera.chameleon.features.configuration.util.CastingList;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -53,6 +54,7 @@ public interface Configuration {
 	default @NotNull Optional<Integer> getInt(@NotNull String path) {
 		return get(path).map(o -> {
 			if (o instanceof Long) return ((Long) o).intValue();
+			else if (o instanceof String) return Integer.parseInt((String) o);
 			return (Integer) o;
 		});
 	}
@@ -63,10 +65,17 @@ public interface Configuration {
 		return get(path).map(o -> (Long) o);
 	}
 	default @NotNull Optional<Boolean> getBoolean(@NotNull String path) {
-		return get(path).map(o -> (Boolean) o);
+		return get(path).map(o -> {
+			if (o instanceof Boolean) return (Boolean) o;
+			return Boolean.parseBoolean((String) o);
+		});
 	}
-	default @NotNull Optional<List<?>> getList(@NotNull String path) {
-		return get(path).map(o -> (List<?>) o);
+	default @NotNull Optional<CastingList> getList(@NotNull String path) {
+		return get(path).map(o -> {
+			CastingList list = new CastingList();
+			list.addAll((List<?>) o);
+			return list;
+		});
 	}
 
 	@NotNull Path getPath();
