@@ -23,10 +23,11 @@
 package dev.hypera.chameleon.core.commands.objects;
 
 import dev.hypera.chameleon.core.commands.context.Context;
-import java.util.function.Function;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Command condition
@@ -34,8 +35,8 @@ import org.jetbrains.annotations.Nullable;
 public interface Condition {
 
 	boolean test(@NotNull Context context);
-	default @Nullable Component getErrorMessage() {
-		return null;
+	default @NotNull Optional<Component> getErrorMessage() {
+		return Optional.empty();
 	}
 
 
@@ -52,8 +53,8 @@ public interface Condition {
 			}
 
 			@Override
-			public @NotNull Component getErrorMessage() {
-				return errorMessage;
+			public @NotNull Optional<Component> getErrorMessage() {
+				return Optional.of(errorMessage);
 			}
 
 		};

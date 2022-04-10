@@ -22,12 +22,13 @@
  */
 package dev.hypera.chameleon.core.platform.objects;
 
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Set;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Platform plugin
@@ -36,7 +37,7 @@ public interface PlatformPlugin {
 
 	@NotNull String getName();
 	@NotNull String getVersion();
-	@Nullable String getDescription();
+	@NotNull Optional<String> getDescription();
 	@NotNull Class<?> getMainClass();
 	@NotNull List<String> getAuthors();
 	@NotNull Set<String> getDependencies();

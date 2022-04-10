@@ -25,6 +25,7 @@ package dev.hypera.chameleon.platforms.bungeecord;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.ChameleonPlugin;
 import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
+import dev.hypera.chameleon.core.data.PluginData;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.managers.CommandManager;
 import dev.hypera.chameleon.core.managers.PluginManager;
@@ -56,8 +57,8 @@ public final class BungeeCordChameleon extends Chameleon {
 	private final @NotNull BungeeCordUserManager userManager = new BungeeCordUserManager(this);
 	private final @NotNull BungeeCordScheduler scheduler = new BungeeCordScheduler(this);
 
-	public BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin) throws ChameleonInstantiationException {
-		super(chameleonPlugin);
+	public BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+		super(chameleonPlugin, pluginData);
 		this.plugin = bungeePlugin;
 		this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);
 		ProxyServer.getInstance().getPluginManager().registerListener(bungeePlugin, new BungeeCordListener(this));

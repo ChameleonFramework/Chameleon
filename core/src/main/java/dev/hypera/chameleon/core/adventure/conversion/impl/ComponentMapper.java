@@ -39,7 +39,7 @@ public class ComponentMapper implements IMapper<Component> {
 
 	public ComponentMapper() {
 		try {
-			Class<?> serializerClass = Class.forName(new String(AdventureConverter.PACKAGE) + "text.serializer.gson.GsonComponentSerializer");
+			Class<?> serializerClass = Class.forName(AdventureConverter.PACKAGE + "text.serializer.gson.GsonComponentSerializer");
 			GSON_SERIALIZER_DESERIALIZE = serializerClass.getMethod("deserialize", Object.class);
 			GSON_SERIALIZER_INSTANCE = serializerClass.getMethod("gson").invoke(null);
 		} catch (ReflectiveOperationException ex) {

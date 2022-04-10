@@ -74,7 +74,7 @@ public class VelocityListener {
 
 	@Subscribe
 	public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
-		if (event.getPreviousServer().isPresent() && event.getPlayer().getCurrentServer().isPresent()) {
+		if (event.getPreviousServer().isPresent()) {
 			chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(
 					wrap(event.getPlayer()),
 					wrap(event.getPreviousServer().orElse(null)),

@@ -28,10 +28,12 @@ import dev.hypera.chameleon.core.users.User;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityConsoleUser;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Velocity user manager
@@ -56,8 +58,8 @@ public final class VelocityUserManager extends UserManager {
 	}
 
 	@Override
-	public @NotNull User getPlayer(@NotNull UUID uniqueId) {
-		return chameleon.getVelocityPlugin().getServer().getPlayer(uniqueId).map(p -> new VelocityUser(chameleon, p)).orElseThrow(() -> new IllegalArgumentException("Cannot find user with id '" + uniqueId + "'"));
+	public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
+		return chameleon.getVelocityPlugin().getServer().getPlayer(uniqueId).map(p -> new VelocityUser(chameleon, p));
 	}
 
 }

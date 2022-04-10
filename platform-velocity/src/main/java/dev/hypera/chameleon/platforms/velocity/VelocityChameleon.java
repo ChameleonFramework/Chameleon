@@ -25,6 +25,7 @@ package dev.hypera.chameleon.platforms.velocity;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.ChameleonPlugin;
 import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
+import dev.hypera.chameleon.core.data.PluginData;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.managers.CommandManager;
 import dev.hypera.chameleon.core.managers.PluginManager;
@@ -54,8 +55,8 @@ public class VelocityChameleon extends Chameleon {
 	private final @NotNull VelocityUserManager userManager = new VelocityUserManager(this);
 	private final @NotNull VelocityScheduler scheduler = new VelocityScheduler(this);
 
-	public VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin) throws ChameleonInstantiationException {
-		super(chameleonPlugin);
+	public VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+		super(chameleonPlugin, pluginData);
 		this.plugin = velocityPlugin;
 		this.plugin.getServer().getEventManager().register(plugin, new VelocityListener(this));
 	}

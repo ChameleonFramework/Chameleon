@@ -29,10 +29,11 @@ import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.platform.objects.VelocityServer;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Velocity user
@@ -79,8 +80,8 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
 	}
 
 	@Override
-	public @Nullable Server getServer() {
-		return player.getCurrentServer().map(s -> new VelocityServer(chameleon, s.getServer())).orElse(null);
+	public @NotNull Optional<Server> getServer() {
+		return player.getCurrentServer().map(s -> new VelocityServer(chameleon, s.getServer()));
 	}
 
 	@Override

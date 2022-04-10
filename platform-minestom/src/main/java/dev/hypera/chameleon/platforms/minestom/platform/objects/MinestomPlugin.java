@@ -23,16 +23,11 @@
 package dev.hypera.chameleon.platforms.minestom.platform.objects;
 
 import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.nio.file.Path;
+import java.util.*;
 
 /**
  * Minestom plugin implementation
@@ -56,8 +51,8 @@ public class MinestomPlugin implements PlatformPlugin {
 	}
 
 	@Override
-	public @Nullable String getDescription() {
-		return null;
+	public @NotNull Optional<String> getDescription() {
+		return Optional.empty();
 	}
 
 	@Override

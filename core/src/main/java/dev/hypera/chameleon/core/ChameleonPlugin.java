@@ -39,6 +39,8 @@ public abstract class ChameleonPlugin {
 	public abstract void onEnable();
 	public abstract void onDisable();
 
-	public abstract @NotNull PluginData getData();
+	public final @NotNull PluginData getData() {
+		return chameleon.getData();
+	}
 
 }

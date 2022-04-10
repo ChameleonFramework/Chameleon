@@ -26,6 +26,7 @@ import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.core.adventure.conversion.IMapper;
 import java.lang.reflect.Method;
 import java.time.Duration;
+import java.util.Arrays;
 import net.kyori.adventure.title.Title.Times;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,8 +39,12 @@ public class TimesMapper implements IMapper<Times> {
 
 	public TimesMapper() {
 		try {
-			Class<?> timesClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title$Times");
-			CREATE_METHOD = timesClass.getMethod("times", Duration.class, Duration.class, Duration.class);
+			Class<?> timesClass = Class.forName(AdventureConverter.PACKAGE + "title.Title$Times");
+			if (Arrays.stream(timesClass.getMethods()).anyMatch(m -> m.getName().equals("times"))) {
+				CREATE_METHOD = timesClass.getMethod("times", Duration.class, Duration.class, Duration.class);
+			} else {
+				CREATE_METHOD = timesClass.getMethod("of", Duration.class, Duration.class, Duration.class);
+			}
 		} catch (ReflectiveOperationException ex) {
 			throw new ExceptionInInitializerError(ex);
 		}

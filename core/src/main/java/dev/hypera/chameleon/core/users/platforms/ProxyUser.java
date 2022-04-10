@@ -26,9 +26,10 @@ import dev.hypera.chameleon.core.annotations.PlatformSpecific;
 import dev.hypera.chameleon.core.platform.Platform.Type;
 import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.core.users.User;
-import java.util.function.BiConsumer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
+import java.util.function.BiConsumer;
 
 /**
  * In-game player on a proxy
@@ -36,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 @PlatformSpecific(Type.PROXY)
 public interface ProxyUser extends User {
 
-	@Nullable Server getServer();
+	@NotNull Optional<Server> getServer();
 
 	void connect(@NotNull Server server);
 	void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback);

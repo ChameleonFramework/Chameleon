@@ -28,12 +28,13 @@ import dev.hypera.chameleon.core.users.User;
 import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
 import dev.hypera.chameleon.platforms.spigot.user.SpigotConsoleUser;
 import dev.hypera.chameleon.platforms.spigot.user.SpigotUser;
+import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Spigot user manager
@@ -58,13 +59,8 @@ public final class SpigotUserManager extends UserManager {
 	}
 
 	@Override
-	public @NotNull User getPlayer(@NotNull UUID uniqueId) {
-		Player player = Bukkit.getPlayer(uniqueId);
-		if (null == player || !player.isOnline()) {
-			throw new IllegalArgumentException("Cannot find user with id '" + uniqueId + "'");
-		} else {
-			return new SpigotUser(chameleon, player);
-		}
+	public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
+		return Optional.ofNullable(Bukkit.getPlayer(uniqueId)).map(player -> new SpigotUser(chameleon, player));
 	}
 
 }

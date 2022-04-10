@@ -42,13 +42,11 @@ import org.jetbrains.annotations.NotNull;
  * Because Velocity and Minestom provide Adventure, we cannot use the shaded/relocated version of adventure without there being problems.
  * To get around this we convert the shaded Adventure objects to the platform ones using reflection.
  *
- * Adapted from Lucko's AdventureCompat class for LuckPerms for use in Chameleon.
+ * Adapted from Lucko's AdventureCompat class in LuckPerms for use in Chameleon.
  */
 public class AdventureConverter {
 
-	public static final char[] PACKAGE = {
-			'n', 'e', 't', '.', 'k', 'y', 'o', 'r', 'i', '.', 'a', 'd', 'v', 'e', 'n', 't', 'u', 'r', 'e', '.'
-	};
+	public static final String PACKAGE = "net.ky".concat("ori.adventure.");
 
 	private static final @NotNull KeyMapper KEY_CONVERTER = new KeyMapper();
 	private static final @NotNull ComponentMapper COMPONENT_CONVERTER = new ComponentMapper();

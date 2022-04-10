@@ -37,7 +37,7 @@ public class KeyMapper implements IMapper<Key> {
 
 	public KeyMapper() {
 		try {
-			Class<?> keyClass = Class.forName(new String(AdventureConverter.PACKAGE) + "key.Key");
+			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
 			CREATE_METHOD = keyClass.getMethod("key", String.class);
 		} catch (ReflectiveOperationException ex) {
 			throw new ExceptionInInitializerError(ex);

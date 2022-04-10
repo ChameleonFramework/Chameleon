@@ -42,8 +42,8 @@ public class BossBarMapper implements IMapper<BossBar> {
 
 	public BossBarMapper() {
 		try {
-			Class<?> componentLikeClass = Class.forName(new String(AdventureConverter.PACKAGE) + "text.ComponentLike");
-			Class<?> bossBarClass = Class.forName(new String(AdventureConverter.PACKAGE) + "bossbar.BossBar");
+			Class<?> componentLikeClass = Class.forName(AdventureConverter.PACKAGE + "text.ComponentLike");
+			Class<?> bossBarClass = Class.forName(AdventureConverter.PACKAGE + "bossbar.BossBar");
 
 			Class<?> colorEnum = Class.forName(bossBarClass.getCanonicalName() + "$Color");
 			Class<?> overlayEnum = Class.forName(bossBarClass.getCanonicalName() + "$Overlay");

@@ -25,13 +25,14 @@ package dev.hypera.chameleon.core.commands;
 import dev.hypera.chameleon.core.commands.annotations.Permission;
 import dev.hypera.chameleon.core.commands.context.Context;
 import dev.hypera.chameleon.core.exceptions.command.ChameleonCommandException;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Sub command
@@ -65,9 +66,7 @@ public final class SubCommand {
 	public void execute(@NotNull Context context, @NotNull Command parent) {
 		try {
 			if (null != permission && !permission.value().isEmpty() && !context.getSender().hasPermission(permission.value())) {
-				if (null != parent.getPermissionErrorMessage()) {
-					context.getSender().sendMessage(parent.getPermissionErrorMessage());
-				}
+				parent.getPermissionErrorMessage().ifPresent(component -> context.getSender().sendMessage(component));
 				return;
 			}
 

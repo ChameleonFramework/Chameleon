@@ -22,79 +22,65 @@
  */
 package dev.hypera.chameleon.core.data;
 
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Plugin data
  */
-public interface PluginData {
+public class PluginData {
 
-	@NotNull String getName();
-	@NotNull String getVersion();
-	@NotNull String getAuthor();
-	@NotNull String getLogPrefix();
+	private final @NotNull String name;
+	private final @NotNull String version;
+	private final @NotNull String description;
+	private final @NotNull String url;
+	private final @NotNull List<String> authors;
+	private final @NotNull String logPrefix;
+	private final @NotNull List<Platform> platforms;
 
-	static Builder builder() {
-		return new Builder();
+	public PluginData(@NotNull String name, @NotNull String version, @NotNull String description, @NotNull String url, @NotNull List<String> authors, @NotNull String logPrefix, @NotNull List<Platform> platforms) {
+		this.name = name;
+		this.version = version;
+		this.description = description;
+		this.url = url;
+		this.authors = authors;
+		this.logPrefix = logPrefix;
+		this.platforms = platforms;
 	}
 
-	class Builder {
+	public @NotNull String getName() {
+		return name;
+	}
 
-		private String name;
-		private String version;
-		private String author;
-		private String logPrefix = "[%s]";
+	public @NotNull String getVersion() {
+		return version;
+	}
 
-		public @NotNull Builder name(@NotNull String name) {
-			this.name = name;
-			return this;
-		}
+	public @NotNull String getDescription() {
+		return description;
+	}
 
-		public @NotNull Builder version(@NotNull String version) {
-			this.version = version;
-			return this;
-		}
+	public @NotNull String getUrl() {
+		return url;
+	}
 
-		public @NotNull Builder author(@NotNull String author) {
-			this.author = author;
-			return this;
-		}
+	public @NotNull List<String> getAuthors() {
+		return authors;
+	}
 
-		public @NotNull Builder logPrefix(@NotNull String logPrefix) {
-			this.logPrefix = logPrefix;
-			return this;
-		}
+	public @NotNull String getLogPrefix() {
+		return logPrefix;
+	}
 
-		public @NotNull PluginData build() {
-			if (null == name || null == version) {
-				throw new IllegalStateException("Name and version must be set");
-			}
+	public @NotNull List<Platform> getPlatforms() {
+		return platforms;
+	}
 
-			return new PluginData() {
-
-				@Override
-				public @NotNull String getName() {
-					return name;
-				}
-
-				@Override
-				public @NotNull String getVersion() {
-					return version;
-				}
-
-				@Override
-				public @NotNull String getAuthor() {
-					return author;
-				}
-
-				@Override
-				public @NotNull String getLogPrefix() {
-					return logPrefix;
-				}
-
-			};
-		}
-
+	public enum Platform {
+		BUNGEECORD,
+		MINESTOM,
+		SPIGOT,
+		VELOCITY
 	}
 
 }

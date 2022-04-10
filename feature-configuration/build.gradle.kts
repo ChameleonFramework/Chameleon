@@ -26,7 +26,7 @@ plugins {
 }
 
 dependencies {
-    implementation("org.yaml:snakeyaml:1.29") {
+    implementation("org.yaml:snakeyaml:1.30") {
         exclude(group = "joda-time", module = "joda-time")
         exclude(group = "junit", module = "joda-time")
         exclude(group = "org.apache", module = "velocity")
@@ -37,4 +37,11 @@ dependencies {
     }
 
     implementation("org.jetbrains:annotations:23.0.0")
+
+    testImplementation(platform("org.junit:junit-bom:5.8.2"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
