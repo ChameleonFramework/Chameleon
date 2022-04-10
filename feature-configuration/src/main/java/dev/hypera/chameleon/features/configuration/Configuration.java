@@ -23,10 +23,10 @@
 package dev.hypera.chameleon.features.configuration;
 
 import dev.hypera.chameleon.features.configuration.util.CastingList;
+import dev.hypera.chameleon.features.configuration.util.CastingUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -49,33 +49,22 @@ public interface Configuration {
 	}
 
 	default @NotNull Optional<String> getString(@NotNull String path) {
-		return get(path).map(o -> (String) o);
+		return get(path).map(CastingUtil::asString);
 	}
 	default @NotNull Optional<Integer> getInt(@NotNull String path) {
-		return get(path).map(o -> {
-			if (o instanceof Long) return ((Long) o).intValue();
-			else if (o instanceof String) return Integer.parseInt((String) o);
-			return (Integer) o;
-		});
+		return get(path).map(CastingUtil::asInt);
 	}
 	default @NotNull Optional<Double> getDouble(@NotNull String path) {
-		return get(path).map(o -> (Double) o);
+		return get(path).map(CastingUtil::asDouble);
 	}
 	default @NotNull Optional<Long> getLong(@NotNull String path) {
-		return get(path).map(o -> (Long) o);
+		return get(path).map(CastingUtil::asLong);
 	}
 	default @NotNull Optional<Boolean> getBoolean(@NotNull String path) {
-		return get(path).map(o -> {
-			if (o instanceof Boolean) return (Boolean) o;
-			return Boolean.parseBoolean((String) o);
-		});
+		return get(path).map(CastingUtil::asBoolean);
 	}
 	default @NotNull Optional<CastingList> getList(@NotNull String path) {
-		return get(path).map(o -> {
-			CastingList list = new CastingList();
-			list.addAll((List<?>) o);
-			return list;
-		});
+		return get(path).map(CastingUtil::asList);
 	}
 
 	@NotNull Path getPath();

@@ -25,7 +25,6 @@ package dev.hypera.chameleon.features.configuration.util;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class CastingList extends ArrayList<Object> {
@@ -42,33 +41,22 @@ public class CastingList extends ArrayList<Object> {
     }
 
     public @NotNull Optional<String> getString(int index) {
-        return getOptional(index).map(o -> (String) o);
+        return getOptional(index).map(CastingUtil::asString);
     }
     public @NotNull Optional<Integer> getInt(int index) {
-        return getOptional(index).map(o -> {
-            if (o instanceof Long) return ((Long) o).intValue();
-            else if (o instanceof String) return Integer.parseInt((String) o);
-            return (Integer) o;
-        });
+        return getOptional(index).map(CastingUtil::asInt);
     }
     public @NotNull Optional<Double> getDouble(int index) {
-        return getOptional(index).map(o -> (Double) o);
+        return getOptional(index).map(CastingUtil::asDouble);
     }
     public @NotNull Optional<Long> getLong(int index) {
-        return getOptional(index).map(o -> (Long) o);
+        return getOptional(index).map(CastingUtil::asLong);
     }
     public @NotNull Optional<Boolean> getBoolean(int index) {
-        return getOptional(index).map(o -> {
-            if (o instanceof Boolean) return (Boolean) o;
-            return Boolean.parseBoolean((String) o);
-        });
+        return getOptional(index).map(CastingUtil::asBoolean);
     }
     public @NotNull Optional<CastingList> getList(int index) {
-        return getOptional(index).map(o -> {
-            CastingList list = new CastingList();
-            list.addAll((List<?>) o);
-            return list;
-        });
+        return getOptional(index).map(CastingUtil::asList);
     }
 
 }

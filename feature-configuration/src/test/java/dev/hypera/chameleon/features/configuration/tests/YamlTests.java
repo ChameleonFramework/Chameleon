@@ -33,6 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class YamlTests {
 
@@ -64,6 +65,7 @@ public class YamlTests {
     public void read() {
         YamlConfiguration config = new YamlConfiguration(folder, FILE_NAME, false);
         assertEquals("Hello World!", config.getString("string").orElseThrow(IllegalStateException::new));
+        assertFalse(config.getInt("string").isPresent());
         assertEquals(42, config.getInt("integer").orElseThrow(IllegalStateException::new));
         assertEquals(69.420, config.getDouble("double").orElseThrow(IllegalStateException::new));
         assertEquals(2028743837545L, config.getLong("long").orElseThrow(IllegalStateException::new));
