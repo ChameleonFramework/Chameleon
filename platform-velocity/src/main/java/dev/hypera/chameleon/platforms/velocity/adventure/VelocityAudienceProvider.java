@@ -29,13 +29,14 @@ import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityConsoleUser;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUsers;
-import java.util.UUID;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Velocity audience provider implementation
@@ -85,7 +86,7 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
 
 	@Override
 	public @NotNull Audience server(@NotNull String serverName) {
-		return filter(p -> p instanceof ProxyUser && null != ((ProxyUser) p).getServer() && ((ProxyUser) p).getServer().getName().equals(serverName));
+		return filter(p -> p instanceof ProxyUser && ((ProxyUser) p).getServer().isPresent() && ((ProxyUser) p).getServer().get().getName().equals(serverName));
 	}
 
 	@Override

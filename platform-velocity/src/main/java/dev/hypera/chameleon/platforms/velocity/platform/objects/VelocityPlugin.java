@@ -25,13 +25,14 @@ package dev.hypera.chameleon.platforms.velocity.platform.objects;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.meta.PluginDependency;
 import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Velocity plugin implementation
@@ -56,8 +57,8 @@ public class VelocityPlugin implements PlatformPlugin {
 	}
 
 	@Override
-	public @Nullable String getDescription() {
-		return plugin.getDescription().getDescription().orElse(null);
+	public @NotNull Optional<String> getDescription() {
+		return plugin.getDescription().getDescription();
 	}
 
 	@Override
