@@ -20,43 +20,17 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.adventure.conversion.impl.key;
+package dev.hypera.chameleon.annotations;
 
-import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IMapper;
-import java.lang.reflect.Method;
-import net.kyori.adventure.key.Key;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.annotations.Plugin.Platform;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-/**
- * Maps shaded to platform net.kyori.adventure.key.Key
- */
-public class KeyMapper implements IMapper<Key> {
+@Retention(RetentionPolicy.SOURCE)
+public @interface PlatformDependency {
 
-	private final @NotNull Method CREATE_METHOD;
-
-	public KeyMapper() {
-		try {
-			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-			CREATE_METHOD = keyClass.getMethod("key", String.class);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
-
-	/**
-	 * Map Key to the platform version of Adventure
-	 *
-	 * @param key Key to be mapped
-	 * @return Platform Key
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Key key) {
-		try {
-			return CREATE_METHOD.invoke(null, key.asString());
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    String name();
+    boolean soft();
+    Platform[] platforms() default {};
 
 }

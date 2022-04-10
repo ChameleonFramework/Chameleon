@@ -23,6 +23,7 @@
 package dev.hypera.chameleon.core;
 
 import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
+import dev.hypera.chameleon.core.data.PluginData;
 import dev.hypera.chameleon.core.events.EventManager;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.exceptions.modules.ChameleonModuleInjectionException;
@@ -47,14 +48,16 @@ public abstract class Chameleon {
 
 	private static final @NotNull String VERSION = "0.4.0-SNAPSHOT";
 	private final @NotNull ChameleonPlugin plugin;
+	private final @NotNull PluginData pluginData;
 	private final @NotNull ChameleonLoggerFactory loggerFactory = new ChameleonLoggerFactory(this);
 	private final @NotNull EventManager eventMapper = new EventManager(this);
 	private final @NotNull ModuleLoader moduleLoader = new ModuleLoader(this);
 
 	@Internal
-	protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin) throws ChameleonInstantiationException {
+	protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
 		try {
 			this.plugin = plugin.getConstructor(Chameleon.class).newInstance(this);
+			this.pluginData = pluginData;
 			for (Field field : plugin.getDeclaredFields()) {
 				try {
 					moduleLoader.injectModule(field, this.plugin);
@@ -81,6 +84,9 @@ public abstract class Chameleon {
 
 	public final @NotNull ChameleonPlugin getPlugin() {
 		return plugin;
+	}
+	public final @NotNull PluginData getData() {
+		return pluginData;
 	}
 
 	public final @NotNull ChameleonLogger getLogger() {

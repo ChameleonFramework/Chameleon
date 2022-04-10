@@ -20,43 +20,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.adventure.conversion.impl.key;
+plugins {
+    id("chameleon.api")
+}
 
-import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IMapper;
-import java.lang.reflect.Method;
-import net.kyori.adventure.key.Key;
-import org.jetbrains.annotations.NotNull;
+dependencies {
+    implementation(project(":core"))
+    implementation("com.squareup:javapoet:1.13.0")
 
-/**
- * Maps shaded to platform net.kyori.adventure.key.Key
- */
-public class KeyMapper implements IMapper<Key> {
+    implementation("org.yaml:snakeyaml:1.30") {
+        exclude(group = "joda-time", module = "joda-time")
+        exclude(group = "junit", module = "joda-time")
+        exclude(group = "org.apache", module = "velocity")
+    }
 
-	private final @NotNull Method CREATE_METHOD;
-
-	public KeyMapper() {
-		try {
-			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-			CREATE_METHOD = keyClass.getMethod("key", String.class);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
-
-	/**
-	 * Map Key to the platform version of Adventure
-	 *
-	 * @param key Key to be mapped
-	 * @return Platform Key
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Key key) {
-		try {
-			return CREATE_METHOD.invoke(null, key.asString());
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
+    implementation("com.google.code.gson:gson:2.9.0")
 }

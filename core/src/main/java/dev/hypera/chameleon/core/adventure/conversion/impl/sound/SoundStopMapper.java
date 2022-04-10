@@ -39,8 +39,8 @@ public class SoundStopMapper implements IMapper<SoundStop> {
 
 	public SoundStopMapper() {
 		try {
-			Class<?> soundStopClass = Class.forName(new String(AdventureConverter.PACKAGE) + "sound.SoundStop");
-			Class<?> keyClass = Class.forName(new String(AdventureConverter.PACKAGE) + "key.Key");
+			Class<?> soundStopClass = Class.forName(AdventureConverter.PACKAGE + "sound.SoundStop");
+			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
 			ALL_METHOD = soundStopClass.getMethod("all");
 			CREATE_METHOD = soundStopClass.getMethod("named", keyClass);
 		} catch (ReflectiveOperationException ex) {

@@ -20,43 +20,28 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.adventure.conversion.impl.key;
+package dev.hypera.chameleon.annotations.processing.generation.impl.minestom;
 
-import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IMapper;
-import java.lang.reflect.Method;
-import net.kyori.adventure.key.Key;
+import dev.hypera.chameleon.annotations.PlatformDependency;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Maps shaded to platform net.kyori.adventure.key.Key
- */
-public class KeyMapper implements IMapper<Key> {
+@SuppressWarnings({ "unused", "FieldCanBeLocal" })
+public class ExtensionDescription {
 
-	private final @NotNull Method CREATE_METHOD;
+    private final @NotNull String name;
+    private final @NotNull String entrypoint;
+    private final @NotNull String version;
+    private final @NotNull List<String> authors;
+    private final @NotNull List<String> dependencies;
 
-	public KeyMapper() {
-		try {
-			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-			CREATE_METHOD = keyClass.getMethod("key", String.class);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
-
-	/**
-	 * Map Key to the platform version of Adventure
-	 *
-	 * @param key Key to be mapped
-	 * @return Platform Key
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Key key) {
-		try {
-			return CREATE_METHOD.invoke(null, key.asString());
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    public ExtensionDescription(@NotNull String name, @NotNull String entrypoint, @NotNull String version, @NotNull List<String> authors, @NotNull List<PlatformDependency> dependencies) {
+        this.name = name;
+        this.entrypoint = entrypoint;
+        this.version = version;
+        this.authors = authors;
+        this.dependencies = dependencies.stream().map(PlatformDependency::name).collect(Collectors.toList());
+    }
 
 }

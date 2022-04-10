@@ -20,43 +20,18 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.adventure.conversion.impl.key;
+package dev.hypera.chameleon.annotations.utils;
 
-import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.core.adventure.conversion.IMapper;
-import java.lang.reflect.Method;
-import net.kyori.adventure.key.Key;
+import java.util.HashMap;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Maps shaded to platform net.kyori.adventure.key.Key
- */
-public class KeyMapper implements IMapper<Key> {
+public class MapBuilder<K, V> extends HashMap<K, V> {
 
-	private final @NotNull Method CREATE_METHOD;
+    private static final long serialVersionUID = 5845273231221036448L;
 
-	public KeyMapper() {
-		try {
-			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-			CREATE_METHOD = keyClass.getMethod("key", String.class);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
-
-	/**
-	 * Map Key to the platform version of Adventure
-	 *
-	 * @param key Key to be mapped
-	 * @return Platform Key
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Key key) {
-		try {
-			return CREATE_METHOD.invoke(null, key.asString());
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    public @NotNull MapBuilder<K, V> add(@NotNull K k, @NotNull V v) {
+        put(k, v);
+        return this;
+    }
 
 }

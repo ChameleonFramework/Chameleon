@@ -31,6 +31,7 @@ rootProject.name = "chameleon-parent"
 
 include(
     "core",
+    "annotations",
     "feature-configuration",
     "platform-bungeecord",
     "platform-minestom",

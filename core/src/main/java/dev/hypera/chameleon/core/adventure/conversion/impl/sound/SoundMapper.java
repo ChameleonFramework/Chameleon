@@ -38,8 +38,8 @@ public class SoundMapper implements IMapper<Sound> {
 
 	public SoundMapper() {
 		try {
-			Class<?> soundClass = Class.forName(new String(AdventureConverter.PACKAGE) + "sound.Sound");
-			Class<?> keyClass = Class.forName(new String(AdventureConverter.PACKAGE) + "key.Key");
+			Class<?> soundClass = Class.forName(AdventureConverter.PACKAGE + "sound.Sound");
+			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
 			Class<?> sourceClass = Class.forName(soundClass.getCanonicalName() + "$Source");
 			CREATE_METHOD = soundClass.getMethod("sound", keyClass, sourceClass, float.class, float.class);
 			SOURCE_VALUE_OF = sourceClass.getMethod("valueOf", String.class);

@@ -39,9 +39,9 @@ public class TitleMapper implements IMapper<Title> {
 
 	public TitleMapper() {
 		try {
-			Class<?> titleClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title");
-			Class<?> timesClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title$Times");
-			Class<?> componentClass = Class.forName(new String(AdventureConverter.PACKAGE) + "text.Component");
+			Class<?> titleClass = Class.forName(AdventureConverter.PACKAGE + "title.Title");
+			Class<?> timesClass = Class.forName(AdventureConverter.PACKAGE + "title.Title$Times");
+			Class<?> componentClass = Class.forName(AdventureConverter.PACKAGE + "text.Component");
 			CREATE_METHOD = titleClass.getMethod("title", componentClass, componentClass, timesClass);
 		} catch (ReflectiveOperationException ex) {
 			throw new ExceptionInInitializerError(ex);
