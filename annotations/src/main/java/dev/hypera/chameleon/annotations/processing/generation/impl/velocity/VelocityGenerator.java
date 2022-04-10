@@ -25,6 +25,7 @@ package dev.hypera.chameleon.annotations.processing.generation.impl.velocity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -32,13 +33,16 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeSpec;
 import dev.hypera.chameleon.annotations.PlatformDependency;
 import dev.hypera.chameleon.annotations.Plugin;
+import dev.hypera.chameleon.annotations.Plugin.Platform;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
+import dev.hypera.chameleon.core.data.PluginData;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
@@ -61,12 +65,20 @@ public class VelocityGenerator extends Generator {
                 .addStatement("this.$N = $N", "dataDirectory", "dataDirectory")
                 .build();
 
+        Platform[] platforms = data.platforms().length > 0 ? data.platforms() : Platform.values();
+
         MethodSpec initEventSpec = MethodSpec.methodBuilder("onProxyInitialization")
                 .addAnnotation(clazz("com.velocitypowered.api.event", "Subscribe"))
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.event.proxy", "ProxyInitializeEvent"), "event").build())
                 .beginControlFlow("try")
-                .addStatement("this.$N = new $T($T.class, this)", "chameleon", clazz("dev.hypera.chameleon.platforms.velocity", "VelocityChameleon"), plugin)
+                .addStatement(CodeBlock.builder().add(
+                        "$T pluginData = new $T($S, $S, $S, $S, $T.asList($L), $S, $T.asList($L))",
+                        PluginData.class, PluginData.class, data.name(), data.version(), data.description(), data.url(),
+                        Arrays.class, data.authors().length > 0 ? '"' + String.join("\",\"", data.authors()) + '"' : "", data.logPrefix(),
+                        Arrays.class, CodeBlock.builder().add(Arrays.stream(platforms).map(p -> "$1T." + p.name()).collect(Collectors.joining(", ")), PluginData.Platform.class).build()
+                ).build())
+                .addStatement("this.$N = new $T($T.class, this, pluginData)", "chameleon", clazz("dev.hypera.chameleon.platforms.velocity", "VelocityChameleon"), plugin)
                 .addStatement("this.$N.onEnable()", "chameleon")
                 .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
                 .addStatement("$N.printStackTrace()", "ex")
