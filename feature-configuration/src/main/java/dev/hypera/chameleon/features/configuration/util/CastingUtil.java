@@ -22,6 +22,7 @@
  */
 package dev.hypera.chameleon.features.configuration.util;
 
+import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,6 +77,14 @@ public class CastingUtil {
             CastingList list = new CastingList();
             list.addAll((Collection<?>) o);
             return list;
+        } return null;
+    }
+
+    public static @Nullable CastingMap asMap(@NotNull Object o) {
+        if (o instanceof Map) {
+            CastingMap map = new CastingMap();
+            map.putAll((Map<?, ?>) o);
+            return map;
         } return null;
     }
 

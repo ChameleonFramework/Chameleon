@@ -22,11 +22,15 @@
  */
 package dev.hypera.chameleon.features.configuration.util;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public class CastingList extends ArrayList<Object> {
 
     public @NotNull Optional<Object> getOptional(int index) {
@@ -38,6 +42,22 @@ public class CastingList extends ArrayList<Object> {
     }
     public boolean isType(int index, @NotNull Class<?> type) {
         return getOptional(index).filter(type::isInstance).isPresent();
+    }
+
+    public @NotNull List<String> asStringList() {
+        return stream().map(CastingUtil::asString).collect(Collectors.toList());
+    }
+    public @NotNull List<Integer> asIntegerList() {
+        return stream().map(CastingUtil::asInt).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+    public @NotNull List<Double> asDoubleList() {
+        return stream().map(CastingUtil::asDouble).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+    public @NotNull List<Long> asLongList() {
+        return stream().map(CastingUtil::asLong).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+    public @NotNull List<Boolean> asBooleanList() {
+        return stream().map(CastingUtil::asBoolean).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     public @NotNull Optional<String> getString(int index) {

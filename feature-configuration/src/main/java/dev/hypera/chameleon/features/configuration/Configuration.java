@@ -23,6 +23,7 @@
 package dev.hypera.chameleon.features.configuration;
 
 import dev.hypera.chameleon.features.configuration.util.CastingList;
+import dev.hypera.chameleon.features.configuration.util.CastingMap;
 import dev.hypera.chameleon.features.configuration.util.CastingUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,6 +66,9 @@ public interface Configuration {
 	}
 	default @NotNull Optional<CastingList> getList(@NotNull String path) {
 		return get(path).map(CastingUtil::asList);
+	}
+	default @NotNull Optional<CastingMap> getMap(@NotNull String path) {
+		return get(path).map(CastingUtil::asMap);
 	}
 
 	@NotNull Path getPath();
