@@ -42,6 +42,8 @@ import net.md_5.bungee.event.EventHandler;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 /**
  * BungeeCord listener
  */
@@ -75,13 +77,11 @@ public class BungeeCordListener implements Listener {
 
 	@EventHandler
 	public void onServerSwitchEvent(@NotNull ServerSwitchEvent event) {
-		if (null != event.getFrom()) {
-			chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(
-					wrap(event.getPlayer()),
-					wrap(event.getFrom()),
-					wrap(event.getPlayer().getServer().getInfo())
-			));
-		}
+		chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(
+				wrap(event.getPlayer()),
+				Optional.ofNullable(event.getFrom()).map(this::wrap).orElse(null),
+				wrap(event.getPlayer().getServer().getInfo())
+		));
 	}
 
 

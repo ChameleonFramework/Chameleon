@@ -28,6 +28,9 @@ import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * Dispatched when a user switches server
@@ -36,11 +39,11 @@ import org.jetbrains.annotations.NotNull;
 public class ProxyUserSwitchEvent implements ProxyUserEvent {
 
 	private final @NotNull ProxyUser user;
-	private final @NotNull Server from;
+	private final @Nullable Server from;
 	private final @NotNull Server to;
 
 	@Internal
-	public ProxyUserSwitchEvent(@NotNull ProxyUser user, @NotNull Server from, @NotNull Server to) {
+	public ProxyUserSwitchEvent(@NotNull ProxyUser user, @Nullable Server from, @NotNull Server to) {
 		this.user = user;
 		this.from = from;
 		this.to = to;
@@ -52,8 +55,8 @@ public class ProxyUserSwitchEvent implements ProxyUserEvent {
 		return user;
 	}
 
-	public @NotNull Server getFrom() {
-		return from;
+	public @NotNull Optional<Server> getFrom() {
+		return Optional.ofNullable(from);
 	}
 
 	public @NotNull Server getTo() {
