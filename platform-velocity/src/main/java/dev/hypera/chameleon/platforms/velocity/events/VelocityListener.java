@@ -29,7 +29,6 @@ import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent.ChatResult;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.Player;
-import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.hypera.chameleon.core.events.impl.common.UserChatEvent;
 import dev.hypera.chameleon.core.events.impl.common.UserConnectEvent;
@@ -40,9 +39,7 @@ import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.platform.objects.VelocityServer;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
-import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Velocity listener
@@ -74,13 +71,11 @@ public class VelocityListener {
 
 	@Subscribe
 	public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
-		if (event.getPreviousServer().isPresent()) {
-			chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(
-					wrap(event.getPlayer()),
-					wrap(event.getPreviousServer().orElse(null)),
-					wrap(event.getPlayer().getCurrentServer().map(ServerConnection::getServer).orElse(null))
-			));
-		}
+		chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(
+				wrap(event.getPlayer()),
+				event.getPreviousServer().map(this::wrap).orElse(null),
+				wrap(event.getServer())
+		));
 	}
 
 
@@ -88,8 +83,8 @@ public class VelocityListener {
 		return new VelocityUser(chameleon, player);
 	}
 
-	private @NotNull Server wrap(@Nullable RegisteredServer server) {
-		return new VelocityServer(chameleon, Objects.requireNonNull(server));
+	private @NotNull Server wrap(@NotNull RegisteredServer server) {
+		return new VelocityServer(chameleon, server);
 	}
 
 }
