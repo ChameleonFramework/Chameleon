@@ -22,18 +22,18 @@
  */
 package dev.hypera.chameleon.features.configuration.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import dev.hypera.chameleon.features.configuration.impl.JsonConfiguration;
 import dev.hypera.chameleon.features.configuration.util.CastingList;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
+import dev.hypera.chameleon.features.configuration.util.CastingMap;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class JsonTests {
 
@@ -58,7 +58,11 @@ public class JsonTests {
                     "  \"string_list\": [\n" +
                     "    \"item1\",\n" +
                     "    \"2\"\n" +
-                    "  ]\n" +
+                    "  ],\n" +
+                    "  \"map\": {\n" +
+                    "    \"a\": \"b\"\n" +
+                    "    \"c\": \"d\"\n" +
+                    "  }\n" +
                     "}").getBytes());
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,6 +84,10 @@ public class JsonTests {
         CastingList list = config.getList("string_list").orElseThrow(IllegalStateException::new);
         assertEquals("item1", list.getString(0).orElseThrow(IllegalStateException::new));
         assertEquals(2, list.getInt(1).orElseThrow(IllegalStateException::new));
+
+        CastingMap map = config.getMap("map").orElseThrow(IllegalStateException::new);
+        assertEquals("b", map.getString("a").orElseThrow(IllegalStateException::new));
+        assertEquals("d", map.getString("c").orElseThrow(IllegalStateException::new));
     }
 
 }

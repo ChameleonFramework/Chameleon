@@ -33,6 +33,8 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 public class CastingList extends ArrayList<Object> {
 
+    private static final long serialVersionUID = 273219730771590150L;
+
     public @NotNull Optional<Object> getOptional(int index) {
         return Optional.ofNullable(get(index));
     }

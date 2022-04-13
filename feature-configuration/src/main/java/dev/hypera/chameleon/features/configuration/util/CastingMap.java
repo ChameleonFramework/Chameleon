@@ -31,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 public class CastingMap extends HashMap<Object, Object> {
 
+    private static final long serialVersionUID = -1754140207986794772L;
+
     public @NotNull Optional<Object> getOptional(@NotNull Object key) {
         return Optional.ofNullable(get(key));
     }

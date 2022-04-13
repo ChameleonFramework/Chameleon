@@ -1,3 +1,6 @@
+import com.adarshr.gradle.testlogger.theme.ThemeType
+import gradle.kotlin.dsl.accessors._be8c63de4797936aa9a9e46f703d5185.testlogger
+
 /*
  * Chameleon Framework - Cross-platform Minecraft plugin framework
  *  Copyright (c) 2021-present The Chameleon Framework Authors.
@@ -22,7 +25,11 @@
  */
 plugins {
     id("chameleon.publishing")
+    id("com.adarshr.test-logger")
     id("net.kyori.indra.license-header")
 }
 
+testlogger {
+    theme = ThemeType.MOCHA_PARALLEL
+}
 

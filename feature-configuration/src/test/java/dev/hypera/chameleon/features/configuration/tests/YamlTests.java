@@ -22,18 +22,18 @@
  */
 package dev.hypera.chameleon.features.configuration.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import dev.hypera.chameleon.features.configuration.impl.YamlConfiguration;
 import dev.hypera.chameleon.features.configuration.util.CastingList;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
+import dev.hypera.chameleon.features.configuration.util.CastingMap;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class YamlTests {
 
@@ -54,8 +54,12 @@ public class YamlTests {
                     "nested:\n" +
                     "  item: \"yes\"\n" +
                     "string_list:\n" +
-                    "- item1\n" +
-                    "- 2").getBytes());
+                    "  - item1\n" +
+                    "  - 2\n" +
+                    "map:\n" +
+                    "  a: b\n" +
+                    "  c: d"
+            ).getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,6 +80,10 @@ public class YamlTests {
         CastingList list = config.getList("string_list").orElseThrow(IllegalStateException::new);
         assertEquals("item1", list.getString(0).orElseThrow(IllegalStateException::new));
         assertEquals(2, list.getInt(1).orElseThrow(IllegalStateException::new));
+
+        CastingMap map = config.getMap("map").orElseThrow(IllegalStateException::new);
+        assertEquals("b", map.getString("a").orElseThrow(IllegalStateException::new));
+        assertEquals("d", map.getString("c").orElseThrow(IllegalStateException::new));
     }
 
 }
