@@ -34,26 +34,22 @@ import org.jetbrains.annotations.NotNull;
 public final class VelocityCommandManager extends CommandManager {
 
 	private final @NotNull VelocityChameleon chameleon;
+	private final @NotNull com.velocitypowered.api.command.CommandManager commandManager;
 
 	public VelocityCommandManager(@NotNull VelocityChameleon chameleon) {
 		super(chameleon);
 		this.chameleon = chameleon;
+		this.commandManager = chameleon.getVelocityPlugin().getServer().getCommandManager();
 	}
 
 	@Override
 	protected void registerCommand(@NotNull Command command) {
-		chameleon.getVelocityPlugin().getServer().getCommandManager().register(
-				chameleon.getVelocityPlugin().getServer().getCommandManager().metaBuilder(command.getName())
-						.aliases(command.getAliases().toArray(new String[0]))
-						.plugin(chameleon.getVelocityPlugin())
-						.build(),
-				new VelocityCommand(chameleon, command)
-		);
+		commandManager.register(commandManager.metaBuilder(command.getName()).aliases(command.getAliases().toArray(new String[0])).build(), new VelocityCommand(chameleon, command));
 	}
 
 	@Override
 	protected void unregisterCommand(@NotNull Command command) {
-		chameleon.getVelocityPlugin().getServer().getCommandManager().unregister(command.getName());
+		commandManager.unregister(command.getName());
 	}
 
 }
