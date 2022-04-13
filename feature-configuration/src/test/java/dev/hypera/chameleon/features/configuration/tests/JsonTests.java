@@ -31,6 +31,7 @@ import dev.hypera.chameleon.features.configuration.util.CastingMap;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -46,24 +47,7 @@ public class JsonTests {
     public static void setup() {
         try {
             Path file = folder.resolve(FILE_NAME);
-            Files.write(file, ("{\n" +
-                    "  \"string\": \"Hello World!\",\n" +
-                    "  \"integer\": 42,\n" +
-                    "  \"double\": 69.420,\n" +
-                    "  \"long\": 2028743837545,\n" +
-                    "  \"boolean\": false\n" +
-                    "  \"nested\": {\n" +
-                    "    \"item\": \"yes\"\n" +
-                    "  },\n" +
-                    "  \"string_list\": [\n" +
-                    "    \"item1\",\n" +
-                    "    \"2\"\n" +
-                    "  ],\n" +
-                    "  \"map\": {\n" +
-                    "    \"a\": \"b\"\n" +
-                    "    \"c\": \"d\"\n" +
-                    "  }\n" +
-                    "}").getBytes());
+            Files.copy(Objects.requireNonNull(JsonTests.class.getResourceAsStream("/" + FILE_NAME)), file);
         } catch (IOException e) {
             e.printStackTrace();
         }
