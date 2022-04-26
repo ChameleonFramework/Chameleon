@@ -24,6 +24,7 @@ package dev.hypera.chameleon.features.configuration.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import dev.hypera.chameleon.features.configuration.Configuration;
 import dev.hypera.chameleon.features.configuration.impl.JsonConfiguration;
@@ -54,7 +55,7 @@ public class JsonTests {
     }
 
     @Test
-    public void read() throws IOException {
+    public void load() throws IOException {
         Configuration config = new JsonConfiguration(folder, FILE_NAME).load();
         assertEquals("Hello World!", config.getString("string").orElseThrow(IllegalStateException::new));
         assertFalse(config.getInt("string").isPresent());
@@ -83,6 +84,15 @@ public class JsonTests {
         config.reload();
 
         assertEquals(true, config.getBoolean("boolean").orElseThrow(IllegalStateException::new));
+    }
+
+    @Test
+    public void unload() throws IOException {
+        Configuration config = new JsonConfiguration(folder, FILE_NAME).load();
+        assertEquals(false, config.getBoolean("boolean").orElseThrow(IllegalStateException::new));
+
+        config.unload();
+        assertThrows(IllegalStateException.class, () -> config.getBoolean("boolean").orElseThrow(IllegalStateException::new));
     }
 
 }
