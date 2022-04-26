@@ -1,0 +1,18 @@
+{
+  "string": "Hello World!",
+  "integer": 42,
+  "double": 69.420,
+  "long": 2028743837545,
+  "boolean": true,
+  "nested": {
+    "item": "yes"
+  },
+  "string_list": [
+    "item1",
+    2
+  ],
+  "map": {
+    "a": "b",
+    "c": "d"
+  }
+}

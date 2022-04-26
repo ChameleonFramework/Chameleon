@@ -25,52 +25,77 @@ package dev.hypera.chameleon.features.configuration;
 import dev.hypera.chameleon.features.configuration.util.CastingList;
 import dev.hypera.chameleon.features.configuration.util.CastingMap;
 import dev.hypera.chameleon.features.configuration.util.CastingUtil;
-import org.jetbrains.annotations.NotNull;
-
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Configuration
  */
-public interface Configuration {
+public abstract class Configuration {
 
-	@NotNull Optional<Object> get(@NotNull String path);
-	default <T> @NotNull Optional<T> get(@NotNull String path, @NotNull Class<T> type) {
+	protected final @NotNull Path dataFolder;
+	protected final @NotNull String fileName;
+	protected final @NotNull Path path;
+	protected final boolean copyDefaultFromResources;
+	protected boolean loaded = false;
+
+	public Configuration(@NotNull Path dataFolder, @NotNull String fileName) {
+		this(dataFolder, fileName, true);
+	}
+
+	public Configuration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
+		this.dataFolder = dataFolder;
+		this.fileName = fileName;
+		this.path = dataFolder.resolve(fileName);
+		this.copyDefaultFromResources = copyDefaultFromResources;
+	}
+
+	public abstract @NotNull Configuration load() throws IOException;
+	public @NotNull Configuration reload() throws IOException {
+		return unload().load();
+	}
+	public abstract @NotNull Configuration unload();
+
+	public abstract @NotNull Optional<Object> get(@NotNull String path);
+	public <T> @NotNull Optional<T> get(@NotNull String path, @NotNull Class<T> type) {
 		Optional<Object> o = get(path);
 		if (!o.isPresent() || type.isInstance(o.get())) return Optional.empty();
 		return Optional.of(type.cast(o.get()));
 	}
 
-	default @NotNull Optional<Class<?>> getType(@NotNull String path) {
+	public @NotNull Optional<Class<?>> getType(@NotNull String path) {
 		return get(path).map(Object::getClass);
 	}
-	default boolean isType(@NotNull String path, @NotNull Class<?> type) {
+	public boolean isType(@NotNull String path, @NotNull Class<?> type) {
 		return get(path).filter(type::isInstance).isPresent();
 	}
 
-	default @NotNull Optional<String> getString(@NotNull String path) {
+	public @NotNull Optional<String> getString(@NotNull String path) {
 		return get(path).map(CastingUtil::asString);
 	}
-	default @NotNull Optional<Integer> getInt(@NotNull String path) {
+	public @NotNull Optional<Integer> getInt(@NotNull String path) {
 		return get(path).map(CastingUtil::asInt);
 	}
-	default @NotNull Optional<Double> getDouble(@NotNull String path) {
+	public @NotNull Optional<Double> getDouble(@NotNull String path) {
 		return get(path).map(CastingUtil::asDouble);
 	}
-	default @NotNull Optional<Long> getLong(@NotNull String path) {
+	public @NotNull Optional<Long> getLong(@NotNull String path) {
 		return get(path).map(CastingUtil::asLong);
 	}
-	default @NotNull Optional<Boolean> getBoolean(@NotNull String path) {
+	public @NotNull Optional<Boolean> getBoolean(@NotNull String path) {
 		return get(path).map(CastingUtil::asBoolean);
 	}
-	default @NotNull Optional<CastingList> getList(@NotNull String path) {
+	public @NotNull Optional<CastingList> getList(@NotNull String path) {
 		return get(path).map(CastingUtil::asList);
 	}
-	default @NotNull Optional<CastingMap> getMap(@NotNull String path) {
+	public @NotNull Optional<CastingMap> getMap(@NotNull String path) {
 		return get(path).map(CastingUtil::asMap);
 	}
 
-	@NotNull Path getPath();
+	public @NotNull Path getPath() {
+		return path;
+	}
 
 }
