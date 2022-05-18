@@ -59,9 +59,11 @@ public class VelocityGenerator extends Generator {
         MethodSpec constructorSpec = MethodSpec.constructorBuilder()
                 .addAnnotation(clazz("com.google.inject", "Inject"))
                 .addModifiers(Modifier.PUBLIC)
+                .addParameter(ParameterSpec.builder(clazz("org.slf4j", "Logger"), "logger").build())
                 .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.proxy", "ProxyServer"), "server").build())
                 .addParameter(ParameterSpec.builder(clazz("java.nio.file", "Path"), "dataDirectory").addAnnotation(clazz("com.velocitypowered.api.plugin.annotation", "DataDirectory")).build())
                 .addStatement("this.$N = $N", "server", "server")
+                .addStatement("this.$N = $N", "logger", "logger")
                 .addStatement("this.$N = $N", "dataDirectory", "dataDirectory")
                 .build();
 
@@ -98,6 +100,14 @@ public class VelocityGenerator extends Generator {
                 .returns(clazz("com.velocitypowered.api.proxy", "ProxyServer"))
                 .addStatement("return this.$N", "server")
                 .build();
+
+        MethodSpec getLoggerSpec = MethodSpec.methodBuilder("getLogger")
+            .addAnnotation(Override.class)
+            .addModifiers(Modifier.PUBLIC)
+            .returns(clazz("org.slf4j", "Logger"))
+            .addStatement("return this.$N", "logger")
+            .build();
+
 
         MethodSpec getDataDirectorySpec = MethodSpec.methodBuilder("getDataDirectory")
                 .addAnnotation(Override.class)
@@ -136,6 +146,11 @@ public class VelocityGenerator extends Generator {
                         Modifier.PRIVATE, Modifier.FINAL
                 ).build())
                 .addField(FieldSpec.builder(
+                    clazz("org.slf4j", "Logger"),
+                    "logger",
+                    Modifier.PRIVATE, Modifier.FINAL
+                ).build())
+                .addField(FieldSpec.builder(
                         clazz("java.nio.file", "Path"),
                         "dataDirectory",
                         Modifier.PRIVATE, Modifier.FINAL
@@ -149,6 +164,7 @@ public class VelocityGenerator extends Generator {
                 .addMethod(initEventSpec)
                 .addMethod(shutdownEventSpec)
                 .addMethod(getServerSpec)
+                .addMethod(getLoggerSpec)
                 .addMethod(getDataDirectorySpec)
                 .build();
 
