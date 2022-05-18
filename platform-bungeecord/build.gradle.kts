@@ -35,5 +35,5 @@ dependencies {
     api(project(":core"))
     compileOnly("net.md-5:bungeecord-api:1.18-R0.1-SNAPSHOT")
     implementation("net.kyori:adventure-platform-bungeecord:4.1.0")
-    implementation("org.jetbrains:annotations:23.0.0")
+    compileOnlyApi("org.jetbrains:annotations:23.0.0")
 }

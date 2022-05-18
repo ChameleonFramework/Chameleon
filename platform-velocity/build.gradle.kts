@@ -33,5 +33,5 @@ repositories {
 dependencies {
     api(project(":core"))
     compileOnly("com.velocitypowered:velocity-api:3.1.0")
-    implementation("org.jetbrains:annotations:23.0.0")
+    compileOnlyApi("org.jetbrains:annotations:23.0.0")
 }
