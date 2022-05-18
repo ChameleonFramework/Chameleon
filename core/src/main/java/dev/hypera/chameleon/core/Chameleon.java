@@ -46,7 +46,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class Chameleon {
 
-	private static final @NotNull String VERSION = "0.6.0-SNAPSHOT";
+	private static final @NotNull String VERSION = "0.6.1-SNAPSHOT";
 
 	private final @NotNull ChameleonLogger logger;
 	private final @NotNull ChameleonLogger internalLogger;
