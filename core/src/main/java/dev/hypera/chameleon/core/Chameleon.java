@@ -28,7 +28,7 @@ import dev.hypera.chameleon.core.events.EventManager;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.exceptions.modules.ChameleonModuleInjectionException;
 import dev.hypera.chameleon.core.logging.ChameleonLogger;
-import dev.hypera.chameleon.core.logging.factory.ChameleonLoggerFactory;
+import dev.hypera.chameleon.core.logging.impl.InternalChameleonLogger;
 import dev.hypera.chameleon.core.managers.CommandManager;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.managers.Scheduler;
@@ -46,18 +46,25 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class Chameleon {
 
-	private static final @NotNull String VERSION = "0.6.0-SNAPSHOT";
+	private static final @NotNull String VERSION = "0.6.1-SNAPSHOT";
+
+	private final @NotNull ChameleonLogger logger;
+	private final @NotNull ChameleonLogger internalLogger;
+
 	private final @NotNull ChameleonPlugin plugin;
 	private final @NotNull PluginData pluginData;
-	private final @NotNull ChameleonLoggerFactory loggerFactory = new ChameleonLoggerFactory(this);
 	private final @NotNull EventManager eventMapper = new EventManager(this);
 	private final @NotNull ModuleLoader moduleLoader = new ModuleLoader(this);
 
 	@Internal
-	protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+	protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull PluginData pluginData, @NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
 		try {
+			this.logger = logger;
+			this.internalLogger = new InternalChameleonLogger(logger);
+
 			this.plugin = plugin.getConstructor(Chameleon.class).newInstance(this);
 			this.pluginData = pluginData;
+
 			for (Field field : plugin.getDeclaredFields()) {
 				try {
 					moduleLoader.injectModule(field, this.plugin);
@@ -90,11 +97,10 @@ public abstract class Chameleon {
 	}
 
 	public final @NotNull ChameleonLogger getLogger() {
-		return loggerFactory.getLogger();
+		return logger;
 	}
-
 	public final @Internal @NotNull ChameleonLogger getInternalLogger() {
-		return loggerFactory.getInternalLogger();
+		return internalLogger;
 	}
 
 	public @NotNull EventManager getEventManager() {

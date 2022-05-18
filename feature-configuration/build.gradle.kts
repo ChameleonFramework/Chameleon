@@ -36,7 +36,7 @@ dependencies {
         exclude(group = "junit", module = "junit")
     }
 
-    implementation("org.jetbrains:annotations:23.0.0")
+    compileOnlyApi("org.jetbrains:annotations:23.0.0")
 
     testImplementation(platform("org.junit:junit-bom:5.8.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")

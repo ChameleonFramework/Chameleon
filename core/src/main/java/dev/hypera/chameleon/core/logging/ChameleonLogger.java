@@ -22,19 +22,22 @@
  */
 package dev.hypera.chameleon.core.logging;
 
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Chameleon logger
  */
 public interface ChameleonLogger {
 
-	void info(@NotNull String s, @Nullable Object... o);
-	void debug(@NotNull String s, @Nullable Object... o);
-	void warn(@NotNull String s, @Nullable Object... o);
-	void warn(@NotNull String s, @NotNull Throwable throwable, @Nullable Object... o);
-	void error(@NotNull String s, @Nullable Object... o);
-	void error(@NotNull String s, @NotNull Throwable throwable, @Nullable Object... o);
+	void info(@NotNull String message, @NotNull Object... o);
+	void debug(@NotNull String message, @NotNull Object... o);
+	void warn(@NotNull String message, @NotNull Object... o);
+	void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o);
+	void error(@NotNull String message, @NotNull Object... o);
+	void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o);
+
+	@NotNull ChameleonLogger enableDebug();
+	@NotNull ChameleonLogger disableDebug();
 
 }

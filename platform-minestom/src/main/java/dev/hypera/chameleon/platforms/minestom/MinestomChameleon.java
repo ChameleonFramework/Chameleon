@@ -27,6 +27,7 @@ import dev.hypera.chameleon.core.ChameleonPlugin;
 import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.core.data.PluginData;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.logging.impl.ChameleonSlf4jLogger;
 import dev.hypera.chameleon.core.managers.CommandManager;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.managers.Scheduler;
@@ -57,7 +58,7 @@ public final class MinestomChameleon extends Chameleon {
 	private final @NotNull MinestomScheduler scheduler = new MinestomScheduler();
 
 	public MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-		super(chameleonPlugin, pluginData);
+		super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(extension.getLogger()));
 		this.extension = extension;
 		new MinestomListener(this);
 	}
