@@ -27,6 +27,9 @@ import dev.hypera.chameleon.features.configuration.util.CastingMap;
 import dev.hypera.chameleon.features.configuration.util.CastingUtil;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
  * Configuration
  */
 public abstract class Configuration {
+
+	private static final @NotNull String SEPARATOR = ".";
 
 	protected final @NotNull Path dataFolder;
 	protected final @NotNull String fileName;
@@ -96,6 +101,35 @@ public abstract class Configuration {
 
 	public @NotNull Path getPath() {
 		return path;
+	}
+
+	protected @NotNull Optional<Object> getObject(@NotNull String path, @NotNull Map<String, Object> map) {
+		if (path.contains(SEPARATOR)) {
+			List<String> parts = Arrays.asList(path.split("\\" + SEPARATOR));
+
+			if (parts.size() < 2 || !(map.get(parts.get(0)) instanceof Map<?, ?>)) return Optional.empty();
+
+			Map<?, ?> section = (Map<?, ?>) map.get(parts.get(0));
+			Object output = null;
+
+			for (int i = 1; i < parts.size(); i++) {
+				if (null == section.get(parts.get(i))) break;
+
+				if (i == parts.size() - 1) {
+					output = section.get(parts.get(i));
+					break;
+				}
+
+				if (section.get(parts.get(i)) instanceof Map<?, ?>) {
+					section = (Map<?, ?>) section.get(parts.get(i));
+					continue;
+				}
+
+				break;
+			}
+
+			return Optional.ofNullable(output);
+		} else return Optional.ofNullable(map.get(path));
 	}
 
 }

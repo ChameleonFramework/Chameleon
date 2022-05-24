@@ -43,7 +43,6 @@ import java.util.Optional;
 public class YamlConfiguration extends Configuration {
 
 	private static final @NotNull Yaml yaml = new Yaml();
-	private static final @NotNull String SEPARATOR = ".";
 
 	private @Nullable Map<String, Object> config;
 
@@ -98,32 +97,7 @@ public class YamlConfiguration extends Configuration {
 			throw new IllegalStateException("Configuration has not been loaded");
 		}
 
-		if (path.contains(SEPARATOR)) {
-			List<String> parts = Arrays.asList(path.split("\\" + SEPARATOR));
-
-			if (parts.size() < 2 || !(config.get(parts.get(0)) instanceof Map<?, ?>)) return Optional.empty();
-
-			Map<?, ?> section = (Map<?, ?>) config.get(parts.get(0));
-			Object output = null;
-
-			for (int i = 1; i < parts.size(); i++) {
-				if (null == section.get(parts.get(i))) break;
-
-				if (i == parts.size() - 1) {
-					output = section.get(parts.get(i));
-					break;
-				}
-
-				if (section.get(parts.get(i)) instanceof Map<?, ?>) {
-					section = (Map<?, ?>) section.get(parts.get(i));
-					continue;
-				}
-
-				break;
-			}
-
-			return Optional.ofNullable(output);
-		} else return Optional.ofNullable(config.get(path));
+		return getObject(path, config);
 	}
 
 }

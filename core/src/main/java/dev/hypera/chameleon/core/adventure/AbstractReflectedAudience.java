@@ -95,7 +95,7 @@ public abstract class AbstractReflectedAudience implements Audience {
 
 	public AbstractReflectedAudience(@NotNull Object audience) {
 		if (!AUDIENCE_CLASS.isInstance(audience)) {
-			throw new IllegalArgumentException("'audience' is not instance of " + new String(AdventureConverter.PACKAGE) + "audience.Audience");
+			throw new IllegalArgumentException("'audience' is not instance of " + AdventureConverter.PACKAGE + "audience.Audience");
 		}
 
 		this.audience = audience;
