@@ -33,7 +33,7 @@ val tokens = mapOf(
 dependencies {
     api("net.kyori:adventure-api:4.11.0")
     api("net.kyori:adventure-text-serializer-legacy:4.11.0")
-    api("net.kyori:adventure-text-serializer-gson:4.10.1")
+    api("net.kyori:adventure-text-serializer-gson:4.11.0")
     api("net.kyori:adventure-platform-api:4.1.0")
     compileOnly("org.slf4j:slf4j-api:1.7.36")
     compileOnlyApi("org.jetbrains:annotations:23.0.0")
