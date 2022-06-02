@@ -58,12 +58,18 @@ public final class BungeeCordChameleon extends Chameleon {
 	private final @NotNull BungeeCordUserManager userManager = new BungeeCordUserManager(this);
 	private final @NotNull BungeeCordScheduler scheduler = new BungeeCordScheduler(this);
 
-	public BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+	BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
 		super(chameleonPlugin, pluginData, new ChameleonJavaLogger(bungeePlugin.getLogger()));
 		this.plugin = bungeePlugin;
 		this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);
 		ProxyServer.getInstance().getPluginManager().registerListener(bungeePlugin, new BungeeCordListener(this));
 	}
+
+
+	public static @NotNull BungeeCordChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) {
+		return new BungeeCordChameleonBootstrap(chameleonPlugin, bungeePlugin, pluginData);
+	}
+
 
 	@Override
 	public @NotNull ChameleonAudienceProvider getAdventure() {

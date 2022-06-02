@@ -57,10 +57,14 @@ public final class MinestomChameleon extends Chameleon {
 	private final @NotNull MinestomUserManager userManager = new MinestomUserManager();
 	private final @NotNull MinestomScheduler scheduler = new MinestomScheduler();
 
-	public MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+	MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
 		super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(extension.getLogger()));
 		this.extension = extension;
 		new MinestomListener(this);
+	}
+
+	public static @NotNull MinestomChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) {
+		return new MinestomChameleonBootstrap(chameleonPlugin, extension, pluginData);
 	}
 
 

@@ -20,32 +20,33 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-import org.apache.tools.ant.filters.ReplaceTokens
+package dev.hypera.chameleon.core;
 
-plugins {
-    id("chameleon.api")
-}
+import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.logging.ChameleonLogger;
+import java.util.function.Consumer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-val tokens = mapOf(
-    "version" to (parent?.version ?: "unknown")
-)
+public abstract class ChameleonBootstrap<T extends Chameleon> {
 
-dependencies {
-    api("net.kyori:adventure-api:4.10.1")
-    api("net.kyori:adventure-text-serializer-legacy:4.10.1")
-    api("net.kyori:adventure-text-serializer-gson:4.10.1")
-    api("net.kyori:adventure-platform-api:4.1.0")
-    compileOnly("org.slf4j:slf4j-api:1.7.36")
-    compileOnlyApi("org.jetbrains:annotations:23.0.0")
-}
+    private @Nullable Consumer<ChameleonLogger> preLoad;
 
-val sourcesForRelease = task<Copy>("sourcesForRelease") {
-    from("src/main/java")
-    into("build/src/java")
-    filter<ReplaceTokens>(mapOf("tokens" to tokens))
-}
 
-tasks.compileJava {
-    dependsOn(sourcesForRelease)
-    source = fileTree(sourcesForRelease.destinationDir)
+    public final @NotNull ChameleonBootstrap<T> onPreLoad(@NotNull Consumer<ChameleonLogger> preLoad) {
+        this.preLoad = preLoad;
+        return this;
+    }
+
+    public final @NotNull T load() throws ChameleonInstantiationException {
+        if (null != preLoad) {
+            preLoad.accept(createLogger());
+        }
+
+        return loadInternal();
+    }
+
+    protected abstract @NotNull T loadInternal() throws ChameleonInstantiationException;
+    protected abstract @NotNull ChameleonLogger createLogger();
+
 }
