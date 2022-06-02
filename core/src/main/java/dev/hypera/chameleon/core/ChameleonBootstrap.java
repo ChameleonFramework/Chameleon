@@ -20,42 +20,33 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.logging.factory;
+package dev.hypera.chameleon.core;
 
-import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.core.logging.ChameleonLogger;
-import dev.hypera.chameleon.core.logging.impl.ChameleonLoggerImpl;
-import dev.hypera.chameleon.core.logging.impl.InternalChameleonLoggerImpl;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * Chameleon logger factory
- */
-public class ChameleonLoggerFactory {
+public abstract class ChameleonBootstrap<T extends Chameleon> {
 
-	private final @NotNull Chameleon chameleon;
-	private boolean debug = false;
+    private @Nullable Consumer<ChameleonLogger> preLoad;
 
-	@Internal
-	public ChameleonLoggerFactory(@NotNull Chameleon chameleon) {
-		this.chameleon = chameleon;
-	}
 
-	public @NotNull ChameleonLogger getLogger() {
-		return new ChameleonLoggerImpl(chameleon, debug);
-	}
+    public final @NotNull ChameleonBootstrap<T> onPreLoad(@NotNull Consumer<ChameleonLogger> preLoad) {
+        this.preLoad = preLoad;
+        return this;
+    }
 
-	@Internal
-	public @NotNull ChameleonLogger getInternalLogger() {
-		return new InternalChameleonLoggerImpl(chameleon, debug);
-	}
+    public final @NotNull T load() throws ChameleonInstantiationException {
+        if (null != preLoad) {
+            preLoad.accept(createLogger());
+        }
 
-	public boolean isDebugEnabled() {
-		return debug;
-	}
-	public void setDebugEnabled(boolean debug) {
-		this.debug = debug;
-	}
+        return loadInternal();
+    }
+
+    protected abstract @NotNull T loadInternal() throws ChameleonInstantiationException;
+    protected abstract @NotNull ChameleonLogger createLogger();
 
 }

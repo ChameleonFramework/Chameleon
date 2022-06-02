@@ -25,13 +25,11 @@ plugins {
 }
 
 repositories {
-    maven(url = "https://nexus.velocitypowered.com/repository/maven-public/") {
-        name = "velocity"
-    }
+    maven("https://nexus.velocitypowered.com/repository/maven-public/")
 }
 
 dependencies {
     api(project(":core"))
     compileOnly("com.velocitypowered:velocity-api:3.1.0")
-    implementation("org.jetbrains:annotations:23.0.0")
+    compileOnlyApi("org.jetbrains:annotations:23.0.0")
 }

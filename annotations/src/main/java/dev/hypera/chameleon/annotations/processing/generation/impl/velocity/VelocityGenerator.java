@@ -59,10 +59,19 @@ public class VelocityGenerator extends Generator {
         MethodSpec constructorSpec = MethodSpec.constructorBuilder()
                 .addAnnotation(clazz("com.google.inject", "Inject"))
                 .addModifiers(Modifier.PUBLIC)
+                .addParameter(ParameterSpec.builder(clazz("org.slf4j", "Logger"), "logger").build())
                 .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.proxy", "ProxyServer"), "server").build())
                 .addParameter(ParameterSpec.builder(clazz("java.nio.file", "Path"), "dataDirectory").addAnnotation(clazz("com.velocitypowered.api.plugin.annotation", "DataDirectory")).build())
                 .addStatement("this.$N = $N", "server", "server")
+                .addStatement("this.$N = $N", "logger", "logger")
                 .addStatement("this.$N = $N", "dataDirectory", "dataDirectory")
+                .beginControlFlow("try")
+                .addStatement(createPluginData(data))
+                .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platforms.velocity", "VelocityChameleon"), plugin, "pluginData")
+                .addStatement("this.$N.onEnable()", "chameleon")
+                .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
+                .addStatement("$N.printStackTrace()", "ex")
+                .endControlFlow()
                 .build();
 
         Platform[] platforms = data.platforms().length > 0 ? data.platforms() : Platform.values();
@@ -71,18 +80,7 @@ public class VelocityGenerator extends Generator {
                 .addAnnotation(clazz("com.velocitypowered.api.event", "Subscribe"))
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.event.proxy", "ProxyInitializeEvent"), "event").build())
-                .beginControlFlow("try")
-                .addStatement(CodeBlock.builder().add(
-                        "$T pluginData = new $T($S, $S, $S, $S, $T.asList($L), $S, $T.asList($L))",
-                        PluginData.class, PluginData.class, data.name(), data.version(), data.description(), data.url(),
-                        Arrays.class, data.authors().length > 0 ? '"' + String.join("\",\"", data.authors()) + '"' : "", data.logPrefix(),
-                        Arrays.class, CodeBlock.builder().add(Arrays.stream(platforms).map(p -> "$1T." + p.name()).collect(Collectors.joining(", ")), PluginData.Platform.class).build()
-                ).build())
-                .addStatement("this.$N = new $T($T.class, this, pluginData)", "chameleon", clazz("dev.hypera.chameleon.platforms.velocity", "VelocityChameleon"), plugin)
                 .addStatement("this.$N.onEnable()", "chameleon")
-                .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
-                .addStatement("$N.printStackTrace()", "ex")
-                .endControlFlow()
                 .build();
 
         MethodSpec shutdownEventSpec = MethodSpec.methodBuilder("onProxyShutdown")
@@ -98,6 +96,14 @@ public class VelocityGenerator extends Generator {
                 .returns(clazz("com.velocitypowered.api.proxy", "ProxyServer"))
                 .addStatement("return this.$N", "server")
                 .build();
+
+        MethodSpec getLoggerSpec = MethodSpec.methodBuilder("getLogger")
+            .addAnnotation(Override.class)
+            .addModifiers(Modifier.PUBLIC)
+            .returns(clazz("org.slf4j", "Logger"))
+            .addStatement("return this.$N", "logger")
+            .build();
+
 
         MethodSpec getDataDirectorySpec = MethodSpec.methodBuilder("getDataDirectory")
                 .addAnnotation(Override.class)
@@ -136,6 +142,11 @@ public class VelocityGenerator extends Generator {
                         Modifier.PRIVATE, Modifier.FINAL
                 ).build())
                 .addField(FieldSpec.builder(
+                    clazz("org.slf4j", "Logger"),
+                    "logger",
+                    Modifier.PRIVATE, Modifier.FINAL
+                ).build())
+                .addField(FieldSpec.builder(
                         clazz("java.nio.file", "Path"),
                         "dataDirectory",
                         Modifier.PRIVATE, Modifier.FINAL
@@ -149,6 +160,7 @@ public class VelocityGenerator extends Generator {
                 .addMethod(initEventSpec)
                 .addMethod(shutdownEventSpec)
                 .addMethod(getServerSpec)
+                .addMethod(getLoggerSpec)
                 .addMethod(getDataDirectorySpec)
                 .build();
 

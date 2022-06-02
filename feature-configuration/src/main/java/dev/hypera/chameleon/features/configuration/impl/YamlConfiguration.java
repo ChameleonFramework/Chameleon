@@ -24,6 +24,7 @@ package dev.hypera.chameleon.features.configuration.impl;
 
 import dev.hypera.chameleon.features.configuration.Configuration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.BufferedReader;
@@ -39,76 +40,64 @@ import java.util.Optional;
 /**
  * YAML configuration implementation
  */
-public class YamlConfiguration implements Configuration {
+public class YamlConfiguration extends Configuration {
 
-	private Path file;
-	private Map<String, Object> config;
+	private static final @NotNull Yaml yaml = new Yaml();
 
-	private static final Yaml yaml = new Yaml();
-	private static final String SEPARATOR = ".";
+	private @Nullable Map<String, Object> config;
 
-	public YamlConfiguration(@NotNull Path dataFolder, @NotNull String filename, boolean copyDefaultFromResources) {
-		try {
-			if (!Files.exists(dataFolder)) {
-				Files.createDirectories(dataFolder);
-			}
-
-			file = dataFolder.resolve(filename);
-
-			if (!Files.exists(file)) {
-				if (copyDefaultFromResources) {
-					try (InputStream defaultResource = YamlConfiguration.class.getResourceAsStream("/" + filename)) {
-						if (null == defaultResource) {
-							throw new IllegalStateException("Failed to load resource '" + filename + "'");
-						}
-						Files.copy(defaultResource, file);
-					}
-				} else {
-					Files.createFile(file);
-				}
-			}
-
-			BufferedReader reader = Files.newBufferedReader(file);
-			config = yaml.load(reader);
-			reader.close();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+	public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName) {
+		super(dataFolder, fileName);
 	}
+
+	public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
+		super(dataFolder, fileName, copyDefaultFromResources);
+	}
+
+
+	@Override
+	public @NotNull Configuration load() throws IOException {
+		if (!Files.exists(dataFolder)) {
+			Files.createDirectories(dataFolder);
+		}
+
+		if (!Files.exists(path)) {
+			if (copyDefaultFromResources) {
+				try (InputStream defaultResource = YamlConfiguration.class.getResourceAsStream("/" + fileName)) {
+					if (null == defaultResource) {
+						throw new IllegalStateException("Failed to load resource '" + fileName + "'");
+					}
+
+					Files.copy(defaultResource, path);
+				}
+			} else {
+				Files.createFile(path);
+			}
+		}
+
+		try (BufferedReader reader = Files.newBufferedReader(path)) {
+			config = yaml.load(reader);
+			loaded = true;
+		}
+
+		return this;
+	}
+
+	@Override
+	public @NotNull Configuration unload() {
+		loaded = false;
+		config = null;
+		return this;
+	}
+
 
 	@Override
 	public @NotNull Optional<Object> get(@NotNull String path) {
-		if (path.contains(SEPARATOR)) {
-			List<String> parts = Arrays.asList(path.split("\\" + SEPARATOR));
+		if (!loaded || null == config) {
+			throw new IllegalStateException("Configuration has not been loaded");
+		}
 
-			if (parts.size() < 2 || !(config.get(parts.get(0)) instanceof Map<?, ?>)) return Optional.empty();
-
-			Map<?, ?> section = (Map<?, ?>) config.get(parts.get(0));
-			Object output = null;
-
-			for (int i = 1; i < parts.size(); i++) {
-				if (null == section.get(parts.get(i))) break;
-
-				if (i == parts.size() - 1) {
-					output = section.get(parts.get(i));
-					break;
-				}
-
-				if (section.get(parts.get(i)) instanceof Map<?, ?>) {
-					section = (Map<?, ?>) section.get(parts.get(i));
-					continue;
-				}
-
-				break;
-			}
-
-			return Optional.ofNullable(output);
-		} else return Optional.ofNullable(config.get(path));
-	}
-
-	@Override
-	public @NotNull Path getPath() {
-		return file;
+		return getObject(path, config);
 	}
 
 }

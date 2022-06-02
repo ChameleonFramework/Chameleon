@@ -18,13 +18,6 @@ jobs:
           java-version: "${{ env.JAVA_VERSION }}"
           distribution: "adopt"
 
-      - name: "Gradle build"
-        uses: "gradle/gradle-build-action@v2"
-        with:
-          cache-read-only: "${{ github.ref != 'refs/heads/main' }}"
-          gradle-version: "release-nightly"
-          arguments: "build"
-
       - name: "Determine version"
         run: |
           echo "VERSION=$(./gradlew properties | awk '/^version:/ { print $2; }')" >> $GITHUB_ENV
@@ -47,7 +40,10 @@ jobs:
 
       - name: "Publish"
         if: "${{ endsWith(env.VERSION, 'SNAPSHOT') || startsWith(github.ref, 'ref/heads/main/') }}"
-        run: "./gradlew publish"
+        uses: "gradle/gradle-build-action@v2"
+        with:
+          cache-read-only: "${{ github.ref != 'refs/heads/main' }}"
+          arguments: "publish"
         env:
           ORG_GRADLE_PROJECT_hyperaReleasesUsername: "${{ secrets.HYPERA_RELEASES_USERNAME }}"
           ORG_GRADLE_PROJECT_hyperaReleasesPassword: "${{ secrets.HYPERA_RELEASES_PASSWORD }}"

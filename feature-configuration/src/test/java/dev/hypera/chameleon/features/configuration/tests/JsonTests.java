@@ -22,55 +22,77 @@
  */
 package dev.hypera.chameleon.features.configuration.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import dev.hypera.chameleon.features.configuration.Configuration;
 import dev.hypera.chameleon.features.configuration.impl.JsonConfiguration;
+import dev.hypera.chameleon.features.configuration.util.CastingList;
+import dev.hypera.chameleon.features.configuration.util.CastingMap;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class JsonTests {
 
-    private static final String FILE_NAME = "test.json";
+    private static final @NotNull String FILE_NAME = "test.json";
+    private static final @NotNull String MODIFIED_FILE_NAME = "test-modified.json";
 
     @TempDir
     public static Path folder;
 
     @BeforeAll
-    public static void setup() {
-        try {
-            Path file = folder.resolve(FILE_NAME);
-            Files.write(file, ("{\n" +
-                    "  \"string\": \"Hello World!\",\n" +
-                    "  \"integer\": 42,\n" +
-                    "  \"double\": 69.420,\n" +
-                    "  \"long\": 2028743837545,\n" +
-                    "  \"string_list\": [\n" +
-                    "    \"item1\",\n" +
-                    "\t\"item2\"\n" +
-                    "  ]\n" +
-                    "}").getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void setup() throws IOException {
+        Files.copy(Objects.requireNonNull(JsonTests.class.getResourceAsStream("/" + FILE_NAME)), folder.resolve(FILE_NAME));
+        Files.copy(Objects.requireNonNull(JsonTests.class.getResourceAsStream("/" + FILE_NAME)), folder.resolve(MODIFIED_FILE_NAME));
     }
 
     @Test
-    public void read() {
-        JsonConfiguration config = new JsonConfiguration(folder, FILE_NAME, false);
+    public void load() throws IOException {
+        Configuration config = new JsonConfiguration(folder, FILE_NAME).load();
         assertEquals("Hello World!", config.getString("string").orElseThrow(IllegalStateException::new));
+        assertFalse(config.getInt("string").isPresent());
         assertEquals(42, config.getInt("integer").orElseThrow(IllegalStateException::new));
         assertEquals(69.420, config.getDouble("double").orElseThrow(IllegalStateException::new));
         assertEquals(2028743837545L, config.getLong("long").orElseThrow(IllegalStateException::new));
+        assertEquals(false, config.getBoolean("boolean").orElseThrow(IllegalStateException::new));
 
-        List<?> list = config.getList("string_list").orElseThrow(IllegalStateException::new);
-        assertEquals("item1", list.get(0));
-        assertEquals("item2", list.get(1));
+        assertEquals("yes", config.getString("nested.item").orElseThrow(IllegalStateException::new));
+
+        CastingList list = config.getList("string_list").orElseThrow(IllegalStateException::new);
+        assertEquals("item1", list.getString(0).orElseThrow(IllegalStateException::new));
+        assertEquals(2, list.getInt(1).orElseThrow(IllegalStateException::new));
+
+        CastingMap map = config.getMap("map").orElseThrow(IllegalStateException::new);
+        assertEquals("b", map.getString("a").orElseThrow(IllegalStateException::new));
+        assertEquals("d", map.getString("c").orElseThrow(IllegalStateException::new));
+    }
+
+    @Test
+    public void reload() throws IOException {
+        Configuration config = new JsonConfiguration(folder, MODIFIED_FILE_NAME).load();
+        assertEquals(false, config.getBoolean("boolean").orElseThrow(IllegalStateException::new));
+
+        Files.copy(Objects.requireNonNull(JsonTests.class.getResourceAsStream("/" + MODIFIED_FILE_NAME)), folder.resolve(MODIFIED_FILE_NAME), StandardCopyOption.REPLACE_EXISTING);
+        config.reload();
+
+        assertEquals(true, config.getBoolean("boolean").orElseThrow(IllegalStateException::new));
+    }
+
+    @Test
+    public void unload() throws IOException {
+        Configuration config = new JsonConfiguration(folder, FILE_NAME).load();
+        assertEquals(false, config.getBoolean("boolean").orElseThrow(IllegalStateException::new));
+
+        config.unload();
+        assertThrows(IllegalStateException.class, () -> config.getBoolean("boolean").orElseThrow(IllegalStateException::new));
     }
 
 }

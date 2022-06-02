@@ -27,6 +27,7 @@ import dev.hypera.chameleon.core.ChameleonPlugin;
 import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.core.data.PluginData;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.logging.impl.ChameleonJavaLogger;
 import dev.hypera.chameleon.core.managers.CommandManager;
 import dev.hypera.chameleon.core.managers.PluginManager;
 import dev.hypera.chameleon.core.managers.Scheduler;
@@ -57,13 +58,16 @@ public final class SpigotChameleon extends Chameleon {
 	private final @NotNull SpigotUserManager userManager = new SpigotUserManager(this);
 	private final @NotNull SpigotScheduler scheduler = new SpigotScheduler(this);
 
-	public SpigotChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-		super(chameleonPlugin, pluginData);
+	SpigotChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+		super(chameleonPlugin, pluginData, new ChameleonJavaLogger(spigotPlugin.getLogger()));
 		this.plugin = spigotPlugin;
 		this.audienceProvider = new SpigotAudienceProvider(this, spigotPlugin);
 		Bukkit.getPluginManager().registerEvents(new SpigotListener(this), plugin);
 	}
 
+	public static @NotNull SpigotChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) {
+		return new SpigotChameleonBootstrap(chameleonPlugin, spigotPlugin, pluginData);
+	}
 
 
 	@Override

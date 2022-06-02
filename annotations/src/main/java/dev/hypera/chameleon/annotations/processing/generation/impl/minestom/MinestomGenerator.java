@@ -56,21 +56,21 @@ public class MinestomGenerator extends Generator {
     public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
         Platform[] platforms = data.platforms().length > 0 ? data.platforms() : Platform.values();
 
-        MethodSpec initializeSpec = MethodSpec.methodBuilder("initialize")
-                .addAnnotation(Override.class)
+        MethodSpec constructorSpec = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
                 .beginControlFlow("try")
-                .addStatement(CodeBlock.builder().add(
-                        "$T pluginData = new $T($S, $S, $S, $S, $T.asList($L), $S, $T.asList($L))",
-                        PluginData.class, PluginData.class, data.name(), data.version(), data.description(), data.url(),
-                        Arrays.class, data.authors().length > 0 ? '"' + String.join("\",\"", data.authors()) + '"' : "", data.logPrefix(),
-                        Arrays.class, CodeBlock.builder().add(Arrays.stream(platforms).map(p -> "$1T." + p.name()).collect(Collectors.joining(", ")), PluginData.Platform.class).build()
-                ).build())
-                .addStatement("this.$N = new $T($T.class, this, pluginData)", "chameleon", clazz("dev.hypera.chameleon.platforms.minestom", "MinestomChameleon"), plugin)
+                .addStatement(createPluginData(data))
+                .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platforms.minestom", "MinestomChameleon"), plugin, "pluginData")
                 .addStatement("this.$N.onEnable()", "chameleon")
                 .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
                 .addStatement("$N.printStackTrace()", "ex")
                 .endControlFlow()
+                .build();
+
+        MethodSpec initializeSpec = MethodSpec.methodBuilder("initialize")
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PUBLIC)
+                .addStatement("this.$N.onEnable()", "chameleon")
                 .build();
 
         MethodSpec terminateSpec = MethodSpec.methodBuilder("terminate")
@@ -87,6 +87,7 @@ public class MinestomGenerator extends Generator {
                         "chameleon",
                         Modifier.PRIVATE
                 ).build())
+                .addMethod(constructorSpec)
                 .addMethod(initializeSpec)
                 .addMethod(terminateSpec)
                 .build();

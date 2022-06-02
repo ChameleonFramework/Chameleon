@@ -35,16 +35,14 @@ public class PluginData {
 	private final @NotNull String description;
 	private final @NotNull String url;
 	private final @NotNull List<String> authors;
-	private final @NotNull String logPrefix;
 	private final @NotNull List<Platform> platforms;
 
-	public PluginData(@NotNull String name, @NotNull String version, @NotNull String description, @NotNull String url, @NotNull List<String> authors, @NotNull String logPrefix, @NotNull List<Platform> platforms) {
+	public PluginData(@NotNull String name, @NotNull String version, @NotNull String description, @NotNull String url, @NotNull List<String> authors, @NotNull List<Platform> platforms) {
 		this.name = name;
 		this.version = version;
 		this.description = description;
 		this.url = url;
 		this.authors = authors;
-		this.logPrefix = logPrefix;
 		this.platforms = platforms;
 	}
 
@@ -66,10 +64,6 @@ public class PluginData {
 
 	public @NotNull List<String> getAuthors() {
 		return authors;
-	}
-
-	public @NotNull String getLogPrefix() {
-		return logPrefix;
 	}
 
 	public @NotNull List<Platform> getPlatforms() {

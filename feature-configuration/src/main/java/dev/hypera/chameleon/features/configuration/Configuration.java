@@ -22,53 +22,114 @@
  */
 package dev.hypera.chameleon.features.configuration;
 
-import org.jetbrains.annotations.NotNull;
-
+import dev.hypera.chameleon.features.configuration.util.CastingList;
+import dev.hypera.chameleon.features.configuration.util.CastingMap;
+import dev.hypera.chameleon.features.configuration.util.CastingUtil;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Configuration
  */
-public interface Configuration {
+public abstract class Configuration {
 
-	@NotNull Optional<Object> get(@NotNull String path);
-	default <T> @NotNull Optional<T> get(@NotNull String path, @NotNull Class<T> type) {
+	private static final @NotNull String SEPARATOR = ".";
+
+	protected final @NotNull Path dataFolder;
+	protected final @NotNull String fileName;
+	protected final @NotNull Path path;
+	protected final boolean copyDefaultFromResources;
+	protected boolean loaded = false;
+
+	public Configuration(@NotNull Path dataFolder, @NotNull String fileName) {
+		this(dataFolder, fileName, true);
+	}
+
+	public Configuration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
+		this.dataFolder = dataFolder;
+		this.fileName = fileName;
+		this.path = dataFolder.resolve(fileName);
+		this.copyDefaultFromResources = copyDefaultFromResources;
+	}
+
+	public abstract @NotNull Configuration load() throws IOException;
+	public @NotNull Configuration reload() throws IOException {
+		return unload().load();
+	}
+	public abstract @NotNull Configuration unload();
+
+	public abstract @NotNull Optional<Object> get(@NotNull String path);
+	public <T> @NotNull Optional<T> get(@NotNull String path, @NotNull Class<T> type) {
 		Optional<Object> o = get(path);
 		if (!o.isPresent() || type.isInstance(o.get())) return Optional.empty();
 		return Optional.of(type.cast(o.get()));
 	}
 
-	default @NotNull Optional<Class<?>> getType(@NotNull String path) {
+	public @NotNull Optional<Class<?>> getType(@NotNull String path) {
 		return get(path).map(Object::getClass);
 	}
-	default boolean isType(@NotNull String path, @NotNull Class<?> type) {
+	public boolean isType(@NotNull String path, @NotNull Class<?> type) {
 		return get(path).filter(type::isInstance).isPresent();
 	}
 
-	default @NotNull Optional<String> getString(@NotNull String path) {
-		return get(path).map(o -> (String) o);
+	public @NotNull Optional<String> getString(@NotNull String path) {
+		return get(path).map(CastingUtil::asString);
 	}
-	default @NotNull Optional<Integer> getInt(@NotNull String path) {
-		return get(path).map(o -> {
-			if (o instanceof Long) return ((Long) o).intValue();
-			return (Integer) o;
-		});
+	public @NotNull Optional<Integer> getInt(@NotNull String path) {
+		return get(path).map(CastingUtil::asInt);
 	}
-	default @NotNull Optional<Double> getDouble(@NotNull String path) {
-		return get(path).map(o -> (Double) o);
+	public @NotNull Optional<Double> getDouble(@NotNull String path) {
+		return get(path).map(CastingUtil::asDouble);
 	}
-	default @NotNull Optional<Long> getLong(@NotNull String path) {
-		return get(path).map(o -> (Long) o);
+	public @NotNull Optional<Long> getLong(@NotNull String path) {
+		return get(path).map(CastingUtil::asLong);
 	}
-	default @NotNull Optional<Boolean> getBoolean(@NotNull String path) {
-		return get(path).map(o -> (Boolean) o);
+	public @NotNull Optional<Boolean> getBoolean(@NotNull String path) {
+		return get(path).map(CastingUtil::asBoolean);
 	}
-	default @NotNull Optional<List<?>> getList(@NotNull String path) {
-		return get(path).map(o -> (List<?>) o);
+	public @NotNull Optional<CastingList> getList(@NotNull String path) {
+		return get(path).map(CastingUtil::asList);
+	}
+	public @NotNull Optional<CastingMap> getMap(@NotNull String path) {
+		return get(path).map(CastingUtil::asMap);
 	}
 
-	@NotNull Path getPath();
+	public @NotNull Path getPath() {
+		return path;
+	}
+
+	protected @NotNull Optional<Object> getObject(@NotNull String path, @NotNull Map<String, Object> map) {
+		if (path.contains(SEPARATOR)) {
+			List<String> parts = Arrays.asList(path.split("\\" + SEPARATOR));
+
+			if (parts.size() < 2 || !(map.get(parts.get(0)) instanceof Map<?, ?>)) return Optional.empty();
+
+			Map<?, ?> section = (Map<?, ?>) map.get(parts.get(0));
+			Object output = null;
+
+			for (int i = 1; i < parts.size(); i++) {
+				if (null == section.get(parts.get(i))) break;
+
+				if (i == parts.size() - 1) {
+					output = section.get(parts.get(i));
+					break;
+				}
+
+				if (section.get(parts.get(i)) instanceof Map<?, ?>) {
+					section = (Map<?, ?>) section.get(parts.get(i));
+					continue;
+				}
+
+				break;
+			}
+
+			return Optional.ofNullable(output);
+		} else return Optional.ofNullable(map.get(path));
+	}
 
 }

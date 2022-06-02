@@ -45,7 +45,6 @@ public @interface Plugin {
 	@NotNull String[] authors() default {};
 	@NotNull PlatformDependency[] dependencies() default {};
 
-	@NotNull String logPrefix() default "[%s]";
 	@NotNull Platform[] platforms() default {};
 
 

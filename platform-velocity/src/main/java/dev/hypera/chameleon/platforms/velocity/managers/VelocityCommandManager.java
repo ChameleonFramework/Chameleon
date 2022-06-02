@@ -42,13 +42,7 @@ public final class VelocityCommandManager extends CommandManager {
 
 	@Override
 	protected void registerCommand(@NotNull Command command) {
-		chameleon.getVelocityPlugin().getServer().getCommandManager().register(
-				chameleon.getVelocityPlugin().getServer().getCommandManager().metaBuilder(command.getName())
-						.aliases(command.getAliases().toArray(new String[0]))
-						.plugin(chameleon.getVelocityPlugin())
-						.build(),
-				new VelocityCommand(chameleon, command)
-		);
+		chameleon.getVelocityPlugin().getServer().getCommandManager().register(chameleon.getVelocityPlugin().getServer().getCommandManager().metaBuilder(command.getName()).aliases(command.getAliases().toArray(new String[0])).build(), new VelocityCommand(chameleon, command));
 	}
 
 	@Override
