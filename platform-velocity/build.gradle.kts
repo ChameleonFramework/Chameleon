@@ -25,9 +25,7 @@ plugins {
 }
 
 repositories {
-    maven(url = "https://nexus.velocitypowered.com/repository/maven-public/") {
-        name = "velocity"
-    }
+    maven("https://nexus.velocitypowered.com/repository/maven-public/")
 }
 
 dependencies {

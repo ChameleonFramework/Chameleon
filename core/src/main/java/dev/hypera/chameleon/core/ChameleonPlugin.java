@@ -36,8 +36,23 @@ public abstract class ChameleonPlugin {
 		this.chameleon = chameleon;
 	}
 
+	/**
+	 * Chameleon load
+	 */
+	public void onLoad() {
+
+	}
+
+	/**
+	 * Platform plugin enable
+	 */
 	public abstract void onEnable();
+
+	/**
+	 * Platform plugin disable
+	 */
 	public abstract void onDisable();
+
 
 	public final @NotNull PluginData getData() {
 		return chameleon.getData();

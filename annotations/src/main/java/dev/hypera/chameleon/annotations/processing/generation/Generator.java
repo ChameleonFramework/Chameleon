@@ -23,7 +23,12 @@
 package dev.hypera.chameleon.annotations.processing.generation;
 
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
 import dev.hypera.chameleon.annotations.Plugin;
+import dev.hypera.chameleon.annotations.Plugin.Platform;
+import dev.hypera.chameleon.core.data.PluginData;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +39,14 @@ public abstract class Generator {
 
     public abstract void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception;
 
+    protected @NotNull CodeBlock createPluginData(@NotNull Plugin data) {
+        return CodeBlock.builder().add(
+            "$T pluginData = new $T($S, $S, $S, $S, $T.asList($L), $T.asList($L))",
+            PluginData.class, PluginData.class, data.name().isEmpty() ? (data.id().isEmpty() ? "Unknown" : data.id()) : data.name(), data.version(), data.description(), data.url(),
+            Arrays.class, data.authors().length > 0 ? '"' + String.join("\",\"", data.authors()) + '"' : "",
+            Arrays.class, CodeBlock.builder().add(Arrays.stream(data.platforms().length > 0 ? data.platforms() : Platform.values()).map(p -> "$1T." + p.name()).collect(Collectors.joining(", ")), PluginData.Platform.class).build()
+        ).build();
+    }
     protected @NotNull ClassName clazz(@NotNull String p, @NotNull String n) {
         return ClassName.get(p, n);
     }
