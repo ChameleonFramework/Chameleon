@@ -22,40 +22,31 @@
  */
 package dev.hypera.chameleon.core;
 
-import dev.hypera.chameleon.core.data.PluginData;
+import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.core.logging.ChameleonLogger;
+import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * Chameleon plugin
- */
-public abstract class ChameleonPlugin {
+public abstract class ChameleonBootstrap<T extends Chameleon> {
 
-	protected final @NotNull Chameleon chameleon;
-
-	public ChameleonPlugin(@NotNull Chameleon chameleon) {
-		this.chameleon = chameleon;
-	}
-
-	/**
-	 * Chameleon load
-	 */
-	public void onLoad() {
-
-	}
-
-	/**
-	 * Platform plugin enable
-	 */
-	public abstract void onEnable();
-
-	/**
-	 * Platform plugin disable
-	 */
-	public abstract void onDisable();
+    private @Nullable Consumer<ChameleonLogger> preLoad;
 
 
-	public final @NotNull PluginData getData() {
-		return chameleon.getData();
-	}
+    public final @NotNull ChameleonBootstrap<T> onPreLoad(@NotNull Consumer<ChameleonLogger> preLoad) {
+        this.preLoad = preLoad;
+        return this;
+    }
+
+    public final @NotNull T load() throws ChameleonInstantiationException {
+        if (null != preLoad) {
+            preLoad.accept(createLogger());
+        }
+
+        return loadInternal();
+    }
+
+    protected abstract @NotNull T loadInternal() throws ChameleonInstantiationException;
+    protected abstract @NotNull ChameleonLogger createLogger();
 
 }

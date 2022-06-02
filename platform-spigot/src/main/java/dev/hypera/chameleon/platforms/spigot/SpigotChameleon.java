@@ -58,13 +58,16 @@ public final class SpigotChameleon extends Chameleon {
 	private final @NotNull SpigotUserManager userManager = new SpigotUserManager(this);
 	private final @NotNull SpigotScheduler scheduler = new SpigotScheduler(this);
 
-	public SpigotChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+	SpigotChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
 		super(chameleonPlugin, pluginData, new ChameleonJavaLogger(spigotPlugin.getLogger()));
 		this.plugin = spigotPlugin;
 		this.audienceProvider = new SpigotAudienceProvider(this, spigotPlugin);
 		Bukkit.getPluginManager().registerEvents(new SpigotListener(this), plugin);
 	}
 
+	public static @NotNull SpigotChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) {
+		return new SpigotChameleonBootstrap(chameleonPlugin, spigotPlugin, pluginData);
+	}
 
 
 	@Override

@@ -46,7 +46,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Velocity Chameleon
  */
-public class VelocityChameleon extends Chameleon {
+public final class VelocityChameleon extends Chameleon {
 
 	private final @NotNull VelocityPlugin plugin;
 	private final @NotNull VelocityAudienceProvider audienceProvider = new VelocityAudienceProvider(this);
@@ -56,11 +56,16 @@ public class VelocityChameleon extends Chameleon {
 	private final @NotNull VelocityUserManager userManager = new VelocityUserManager(this);
 	private final @NotNull VelocityScheduler scheduler = new VelocityScheduler(this);
 
-	public VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+	VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
 		super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(velocityPlugin.getLogger()));
 		this.plugin = velocityPlugin;
 		this.plugin.getServer().getEventManager().register(plugin, new VelocityListener(this));
 	}
+
+	public static @NotNull VelocityChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) {
+		return new VelocityChameleonBootstrap(chameleonPlugin, velocityPlugin, pluginData);
+	}
+
 
 	@Override
 	public @NotNull ChameleonAudienceProvider getAdventure() {

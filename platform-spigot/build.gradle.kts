@@ -26,9 +26,7 @@ plugins {
 }
 
 repositories {
-    maven(url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/") {
-        name = "spigotmc"
-    }
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
 dependencies {

@@ -26,13 +26,8 @@ plugins {
 }
 
 repositories {
-    maven(url = "https://jitpack.io/") {
-        name = "jitpack"
-    }
-
-    maven(url = "https://repo.spongepowered.org/maven/") {
-        name = "sponge-powered"
-    }
+    maven("https://jitpack.io/")
+    maven("https://repo.spongepowered.org/maven/")
 }
 
 dependencies {
