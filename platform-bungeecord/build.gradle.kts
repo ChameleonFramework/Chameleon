@@ -34,6 +34,6 @@ repositories {
 dependencies {
     api(project(":core"))
     compileOnly("net.md-5:bungeecord-api:1.18-R0.1-SNAPSHOT")
-    implementation("net.kyori:adventure-platform-bungeecord:4.1.0")
+    implementation("net.kyori:adventure-platform-bungeecord:4.1.1")
     compileOnlyApi("org.jetbrains:annotations:23.0.0")
 }
