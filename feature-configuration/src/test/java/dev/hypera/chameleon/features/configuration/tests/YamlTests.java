@@ -22,18 +22,24 @@
  */
 package dev.hypera.chameleon.features.configuration.tests;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dev.hypera.chameleon.features.configuration.Configuration;
 import dev.hypera.chameleon.features.configuration.impl.YamlConfiguration;
 import dev.hypera.chameleon.features.configuration.util.CastingList;
 import dev.hypera.chameleon.features.configuration.util.CastingMap;
+import dev.hypera.chameleon.features.configuration.util.CastingUtil;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
@@ -73,6 +79,15 @@ public class YamlTests {
         CastingMap map = config.getMap("map").orElseThrow(IllegalStateException::new);
         assertEquals("b", map.getString("a").orElseThrow(IllegalStateException::new));
         assertEquals("d", map.getString("c").orElseThrow(IllegalStateException::new));
+
+        /* Order testing */
+        CastingMap objectMap = config.getMap("object_map").orElseThrow(IllegalStateException::new);
+        assertTrue(objectMap.get("test1") instanceof Map);
+        assertEquals("test1", Objects.requireNonNull(CastingUtil.asMap(objectMap.get("test1"))).getString("iam").orElseThrow(IllegalStateException::new));
+
+        List<String> tempList = new ArrayList<>();
+        objectMap.forEach((k, v) -> tempList.add(k.toString()));
+        assertArrayEquals(new String[]{ "test1", "test2", "test3", "test4", "test5" }, tempList.toArray());
     }
 
     @Test

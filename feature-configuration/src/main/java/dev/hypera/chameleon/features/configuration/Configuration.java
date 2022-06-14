@@ -107,13 +107,17 @@ public abstract class Configuration {
 		if (path.contains(SEPARATOR)) {
 			List<String> parts = Arrays.asList(path.split("\\" + SEPARATOR));
 
-			if (parts.size() < 2 || !(map.get(parts.get(0)) instanceof Map<?, ?>)) return Optional.empty();
+			if (parts.size() < 2 || !(map.get(parts.get(0)) instanceof Map<?, ?>)) {
+				return Optional.empty();
+			}
 
 			Map<?, ?> section = (Map<?, ?>) map.get(parts.get(0));
 			Object output = null;
 
 			for (int i = 1; i < parts.size(); i++) {
-				if (null == section.get(parts.get(i))) break;
+				if (null == section.get(parts.get(i))) {
+					break;
+				}
 
 				if (i == parts.size() - 1) {
 					output = section.get(parts.get(i));

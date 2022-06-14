@@ -22,14 +22,15 @@
  */
 package dev.hypera.chameleon.features.configuration.util;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public class CastingMap extends HashMap<Object, Object> {
+public class CastingMap extends LinkedHashMap<Object, Object> {
 
     private static final long serialVersionUID = -1754140207986794772L;
 
