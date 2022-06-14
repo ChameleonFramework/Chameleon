@@ -32,6 +32,6 @@ repositories {
 
 dependencies {
     api(project(":core"))
-    compileOnly("com.github.Minestom:Minestom:2e73f00331")
+    compileOnly("com.github.Minestom:Minestom:3821d204cf")
     compileOnlyApi("org.jetbrains:annotations:23.0.0")
 }
