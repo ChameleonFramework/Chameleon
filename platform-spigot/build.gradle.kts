@@ -32,6 +32,6 @@ repositories {
 dependencies {
     api(project(":core"))
     compileOnly("org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT")
-    implementation("net.kyori:adventure-platform-bukkit:4.1.0")
+    implementation("net.kyori:adventure-platform-bukkit:4.1.1")
     compileOnlyApi("org.jetbrains:annotations:23.0.0")
 }
