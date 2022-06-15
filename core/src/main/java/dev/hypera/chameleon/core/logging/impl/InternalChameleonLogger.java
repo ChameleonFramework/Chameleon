@@ -27,62 +27,91 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Internal Chameleon logger implementation
+ * Internal {@link ChameleonLogger} implementation.
  */
 @Internal
 public class InternalChameleonLogger implements ChameleonLogger {
 
-	private static final @NotNull String CHAMELEON_PREFIX = "[Chameleon] ";
+    private static final @NotNull String CHAMELEON_PREFIX = "[Chameleon] ";
 
-	private final @NotNull ChameleonLogger logger;
+    private final @NotNull ChameleonLogger logger;
 
-	@Internal
-	public InternalChameleonLogger(@NotNull ChameleonLogger logger) {
-		this.logger = logger;
-	}
-
-
-	@Override
-	public void info(@NotNull String message, @NotNull Object... o) {
-		logger.info(CHAMELEON_PREFIX + message, o);
-	}
-
-	@Override
-	public void debug(@NotNull String message, @NotNull Object... o) {
-		logger.debug(CHAMELEON_PREFIX + message, o);
-	}
-
-	@Override
-	public void warn(@NotNull String message, @NotNull Object... o) {
-		logger.warn(CHAMELEON_PREFIX + message, o);
-	}
-
-	@Override
-	public void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
-		logger.warn(CHAMELEON_PREFIX + message, throwable, o);
-	}
-
-	@Override
-	public void error(@NotNull String message, @NotNull Object... o) {
-		logger.error(CHAMELEON_PREFIX + message, o);
-	}
-
-	@Override
-	public void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
-		logger.error(CHAMELEON_PREFIX + message, throwable, o);
-	}
+    /**
+     * {@link InternalChameleonLogger} constructor.
+     *
+     * @param logger {@link ChameleonLogger} instance to use.
+     */
+    @Internal
+    public InternalChameleonLogger(@NotNull ChameleonLogger logger) {
+        this.logger = logger;
+    }
 
 
-	@Override
-	public @NotNull ChameleonLogger enableDebug() {
-		logger.enableDebug();
-		return this;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String message, @NotNull Object... o) {
+        this.logger.info(CHAMELEON_PREFIX + message, o);
+    }
 
-	@Override
-	public @NotNull ChameleonLogger disableDebug() {
-		logger.disableDebug();
-		return this;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void debug(@NotNull String message, @NotNull Object... o) {
+        this.logger.debug(CHAMELEON_PREFIX + message, o);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String message, @NotNull Object... o) {
+        this.logger.warn(CHAMELEON_PREFIX + message, o);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
+        this.logger.warn(CHAMELEON_PREFIX + message, throwable, o);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String message, @NotNull Object... o) {
+        this.logger.error(CHAMELEON_PREFIX + message, o);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
+        this.logger.error(CHAMELEON_PREFIX + message, throwable, o);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ChameleonLogger enableDebug() {
+        this.logger.enableDebug();
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ChameleonLogger disableDebug() {
+        this.logger.disableDebug();
+        return this;
+    }
 
 }

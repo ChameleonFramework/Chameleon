@@ -28,39 +28,38 @@ import dev.hypera.chameleon.core.users.User;
 import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
 import dev.hypera.chameleon.platforms.spigot.user.SpigotConsoleUser;
 import dev.hypera.chameleon.platforms.spigot.user.SpigotUser;
-import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Spigot user manager
  */
 public final class SpigotUserManager extends UserManager {
 
-	private final @NotNull SpigotChameleon chameleon;
+    private final @NotNull SpigotChameleon chameleon;
 
-	public SpigotUserManager(@NotNull SpigotChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+    public SpigotUserManager(@NotNull SpigotChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
 
-	@Override
-	public @NotNull ChatUser getConsole() {
-		return new SpigotConsoleUser(chameleon);
-	}
+    @Override
+    public @NotNull ChatUser getConsole() {
+        return new SpigotConsoleUser(chameleon);
+    }
 
-	@Override
-	public @NotNull Set<User> getPlayers() {
-		return Bukkit.getOnlinePlayers().stream().map(p -> new SpigotUser(chameleon, p)).collect(Collectors.toSet());
-	}
+    @Override
+    public @NotNull Set<User> getPlayers() {
+        return Bukkit.getOnlinePlayers().stream().map(p -> new SpigotUser(chameleon, p)).collect(Collectors.toSet());
+    }
 
-	@Override
-	public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
-		return Optional.ofNullable(Bukkit.getPlayer(uniqueId)).map(player -> new SpigotUser(chameleon, player));
-	}
+    @Override
+    public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
+        return Optional.ofNullable(Bukkit.getPlayer(uniqueId)).map(player -> new SpigotUser(chameleon, player));
+    }
 
 }

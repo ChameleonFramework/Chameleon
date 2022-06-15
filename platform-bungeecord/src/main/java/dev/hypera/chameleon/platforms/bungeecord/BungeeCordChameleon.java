@@ -50,66 +50,66 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BungeeCordChameleon extends Chameleon {
 
-	private final @NotNull Plugin plugin;
-	private final @NotNull ChameleonAudienceProvider audienceProvider;
-	private final @NotNull BungeeCordPlatform platform = new BungeeCordPlatform(this);
-	private final @NotNull BungeeCordCommandManager commandManager = new BungeeCordCommandManager(this);
-	private final @NotNull BungeeCordPluginManager pluginManager = new BungeeCordPluginManager();
-	private final @NotNull BungeeCordUserManager userManager = new BungeeCordUserManager(this);
-	private final @NotNull BungeeCordScheduler scheduler = new BungeeCordScheduler(this);
+    private final @NotNull Plugin plugin;
+    private final @NotNull ChameleonAudienceProvider audienceProvider;
+    private final @NotNull BungeeCordPlatform platform = new BungeeCordPlatform(this);
+    private final @NotNull BungeeCordCommandManager commandManager = new BungeeCordCommandManager(this);
+    private final @NotNull BungeeCordPluginManager pluginManager = new BungeeCordPluginManager();
+    private final @NotNull BungeeCordUserManager userManager = new BungeeCordUserManager(this);
+    private final @NotNull BungeeCordScheduler scheduler = new BungeeCordScheduler(this);
 
-	BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-		super(chameleonPlugin, pluginData, new ChameleonJavaLogger(bungeePlugin.getLogger()));
-		this.plugin = bungeePlugin;
-		this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);
-		ProxyServer.getInstance().getPluginManager().registerListener(bungeePlugin, new BungeeCordListener(this));
-	}
-
-
-	public static @NotNull BungeeCordChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) {
-		return new BungeeCordChameleonBootstrap(chameleonPlugin, bungeePlugin, pluginData);
-	}
+    BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+        super(chameleonPlugin, pluginData, new ChameleonJavaLogger(bungeePlugin.getLogger()));
+        this.plugin = bungeePlugin;
+        this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);
+        ProxyServer.getInstance().getPluginManager().registerListener(bungeePlugin, new BungeeCordListener(this));
+    }
 
 
-	@Override
-	public @NotNull ChameleonAudienceProvider getAdventure() {
-		return audienceProvider;
-	}
-
-	@Override
-	public @NotNull Platform getPlatform() {
-		return platform;
-	}
-
-	@Override
-	public @NotNull CommandManager getCommandManager() {
-		return commandManager;
-	}
-
-	@Override
-	public @NotNull PluginManager getPluginManager() {
-		return pluginManager;
-	}
-
-	@Override
-	public @NotNull UserManager getUserManager() {
-		return userManager;
-	}
-
-	@Override
-	public @NotNull Scheduler getScheduler() {
-		return scheduler;
-	}
+    public static @NotNull BungeeCordChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) {
+        return new BungeeCordChameleonBootstrap(chameleonPlugin, bungeePlugin, pluginData);
+    }
 
 
-	@Override
-	public @NotNull Path getDataFolder() {
-		return plugin.getDataFolder().toPath().toAbsolutePath();
-	}
+    @Override
+    public @NotNull ChameleonAudienceProvider getAdventure() {
+        return audienceProvider;
+    }
+
+    @Override
+    public @NotNull Platform getPlatform() {
+        return platform;
+    }
+
+    @Override
+    public @NotNull CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    @Override
+    public @NotNull PluginManager getPluginManager() {
+        return pluginManager;
+    }
+
+    @Override
+    public @NotNull UserManager getUserManager() {
+        return userManager;
+    }
+
+    @Override
+    public @NotNull Scheduler getScheduler() {
+        return scheduler;
+    }
 
 
-	public @NotNull Plugin getBungeePlugin() {
-		return plugin;
-	}
+    @Override
+    public @NotNull Path getDataFolder() {
+        return plugin.getDataFolder().toPath().toAbsolutePath();
+    }
+
+
+    public @NotNull Plugin getBungeePlugin() {
+        return plugin;
+    }
 
 }

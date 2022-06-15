@@ -36,19 +36,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BungeeCordPluginManager extends PluginManager {
 
-	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return ProxyServer.getInstance().getPluginManager().getPlugins().stream().map(BungeeCordPlugin::new).collect(Collectors.toSet());
-	}
+    @Override
+    public @NotNull Set<PlatformPlugin> getPlugins() {
+        return ProxyServer.getInstance().getPluginManager().getPlugins().stream().map(BungeeCordPlugin::new).collect(Collectors.toSet());
+    }
 
-	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return Optional.ofNullable(ProxyServer.getInstance().getPluginManager().getPlugin(name)).map(BungeeCordPlugin::new);
-	}
+    @Override
+    public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
+        return Optional.ofNullable(ProxyServer.getInstance().getPluginManager().getPlugin(name)).map(BungeeCordPlugin::new);
+    }
 
-	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return null != ProxyServer.getInstance().getPluginManager().getPlugin(name);
-	}
+    @Override
+    public boolean isPluginEnabled(@NotNull String name) {
+        return null != ProxyServer.getInstance().getPluginManager().getPlugin(name);
+    }
 
 }

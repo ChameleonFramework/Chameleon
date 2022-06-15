@@ -34,12 +34,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class SpigotUsers {
 
-	public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSender sender) {
-		if (sender instanceof Player) {
-			return new SpigotUser((SpigotChameleon) chameleon, (Player) sender);
-		} else {
-			return new SpigotConsoleUser(chameleon);
-		}
-	}
+    public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSender sender) {
+        if (sender instanceof Player) {
+            return new SpigotUser((SpigotChameleon) chameleon, (Player) sender);
+        } else {
+            return new SpigotConsoleUser(chameleon);
+        }
+    }
 
 }

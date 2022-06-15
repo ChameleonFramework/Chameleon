@@ -29,43 +29,48 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command manager
+ * {@link Chameleon} command manager.
  */
 public abstract class CommandManager {
 
-	private final @NotNull Chameleon chameleon;
+    private final @NotNull Chameleon chameleon;
 
-	@Internal
-	public CommandManager(@NotNull Chameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+    /**
+     * {@link CommandManager} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    @Internal
+    public CommandManager(@NotNull Chameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
-	/**
-	 * Register command
-	 *
-	 * @param command Command to be registered
-	 */
-	public void register(@NotNull Command command) {
-		if (command.getPlatform().equals(Platform.ALL) || command.getPlatform().name().equals(chameleon.getPlatform().getType().name())) {
-			registerCommand(command);
-		}
-	}
+    /**
+     * Register {@link Command}.
+     *
+     * @param command {@link Command} to be registered.
+     */
+    public void register(@NotNull Command command) {
+        if (command.getPlatform().equals(Platform.ALL) || command.getPlatform().name().equals(this.chameleon.getPlatform().getType().name())) {
+            registerCommand(command);
+        }
+    }
 
-	/**
-	 * Unregister command
-	 *
-	 * @param command Command to be unregistered
-	 */
-	public void unregister(@NotNull Command command) {
-		if (command.getPlatform().equals(Platform.ALL) || command.getPlatform().name().equals(chameleon.getPlatform().getType().name())) {
-			unregisterCommand(command);
-		}
-	}
+    /**
+     * Unregister {@link Command}.
+     *
+     * @param command {@link Command} to be unregistered.
+     */
+    public void unregister(@NotNull Command command) {
+        if (command.getPlatform().equals(Platform.ALL) || command.getPlatform().name().equals(this.chameleon.getPlatform().getType().name())) {
+            unregisterCommand(command);
+        }
+    }
 
-	@Internal
-	protected abstract void registerCommand(@NotNull Command command);
+    @Internal
+    protected abstract void registerCommand(@NotNull Command command);
 
-	@Internal
-	protected abstract void unregisterCommand(@NotNull Command command);
+    @Internal
+    protected abstract void unregisterCommand(@NotNull Command command);
 
 }

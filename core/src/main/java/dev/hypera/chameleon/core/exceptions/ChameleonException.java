@@ -22,31 +22,52 @@
  */
 package dev.hypera.chameleon.core.exceptions;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
- * Chameleon exception
+ * {@link dev.hypera.chameleon.core.Chameleon} exception.
  */
 public class ChameleonException extends Exception {
 
-	private static final long serialVersionUID = -1034303202721107553L;
+    private static final long serialVersionUID = -1034303202721107553L;
 
-	public ChameleonException() {
-		super();
-	}
+    /**
+     * {@link ChameleonException} constructor.
+     */
+    public ChameleonException() {
+        super();
+    }
 
-	public ChameleonException(String message) {
-		super(message);
-	}
+    /**
+     * {@link ChameleonException} constructor.
+     *
+     * @param message Exception message.
+     */
+    public ChameleonException(String message) {
+        super(message);
+    }
 
-	public ChameleonException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * {@link ChameleonException} constructor.
+     *
+     * @param message Exception message.
+     * @param cause   Exception cause.
+     */
+    public ChameleonException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public ChameleonException(Throwable cause) {
-		super(cause);
-	}
+    /**
+     * {@link ChameleonException} constructor.
+     *
+     * @param cause Exception cause.
+     */
+    public ChameleonException(Throwable cause) {
+        super(cause);
+    }
 
-	public ChameleonException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
+    protected ChameleonException(@NotNull String message, @NotNull Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 
 }

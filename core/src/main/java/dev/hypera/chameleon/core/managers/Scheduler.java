@@ -27,14 +27,21 @@ import dev.hypera.chameleon.core.scheduling.TaskImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Scheduler
+ * {@link dev.hypera.chameleon.core.Chameleon} scheduler.
  */
 public abstract class Scheduler {
 
-	public final @NotNull Task.Builder createBuilder(@NotNull Runnable runnable) {
-		return new Task.Builder(this::schedule, runnable);
-	}
+    /**
+     * Create new {@link Task.Builder}.
+     *
+     * @param runnable Task runnable.
+     *
+     * @return new {@link Task.Builder}.
+     */
+    public final @NotNull Task.Builder createBuilder(@NotNull Runnable runnable) {
+        return new Task.Builder(this::schedule, runnable);
+    }
 
-	protected abstract void schedule(@NotNull TaskImpl task);
+    protected abstract void schedule(@NotNull TaskImpl task);
 
 }

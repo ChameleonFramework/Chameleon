@@ -41,18 +41,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MinestomListener {
 
-	public MinestomListener(@NotNull Chameleon chameleon) {
-		GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
-		handler.addListener(PlayerLoginEvent.class, event -> chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer()))));
-		handler.addListener(PlayerChatEvent.class, event -> {
-			if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
-				event.setCancelled(true);
-			}
-		});
-		handler.addListener(PlayerDisconnectEvent.class, event -> chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()))));
-	}
+    public MinestomListener(@NotNull Chameleon chameleon) {
+        GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
+        handler.addListener(PlayerLoginEvent.class, event -> chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer()))));
+        handler.addListener(PlayerChatEvent.class, event -> {
+            if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
+                event.setCancelled(true);
+            }
+        });
+        handler.addListener(PlayerDisconnectEvent.class, event -> chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()))));
+    }
 
-	private @NotNull ServerUser wrap(@NotNull Player player) {
-		return (ServerUser) MinestomUsers.wrap(player);
-	}
+    private @NotNull ServerUser wrap(@NotNull Player player) {
+        return (ServerUser) MinestomUsers.wrap(player);
+    }
+
 }

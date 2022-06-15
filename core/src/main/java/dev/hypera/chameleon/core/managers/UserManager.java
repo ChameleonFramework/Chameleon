@@ -24,19 +24,37 @@ package dev.hypera.chameleon.core.managers;
 
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.core.users.User;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * User manager
+ * {@link dev.hypera.chameleon.core.Chameleon} user manager.
  */
 public abstract class UserManager {
 
-	public abstract @NotNull ChatUser getConsole();
-	public abstract @NotNull Set<User> getPlayers();
-	public abstract @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId);
+    /**
+     * Get Console {@link ChatUser}.
+     *
+     * @return console {@link ChatUser}.
+     */
+    public abstract @NotNull ChatUser getConsole();
+
+    /**
+     * Get all online {@link User}s.
+     *
+     * @return set of online {@link User}s.
+     */
+    public abstract @NotNull Set<User> getPlayers();
+
+    /**
+     * Attempt to find {@link User} by unique id.
+     *
+     * @param uniqueId The unique id to search for.
+     *
+     * @return {@link Optional} containing the {@link User} if found, otherwise empty.
+     */
+    public abstract @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId);
 
 }

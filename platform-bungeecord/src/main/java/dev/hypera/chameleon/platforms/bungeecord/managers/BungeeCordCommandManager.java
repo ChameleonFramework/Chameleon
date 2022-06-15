@@ -35,26 +35,26 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BungeeCordCommandManager extends CommandManager {
 
-	private final @NotNull BungeeCordChameleon chameleon;
+    private final @NotNull BungeeCordChameleon chameleon;
 
-	public BungeeCordCommandManager(@NotNull BungeeCordChameleon chameleon) {
-		super(chameleon);
-		this.chameleon = chameleon;
-	}
+    public BungeeCordCommandManager(@NotNull BungeeCordChameleon chameleon) {
+        super(chameleon);
+        this.chameleon = chameleon;
+    }
 
-	@Override
-	protected void registerCommand(@NotNull Command command) {
-		ProxyServer.getInstance().getPluginManager().registerCommand(chameleon.getBungeePlugin(), new BungeeCordCommand(chameleon, command));
-	}
+    @Override
+    protected void registerCommand(@NotNull Command command) {
+        ProxyServer.getInstance().getPluginManager().registerCommand(chameleon.getBungeePlugin(), new BungeeCordCommand(chameleon, command));
+    }
 
-	@Override
-	protected void unregisterCommand(@NotNull Command command) {
-		net.md_5.bungee.api.plugin.Command bungeeCommand = ProxyServer.getInstance().getPluginManager().getCommands().stream().filter(c -> c.getKey().equals(command.getName())).map(Entry::getValue).findFirst().orElse(null);
-		if (null != bungeeCommand) {
-			ProxyServer.getInstance().getPluginManager().unregisterCommand(bungeeCommand);
-		} else {
-			throw new IllegalArgumentException("Cannot find command with name '" + command.getName() + "'");
-		}
-	}
+    @Override
+    protected void unregisterCommand(@NotNull Command command) {
+        net.md_5.bungee.api.plugin.Command bungeeCommand = ProxyServer.getInstance().getPluginManager().getCommands().stream().filter(c -> c.getKey().equals(command.getName())).map(Entry::getValue).findFirst().orElse(null);
+        if (null != bungeeCommand) {
+            ProxyServer.getInstance().getPluginManager().unregisterCommand(bungeeCommand);
+        } else {
+            throw new IllegalArgumentException("Cannot find command with name '" + command.getName() + "'");
+        }
+    }
 
 }

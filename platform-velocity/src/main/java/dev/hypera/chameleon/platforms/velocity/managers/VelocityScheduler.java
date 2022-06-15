@@ -37,32 +37,29 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class VelocityScheduler extends Scheduler {
 
-	private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull VelocityChameleon chameleon;
 
-	public VelocityScheduler(@NotNull VelocityChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
-
-
-	@Override
-	protected void schedule(@NotNull TaskImpl task) {
-		chameleon.getVelocityPlugin().getServer().getScheduler().buildTask(chameleon.getVelocityPlugin(), task.getRunnable())
-				.delay(convert(task.getDelay()), TimeUnit.MILLISECONDS)
-				.repeat(convert(task.getRepeat()), TimeUnit.MILLISECONDS)
-				.schedule();
-	}
+    public VelocityScheduler(@NotNull VelocityChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
 
-	private long convert(@NotNull Schedule schedule) {
-		if (schedule.getType().equals(Type.NONE)) {
-			return 0;
-		} else if (schedule.getType().equals(Type.DURATION)) {
-			return ((DurationSchedule) schedule).getDuration().toMillis();
-		} else if (schedule.getType().equals(Type.TICK)) {
-			return (long) ((TickSchedule) schedule).getTicks() * 50;
-		} else {
-			throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
-		}
-	}
+    @Override
+    protected void schedule(@NotNull TaskImpl task) {
+        chameleon.getVelocityPlugin().getServer().getScheduler().buildTask(chameleon.getVelocityPlugin(), task.getRunnable()).delay(convert(task.getDelay()), TimeUnit.MILLISECONDS).repeat(convert(task.getRepeat()), TimeUnit.MILLISECONDS).schedule();
+    }
+
+
+    private long convert(@NotNull Schedule schedule) {
+        if (schedule.getType().equals(Type.NONE)) {
+            return 0;
+        } else if (schedule.getType().equals(Type.DURATION)) {
+            return ((DurationSchedule) schedule).getDuration().toMillis();
+        } else if (schedule.getType().equals(Type.TICK)) {
+            return (long) ((TickSchedule) schedule).getTicks() * 50;
+        } else {
+            throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
+        }
+    }
 
 }

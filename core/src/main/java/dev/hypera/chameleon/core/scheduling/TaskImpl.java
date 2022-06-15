@@ -26,32 +26,32 @@ import org.jetbrains.annotations.NotNull;
 
 public class TaskImpl implements Task {
 
-	private final @NotNull Runnable runnable;
-	private final @NotNull Type type;
-	private final @NotNull Schedule delay;
-	private final @NotNull Schedule repeat;
+    private final @NotNull Runnable runnable;
+    private final @NotNull Type type;
+    private final @NotNull Schedule delay;
+    private final @NotNull Schedule repeat;
 
-	TaskImpl(@NotNull Runnable runnable, @NotNull Type type, @NotNull Schedule delay, @NotNull Schedule repeat) {
-		this.runnable = runnable;
-		this.type = type;
-		this.delay = delay;
-		this.repeat = repeat;
-	}
+    TaskImpl(@NotNull Runnable runnable, @NotNull Type type, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        this.runnable = runnable;
+        this.type = type;
+        this.delay = delay;
+        this.repeat = repeat;
+    }
 
-	public @NotNull Runnable getRunnable() {
-		return runnable;
-	}
+    public @NotNull Runnable getRunnable() {
+        return runnable;
+    }
 
-	public @NotNull Type getType() {
-		return type;
-	}
+    public @NotNull Type getType() {
+        return type;
+    }
 
-	public @NotNull Schedule getDelay() {
-		return delay;
-	}
+    public @NotNull Schedule getDelay() {
+        return delay;
+    }
 
-	public @NotNull Schedule getRepeat() {
-		return repeat;
-	}
+    public @NotNull Schedule getRepeat() {
+        return repeat;
+    }
 
 }

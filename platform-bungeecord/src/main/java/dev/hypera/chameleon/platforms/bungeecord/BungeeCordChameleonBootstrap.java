@@ -44,7 +44,7 @@ public final class BungeeCordChameleonBootstrap extends ChameleonBootstrap<Bunge
     }
 
     @Override
-    public @NotNull BungeeCordChameleon loadInternal() throws ChameleonInstantiationException {
+    protected @NotNull BungeeCordChameleon loadInternal() throws ChameleonInstantiationException {
         BungeeCordChameleon chameleon = new BungeeCordChameleon(chameleonPlugin, bungeePlugin, pluginData);
         chameleon.onLoad();
         return chameleon;

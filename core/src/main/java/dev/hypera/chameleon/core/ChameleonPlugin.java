@@ -26,36 +26,45 @@ import dev.hypera.chameleon.core.data.PluginData;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Chameleon plugin
+ * {@link Chameleon} plugin.
  */
 public abstract class ChameleonPlugin {
 
-	protected final @NotNull Chameleon chameleon;
+    protected final @NotNull Chameleon chameleon;
 
-	public ChameleonPlugin(@NotNull Chameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+    /**
+     * {@link ChameleonPlugin} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    public ChameleonPlugin(@NotNull Chameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
-	/**
-	 * Chameleon load
-	 */
-	public void onLoad() {
+    /**
+     * Called after Chameleon has been loaded.
+     */
+    public void onLoad() {
 
-	}
+    }
 
-	/**
-	 * Platform plugin enable
-	 */
-	public abstract void onEnable();
+    /**
+     * Called when the platform plugin is enabled.
+     */
+    public abstract void onEnable();
 
-	/**
-	 * Platform plugin disable
-	 */
-	public abstract void onDisable();
+    /**
+     * Called when the platform plugin is disabled.
+     */
+    public abstract void onDisable();
 
-
-	public final @NotNull PluginData getData() {
-		return chameleon.getData();
-	}
+    /**
+     * Get {@link PluginData} instance.
+     *
+     * @return the stored {@link PluginData} instance.
+     */
+    public final @NotNull PluginData getData() {
+        return this.chameleon.getData();
+    }
 
 }

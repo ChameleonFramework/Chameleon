@@ -32,18 +32,18 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class MinestomUsers {
 
-	private static final @NotNull MinestomConsoleUser CONSOLE = new MinestomConsoleUser();
+    private static final @NotNull MinestomConsoleUser CONSOLE = new MinestomConsoleUser();
 
-	public static @NotNull ChatUser wrap(@NotNull CommandSender sender) {
-		if (sender instanceof Player) {
-			return new MinestomUser((Player) sender);
-		} else {
-			return CONSOLE;
-		}
-	}
+    public static @NotNull ChatUser wrap(@NotNull CommandSender sender) {
+        if (sender instanceof Player) {
+            return new MinestomUser((Player) sender);
+        } else {
+            return CONSOLE;
+        }
+    }
 
-	public static @NotNull ChatUser console() {
-		return CONSOLE;
-	}
+    public static @NotNull ChatUser console() {
+        return CONSOLE;
+    }
 
 }

@@ -27,10 +27,15 @@ import dev.hypera.chameleon.core.users.User;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * User event
+ * User event.
  */
 public interface UserEvent extends ChameleonEvent {
 
-	@NotNull User getUser();
+    /**
+     * Get the {@link User} that triggered this event.
+     *
+     * @return the {@link User} that triggered this event.
+     */
+    @NotNull User getUser();
 
 }

@@ -31,24 +31,24 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class MinestomPlatform extends ServerPlatform {
 
-	@Override
-	public @NotNull String getAPIName() {
-		return "Minestom";
-	}
+    @Override
+    public @NotNull String getAPIName() {
+        return "Minestom";
+    }
 
-	@Override
-	public @NotNull String getName() {
-		return MinecraftServer.getBrandName();
-	}
+    @Override
+    public @NotNull String getName() {
+        return MinecraftServer.getBrandName();
+    }
 
-	@Override
-	public @NotNull String getVersion() {
-		return MinecraftServer.VERSION_NAME;
-	}
+    @Override
+    public @NotNull String getVersion() {
+        return MinecraftServer.VERSION_NAME;
+    }
 
-	@Override
-	public @NotNull Type getType() {
-		return Type.SERVER;
-	}
+    @Override
+    public @NotNull Type getType() {
+        return Type.SERVER;
+    }
 
 }

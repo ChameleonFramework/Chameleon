@@ -38,26 +38,21 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class MinestomScheduler extends Scheduler {
 
-	@Override
-	protected void schedule(@NotNull TaskImpl task) {
-		MinecraftServer.getSchedulerManager()
-				.buildTask(task.getRunnable())
-				.executionType(ExecutionType.valueOf(task.getType().name()))
-				.delay(convert(task.getDelay(), false))
-				.repeat(convert(task.getRepeat(), true))
-				.schedule();
-	}
+    @Override
+    protected void schedule(@NotNull TaskImpl task) {
+        MinecraftServer.getSchedulerManager().buildTask(task.getRunnable()).executionType(ExecutionType.valueOf(task.getType().name())).delay(convert(task.getDelay(), false)).repeat(convert(task.getRepeat(), true)).schedule();
+    }
 
-	private @NotNull TaskSchedule convert(@NotNull Schedule schedule, boolean repeat) {
-		if (schedule.getType().equals(Type.NONE)) {
-			return repeat ? TaskSchedule.stop() : TaskSchedule.immediate();
-		} else if (schedule.getType().equals(Type.DURATION)) {
-			return TaskSchedule.duration(((DurationSchedule) schedule).getDuration());
-		} else if (schedule.getType().equals(Type.TICK)) {
-			return TaskSchedule.tick(((TickSchedule) schedule).getTicks());
-		} else {
-			throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
-		}
-	}
+    private @NotNull TaskSchedule convert(@NotNull Schedule schedule, boolean repeat) {
+        if (schedule.getType().equals(Type.NONE)) {
+            return repeat ? TaskSchedule.stop() : TaskSchedule.immediate();
+        } else if (schedule.getType().equals(Type.DURATION)) {
+            return TaskSchedule.duration(((DurationSchedule) schedule).getDuration());
+        } else if (schedule.getType().equals(Type.TICK)) {
+            return TaskSchedule.tick(((TickSchedule) schedule).getTicks());
+        } else {
+            throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
+        }
+    }
 
 }

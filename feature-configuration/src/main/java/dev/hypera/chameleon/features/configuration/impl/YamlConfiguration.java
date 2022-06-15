@@ -39,62 +39,62 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class YamlConfiguration extends Configuration {
 
-	private static final @NotNull Yaml yaml = new Yaml();
+    private static final @NotNull Yaml yaml = new Yaml();
 
-	private @Nullable Map<String, Object> config;
+    private @Nullable Map<String, Object> config;
 
-	public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName) {
-		super(dataFolder, fileName);
-	}
+    public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName) {
+        super(dataFolder, fileName);
+    }
 
-	public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
-		super(dataFolder, fileName, copyDefaultFromResources);
-	}
-
-
-	@Override
-	public @NotNull Configuration load() throws IOException {
-		if (!Files.exists(dataFolder)) {
-			Files.createDirectories(dataFolder);
-		}
-
-		if (!Files.exists(path)) {
-			if (copyDefaultFromResources) {
-				try (InputStream defaultResource = YamlConfiguration.class.getResourceAsStream("/" + fileName)) {
-					if (null == defaultResource) {
-						throw new IllegalStateException("Failed to load resource '" + fileName + "'");
-					}
-
-					Files.copy(defaultResource, path);
-				}
-			} else {
-				Files.createFile(path);
-			}
-		}
-
-		try (BufferedReader reader = Files.newBufferedReader(path)) {
-			config = yaml.load(reader);
-			loaded = true;
-		}
-
-		return this;
-	}
-
-	@Override
-	public @NotNull Configuration unload() {
-		loaded = false;
-		config = null;
-		return this;
-	}
+    public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
+        super(dataFolder, fileName, copyDefaultFromResources);
+    }
 
 
-	@Override
-	public @NotNull Optional<Object> get(@NotNull String path) {
-		if (!loaded || null == config) {
-			throw new IllegalStateException("Configuration has not been loaded");
-		}
+    @Override
+    public @NotNull Configuration load() throws IOException {
+        if (!Files.exists(dataFolder)) {
+            Files.createDirectories(dataFolder);
+        }
 
-		return getObject(path, config);
-	}
+        if (!Files.exists(path)) {
+            if (copyDefaultFromResources) {
+                try (InputStream defaultResource = YamlConfiguration.class.getResourceAsStream("/" + fileName)) {
+                    if (null == defaultResource) {
+                        throw new IllegalStateException("Failed to load resource '" + fileName + "'");
+                    }
+
+                    Files.copy(defaultResource, path);
+                }
+            } else {
+                Files.createFile(path);
+            }
+        }
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            config = yaml.load(reader);
+            loaded = true;
+        }
+
+        return this;
+    }
+
+    @Override
+    public @NotNull Configuration unload() {
+        loaded = false;
+        config = null;
+        return this;
+    }
+
+
+    @Override
+    public @NotNull Optional<Object> get(@NotNull String path) {
+        if (!loaded || null == config) {
+            throw new IllegalStateException("Configuration has not been loaded");
+        }
+
+        return getObject(path, config);
+    }
 
 }

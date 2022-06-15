@@ -22,16 +22,18 @@
  */
 package dev.hypera.chameleon.core.utils;
 
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Utilities
  */
-public class BasicUtil {
+@Internal
+public class ChameleonUtil {
 
-	public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
-		return null == s ? defaultValue : s;
-	}
+    public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
+        return null == s ? defaultValue : s;
+    }
 
 }

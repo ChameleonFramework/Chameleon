@@ -23,73 +23,76 @@
 package dev.hypera.chameleon.platforms.spigot.platform.objects;
 
 import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.core.utils.BasicUtil;
+import dev.hypera.chameleon.core.utils.ChameleonUtil;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-import java.util.*;
 
 /**
  * Spigot plugin implementation
  */
 public class SpigotPlugin implements PlatformPlugin {
 
-	private final @NotNull Plugin plugin;
+    private final @NotNull Plugin plugin;
 
-	public SpigotPlugin(@NotNull Plugin plugin) {
-		this.plugin = plugin;
-	}
+    public SpigotPlugin(@NotNull Plugin plugin) {
+        this.plugin = plugin;
+    }
 
-	@Override
-	public @NotNull String getName() {
-		return BasicUtil.getOrDefault(plugin.getDescription().getName(), "unknown");
-	}
+    @Override
+    public @NotNull String getName() {
+        return ChameleonUtil.getOrDefault(plugin.getDescription().getName(), "unknown");
+    }
 
-	@Override
-	public @NotNull String getVersion() {
-		return BasicUtil.getOrDefault(plugin.getDescription().getVersion(), "unknown");
-	}
+    @Override
+    public @NotNull String getVersion() {
+        return ChameleonUtil.getOrDefault(plugin.getDescription().getVersion(), "unknown");
+    }
 
-	@Override
-	public @NotNull Optional<String> getDescription() {
-		return Optional.ofNullable(plugin.getDescription().getDescription());
-	}
+    @Override
+    public @NotNull Optional<String> getDescription() {
+        return Optional.ofNullable(plugin.getDescription().getDescription());
+    }
 
-	@Override
-	public @NotNull Class<?> getMainClass() {
-		return plugin.getClass();
-	}
+    @Override
+    public @NotNull Class<?> getMainClass() {
+        return plugin.getClass();
+    }
 
-	@Override
-	public @NotNull List<String> getAuthors() {
-		return BasicUtil.getOrDefault(plugin.getDescription().getAuthors(), Collections.emptyList());
-	}
+    @Override
+    public @NotNull List<String> getAuthors() {
+        return ChameleonUtil.getOrDefault(plugin.getDescription().getAuthors(), Collections.emptyList());
+    }
 
-	@Override
-	public @NotNull Set<String> getDependencies() {
-		return new HashSet<>(plugin.getDescription().getDepend());
-	}
+    @Override
+    public @NotNull Set<String> getDependencies() {
+        return new HashSet<>(plugin.getDescription().getDepend());
+    }
 
-	@Override
-	public @NotNull Set<String> getSoftDependencies() {
-		return new HashSet<>(plugin.getDescription().getSoftDepend());
-	}
+    @Override
+    public @NotNull Set<String> getSoftDependencies() {
+        return new HashSet<>(plugin.getDescription().getSoftDepend());
+    }
 
-	@Override
-	public @NotNull Path getDataFolder() {
-		return plugin.getDataFolder().toPath().toAbsolutePath();
-	}
+    @Override
+    public @NotNull Path getDataFolder() {
+        return plugin.getDataFolder().toPath().toAbsolutePath();
+    }
 
-	@Override
-	public void enable() {
-		Bukkit.getPluginManager().enablePlugin(plugin);
-	}
+    @Override
+    public void enable() {
+        Bukkit.getPluginManager().enablePlugin(plugin);
+    }
 
-	@Override
-	public void disable() {
-		Bukkit.getPluginManager().disablePlugin(plugin);
-	}
+    @Override
+    public void disable() {
+        Bukkit.getPluginManager().disablePlugin(plugin);
+    }
 
 }

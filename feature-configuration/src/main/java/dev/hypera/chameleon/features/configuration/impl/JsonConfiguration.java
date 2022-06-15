@@ -40,63 +40,63 @@ import org.json.simple.parser.ParseException;
  */
 public class JsonConfiguration extends Configuration {
 
-	private @Nullable Map<String, Object> config;
+    private @Nullable Map<String, Object> config;
 
-	public JsonConfiguration(@NotNull Path dataFolder, @NotNull String fileName) {
-		super(dataFolder, fileName);
-	}
+    public JsonConfiguration(@NotNull Path dataFolder, @NotNull String fileName) {
+        super(dataFolder, fileName);
+    }
 
-	public JsonConfiguration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
-		super(dataFolder, fileName, copyDefaultFromResources);
-	}
-
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public @NotNull Configuration load() throws IOException {
-		if (!Files.exists(dataFolder)) {
-			Files.createDirectories(dataFolder);
-		}
-
-		if (!Files.exists(path)) {
-			if (copyDefaultFromResources) {
-				try (InputStream defaultResource = JsonConfiguration.class.getResourceAsStream("/" + fileName)) {
-					if (null == defaultResource) {
-						throw new IllegalStateException("Failed to load resource '" + fileName + "'");
-					}
-
-					Files.copy(defaultResource, path);
-				}
-			} else {
-				Files.createFile(path);
-			}
-		}
-
-		try (BufferedReader reader = Files.newBufferedReader(path)) {
-			config = ((Map<String, Object>) new JSONParser().parse(reader));
-			loaded = true;
-		} catch (ParseException ex) {
-			throw new IOException(ex);
-		}
-
-		return this;
-	}
-
-	@Override
-	public @NotNull Configuration unload() {
-		loaded = false;
-		config = null;
-		return this;
-	}
+    public JsonConfiguration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
+        super(dataFolder, fileName, copyDefaultFromResources);
+    }
 
 
-	@Override
-	public @NotNull Optional<Object> get(@NotNull String path) {
-		if (!loaded || null == config) {
-			throw new IllegalStateException("Configuration has not been loaded");
-		}
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Configuration load() throws IOException {
+        if (!Files.exists(dataFolder)) {
+            Files.createDirectories(dataFolder);
+        }
 
-		return getObject(path, config);
-	}
+        if (!Files.exists(path)) {
+            if (copyDefaultFromResources) {
+                try (InputStream defaultResource = JsonConfiguration.class.getResourceAsStream("/" + fileName)) {
+                    if (null == defaultResource) {
+                        throw new IllegalStateException("Failed to load resource '" + fileName + "'");
+                    }
+
+                    Files.copy(defaultResource, path);
+                }
+            } else {
+                Files.createFile(path);
+            }
+        }
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            config = ((Map<String, Object>) new JSONParser().parse(reader));
+            loaded = true;
+        } catch (ParseException ex) {
+            throw new IOException(ex);
+        }
+
+        return this;
+    }
+
+    @Override
+    public @NotNull Configuration unload() {
+        loaded = false;
+        config = null;
+        return this;
+    }
+
+
+    @Override
+    public @NotNull Optional<Object> get(@NotNull String path) {
+        if (!loaded || null == config) {
+            throw new IllegalStateException("Configuration has not been loaded");
+        }
+
+        return getObject(path, config);
+    }
 
 }

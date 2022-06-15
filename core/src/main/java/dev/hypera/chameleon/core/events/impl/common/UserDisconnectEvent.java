@@ -27,21 +27,29 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Dispatched when a user leaves the proxy/server
+ * {@link User} disconnect event, dispatched when a user leaves the proxy/server.
  */
 public class UserDisconnectEvent implements UserEvent {
 
-	private final @NotNull User user;
+    private final @NotNull User user;
 
-	@Internal
-	public UserDisconnectEvent(@NotNull User user) {
-		this.user = user;
-	}
+    /**
+     * {@link UserDisconnectEvent} constructor.
+     *
+     * @param user The {@link User} that triggered this event.
+     */
+    @Internal
+    public UserDisconnectEvent(@NotNull User user) {
+        this.user = user;
+    }
 
 
-	@Override
-	public @NotNull User getUser() {
-		return user;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull User getUser() {
+        return this.user;
+    }
 
 }

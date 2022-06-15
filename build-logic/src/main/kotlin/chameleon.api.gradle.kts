@@ -1,5 +1,5 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
-import gradle.kotlin.dsl.accessors._be8c63de4797936aa9a9e46f703d5185.testlogger
+import gradle.kotlin.dsl.accessors._d5fd66abff6fbcbd4777caf19a546130.testlogger
 
 /*
  * Chameleon Framework - Cross-platform Minecraft plugin framework
@@ -26,6 +26,7 @@ import gradle.kotlin.dsl.accessors._be8c63de4797936aa9a9e46f703d5185.testlogger
 plugins {
     id("chameleon.publishing")
     id("com.adarshr.test-logger")
+    id("net.kyori.indra.checkstyle")
     id("net.kyori.indra.license-header")
 }
 

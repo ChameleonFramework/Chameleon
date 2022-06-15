@@ -36,52 +36,102 @@ import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.title.Title;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Because Velocity and Minestom provide Adventure, we cannot use the shaded/relocated version of adventure without there being problems.
  * To get around this we convert the shaded Adventure objects to the platform ones using reflection.
  *
- * Adapted from Lucko's AdventureCompat class in LuckPerms for use in Chameleon.
+ * <p>
+ *     Adapted from Lucko's AdventureCompat class in LuckPerms for use in Chameleon.
+ * </p>
  */
-public class AdventureConverter {
+@Internal
+public final class AdventureConverter {
 
-	public static final String PACKAGE = "net.ky".concat("ori.adventure.");
+    public static final String PACKAGE = "net.ky".concat("ori.adventure.");
 
-	private static final @NotNull KeyMapper KEY_CONVERTER = new KeyMapper();
-	private static final @NotNull ComponentMapper COMPONENT_CONVERTER = new ComponentMapper();
-	private static final @NotNull TitleMapper TITLE_CONVERTER = new TitleMapper();
-	private static final @NotNull BossBarMapper BOSS_BAR_CONVERTER = new BossBarMapper();
-	private static final @NotNull SoundMapper SOUND_CONVERTER = new SoundMapper();
-	private static final @NotNull SoundStopMapper SOUND_STOP_CONVERTER = new SoundStopMapper();
-	private static final @NotNull BookMapper BOOK_CONVERTER = new BookMapper();
+    private static final @NotNull KeyMapper KEY_CONVERTER = new KeyMapper();
+    private static final @NotNull ComponentMapper COMPONENT_CONVERTER = new ComponentMapper();
+    private static final @NotNull TitleMapper TITLE_CONVERTER = new TitleMapper();
+    private static final @NotNull BossBarMapper BOSS_BAR_CONVERTER = new BossBarMapper();
+    private static final @NotNull SoundMapper SOUND_CONVERTER = new SoundMapper();
+    private static final @NotNull SoundStopMapper SOUND_STOP_CONVERTER = new SoundStopMapper();
+    private static final @NotNull BookMapper BOOK_CONVERTER = new BookMapper();
 
-	public static @NotNull Object convertKey(@NotNull Key key) {
-		return KEY_CONVERTER.map(key);
-	}
+    private AdventureConverter() {
 
-	public static @NotNull Object convertComponent(@NotNull ComponentLike component) {
-		return COMPONENT_CONVERTER.map(component.asComponent());
-	}
+    }
 
-	public static @NotNull Object convertTitle(@NotNull Title title) {
-		return TITLE_CONVERTER.map(title);
-	}
+    /**
+     * Convert {@link Key} to a platform instance.
+     *
+     * @param key {@link Key} to be converted.
+     * @return Platform instance of {@link Key}.
+     */
+    public static @NotNull Object convertKey(@NotNull Key key) {
+        return KEY_CONVERTER.map(key);
+    }
 
-	public static @NotNull Object convertBossBar(@NotNull BossBar bossBar) {
-		return BOSS_BAR_CONVERTER.map(bossBar);
-	}
+    /**
+     * Convert {@link ComponentLike} to a platform instance.
+     *
+     * @param component {@link ComponentLike} to be converted.
+     * @return Platform instance of {@link ComponentLike}.
+     */
+    public static @NotNull Object convertComponent(@NotNull ComponentLike component) {
+        return COMPONENT_CONVERTER.map(component.asComponent());
+    }
 
-	public static @NotNull Object convertSound(@NotNull Sound sound) {
-		return SOUND_CONVERTER.map(sound);
-	}
+    /**
+     * Convert {@link Title} to a platform instance.
+     *
+     * @param title {@link Title} to be converted.
+     * @return Platform instance of {@link Title}.
+     */
+    public static @NotNull Object convertTitle(@NotNull Title title) {
+        return TITLE_CONVERTER.map(title);
+    }
 
-	public static @NotNull Object convertSoundStop(@NotNull SoundStop soundStop) {
-		return SOUND_STOP_CONVERTER.map(soundStop);
-	}
+    /**
+     * Convert {@link BossBar} to a platform instance.
+     *
+     * @param bossBar {@link BossBar} to be converted.
+     * @return Platform instance of {@link BossBar}.
+     */
+    public static @NotNull Object convertBossBar(@NotNull BossBar bossBar) {
+        return BOSS_BAR_CONVERTER.map(bossBar);
+    }
 
-	public static @NotNull Object convertBook(@NotNull Book book) {
-		return BOOK_CONVERTER.map(book);
-	}
+    /**
+     * Convert {@link Sound} to a platform instance.
+     *
+     * @param sound {@link Sound} to be converted.
+     * @return Platform instance of {@link Sound}.
+     */
+    public static @NotNull Object convertSound(@NotNull Sound sound) {
+        return SOUND_CONVERTER.map(sound);
+    }
+
+    /**
+     * Convert {@link SoundStop} to a platform instance.
+     *
+     * @param soundStop {@link SoundStop} to be converted.
+     * @return Platform instance of {@link SoundStop}.
+     */
+    public static @NotNull Object convertSoundStop(@NotNull SoundStop soundStop) {
+        return SOUND_STOP_CONVERTER.map(soundStop);
+    }
+
+    /**
+     * Convert {@link Book} to a platform instance.
+     *
+     * @param book {@link Book} to be converted.
+     * @return Platform instance of {@link Book}.
+     */
+    public static @NotNull Object convertBook(@NotNull Book book) {
+        return BOOK_CONVERTER.map(book);
+    }
 
 }

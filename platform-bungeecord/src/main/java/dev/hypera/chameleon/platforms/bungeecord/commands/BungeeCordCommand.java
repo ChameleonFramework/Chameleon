@@ -24,7 +24,7 @@ package dev.hypera.chameleon.platforms.bungeecord.commands;
 
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.core.commands.context.impl.ContextImpl;
+import dev.hypera.chameleon.core.commands.context.ContextImpl;
 import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUsers;
 import java.util.Arrays;
 import net.md_5.bungee.api.CommandSender;
@@ -36,26 +36,26 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BungeeCordCommand extends net.md_5.bungee.api.plugin.Command implements TabExecutor {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull Command command;
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull Command command;
 
-	public BungeeCordCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
-		super(command.getName(), null, command.getAliases().toArray(new String[0]));
-		this.chameleon = chameleon;
-		this.command = command;
-	}
+    public BungeeCordCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
+        super(command.getName(), null, command.getAliases().toArray(new String[0]));
+        this.chameleon = chameleon;
+        this.command = command;
+    }
 
 
-	@Override
-	public void execute(CommandSender sender, String[] args) {
-		if (args.length < 1 || command.executeSubCommand(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
-			command.executeCommand(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, args));
-		}
-	}
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        if (args.length < 1 || command.executeSubCommand(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
+            command.executeCommand(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, args));
+        }
+    }
 
-	@Override
-	public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
-		return command.tabComplete(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, args));
-	}
+    @Override
+    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+        return command.tabComplete(new ContextImpl(BungeeCordUsers.wrap(chameleon, sender), chameleon, args));
+    }
 
 }

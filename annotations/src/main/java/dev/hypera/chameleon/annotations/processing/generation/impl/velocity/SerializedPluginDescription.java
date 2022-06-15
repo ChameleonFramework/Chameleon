@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({ "unused", "FieldCanBeLocal" })
-public class SerializedPluginDescription {
+class SerializedPluginDescription {
 
     private final @NotNull String id;
     private final @NotNull String name;
@@ -39,8 +39,8 @@ public class SerializedPluginDescription {
     private final @NotNull List<SerializedDependency> dependencies;
     private final @NotNull String main;
 
-    public SerializedPluginDescription(@NotNull String id, @NotNull String name, @NotNull String version, @NotNull String description, @NotNull String url, @NotNull List<String> authors, @NotNull List<PlatformDependency> dependencies, @NotNull String main) {
-        if (!id.matches("[a-z][a-z0-9-_]{0,63}")) {
+    SerializedPluginDescription(@NotNull String id, @NotNull String name, @NotNull String version, @NotNull String description, @NotNull String url, @NotNull List<String> authors, @NotNull List<PlatformDependency> dependencies, @NotNull String main) {
+        if (!id.matches("[a-z][a-z\\d-_]{0,63}")) {
             throw new IllegalArgumentException("Invalid plugin id");
         }
 
@@ -50,18 +50,17 @@ public class SerializedPluginDescription {
         this.description = description;
         this.url = url;
         this.authors = authors;
-        this.dependencies = dependencies.stream().map(d -> new SerializedDependency(d.name(), d.soft()))
-                .collect(Collectors.toList());
+        this.dependencies = dependencies.stream().map(d -> new SerializedDependency(d.name(), d.soft())).collect(Collectors.toList());
         this.main = main;
     }
 
 
-    public static class SerializedDependency {
+    private final static class SerializedDependency {
 
         private final @NotNull String name;
         private final boolean optional;
 
-        public SerializedDependency(@NotNull String name, boolean optional) {
+        private SerializedDependency(@NotNull String name, boolean optional) {
             this.name = name;
             this.optional = optional;
         }

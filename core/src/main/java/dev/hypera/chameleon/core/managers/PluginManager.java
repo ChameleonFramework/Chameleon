@@ -28,12 +28,33 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Plugin manager
+ * {@link dev.hypera.chameleon.core.platform.Platform} plugin manager.
  */
 public abstract class PluginManager {
 
-	public abstract @NotNull Set<PlatformPlugin> getPlugins();
-	public abstract @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name);
-	public abstract boolean isPluginEnabled(@NotNull String name);
+    /**
+     * Get {@link PlatformPlugin}s.
+     *
+     * @return set of {@link PlatformPlugin}s.
+     */
+    public abstract @NotNull Set<PlatformPlugin> getPlugins();
+
+    /**
+     * Attempt to find {@link PlatformPlugin} by name.
+     *
+     * @param name The name to search for.
+     *
+     * @return {@link Optional} containing the {@link PlatformPlugin} if found, otherwise empty.
+     */
+    public abstract @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name);
+
+    /**
+     * Check if a {@link PlatformPlugin} is enabled, by name.
+     *
+     * @param name The name to search for.
+     *
+     * @return {@code true} if the {@link PlatformPlugin} was found and if it's enabled, otherwise false.
+     */
+    public abstract boolean isPluginEnabled(@NotNull String name);
 
 }

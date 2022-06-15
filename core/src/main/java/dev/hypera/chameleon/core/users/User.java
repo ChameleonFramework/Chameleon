@@ -30,10 +30,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface User extends ChatUser {
 
-	@NotNull UUID getUniqueId();
-	int getPing();
+    @NotNull UUID getUniqueId();
 
-	void chat(@NotNull String message);
-	void sendData(@NotNull String channel, byte[] data);
+    int getPing();
+
+    void chat(@NotNull String message);
+
+    void sendData(@NotNull String channel, byte[] data);
 
 }

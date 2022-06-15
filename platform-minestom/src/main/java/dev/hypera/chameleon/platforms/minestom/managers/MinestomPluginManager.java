@@ -36,19 +36,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class MinestomPluginManager extends PluginManager {
 
-	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return MinecraftServer.getExtensionManager().getExtensions().stream().map(MinestomPlugin::new).collect(Collectors.toSet());
-	}
+    @Override
+    public @NotNull Set<PlatformPlugin> getPlugins() {
+        return MinecraftServer.getExtensionManager().getExtensions().stream().map(MinestomPlugin::new).collect(Collectors.toSet());
+    }
 
-	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return Optional.ofNullable(MinecraftServer.getExtensionManager().getExtension(name)).map(MinestomPlugin::new);
-	}
+    @Override
+    public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
+        return Optional.ofNullable(MinecraftServer.getExtensionManager().getExtension(name)).map(MinestomPlugin::new);
+    }
 
-	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return MinecraftServer.getExtensionManager().hasExtension(name);
-	}
+    @Override
+    public boolean isPluginEnabled(@NotNull String name) {
+        return MinecraftServer.getExtensionManager().hasExtension(name);
+    }
 
 }

@@ -32,18 +32,18 @@ import org.jetbrains.annotations.NotNull;
  */
 public class VelocityConsoleUser extends AbstractReflectedAudience implements ChatUser {
 
-	public VelocityConsoleUser(@NotNull VelocityChameleon chameleon) {
-		super(chameleon.getVelocityPlugin().getServer().getConsoleCommandSource());
-	}
+    public VelocityConsoleUser(@NotNull VelocityChameleon chameleon) {
+        super(chameleon.getVelocityPlugin().getServer().getConsoleCommandSource());
+    }
 
-	@Override
-	public @NotNull String getName() {
-		return "Console";
-	}
+    @Override
+    public @NotNull String getName() {
+        return "Console";
+    }
 
-	@Override
-	public boolean hasPermission(@NotNull String permission) {
-		return true;
-	}
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return true;
+    }
 
 }

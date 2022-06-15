@@ -31,41 +31,98 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Annotation used to describe a plugin.
+ */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface Plugin {
 
-	@NotNull String id();
-	@NotNull String name() default "";
-	@NotNull String version();
-	@NotNull String description() default "";
-	@NotNull String url() default "";
-	@NotNull String[] authors() default {};
-	@NotNull PlatformDependency[] dependencies() default {};
+    /**
+     * The plugin's unique identifier.
+     *
+     * @return the plugin's ID.
+     */
+    @NotNull String id();
 
-	@NotNull Platform[] platforms() default {};
+    /**
+     * The plugin's human-readable name.
+     *
+     * @return the plugin's name, or an empty string.
+     */
+    @NotNull String name() default "";
+
+    /**
+     * The plugin's version.
+     *
+     * @return the plugin's version.
+     */
+    @NotNull String version();
+
+    /**
+     * The plugin's description, generally a short explaination of what the plugin is used for.
+     *
+     * @return the plugin's description, or an empty string.
+     */
+    @NotNull String description() default "";
+
+    /**
+     * The plugin's website or download URL.
+     *
+     * @return the plugin's url, or an empty string.
+     */
+    @NotNull String url() default "";
+
+    /**
+     * The plugin's author(s).
+     *
+     * @return the plugin's authors.
+     */
+    @NotNull String[] authors() default {};
+
+    /**
+     * The plugin's dependencies.
+     *
+     * @return the plugin's dependencies.
+     */
+    @NotNull PlatformDependency[] dependencies() default {};
+
+    /**
+     * The {@link Platform}s this plugin can run on.
+     * This is used by Chameleon Annotations to determine what generators should be run.
+     *
+     * @return the {@link Platform}s this plugin can run on.
+     */
+    @NotNull Platform[] platforms() default {};
 
 
-	enum Platform {
+    /**
+     * Server and Proxy platforms.
+     */
+    enum Platform {
 
-		BUNGEECORD(BungeeCordGenerator.class),
-		MINESTOM(MinestomGenerator.class),
-		SPIGOT(SpigotGenerator.class),
-		VELOCITY(VelocityGenerator.class);
+        BUNGEECORD(BungeeCordGenerator.class), MINESTOM(MinestomGenerator.class), SPIGOT(SpigotGenerator.class), VELOCITY(VelocityGenerator.class);
 
-		private final @NotNull Class<? extends Generator> generator;
+        private final @NotNull Class<? extends Generator> generator;
 
-		Platform(@NotNull Class<? extends Generator> generator) {
-			this.generator = generator;
-		}
+        Platform(@NotNull Class<? extends Generator> generator) {
+            this.generator = generator;
+        }
 
-		public @NotNull Class<? extends Generator> getGenerator() {
-			return generator;
-		}
+        /**
+         * This platform's generator.
+         *
+         * @return platform generator.
+         */
+        @Internal
+        public @NotNull Class<? extends Generator> getGenerator() {
+            return this.generator;
+        }
 
-	}
+    }
 
 
 }

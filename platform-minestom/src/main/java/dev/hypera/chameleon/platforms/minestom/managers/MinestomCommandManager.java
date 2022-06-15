@@ -34,26 +34,26 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class MinestomCommandManager extends CommandManager {
 
-	private final @NotNull Chameleon chameleon;
+    private final @NotNull Chameleon chameleon;
 
-	public MinestomCommandManager(@NotNull Chameleon chameleon) {
-		super(chameleon);
-		this.chameleon = chameleon;
-	}
+    public MinestomCommandManager(@NotNull Chameleon chameleon) {
+        super(chameleon);
+        this.chameleon = chameleon;
+    }
 
-	@Override
-	protected void registerCommand(@NotNull Command command) {
-		MinecraftServer.getCommandManager().register(new MinestomCommand(chameleon, command));
-	}
+    @Override
+    protected void registerCommand(@NotNull Command command) {
+        MinecraftServer.getCommandManager().register(new MinestomCommand(chameleon, command));
+    }
 
-	@Override
-	protected void unregisterCommand(@NotNull Command command) {
-		net.minestom.server.command.builder.Command minestomCommand = MinecraftServer.getCommandManager().getCommand(command.getName());
-		if (null != minestomCommand) {
-			MinecraftServer.getCommandManager().unregister(minestomCommand);
-		} else {
-			throw new IllegalArgumentException("Cannot find command with name '" + command.getName() + "'");
-		}
-	}
+    @Override
+    protected void unregisterCommand(@NotNull Command command) {
+        net.minestom.server.command.builder.Command minestomCommand = MinecraftServer.getCommandManager().getCommand(command.getName());
+        if (null != minestomCommand) {
+            MinecraftServer.getCommandManager().unregister(minestomCommand);
+        } else {
+            throw new IllegalArgumentException("Cannot find command with name '" + command.getName() + "'");
+        }
+    }
 
 }

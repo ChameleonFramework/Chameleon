@@ -33,19 +33,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SpigotConsoleUser extends AbstractAudience implements ChatUser {
 
-	public SpigotConsoleUser(@NotNull Chameleon chameleon) {
-		super(chameleon.getAdventure().console());
-	}
+    public SpigotConsoleUser(@NotNull Chameleon chameleon) {
+        super(chameleon.getAdventure().console());
+    }
 
 
-	@Override
-	public @NotNull String getName() {
-		return Bukkit.getConsoleSender().getName();
-	}
+    @Override
+    public @NotNull String getName() {
+        return Bukkit.getConsoleSender().getName();
+    }
 
-	@Override
-	public boolean hasPermission(@NotNull String permission) {
-		return true;
-	}
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return true;
+    }
 
 }

@@ -26,41 +26,60 @@ import dev.hypera.chameleon.core.annotations.PlatformSpecific;
 import dev.hypera.chameleon.core.platform.Platform.Type;
 import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
+import java.util.Optional;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 /**
- * Dispatched when a user switches server
+ * {@link ProxyUser} switch sever event, dispatched whenever a player switches server.
  */
 @PlatformSpecific(Type.PROXY)
 public class ProxyUserSwitchEvent implements ProxyUserEvent {
 
-	private final @NotNull ProxyUser user;
-	private final @Nullable Server from;
-	private final @NotNull Server to;
+    private final @NotNull ProxyUser user;
+    private final @Nullable Server from;
+    private final @NotNull Server to;
 
-	@Internal
-	public ProxyUserSwitchEvent(@NotNull ProxyUser user, @Nullable Server from, @NotNull Server to) {
-		this.user = user;
-		this.from = from;
-		this.to = to;
-	}
+    /**
+     * {@link ProxyUserSwitchEvent} constructor.
+     *
+     * @param user The {@link ProxyUser} that triggered this event.
+     * @param from The {@link Server} the user switched from.
+     * @param to   The {@link Server} the user switched to.
+     */
+    @Internal
+    public ProxyUserSwitchEvent(@NotNull ProxyUser user, @Nullable Server from, @NotNull Server to) {
+        this.user = user;
+        this.from = from;
+        this.to = to;
+    }
 
 
-	@Override
-	public @NotNull ProxyUser getUser() {
-		return user;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ProxyUser getUser() {
+        return this.user;
+    }
 
-	public @NotNull Optional<Server> getFrom() {
-		return Optional.ofNullable(from);
-	}
+    /**
+     * The {@link Server} the user switched from, if available.
+     *
+     * @return optionally the {@link Server} the user switched from.
+     */
+    public @NotNull Optional<Server> getFrom() {
+        return Optional.ofNullable(this.from);
+    }
 
-	public @NotNull Server getTo() {
-		return to;
-	}
+    /**
+     * The {@link Server} the user switched to.
+     *
+     * @return the {@link Server} the user switched to.
+     */
+    public @NotNull Server getTo() {
+        return this.to;
+    }
 
 }

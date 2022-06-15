@@ -23,12 +23,10 @@
 package dev.hypera.chameleon.core.commands.objects;
 
 /**
- * Command platform
+ * Command platform.
  */
 public enum Platform {
 
-	ALL,
-	PROXY,
-	SERVER
+    ALL, PROXY, SERVER
 
 }

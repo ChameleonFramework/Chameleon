@@ -25,7 +25,7 @@ package dev.hypera.chameleon.platforms.velocity.commands;
 import com.velocitypowered.api.command.SimpleCommand;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.core.commands.context.impl.ContextImpl;
+import dev.hypera.chameleon.core.commands.context.ContextImpl;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUsers;
 import java.util.Arrays;
 import java.util.List;
@@ -36,25 +36,28 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class VelocityCommand implements SimpleCommand {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull Command command;
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull Command command;
 
-	public VelocityCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
-		this.chameleon = chameleon;
-		this.command = command;
-	}
+    public VelocityCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
+        this.chameleon = chameleon;
+        this.command = command;
+    }
 
 
-	@Override
-	public void execute(Invocation invocation) {
-		if (invocation.arguments().length < 1 || command.executeSubCommand(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, Arrays.copyOfRange(invocation.arguments(), 1, invocation.arguments().length)), invocation.arguments()[0])) {
-			command.executeCommand(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, invocation.arguments()));
-		}
-	}
+    @Override
+    public void execute(Invocation invocation) {
+        if (invocation.arguments().length < 1 || command.executeSubCommand(
+            new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, Arrays.copyOfRange(invocation.arguments(), 1, invocation.arguments().length)),
+            invocation.arguments()[0]
+        )) {
+            command.executeCommand(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, invocation.arguments()));
+        }
+    }
 
-	@Override
-	public List<String> suggest(Invocation invocation) {
-		return command.tabComplete(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, invocation.arguments()));
-	}
+    @Override
+    public List<String> suggest(Invocation invocation) {
+        return command.tabComplete(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, invocation.arguments()));
+    }
 
 }

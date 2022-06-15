@@ -27,13 +27,29 @@ import dev.hypera.chameleon.core.users.ChatUser;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command context
+ * {@link dev.hypera.chameleon.core.commands.Command} context.
  */
 public interface Context {
 
-	@NotNull ChatUser getSender();
-	@NotNull Chameleon getChameleon();
+    /**
+     * Get command sender.
+     *
+     * @return command sender.
+     */
+    @NotNull ChatUser getSender();
 
-	@NotNull String[] getArgs();
+    /**
+     * Get {@link Chameleon} instance.
+     *
+     * @return {@link Chameleon} instance.
+     */
+    @NotNull Chameleon getChameleon();
+
+    /**
+     * Get command arguments.
+     *
+     * @return command arguments.
+     */
+    @NotNull String[] getArgs();
 
 }

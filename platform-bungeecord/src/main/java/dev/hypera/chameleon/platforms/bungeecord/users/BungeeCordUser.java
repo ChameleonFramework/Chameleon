@@ -27,73 +27,74 @@ import dev.hypera.chameleon.core.adventure.AbstractAudience;
 import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import dev.hypera.chameleon.platforms.bungeecord.platform.objects.BungeeCordServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * BungeeCord user
  */
 public class BungeeCordUser extends AbstractAudience implements ProxyUser {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull ProxiedPlayer player;
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull ProxiedPlayer player;
 
-	public BungeeCordUser(@NotNull Chameleon chameleon, @NotNull ProxiedPlayer player) {
-		super(chameleon.getAdventure().player(player.getUniqueId()));
-		this.chameleon = chameleon;
-		this.player = player;
-	}
+    public BungeeCordUser(@NotNull Chameleon chameleon, @NotNull ProxiedPlayer player) {
+        super(chameleon.getAdventure().player(player.getUniqueId()));
+        this.chameleon = chameleon;
+        this.player = player;
+    }
 
 
-	@Override
-	public @NotNull String getName() {
-		return player.getName();
-	}
+    @Override
+    public @NotNull String getName() {
+        return player.getName();
+    }
 
-	@Override
-	public @NotNull UUID getUniqueId() {
-		return player.getUniqueId();
-	}
+    @Override
+    public @NotNull UUID getUniqueId() {
+        return player.getUniqueId();
+    }
 
-	@Override
-	public int getPing() {
-		return player.getPing();
-	}
+    @Override
+    public int getPing() {
+        return player.getPing();
+    }
 
-	@Override
-	public void chat(@NotNull String message) {
-		player.chat(message);
-	}
+    @Override
+    public void chat(@NotNull String message) {
+        player.chat(message);
+    }
 
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		player.sendData(channel, data);
-	}
+    @Override
+    public void sendData(@NotNull String channel, byte[] data) {
+        player.sendData(channel, data);
+    }
 
-	@Override
-	public boolean hasPermission(@NotNull String permission) {
-		return player.hasPermission(permission);
-	}
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return player.hasPermission(permission);
+    }
 
-	@Override
-	public @NotNull Optional<Server> getServer() {
-		net.md_5.bungee.api.connection.Server server = player.getServer();
-		if (server == null) return Optional.empty();
-		return Optional.of(new BungeeCordServer(chameleon, server.getInfo()));
-	}
+    @Override
+    public @NotNull Optional<Server> getServer() {
+        net.md_5.bungee.api.connection.Server server = player.getServer();
+        if (server == null) {
+            return Optional.empty();
+        }
+        return Optional.of(new BungeeCordServer(chameleon, server.getInfo()));
+    }
 
-	@Override
-	public void connect(@NotNull Server server) {
-		player.connect(((BungeeCordServer) server).getBungeeCord());
-	}
+    @Override
+    public void connect(@NotNull Server server) {
+        player.connect(((BungeeCordServer) server).getBungeeCord());
+    }
 
-	@Override
-	public void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback) {
-		player.connect(((BungeeCordServer) server).getBungeeCord(), callback::accept);
-	}
+    @Override
+    public void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback) {
+        player.connect(((BungeeCordServer) server).getBungeeCord(), callback::accept);
+    }
 
 }

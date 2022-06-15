@@ -40,62 +40,62 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class SpigotAudienceProvider implements ChameleonAudienceProvider {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull BukkitAudiences adventure;
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull BukkitAudiences adventure;
 
-	public SpigotAudienceProvider(@NotNull Chameleon chameleon, @NotNull JavaPlugin plugin) {
-		this.chameleon = chameleon;
-		this.adventure = BukkitAudiences.create(plugin);
-	}
+    public SpigotAudienceProvider(@NotNull Chameleon chameleon, @NotNull JavaPlugin plugin) {
+        this.chameleon = chameleon;
+        this.adventure = BukkitAudiences.create(plugin);
+    }
 
-	@Override
-	public @NotNull Audience all() {
-		return adventure.all();
-	}
+    @Override
+    public @NotNull Audience all() {
+        return adventure.all();
+    }
 
-	@Override
-	public @NotNull Audience console() {
-		return adventure.console();
-	}
+    @Override
+    public @NotNull Audience console() {
+        return adventure.console();
+    }
 
-	@Override
-	public @NotNull Audience players() {
-		return adventure.players();
-	}
+    @Override
+    public @NotNull Audience players() {
+        return adventure.players();
+    }
 
-	@Override
-	public @NotNull Audience player(@NotNull UUID playerId) {
-		return adventure.player(playerId);
-	}
+    @Override
+    public @NotNull Audience player(@NotNull UUID playerId) {
+        return adventure.player(playerId);
+    }
 
-	@Override
-	public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
-		return adventure.filter(c -> filter.test(SpigotUsers.wrap(chameleon, c)));
-	}
+    @Override
+    public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
+        return adventure.filter(c -> filter.test(SpigotUsers.wrap(chameleon, c)));
+    }
 
-	@Override
-	public @NotNull Audience permission(@NotNull String permission) {
-		return adventure.permission(permission);
-	}
+    @Override
+    public @NotNull Audience permission(@NotNull String permission) {
+        return adventure.permission(permission);
+    }
 
-	@Override
-	public @NotNull Audience world(@NotNull Key world) {
-		return adventure.world(world);
-	}
+    @Override
+    public @NotNull Audience world(@NotNull Key world) {
+        return adventure.world(world);
+    }
 
-	@Override
-	public @NotNull Audience server(@NotNull String serverName) {
-		return adventure.server(serverName);
-	}
+    @Override
+    public @NotNull Audience server(@NotNull String serverName) {
+        return adventure.server(serverName);
+    }
 
-	@Override
-	public @NotNull ComponentFlattener flattener() {
-		return adventure.flattener();
-	}
+    @Override
+    public @NotNull ComponentFlattener flattener() {
+        return adventure.flattener();
+    }
 
-	@Override
-	public void close() {
-		adventure.close();
-	}
+    @Override
+    public void close() {
+        adventure.close();
+    }
 
 }

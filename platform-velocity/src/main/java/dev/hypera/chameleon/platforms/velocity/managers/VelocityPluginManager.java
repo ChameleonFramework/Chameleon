@@ -36,26 +36,26 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class VelocityPluginManager extends PluginManager {
 
-	private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull VelocityChameleon chameleon;
 
-	public VelocityPluginManager(@NotNull VelocityChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+    public VelocityPluginManager(@NotNull VelocityChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
 
-	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return chameleon.getVelocityPlugin().getServer().getPluginManager().getPlugins().stream().map(VelocityPlugin::new).collect(Collectors.toSet());
-	}
+    @Override
+    public @NotNull Set<PlatformPlugin> getPlugins() {
+        return chameleon.getVelocityPlugin().getServer().getPluginManager().getPlugins().stream().map(VelocityPlugin::new).collect(Collectors.toSet());
+    }
 
-	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return chameleon.getVelocityPlugin().getServer().getPluginManager().getPlugin(name.toLowerCase()).map(VelocityPlugin::new);
-	}
+    @Override
+    public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
+        return chameleon.getVelocityPlugin().getServer().getPluginManager().getPlugin(name.toLowerCase()).map(VelocityPlugin::new);
+    }
 
-	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return chameleon.getVelocityPlugin().getServer().getPluginManager().isLoaded(name.toLowerCase());
-	}
+    @Override
+    public boolean isPluginEnabled(@NotNull String name) {
+        return chameleon.getVelocityPlugin().getServer().getPluginManager().isLoaded(name.toLowerCase());
+    }
 
 }

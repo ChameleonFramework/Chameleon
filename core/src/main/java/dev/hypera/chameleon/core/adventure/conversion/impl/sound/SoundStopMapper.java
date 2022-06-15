@@ -30,37 +30,41 @@ import net.kyori.adventure.sound.SoundStop;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform net.kyori.adventure.sound.SoundStop
+ * Maps shaded to platform {@link SoundStop}.
  */
-public class SoundStopMapper implements IMapper<SoundStop> {
+public final class SoundStopMapper implements IMapper<SoundStop> {
 
-	private final @NotNull Method ALL_METHOD;
-	private final @NotNull Method CREATE_METHOD;
+    private final @NotNull Method allMethod;
+    private final @NotNull Method createMethod;
 
-	public SoundStopMapper() {
-		try {
-			Class<?> soundStopClass = Class.forName(AdventureConverter.PACKAGE + "sound.SoundStop");
-			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-			ALL_METHOD = soundStopClass.getMethod("all");
-			CREATE_METHOD = soundStopClass.getMethod("named", keyClass);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
+    /**
+     * {@link SoundStopMapper} constructor.
+     */
+    public SoundStopMapper() {
+        try {
+            Class<?> soundStopClass = Class.forName(AdventureConverter.PACKAGE + "sound.SoundStop");
+            Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
+            this.allMethod = soundStopClass.getMethod("all");
+            this.createMethod = soundStopClass.getMethod("named", keyClass);
+        } catch (ReflectiveOperationException ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
 
-	/**
-	 * Map SoundStop to the platform version of Adventure
-	 *
-	 * @param soundStop SoundStop to be mapped
-	 * @return Platform SoundStop
-	 */
-	@Override
-	public @NotNull Object map(@NotNull SoundStop soundStop) {
-		try {
-			return null == soundStop.sound() ? ALL_METHOD.invoke(null) : CREATE_METHOD.invoke(null, AdventureConverter.convertKey(Objects.requireNonNull(soundStop.sound())));
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * Map {@link SoundStop} to the platform version of Adventure.
+     *
+     * @param soundStop {@link SoundStop} to be mapped.
+     *
+     * @return Platform instance of {@link SoundStop}.
+     */
+    @Override
+    public @NotNull Object map(@NotNull SoundStop soundStop) {
+        try {
+            return null == soundStop.sound() ? this.allMethod.invoke(null) : this.createMethod.invoke(null, AdventureConverter.convertKey(Objects.requireNonNull(soundStop.sound())));
+        } catch (ReflectiveOperationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
 }

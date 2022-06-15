@@ -17,23 +17,27 @@
 
 ### Extra Information
 
-All examples below are taken from [the example Chameleon project](https://github.com/ChameleonFramework/Example).
+All examples below are taken
+from [the example Chameleon project](https://github.com/ChameleonFramework/Example).
 
 ## Platforms
- - [x] BungeeCord
- - [x] Spigot
- - [x] Velocity
- - [x] Minestom
- - [ ] Sponge
- - [ ] Nukkit
+
+- [x] BungeeCord
+- [x] Spigot
+- [x] Velocity
+- [x] Minestom
+- [ ] Sponge
+- [ ] Nukkit
 
 ## Logging
- - [x] Info
- - [x] Debug
- - [x] Warning
- - [x] Error
+
+- [x] Info
+- [x] Debug
+- [x] Warning
+- [x] Error
 
 **ChameleonProject.java**
+
 ```java
 @Override
 public void onEnable() {
@@ -44,12 +48,14 @@ public void onEnable() {
 ```
 
 ## Commands
- - [x] Name
- - [x] Aliases
- - [x] Executing
- - [x] Tab Complete
+
+- [x] Name
+- [x] Aliases
+- [x] Executing
+- [x] Tab Complete
 
 **ExampleCommand.java**
+
 ```java
 @CommandHandler("example|ex")
 public class ExampleCommand extends Command {
@@ -83,6 +89,7 @@ public class ExampleCommand extends Command {
 ```
 
 **ChameleonProject.java**
+
 ```java
 @Override
 public void onEnable() {
@@ -99,6 +106,7 @@ public void onEnable() {
 * [x] Cross-platform events
 
 **ExampleListener.java**
+
 ```java
 public class ExampleListener implements ChameleonListener {
 
@@ -110,8 +118,8 @@ public class ExampleListener implements ChameleonListener {
 }
 ```
 
-
 **ChameleonProject.java**
+
 ```java
 @Override
 public void onEnable() {
@@ -124,20 +132,20 @@ public void onEnable() {
 
 ## Users
 
- - [x] ChatUser
- - [x] User
- - [x] ProxyUser
- - [ ] ServerUser (WIP)
+- [x] ChatUser
+- [x] User
+- [x] ProxyUser
+- [ ] ServerUser (WIP)
 
 ## Configuration
 
- - [x] Data folders
- - [x] Config
- - [x] YAML support
- - [x] JSON support
- - [x] Copy default from resources
- - [ ] Setters
- - [ ] Saving
+- [x] Data folders
+- [x] Config
+- [x] YAML support
+- [x] JSON support
+- [x] Copy default from resources
+- [ ] Setters
+- [ ] Saving
 
 ```xml
 <dependency>
@@ -148,6 +156,7 @@ public void onEnable() {
 ```
 
 **ChameleonProject.java**
+
 ```java
 private static Configuration yamlConfig;
 private static Configuration jsonTest;

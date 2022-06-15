@@ -32,8 +32,10 @@ import org.slf4j.Logger;
  */
 public interface VelocityPlugin {
 
-	@NotNull ProxyServer getServer();
-	@NotNull Logger getLogger();
-	@NotNull Path getDataDirectory();
+    @NotNull ProxyServer getServer();
+
+    @NotNull Logger getLogger();
+
+    @NotNull Path getDataDirectory();
 
 }

@@ -32,42 +32,44 @@ import net.kyori.adventure.inventory.Book;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform net.kyori.adventure.inventory.Book
+ * Maps shaded to platform {@link Book}.
  */
-public class BookMapper implements IMapper<Book> {
+public final class BookMapper implements IMapper<Book> {
 
-	private final @NotNull Method CREATE_METHOD;
+    private final @NotNull Method createMethod;
 
-	public BookMapper() {
-		try {
-			Class<?> componentClass = Class.forName(AdventureConverter.PACKAGE + "text.Component");
-			Class<?> bookClass = Class.forName(AdventureConverter.PACKAGE + "inventory.Book");
-			CREATE_METHOD = bookClass.getMethod("book", componentClass, componentClass, Collection.class);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
+    /**
+     * {@link BookMapper} constructor.
+     */
+    public BookMapper() {
+        try {
+            Class<?> componentClass = Class.forName(AdventureConverter.PACKAGE + "text.Component");
+            Class<?> bookClass = Class.forName(AdventureConverter.PACKAGE + "inventory.Book");
+            this.createMethod = bookClass.getMethod("book", componentClass, componentClass, Collection.class);
+        } catch (ReflectiveOperationException ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
 
 
-	/**
-	 * Map Book to the platform version of Adventure
-	 *
-	 * @param book Book to be mapped
-	 * @return Platform Book
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Book book) {
-		try {
-			return CREATE_METHOD.invoke(
-					null,
-					AdventureConverter.convertComponent(book.title()),
-					AdventureConverter.convertComponent(book.author()),
-					book.pages().stream().map(AdventureConverter::convertComponent)
-							.collect(Collectors.toCollection(ArrayList::new))
-			);
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * Map {@link Book} to the platform version of Adventure.
+     *
+     * @param book {@link Book} to be mapped.
+     *
+     * @return Platform instance of {@link Book}.
+     */
+    @Override
+    public @NotNull Object map(@NotNull Book book) {
+        try {
+            return this.createMethod.invoke(null,
+                AdventureConverter.convertComponent(book.title()),
+                AdventureConverter.convertComponent(book.author()),
+                book.pages().stream().map(AdventureConverter::convertComponent).collect(Collectors.toCollection(ArrayList::new))
+            );
+        } catch (ReflectiveOperationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
 }

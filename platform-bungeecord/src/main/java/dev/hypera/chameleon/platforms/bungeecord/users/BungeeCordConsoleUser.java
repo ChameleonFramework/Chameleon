@@ -33,19 +33,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BungeeCordConsoleUser extends AbstractAudience implements ChatUser {
 
-	public BungeeCordConsoleUser(@NotNull Chameleon chameleon) {
-		super(chameleon.getAdventure().console());
-	}
+    public BungeeCordConsoleUser(@NotNull Chameleon chameleon) {
+        super(chameleon.getAdventure().console());
+    }
 
 
-	@Override
-	public @NotNull String getName() {
-		return ProxyServer.getInstance().getConsole().getName();
-	}
+    @Override
+    public @NotNull String getName() {
+        return ProxyServer.getInstance().getConsole().getName();
+    }
 
-	@Override
-	public boolean hasPermission(@NotNull String permission) {
-		return true;
-	}
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return true;
+    }
 
 }

@@ -34,53 +34,53 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MinestomUser extends AbstractReflectedAudience implements ServerUser {
 
-	private final @NotNull Player player;
+    private final @NotNull Player player;
 
-	public MinestomUser(@NotNull Player player) {
-		super(player);
-		this.player = player;
-	}
-
-
-	@Override
-	public @NotNull String getName() {
-		return player.getUsername();
-	}
-
-	@Override
-	public @NotNull UUID getUniqueId() {
-		return player.getUuid();
-	}
-
-	@Override
-	public int getPing() {
-		return player.getLatency();
-	}
-
-	@Override
-	public void chat(@NotNull String message) {
-		player.chat(message);
-	}
-
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		player.sendPluginMessage(channel, data);
-	}
-
-	@Override
-	public boolean hasPermission(@NotNull String permission) {
-		return player.hasPermission(permission);
-	}
+    public MinestomUser(@NotNull Player player) {
+        super(player);
+        this.player = player;
+    }
 
 
-	@Override
-	public @NotNull GameMode getGameMode() {
-		return GameMode.valueOf(player.getGameMode().name());
-	}
+    @Override
+    public @NotNull String getName() {
+        return player.getUsername();
+    }
 
-	@Override
-	public void setGameMode(@NotNull GameMode gameMode) {
-		player.setGameMode(net.minestom.server.entity.GameMode.valueOf(gameMode.name()));
-	}
+    @Override
+    public @NotNull UUID getUniqueId() {
+        return player.getUuid();
+    }
+
+    @Override
+    public int getPing() {
+        return player.getLatency();
+    }
+
+    @Override
+    public void chat(@NotNull String message) {
+        player.chat(message);
+    }
+
+    @Override
+    public void sendData(@NotNull String channel, byte[] data) {
+        player.sendPluginMessage(channel, data);
+    }
+
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return player.hasPermission(permission);
+    }
+
+
+    @Override
+    public @NotNull GameMode getGameMode() {
+        return GameMode.valueOf(player.getGameMode().name());
+    }
+
+    @Override
+    public void setGameMode(@NotNull GameMode gameMode) {
+        player.setGameMode(net.minestom.server.entity.GameMode.valueOf(gameMode.name()));
+    }
 
 }

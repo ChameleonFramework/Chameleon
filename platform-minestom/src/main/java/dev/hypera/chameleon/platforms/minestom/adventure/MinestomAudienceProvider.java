@@ -40,60 +40,60 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MinestomAudienceProvider implements ChameleonAudienceProvider {
 
-	@Override
-	public @NotNull Audience all() {
-		return Audience.audience(players(), console());
-	}
+    @Override
+    public @NotNull Audience all() {
+        return Audience.audience(players(), console());
+    }
 
-	@Override
-	public @NotNull Audience console() {
-		return MinestomUsers.console();
-	}
+    @Override
+    public @NotNull Audience console() {
+        return MinestomUsers.console();
+    }
 
-	@Override
-	public @NotNull Audience players() {
-		return Audience.audience(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().map(MinestomUsers::wrap).collect(Collectors.toSet()));
-	}
+    @Override
+    public @NotNull Audience players() {
+        return Audience.audience(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().map(MinestomUsers::wrap).collect(Collectors.toSet()));
+    }
 
-	@Override
-	public @NotNull Audience player(@NotNull UUID playerId) {
-		Player player = MinecraftServer.getConnectionManager().getPlayer(playerId);
+    @Override
+    public @NotNull Audience player(@NotNull UUID playerId) {
+        Player player = MinecraftServer.getConnectionManager().getPlayer(playerId);
 
-		if (null != player) {
-			return MinestomUsers.wrap(player);
-		} else {
-			throw new IllegalArgumentException("Cannot find player with id '" + playerId + "'");
-		}
-	}
+        if (null != player) {
+            return MinestomUsers.wrap(player);
+        } else {
+            throw new IllegalArgumentException("Cannot find player with id '" + playerId + "'");
+        }
+    }
 
-	@Override
-	public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
-		return all().filterAudience(f -> filter.test((ChatUser) f));
-	}
+    @Override
+    public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
+        return all().filterAudience(f -> filter.test((ChatUser) f));
+    }
 
-	@Override
-	public @NotNull Audience permission(@NotNull String permission) {
-		return filter(p -> p.hasPermission(permission));
-	}
+    @Override
+    public @NotNull Audience permission(@NotNull String permission) {
+        return filter(p -> p.hasPermission(permission));
+    }
 
-	@Override
-	public @NotNull Audience world(@NotNull Key world) {
-		return all();
-	}
+    @Override
+    public @NotNull Audience world(@NotNull Key world) {
+        return all();
+    }
 
-	@Override
-	public @NotNull Audience server(@NotNull String serverName) {
-		return all();
-	}
+    @Override
+    public @NotNull Audience server(@NotNull String serverName) {
+        return all();
+    }
 
-	@Override
-	public @NotNull ComponentFlattener flattener() {
-		return ComponentFlattener.basic();
-	}
+    @Override
+    public @NotNull ComponentFlattener flattener() {
+        return ComponentFlattener.basic();
+    }
 
-	@Override
-	public void close() {
+    @Override
+    public void close() {
 
-	}
+    }
 
 }

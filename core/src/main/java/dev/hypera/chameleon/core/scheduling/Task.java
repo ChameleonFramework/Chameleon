@@ -29,47 +29,47 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Task {
 
-	class Builder {
+    class Builder {
 
-		private final @NotNull Consumer<TaskImpl> schedule;
-		private final @NotNull Runnable runnable;
+        private final @NotNull Consumer<TaskImpl> schedule;
+        private final @NotNull Runnable runnable;
 
-		private @NotNull Type type = Type.ASYNC;
-		private @NotNull Schedule delay = Schedule.none();
-		private @NotNull Schedule repeat = Schedule.none();
+        private @NotNull Type type = Type.ASYNC;
+        private @NotNull Schedule delay = Schedule.none();
+        private @NotNull Schedule repeat = Schedule.none();
 
-		@Internal
-		public Builder(@NotNull Consumer<TaskImpl> schedule, @NotNull Runnable runnable) {
-			this.schedule = schedule;
-			this.runnable = runnable;
-		}
+        @Internal
+        public Builder(@NotNull Consumer<TaskImpl> schedule, @NotNull Runnable runnable) {
+            this.schedule = schedule;
+            this.runnable = runnable;
+        }
 
-		@Contract("_ -> this")
-		public @NotNull Builder type(@NotNull Type type) {
-			this.type = type;
-			return this;
-		}
+        @Contract("_ -> this")
+        public @NotNull Builder type(@NotNull Type type) {
+            this.type = type;
+            return this;
+        }
 
-		@Contract("_ -> this")
-		public @NotNull Builder delay(@NotNull Schedule delay) {
-			this.delay = delay;
-			return this;
-		}
+        @Contract("_ -> this")
+        public @NotNull Builder delay(@NotNull Schedule delay) {
+            this.delay = delay;
+            return this;
+        }
 
-		@Contract("_ -> this")
-		public @NotNull Builder repeat(@NotNull Schedule repeat) {
-			this.repeat = repeat;
-			return this;
-		}
+        @Contract("_ -> this")
+        public @NotNull Builder repeat(@NotNull Schedule repeat) {
+            this.repeat = repeat;
+            return this;
+        }
 
-		public void build() {
-			schedule.accept(new TaskImpl(runnable, type, delay, repeat));
-		}
+        public void build() {
+            schedule.accept(new TaskImpl(runnable, type, delay, repeat));
+        }
 
-	}
+    }
 
-	enum Type {
-		SYNC, ASYNC
-	}
+    enum Type {
+        SYNC, ASYNC
+    }
 
 }

@@ -41,6 +41,7 @@ public class CastingMap extends LinkedHashMap<Object, Object> {
     public @NotNull Optional<Class<?>> getType(@NotNull Object key) {
         return getOptional(key).map(Object::getClass);
     }
+
     public boolean isType(@NotNull Object key, @NotNull Class<?> type) {
         return getOptional(key).filter(type::isInstance).isPresent();
     }
@@ -49,62 +50,76 @@ public class CastingMap extends LinkedHashMap<Object, Object> {
     public @NotNull Map<String, Object> asStringObjectMap() {
         return entrySet().stream().collect(Collectors.toMap(e -> CastingUtil.asString(e.getKey()), Entry::getValue));
     }
+
     public @NotNull Map<String, String> asStringMap() {
         return entrySet().stream().collect(Collectors.toMap(e -> CastingUtil.asString(e.getKey()), e -> CastingUtil.asString(e.getValue())));
     }
 
     public @NotNull Map<Integer, Object> asIntegerObjectMap() {
-        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asInt(e.getKey()), e.getValue()))
-                .filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asInt(e.getKey()), e.getValue())).filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
     }
+
     public @NotNull Map<Integer, Integer> asIntegerMap() {
-        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asInt(e.getKey()), CastingUtil.asInt(e.getValue())))
-                .filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+        return entrySet().stream()
+            .map(e -> new SimpleEntry<>(CastingUtil.asInt(e.getKey()), CastingUtil.asInt(e.getValue())))
+            .filter(e -> null != e.getKey() && null != e.getValue())
+            .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
     }
 
     public @NotNull Map<Double, Object> asDoubleObjectMap() {
-        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asDouble(e.getKey()), e.getValue()))
-                .filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asDouble(e.getKey()), e.getValue())).filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
     }
+
     public @NotNull Map<Double, Double> asDoubleMap() {
-        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asDouble(e.getKey()), CastingUtil.asDouble(e.getValue())))
-                .filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+        return entrySet().stream()
+            .map(e -> new SimpleEntry<>(CastingUtil.asDouble(e.getKey()), CastingUtil.asDouble(e.getValue())))
+            .filter(e -> null != e.getKey() && null != e.getValue())
+            .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
     }
 
     public @NotNull Map<Long, Object> asLongObjectMap() {
-        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asLong(e.getKey()), e.getValue()))
-                .filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asLong(e.getKey()), e.getValue())).filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
     }
+
     public @NotNull Map<Long, Long> asLongMap() {
-        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asLong(e.getKey()), CastingUtil.asLong(e.getValue())))
-                .filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+        return entrySet().stream()
+            .map(e -> new SimpleEntry<>(CastingUtil.asLong(e.getKey()), CastingUtil.asLong(e.getValue())))
+            .filter(e -> null != e.getKey() && null != e.getValue())
+            .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
     }
 
     public @NotNull Map<Boolean, Object> asBooleanObjectMap() {
-        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asBoolean(e.getKey()), e.getValue()))
-                .filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
-    }
-    public @NotNull Map<Boolean, Boolean> asBooleanMap() {
-        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asBoolean(e.getKey()), CastingUtil.asBoolean(e.getValue())))
-                .filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+        return entrySet().stream().map(e -> new SimpleEntry<>(CastingUtil.asBoolean(e.getKey()), e.getValue())).filter(e -> null != e.getKey() && null != e.getValue()).collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
     }
 
-    
+    public @NotNull Map<Boolean, Boolean> asBooleanMap() {
+        return entrySet().stream()
+            .map(e -> new SimpleEntry<>(CastingUtil.asBoolean(e.getKey()), CastingUtil.asBoolean(e.getValue())))
+            .filter(e -> null != e.getKey() && null != e.getValue())
+            .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+    }
+
+
     public @NotNull Optional<String> getString(@NotNull Object key) {
         return getOptional(key).map(CastingUtil::asString);
     }
+
     public @NotNull Optional<Integer> getInt(@NotNull Object key) {
         return getOptional(key).map(CastingUtil::asInt);
     }
+
     public @NotNull Optional<Double> getDouble(@NotNull Object key) {
         return getOptional(key).map(CastingUtil::asDouble);
     }
+
     public @NotNull Optional<Long> getLong(@NotNull Object key) {
         return getOptional(key).map(CastingUtil::asLong);
     }
+
     public @NotNull Optional<Boolean> getBoolean(@NotNull Object key) {
         return getOptional(key).map(CastingUtil::asBoolean);
     }
+
     public @NotNull Optional<CastingList> getList(@NotNull Object key) {
         return getOptional(key).map(CastingUtil::asList);
     }

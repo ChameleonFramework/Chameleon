@@ -39,100 +39,105 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Event manager
+ * {@link Chameleon} event manager.
  */
 public final class EventManager {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull Set<ChameleonListener> registeredListeners = new HashSet<>();
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull Set<ChameleonListener> registeredListeners = new HashSet<>();
 
-	@Internal
-	public EventManager(@NotNull Chameleon chameleon) {
-		this.chameleon = chameleon;
-	}
-
-	/**
-	 * Register a listener
-	 *
-	 * @param listener Listener to be registered
-	 */
-	public void registerListener(@NotNull ChameleonListener listener) {
-		registeredListeners.add(listener);
-	}
-
-	/**
-	 * Register an inline listener
-	 *
-	 * @param type  Event type
-	 * @param event Event consumer
-	 * @param <T>   Event type
-	 */
-	public <T extends ChameleonEvent> void registerListener(@NotNull Class<T> type, @NotNull Consumer<T> event) {
-		registerListener(new InlineChameleonListener<>(type, event));
-	}
-
-	/**
-	 * Unregister a listener
-	 *
-	 * @param listener Listener to be unregistered
-	 */
-	public void unregisterListener(@NotNull ChameleonListener listener) {
-		registeredListeners.remove(listener);
-	}
+    /**
+     * {@link EventManager} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    @Internal
+    public EventManager(@NotNull Chameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
 
-	/**
-	 * Dispatch an event to registered listeners
-	 *
-	 * @param event Event to be dispatched
-	 */
-	@Internal
-	public boolean dispatch(@NotNull ChameleonEvent event) {
-		registeredListeners.stream()
-				.map(listener -> Arrays.stream(listener.getClass().getDeclaredMethods()).filter(method ->
-						method.isAnnotationPresent(EventHandler.class) &&
-								method.getParameterCount() == 1 &&
-								method.getParameterTypes()[0].isInstance(event)
-				).findFirst().map(m -> new EventMethod(m, listener)).orElse(null)).filter(Objects::nonNull)
-				.sorted(Comparator.comparingInt(m -> m.getMethod().getAnnotation(EventHandler.class).value().getPriority())).forEachOrdered(method -> {
-					try {
-						method.getMethod().invoke(method.getListener(), event);
-					} catch (IllegalAccessException | InvocationTargetException ex) {
-						chameleon.getInternalLogger().error(
-								"Failed to dispatch event '%s' to method '%s' of '%s'", ex,
-								event.getClass().getSimpleName(),
-								method.getMethod().toGenericString(),
-								method.getListener().getClass().getCanonicalName()
-						);
-					}
-				});
+    /**
+     * Register a listener.
+     *
+     * @param listener {@link ChameleonListener} to be registered.
+     */
+    public void registerListener(@NotNull ChameleonListener listener) {
+        this.registeredListeners.add(listener);
+    }
 
-		if (event instanceof Cancellable) {
-			return !((Cancellable) event).isCancelled();
-		} else {
-			return true;
-		}
-	}
+    /**
+     * Register an inline listener.
+     *
+     * @param type  {@link ChameleonEvent} type.
+     * @param event {@link ChameleonEvent} consumer.
+     * @param <T>   {@link ChameleonEvent} type.
+     */
+    public <T extends ChameleonEvent> void registerListener(@NotNull Class<T> type, @NotNull Consumer<T> event) {
+        registerListener(new InlineChameleonListener<>(type, event));
+    }
 
-	@Internal
-	private static class EventMethod {
+    /**
+     * Unregister a listener.
+     *
+     * @param listener {@link ChameleonListener} to be unregistered.
+     */
+    public void unregisterListener(@NotNull ChameleonListener listener) {
+        this.registeredListeners.remove(listener);
+    }
 
-		private final @NotNull Method method;
-		private final @NotNull ChameleonListener listener;
 
-		public EventMethod(@NotNull Method method, @NotNull ChameleonListener listener) {
-			this.method = method;
-			this.listener = listener;
-		}
+    /**
+     * Dispatch an {@link ChameleonEvent} to registered listeners.
+     *
+     * @param event {@link ChameleonEvent} to be dispatched.
+     *
+     * @return {@code true} if the event isn't instanceof {@link Cancellable} or if the event wasn't cancelled, otherwise {@code false}.
+     */
+    @Internal
+    public boolean dispatch(@NotNull ChameleonEvent event) {
+        this.registeredListeners.stream()
+            .map(listener -> Arrays.stream(listener.getClass().getDeclaredMethods())
+                .filter(method -> method.isAnnotationPresent(EventHandler.class) && method.getParameterCount() == 1 && method.getParameterTypes()[0].isInstance(event))
+                .findFirst()
+                .map(m -> new EventMethod(m, listener))
+                .orElse(null))
+            .filter(Objects::nonNull)
+            .sorted(Comparator.comparingInt(m -> m.getMethod().getAnnotation(EventHandler.class).value().getPriority()))
+            .forEachOrdered(method -> {
+                try {
+                    method.getMethod().invoke(method.getListener(), event);
+                } catch (IllegalAccessException | InvocationTargetException ex) {
+                    this.chameleon.getInternalLogger().error("Failed to dispatch event '%s' to method '%s' of '%s'", ex, event.getClass().getSimpleName(), method.getMethod().toGenericString(), method.getListener().getClass().getCanonicalName());
+                }
+            });
 
-		public @NotNull Method getMethod() {
-			return method;
-		}
+        if (event instanceof Cancellable) {
+            return !((Cancellable) event).isCancelled();
+        } else {
+            return true;
+        }
+    }
 
-		public @NotNull ChameleonListener getListener() {
-			return listener;
-		}
+    @Internal
+    private final static class EventMethod {
 
-	}
+        private final @NotNull Method method;
+        private final @NotNull ChameleonListener listener;
+
+        private EventMethod(@NotNull Method method, @NotNull ChameleonListener listener) {
+            this.method = method;
+            this.listener = listener;
+        }
+
+        public @NotNull Method getMethod() {
+            return this.method;
+        }
+
+        public @NotNull ChameleonListener getListener() {
+            return this.listener;
+        }
+
+    }
 
 }

@@ -30,37 +30,41 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform net.kyori.adventure.text.Component
+ * Maps shaded to platform {@link Component}.
  */
-public class ComponentMapper implements IMapper<Component> {
+public final class ComponentMapper implements IMapper<Component> {
 
-	private final @NotNull Method GSON_SERIALIZER_DESERIALIZE;
-	private final @NotNull Object GSON_SERIALIZER_INSTANCE;
+    private final @NotNull Method gsonSerializerDeserialize;
+    private final @NotNull Object gsonSerializerInstance;
 
-	public ComponentMapper() {
-		try {
-			Class<?> serializerClass = Class.forName(AdventureConverter.PACKAGE + "text.serializer.gson.GsonComponentSerializer");
-			GSON_SERIALIZER_DESERIALIZE = serializerClass.getMethod("deserialize", Object.class);
-			GSON_SERIALIZER_INSTANCE = serializerClass.getMethod("gson").invoke(null);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
+    /**
+     * {@link ComponentMapper} constructor.
+     */
+    public ComponentMapper() {
+        try {
+            Class<?> serializerClass = Class.forName(AdventureConverter.PACKAGE + "text.serializer.gson.GsonComponentSerializer");
+            this.gsonSerializerDeserialize = serializerClass.getMethod("deserialize", Object.class);
+            this.gsonSerializerInstance = serializerClass.getMethod("gson").invoke(null);
+        } catch (ReflectiveOperationException ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
 
-	/**
-	 * Map Component to the platform version of Adventure
-	 *
-	 * @param component Component to be mapped
-	 * @return Platform Component
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Component component) {
-		String json = GsonComponentSerializer.gson().serialize(component);
-		try {
-			return GSON_SERIALIZER_DESERIALIZE.invoke(GSON_SERIALIZER_INSTANCE, json);
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * Map {@link Component} to the platform version of Adventure.
+     *
+     * @param component {@link Component} to be mapped.
+     *
+     * @return Platform instance of {@link Component}.
+     */
+    @Override
+    public @NotNull Object map(@NotNull Component component) {
+        String json = GsonComponentSerializer.gson().serialize(component);
+        try {
+            return this.gsonSerializerDeserialize.invoke(this.gsonSerializerInstance, json);
+        } catch (ReflectiveOperationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
 }

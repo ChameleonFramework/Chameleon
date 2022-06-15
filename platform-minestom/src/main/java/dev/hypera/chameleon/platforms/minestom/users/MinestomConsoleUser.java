@@ -32,18 +32,18 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MinestomConsoleUser extends AbstractReflectedAudience implements ChatUser {
 
-	public MinestomConsoleUser() {
-		super(MinecraftServer.getCommandManager().getConsoleSender());
-	}
+    public MinestomConsoleUser() {
+        super(MinecraftServer.getCommandManager().getConsoleSender());
+    }
 
-	@Override
-	public @NotNull String getName() {
-		return "Console";
-	}
+    @Override
+    public @NotNull String getName() {
+        return "Console";
+    }
 
-	@Override
-	public boolean hasPermission(@NotNull String permission) {
-		return true;
-	}
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return true;
+    }
 
 }

@@ -29,12 +29,17 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command handler annotation
+ * Command handler annotation.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CommandHandler {
 
-	@NotNull String value();
+    /**
+     * Get command names, separated by '|'.
+     *
+     * @return command names.
+     */
+    @NotNull String value();
 
 }

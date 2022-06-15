@@ -29,74 +29,73 @@ import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityConsoleUser;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUsers;
+import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.UUID;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Velocity audience provider implementation
  */
 public class VelocityAudienceProvider implements ChameleonAudienceProvider {
 
-	private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull VelocityChameleon chameleon;
 
-	public VelocityAudienceProvider(@NotNull VelocityChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+    public VelocityAudienceProvider(@NotNull VelocityChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
-	@Override
-	public @NotNull Audience all() {
-		return Audience.audience(players(), console());
-	}
+    @Override
+    public @NotNull Audience all() {
+        return Audience.audience(players(), console());
+    }
 
-	@Override
-	public @NotNull Audience console() {
-		return new VelocityConsoleUser(chameleon);
-	}
+    @Override
+    public @NotNull Audience console() {
+        return new VelocityConsoleUser(chameleon);
+    }
 
-	@Override
-	public @NotNull Audience players() {
-		return Audience.audience(chameleon.getVelocityPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(chameleon, p)).collect(Collectors.toSet()));
-	}
+    @Override
+    public @NotNull Audience players() {
+        return Audience.audience(chameleon.getVelocityPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(chameleon, p)).collect(Collectors.toSet()));
+    }
 
-	@Override
-	public @NotNull Audience player(@NotNull UUID playerId) {
-		return VelocityUsers.wrap(chameleon, chameleon.getVelocityPlugin().getServer().getPlayer(playerId).orElseThrow(() -> new IllegalArgumentException("Cannot find player with id '" + playerId + "'")));
-	}
+    @Override
+    public @NotNull Audience player(@NotNull UUID playerId) {
+        return VelocityUsers.wrap(chameleon, chameleon.getVelocityPlugin().getServer().getPlayer(playerId).orElseThrow(() -> new IllegalArgumentException("Cannot find player with id '" + playerId + "'")));
+    }
 
-	@Override
-	public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
-		return all().filterAudience(f -> filter.test((ChatUser) f));
-	}
+    @Override
+    public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
+        return all().filterAudience(f -> filter.test((ChatUser) f));
+    }
 
-	@Override
-	public @NotNull Audience permission(@NotNull String permission) {
-		return filter(p -> p.hasPermission(permission));
-	}
+    @Override
+    public @NotNull Audience permission(@NotNull String permission) {
+        return filter(p -> p.hasPermission(permission));
+    }
 
-	@Override
-	public @NotNull Audience world(@NotNull Key world) {
-		return all();
-	}
+    @Override
+    public @NotNull Audience world(@NotNull Key world) {
+        return all();
+    }
 
-	@Override
-	public @NotNull Audience server(@NotNull String serverName) {
-		return filter(p -> p instanceof ProxyUser && ((ProxyUser) p).getServer().isPresent() && ((ProxyUser) p).getServer().get().getName().equals(serverName));
-	}
+    @Override
+    public @NotNull Audience server(@NotNull String serverName) {
+        return filter(p -> p instanceof ProxyUser && ((ProxyUser) p).getServer().isPresent() && ((ProxyUser) p).getServer().get().getName().equals(serverName));
+    }
 
-	@Override
-	public @NotNull ComponentFlattener flattener() {
-		return ComponentFlattener.basic();
-	}
+    @Override
+    public @NotNull ComponentFlattener flattener() {
+        return ComponentFlattener.basic();
+    }
 
-	@Override
-	public void close() {
+    @Override
+    public void close() {
 
-	}
+    }
 
 }

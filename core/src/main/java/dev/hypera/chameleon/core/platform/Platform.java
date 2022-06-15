@@ -28,37 +28,74 @@ import dev.hypera.chameleon.core.platform.server.ServerPlatform;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Platform
+ * Platform.
  */
 public abstract class Platform {
 
-	public abstract @NotNull String getAPIName();
-	public abstract @NotNull String getName();
-	public abstract @NotNull String getVersion();
-	public abstract @NotNull Type getType();
+    /**
+     * Get API name.
+     *
+     * @return API name.
+     */
+    public abstract @NotNull String getAPIName();
+
+    /**
+     * Get name.
+     *
+     * @return name.
+     */
+    public abstract @NotNull String getName();
+
+    /**
+     * Get version.
+     *
+     * @return version.
+     */
+    public abstract @NotNull String getVersion();
+
+    /**
+     * Get {@link Type}.
+     *
+     * @return {@link Type}.
+     */
+    public abstract @NotNull Type getType();
 
 
-	@PlatformSpecific(Type.PROXY)
-	public final @NotNull ProxyPlatform proxy() {
-		if (this instanceof ProxyPlatform) {
-			return (ProxyPlatform) this;
-		} else {
-			throw new IllegalStateException("Cannot cast to ProxyPlatform");
-		}
-	}
+    /**
+     * Cast this {@link Platform} instance to an {@link ProxyPlatform} instance.
+     *
+     * @return {@link ProxyPlatform}.
+     * @throws IllegalStateException if this {@link Platform} is not an {@link ProxyPlatform}.
+     */
+    @PlatformSpecific(Type.PROXY)
+    public final @NotNull ProxyPlatform proxy() {
+        if (this instanceof ProxyPlatform) {
+            return (ProxyPlatform) this;
+        } else {
+            throw new IllegalStateException("Cannot cast to ProxyPlatform");
+        }
+    }
 
-	@PlatformSpecific(Type.SERVER)
-	public final @NotNull ServerPlatform server() {
-		if (this instanceof ServerPlatform) {
-			return (ServerPlatform) this;
-		} else {
-			throw new IllegalStateException("Cannot cast to ServerPlatform");
-		}
-	}
+    /**
+     * Cast this {@link Platform} instance to an {@link ServerPlatform} instance.
+     *
+     * @return {@link ServerPlatform}.
+     * @throws IllegalStateException if this {@link Platform} is not an {@link ServerPlatform}.
+     */
+    @PlatformSpecific(Type.SERVER)
+    public final @NotNull ServerPlatform server() {
+        if (this instanceof ServerPlatform) {
+            return (ServerPlatform) this;
+        } else {
+            throw new IllegalStateException("Cannot cast to ServerPlatform");
+        }
+    }
 
-
-	public enum Type {
-		SERVER, PROXY
-	}
+    /**
+     * Platform type.
+     */
+    public enum Type {
+        SERVER, PROXY
+    }
 
 }

@@ -35,33 +35,33 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface ChatUser extends Audience, PermissionHolder {
 
-	@NotNull String getName();
+    @NotNull String getName();
 
 
-	default @NotNull User user() {
-		if (this instanceof User) {
-			return (User) this;
-		} else {
-			throw new IllegalStateException("Cannot cast to User");
-		}
-	}
+    default @NotNull User user() {
+        if (this instanceof User) {
+            return (User) this;
+        } else {
+            throw new IllegalStateException("Cannot cast to User");
+        }
+    }
 
-	@PlatformSpecific(Type.PROXY)
-	default @NotNull ProxyUser proxy() {
-		if (this instanceof ProxyUser) {
-			return (ProxyUser) this;
-		} else {
-			throw new IllegalStateException("Cannot cast to ProxyUser");
-		}
-	}
+    @PlatformSpecific(Type.PROXY)
+    default @NotNull ProxyUser proxy() {
+        if (this instanceof ProxyUser) {
+            return (ProxyUser) this;
+        } else {
+            throw new IllegalStateException("Cannot cast to ProxyUser");
+        }
+    }
 
-	@PlatformSpecific(Type.SERVER)
-	default @NotNull ServerUser server() {
-		if (this instanceof ServerUser) {
-			return (ServerUser) this;
-		} else {
-			throw new IllegalStateException("Cannot cast to ServerUser");
-		}
-	}
+    @PlatformSpecific(Type.SERVER)
+    default @NotNull ServerUser server() {
+        if (this instanceof ServerUser) {
+            return (ServerUser) this;
+        } else {
+            throw new IllegalStateException("Cannot cast to ServerUser");
+        }
+    }
 
 }

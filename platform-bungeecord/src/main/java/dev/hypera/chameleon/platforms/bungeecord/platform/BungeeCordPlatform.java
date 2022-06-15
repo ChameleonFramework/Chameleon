@@ -37,42 +37,42 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BungeeCordPlatform extends ProxyPlatform {
 
-	private final @NotNull BungeeCordChameleon chameleon;
+    private final @NotNull BungeeCordChameleon chameleon;
 
-	public BungeeCordPlatform(@NotNull BungeeCordChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
-
-
-	@Override
-	public @NotNull String getAPIName() {
-		return "BungeeCord";
-	}
-
-	@Override
-	public @NotNull String getName() {
-		return ProxyServer.getInstance().getName();
-	}
-
-	@Override
-	public @NotNull String getVersion() {
-		return ProxyServer.getInstance().getVersion();
-	}
-
-	@Override
-	public @NotNull Type getType() {
-		return Type.PROXY;
-	}
+    public BungeeCordPlatform(@NotNull BungeeCordChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
 
-	@Override
-	public @NotNull Set<Server> getServers() {
-		return ProxyServer.getInstance().getServers().values().stream().map(s -> new BungeeCordServer(chameleon, s)).collect(Collectors.toSet());
-	}
+    @Override
+    public @NotNull String getAPIName() {
+        return "BungeeCord";
+    }
 
-	@Override
-	public @NotNull Optional<Server> getServer(@NotNull String name) {
-		return Optional.ofNullable(ProxyServer.getInstance().getServerInfo(name)).map(s -> new BungeeCordServer(chameleon, s));
-	}
+    @Override
+    public @NotNull String getName() {
+        return ProxyServer.getInstance().getName();
+    }
+
+    @Override
+    public @NotNull String getVersion() {
+        return ProxyServer.getInstance().getVersion();
+    }
+
+    @Override
+    public @NotNull Type getType() {
+        return Type.PROXY;
+    }
+
+
+    @Override
+    public @NotNull Set<Server> getServers() {
+        return ProxyServer.getInstance().getServers().values().stream().map(s -> new BungeeCordServer(chameleon, s)).collect(Collectors.toSet());
+    }
+
+    @Override
+    public @NotNull Optional<Server> getServer(@NotNull String name) {
+        return Optional.ofNullable(ProxyServer.getInstance().getServerInfo(name)).map(s -> new BungeeCordServer(chameleon, s));
+    }
 
 }

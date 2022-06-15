@@ -46,45 +46,41 @@ import org.jetbrains.annotations.NotNull;
  */
 public class VelocityListener {
 
-	private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull VelocityChameleon chameleon;
 
-	public VelocityListener(@NotNull VelocityChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+    public VelocityListener(@NotNull VelocityChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
-	@Subscribe
-	public void onPostLoginEvent(@NotNull PostLoginEvent event) {
-		chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
-	}
+    @Subscribe
+    public void onPostLoginEvent(@NotNull PostLoginEvent event) {
+        chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+    }
 
-	@Subscribe
-	public void onChatEvent(@NotNull PlayerChatEvent event) {
-		if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
-			event.setResult(ChatResult.denied());
-		}
-	}
+    @Subscribe
+    public void onChatEvent(@NotNull PlayerChatEvent event) {
+        if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
+            event.setResult(ChatResult.denied());
+        }
+    }
 
-	@Subscribe
-	public void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
-		chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
-	}
+    @Subscribe
+    public void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
+        chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+    }
 
-	@Subscribe
-	public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
-		chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(
-				wrap(event.getPlayer()),
-				event.getPreviousServer().map(this::wrap).orElse(null),
-				wrap(event.getServer())
-		));
-	}
+    @Subscribe
+    public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
+        chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), event.getPreviousServer().map(this::wrap).orElse(null), wrap(event.getServer())));
+    }
 
 
-	private @NotNull ProxyUser wrap(@NotNull Player player) {
-		return new VelocityUser(chameleon, player);
-	}
+    private @NotNull ProxyUser wrap(@NotNull Player player) {
+        return new VelocityUser(chameleon, player);
+    }
 
-	private @NotNull Server wrap(@NotNull RegisteredServer server) {
-		return new VelocityServer(chameleon, server);
-	}
+    private @NotNull Server wrap(@NotNull RegisteredServer server) {
+        return new VelocityServer(chameleon, server);
+    }
 
 }

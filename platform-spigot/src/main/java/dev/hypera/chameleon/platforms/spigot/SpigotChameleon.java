@@ -50,66 +50,66 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class SpigotChameleon extends Chameleon {
 
-	private final @NotNull JavaPlugin plugin;
-	private final @NotNull ChameleonAudienceProvider audienceProvider;
-	private final @NotNull SpigotPlatform platform = new SpigotPlatform();
-	private final @NotNull SpigotCommandManager commandManager = new SpigotCommandManager(this);
-	private final @NotNull SpigotPluginManager pluginManager = new SpigotPluginManager();
-	private final @NotNull SpigotUserManager userManager = new SpigotUserManager(this);
-	private final @NotNull SpigotScheduler scheduler = new SpigotScheduler(this);
+    private final @NotNull JavaPlugin plugin;
+    private final @NotNull ChameleonAudienceProvider audienceProvider;
+    private final @NotNull SpigotPlatform platform = new SpigotPlatform();
+    private final @NotNull SpigotCommandManager commandManager = new SpigotCommandManager(this);
+    private final @NotNull SpigotPluginManager pluginManager = new SpigotPluginManager();
+    private final @NotNull SpigotUserManager userManager = new SpigotUserManager(this);
+    private final @NotNull SpigotScheduler scheduler = new SpigotScheduler(this);
 
-	SpigotChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-		super(chameleonPlugin, pluginData, new ChameleonJavaLogger(spigotPlugin.getLogger()));
-		this.plugin = spigotPlugin;
-		this.audienceProvider = new SpigotAudienceProvider(this, spigotPlugin);
-		Bukkit.getPluginManager().registerEvents(new SpigotListener(this), plugin);
-	}
+    SpigotChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+        super(chameleonPlugin, pluginData, new ChameleonJavaLogger(spigotPlugin.getLogger()));
+        this.plugin = spigotPlugin;
+        this.audienceProvider = new SpigotAudienceProvider(this, spigotPlugin);
+        Bukkit.getPluginManager().registerEvents(new SpigotListener(this), plugin);
+    }
 
-	public static @NotNull SpigotChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) {
-		return new SpigotChameleonBootstrap(chameleonPlugin, spigotPlugin, pluginData);
-	}
-
-
-	@Override
-	public @NotNull ChameleonAudienceProvider getAdventure() {
-		return audienceProvider;
-	}
-
-	@Override
-	public @NotNull Platform getPlatform() {
-		return platform;
-	}
+    public static @NotNull SpigotChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) {
+        return new SpigotChameleonBootstrap(chameleonPlugin, spigotPlugin, pluginData);
+    }
 
 
-	@Override
-	public @NotNull CommandManager getCommandManager() {
-		return commandManager;
-	}
+    @Override
+    public @NotNull ChameleonAudienceProvider getAdventure() {
+        return audienceProvider;
+    }
 
-	@Override
-	public @NotNull PluginManager getPluginManager() {
-		return pluginManager;
-	}
-
-	@Override
-	public @NotNull UserManager getUserManager() {
-		return userManager;
-	}
-
-	@Override
-	public @NotNull Scheduler getScheduler() {
-		return scheduler;
-	}
+    @Override
+    public @NotNull Platform getPlatform() {
+        return platform;
+    }
 
 
-	@Override
-	public @NotNull Path getDataFolder() {
-		return plugin.getDataFolder().toPath().toAbsolutePath();
-	}
+    @Override
+    public @NotNull CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    @Override
+    public @NotNull PluginManager getPluginManager() {
+        return pluginManager;
+    }
+
+    @Override
+    public @NotNull UserManager getUserManager() {
+        return userManager;
+    }
+
+    @Override
+    public @NotNull Scheduler getScheduler() {
+        return scheduler;
+    }
 
 
-	public @NotNull JavaPlugin getSpigotPlugin() {
-		return plugin;
-	}
+    @Override
+    public @NotNull Path getDataFolder() {
+        return plugin.getDataFolder().toPath().toAbsolutePath();
+    }
+
+
+    public @NotNull JavaPlugin getSpigotPlugin() {
+        return plugin;
+    }
 
 }

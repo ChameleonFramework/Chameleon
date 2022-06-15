@@ -30,15 +30,38 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Proxy sub-server
+ * {@link ProxyPlatform} sub-server.
  */
 @PlatformSpecific(Type.PROXY)
 public interface Server {
 
-	@NotNull String getName();
-	@NotNull SocketAddress getSocketAddress();
-	@NotNull Set<ProxyUser> getPlayers();
+    /**
+     * Get {@link Server} name.
+     *
+     * @return {@link Server} name.
+     */
+    @NotNull String getName();
 
-	void sendData(@NotNull String channel, byte[] data);
+    /**
+     * Get {@link Server} socket address.
+     *
+     * @return {@link Server} socket address.
+     */
+    @NotNull SocketAddress getSocketAddress();
+
+    /**
+     * Get all {@link ProxyUser}s on this {@link Server}.
+     *
+     * @return set of {@link ProxyUser} currently on this {@link Server}.
+     */
+    @NotNull Set<ProxyUser> getPlayers();
+
+    /**
+     * Send a plugin message to this {@link Server}.
+     *
+     * @param channel Plugin message channel.
+     * @param data    Data.
+     */
+    void sendData(@NotNull String channel, byte[] data);
 
 }

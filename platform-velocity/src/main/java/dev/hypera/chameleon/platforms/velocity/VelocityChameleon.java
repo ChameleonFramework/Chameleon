@@ -48,64 +48,64 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class VelocityChameleon extends Chameleon {
 
-	private final @NotNull VelocityPlugin plugin;
-	private final @NotNull VelocityAudienceProvider audienceProvider = new VelocityAudienceProvider(this);
-	private final @NotNull VelocityPlatform platform = new VelocityPlatform(this);
-	private final @NotNull VelocityCommandManager commandManager = new VelocityCommandManager(this);
-	private final @NotNull VelocityPluginManager pluginManager = new VelocityPluginManager(this);
-	private final @NotNull VelocityUserManager userManager = new VelocityUserManager(this);
-	private final @NotNull VelocityScheduler scheduler = new VelocityScheduler(this);
+    private final @NotNull VelocityPlugin plugin;
+    private final @NotNull VelocityAudienceProvider audienceProvider = new VelocityAudienceProvider(this);
+    private final @NotNull VelocityPlatform platform = new VelocityPlatform(this);
+    private final @NotNull VelocityCommandManager commandManager = new VelocityCommandManager(this);
+    private final @NotNull VelocityPluginManager pluginManager = new VelocityPluginManager(this);
+    private final @NotNull VelocityUserManager userManager = new VelocityUserManager(this);
+    private final @NotNull VelocityScheduler scheduler = new VelocityScheduler(this);
 
-	VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-		super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(velocityPlugin.getLogger()));
-		this.plugin = velocityPlugin;
-		this.plugin.getServer().getEventManager().register(plugin, new VelocityListener(this));
-	}
+    VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+        super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(velocityPlugin.getLogger()));
+        this.plugin = velocityPlugin;
+        this.plugin.getServer().getEventManager().register(plugin, new VelocityListener(this));
+    }
 
-	public static @NotNull VelocityChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) {
-		return new VelocityChameleonBootstrap(chameleonPlugin, velocityPlugin, pluginData);
-	}
-
-
-	@Override
-	public @NotNull ChameleonAudienceProvider getAdventure() {
-		return audienceProvider;
-	}
-
-	@Override
-	public @NotNull Platform getPlatform() {
-		return platform;
-	}
-
-	@Override
-	public @NotNull CommandManager getCommandManager() {
-		return commandManager;
-	}
-
-	@Override
-	public @NotNull PluginManager getPluginManager() {
-		return pluginManager;
-	}
-
-	@Override
-	public @NotNull UserManager getUserManager() {
-		return userManager;
-	}
-
-	@Override
-	public @NotNull Scheduler getScheduler() {
-		return scheduler;
-	}
+    public static @NotNull VelocityChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) {
+        return new VelocityChameleonBootstrap(chameleonPlugin, velocityPlugin, pluginData);
+    }
 
 
-	@Override
-	public @NotNull Path getDataFolder() {
-		return plugin.getDataDirectory();
-	}
+    @Override
+    public @NotNull ChameleonAudienceProvider getAdventure() {
+        return audienceProvider;
+    }
+
+    @Override
+    public @NotNull Platform getPlatform() {
+        return platform;
+    }
+
+    @Override
+    public @NotNull CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    @Override
+    public @NotNull PluginManager getPluginManager() {
+        return pluginManager;
+    }
+
+    @Override
+    public @NotNull UserManager getUserManager() {
+        return userManager;
+    }
+
+    @Override
+    public @NotNull Scheduler getScheduler() {
+        return scheduler;
+    }
 
 
-	public @NotNull VelocityPlugin getVelocityPlugin() {
-		return plugin;
-	}
+    @Override
+    public @NotNull Path getDataFolder() {
+        return plugin.getDataDirectory();
+    }
+
+
+    public @NotNull VelocityPlugin getVelocityPlugin() {
+        return plugin;
+    }
 
 }

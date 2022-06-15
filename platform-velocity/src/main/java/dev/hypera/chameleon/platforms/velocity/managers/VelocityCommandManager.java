@@ -33,21 +33,24 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class VelocityCommandManager extends CommandManager {
 
-	private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull VelocityChameleon chameleon;
 
-	public VelocityCommandManager(@NotNull VelocityChameleon chameleon) {
-		super(chameleon);
-		this.chameleon = chameleon;
-	}
+    public VelocityCommandManager(@NotNull VelocityChameleon chameleon) {
+        super(chameleon);
+        this.chameleon = chameleon;
+    }
 
-	@Override
-	protected void registerCommand(@NotNull Command command) {
-		chameleon.getVelocityPlugin().getServer().getCommandManager().register(chameleon.getVelocityPlugin().getServer().getCommandManager().metaBuilder(command.getName()).aliases(command.getAliases().toArray(new String[0])).build(), new VelocityCommand(chameleon, command));
-	}
+    @Override
+    protected void registerCommand(@NotNull Command command) {
+        chameleon.getVelocityPlugin()
+            .getServer()
+            .getCommandManager()
+            .register(chameleon.getVelocityPlugin().getServer().getCommandManager().metaBuilder(command.getName()).aliases(command.getAliases().toArray(new String[0])).build(), new VelocityCommand(chameleon, command));
+    }
 
-	@Override
-	protected void unregisterCommand(@NotNull Command command) {
-		chameleon.getVelocityPlugin().getServer().getCommandManager().unregister(command.getName());
-	}
+    @Override
+    protected void unregisterCommand(@NotNull Command command) {
+        chameleon.getVelocityPlugin().getServer().getCommandManager().unregister(command.getName());
+    }
 
 }

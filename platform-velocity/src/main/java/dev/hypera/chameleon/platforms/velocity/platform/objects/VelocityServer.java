@@ -39,39 +39,39 @@ import org.jetbrains.annotations.NotNull;
  */
 public class VelocityServer implements Server {
 
-	private final @NotNull VelocityChameleon chameleon;
-	private final @NotNull RegisteredServer server;
+    private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull RegisteredServer server;
 
-	public VelocityServer(@NotNull VelocityChameleon chameleon, @NotNull RegisteredServer server) {
-		this.chameleon = chameleon;
-		this.server = server;
-	}
-
-
-	@Override
-	public @NotNull String getName() {
-		return server.getServerInfo().getName();
-	}
-
-	@Override
-	public @NotNull SocketAddress getSocketAddress() {
-		return server.getServerInfo().getAddress();
-	}
-
-	@Override
-	public @NotNull Set<ProxyUser> getPlayers() {
-		return server.getPlayersConnected().stream().map(p -> new VelocityUser(chameleon, p)).collect(Collectors.toSet());
-	}
-
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		server.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
-	}
+    public VelocityServer(@NotNull VelocityChameleon chameleon, @NotNull RegisteredServer server) {
+        this.chameleon = chameleon;
+        this.server = server;
+    }
 
 
-	@Internal
-	public @NotNull RegisteredServer getVelocity() {
-		return server;
-	}
+    @Override
+    public @NotNull String getName() {
+        return server.getServerInfo().getName();
+    }
+
+    @Override
+    public @NotNull SocketAddress getSocketAddress() {
+        return server.getServerInfo().getAddress();
+    }
+
+    @Override
+    public @NotNull Set<ProxyUser> getPlayers() {
+        return server.getPlayersConnected().stream().map(p -> new VelocityUser(chameleon, p)).collect(Collectors.toSet());
+    }
+
+    @Override
+    public void sendData(@NotNull String channel, byte[] data) {
+        server.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
+    }
+
+
+    @Internal
+    public @NotNull RegisteredServer getVelocity() {
+        return server;
+    }
 
 }

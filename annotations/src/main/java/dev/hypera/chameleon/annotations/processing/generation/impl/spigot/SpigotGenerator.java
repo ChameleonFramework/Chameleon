@@ -46,10 +46,22 @@ import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
 
+/**
+ * Spigot plugin main class and 'plugin.yml' description file generator.
+ */
 public class SpigotGenerator extends Generator {
 
     private static final @NotNull String DESCRIPTION_FILE = "plugin.yml";
 
+    /**
+     * Generate Spigot plugin main class and 'plugin.yml' description file.
+     *
+     * @param data   {@link Plugin} data
+     * @param plugin Chameleon plugin main class
+     * @param env    Processing environment
+     *
+     * @throws Exception if something goes wrong while creating the files.
+     */
     @Override
     public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
         MethodSpec loadSpec = MethodSpec.methodBuilder("onLoad")
@@ -64,29 +76,21 @@ public class SpigotGenerator extends Generator {
             .build();
 
         MethodSpec enableSpec = MethodSpec.methodBuilder("onEnable")
-            .addAnnotation(Override.class)
-            .addModifiers(Modifier.PUBLIC)
-            .addStatement("this.$N.onEnable()", "chameleon")
-            .build();
+            .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
+            .addStatement("this.$N.onEnable()", "chameleon").build();
 
         MethodSpec disableSpec = MethodSpec.methodBuilder("onDisable")
-                .addAnnotation(Override.class)
-                .addModifiers(Modifier.PUBLIC)
-                .addStatement("this.$N.onDisable()", "chameleon")
-                .build();
+            .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
+            .addStatement("this.$N.onDisable()", "chameleon").build();
 
         TypeSpec spigotMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Spigot")
-                .addModifiers(Modifier.PUBLIC)
-                .superclass(clazz("org.bukkit.plugin.java", "JavaPlugin"))
-                .addField(FieldSpec.builder(
-                        clazz("dev.hypera.chameleon.platforms.spigot", "SpigotChameleon"),
-                        "chameleon",
-                        Modifier.PRIVATE
-                ).build())
-                .addMethod(loadSpec)
-                .addMethod(enableSpec)
-                .addMethod(disableSpec)
-                .build();
+            .addModifiers(Modifier.PUBLIC)
+            .superclass(clazz("org.bukkit.plugin.java", "JavaPlugin"))
+            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platforms.spigot", "SpigotChameleon"), "chameleon", Modifier.PRIVATE).build())
+            .addMethod(loadSpec)
+            .addMethod(enableSpec)
+            .addMethod(disableSpec)
+            .build();
 
         String packageName = ((PackageElement) plugin.getEnclosingElement()).getQualifiedName().toString();
         if (packageName.endsWith("core") || packageName.endsWith("common")) {
@@ -100,24 +104,16 @@ public class SpigotGenerator extends Generator {
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))) {
-            new Yaml().dump(
-                    new MapBuilder<String, Object>()
-                            .add("name", data.name().isEmpty() ? data.id() : data.name())
-                            .add("main", packageName + "." + plugin.getSimpleName() + "Spigot")
-                            .add("version", data.version())
-                            .add("api-version", "1.13")
-                            .add("author", data.authors().length > 0 ? String.join(", ", data.authors()) : "Unknown")
-                            .add("authors", data.authors())
-                            .add("website", data.url())
-                            .add("depend", Arrays.stream(data.dependencies())
-                                    .filter(d -> !d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.SPIGOT)))
-                                    .map(PlatformDependency::name).collect(Collectors.toList())
-                            ).add("softdepend", Arrays.stream(data.dependencies())
-                                    .filter(d -> d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.SPIGOT)))
-                                    .map(PlatformDependency::name).collect(Collectors.toList())
-                            ).add("description", data.description()),
-                    writer
-            );
+            new Yaml().dump(new MapBuilder<String, Object>().add("name", data.name().isEmpty() ? data.id() : data.name())
+                .add("main", packageName + "." + plugin.getSimpleName() + "Spigot")
+                .add("version", data.version())
+                .add("api-version", "1.13")
+                .add("author", data.authors().length > 0 ? String.join(", ", data.authors()) : "Unknown")
+                .add("authors", data.authors())
+                .add("website", data.url())
+                .add("depend", Arrays.stream(data.dependencies()).filter(d -> !d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.SPIGOT))).map(PlatformDependency::name).collect(Collectors.toList()))
+                .add("softdepend", Arrays.stream(data.dependencies()).filter(d -> d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.SPIGOT))).map(PlatformDependency::name).collect(Collectors.toList()))
+                .add("description", data.description()), writer);
         }
     }
 

@@ -25,10 +25,24 @@ package dev.hypera.chameleon.annotations.utils;
 import java.util.HashMap;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * {@link java.util.Map} builder utility.
+ *
+ * @param <K> Key
+ * @param <V> Value
+ */
 public class MapBuilder<K, V> extends HashMap<K, V> {
 
     private static final long serialVersionUID = 5845273231221036448L;
 
+    /**
+     * Add object to {@link java.util.Map}.
+     *
+     * @param k Key
+     * @param v Value
+     *
+     * @return {@code this}
+     */
     public @NotNull MapBuilder<K, V> add(@NotNull K k, @NotNull V v) {
         put(k, v);
         return this;

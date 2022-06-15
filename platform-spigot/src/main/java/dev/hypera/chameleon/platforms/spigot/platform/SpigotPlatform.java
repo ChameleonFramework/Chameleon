@@ -23,7 +23,6 @@
 package dev.hypera.chameleon.platforms.spigot.platform;
 
 import dev.hypera.chameleon.core.platform.server.ServerPlatform;
-import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,24 +31,24 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class SpigotPlatform extends ServerPlatform {
 
-	@Override
-	public @NotNull String getAPIName() {
-		return "Spigot";
-	}
+    @Override
+    public @NotNull String getAPIName() {
+        return "Spigot";
+    }
 
-	@Override
-	public @NotNull String getName() {
-		return Bukkit.getName();
-	}
+    @Override
+    public @NotNull String getName() {
+        return Bukkit.getName();
+    }
 
-	@Override
-	public @NotNull String getVersion() {
-		return Bukkit.getVersion();
-	}
+    @Override
+    public @NotNull String getVersion() {
+        return Bukkit.getVersion();
+    }
 
-	@Override
-	public @NotNull Type getType() {
-		return Type.SERVER;
-	}
+    @Override
+    public @NotNull Type getType() {
+        return Type.SERVER;
+    }
 
 }

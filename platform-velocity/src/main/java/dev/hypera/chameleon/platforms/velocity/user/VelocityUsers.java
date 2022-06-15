@@ -34,12 +34,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class VelocityUsers {
 
-	public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSource source) {
-		if (source instanceof Player) {
-			return new VelocityUser((VelocityChameleon) chameleon, (Player) source);
-		} else {
-			return new VelocityConsoleUser((VelocityChameleon) chameleon);
-		}
-	}
+    public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSource source) {
+        if (source instanceof Player) {
+            return new VelocityUser((VelocityChameleon) chameleon, (Player) source);
+        } else {
+            return new VelocityConsoleUser((VelocityChameleon) chameleon);
+        }
+    }
 
 }

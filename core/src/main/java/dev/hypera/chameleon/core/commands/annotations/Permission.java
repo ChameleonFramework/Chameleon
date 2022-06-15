@@ -28,10 +28,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Permission.
+ */
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Permission {
 
-	@NotNull String value();
+    /**
+     * Get permission string.
+     *
+     * @return permission string.
+     */
+    @NotNull String value();
 
 }

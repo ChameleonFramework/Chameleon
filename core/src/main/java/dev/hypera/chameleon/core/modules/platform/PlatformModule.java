@@ -26,15 +26,21 @@ import dev.hypera.chameleon.core.Chameleon;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Platform module
- * @param <C> Platform Chameleon
+ * Platform module.
+ *
+ * @param <C> Platform {@link Chameleon}.
  */
 public abstract class PlatformModule<C extends Chameleon> {
 
-	protected final @NotNull C chameleon;
+    protected final @NotNull C chameleon;
 
-	public PlatformModule(@NotNull C chameleon) {
-		this.chameleon = chameleon;
-	}
+    /**
+     * {@link PlatformModule} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    public PlatformModule(@NotNull C chameleon) {
+        this.chameleon = chameleon;
+    }
 
 }

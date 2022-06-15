@@ -36,42 +36,42 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class VelocityPlatform extends ProxyPlatform {
 
-	private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull VelocityChameleon chameleon;
 
-	public VelocityPlatform(@NotNull VelocityChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
-
-
-	@Override
-	public @NotNull String getAPIName() {
-		return "Velocity";
-	}
-
-	@Override
-	public @NotNull String getName() {
-		return chameleon.getVelocityPlugin().getServer().getVersion().getName();
-	}
-
-	@Override
-	public @NotNull String getVersion() {
-		return chameleon.getVelocityPlugin().getServer().getVersion().getVersion();
-	}
-
-	@Override
-	public @NotNull Type getType() {
-		return Type.PROXY;
-	}
+    public VelocityPlatform(@NotNull VelocityChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
 
-	@Override
-	public @NotNull Set<Server> getServers() {
-		return chameleon.getVelocityPlugin().getServer().getAllServers().stream().map(s -> new VelocityServer(chameleon, s)).collect(Collectors.toSet());
-	}
+    @Override
+    public @NotNull String getAPIName() {
+        return "Velocity";
+    }
 
-	@Override
-	public @NotNull Optional<Server> getServer(@NotNull String name) {
-		return chameleon.getVelocityPlugin().getServer().getServer(name).map(s -> new VelocityServer(chameleon, s));
-	}
+    @Override
+    public @NotNull String getName() {
+        return chameleon.getVelocityPlugin().getServer().getVersion().getName();
+    }
+
+    @Override
+    public @NotNull String getVersion() {
+        return chameleon.getVelocityPlugin().getServer().getVersion().getVersion();
+    }
+
+    @Override
+    public @NotNull Type getType() {
+        return Type.PROXY;
+    }
+
+
+    @Override
+    public @NotNull Set<Server> getServers() {
+        return chameleon.getVelocityPlugin().getServer().getAllServers().stream().map(s -> new VelocityServer(chameleon, s)).collect(Collectors.toSet());
+    }
+
+    @Override
+    public @NotNull Optional<Server> getServer(@NotNull String name) {
+        return chameleon.getVelocityPlugin().getServer().getServer(name).map(s -> new VelocityServer(chameleon, s));
+    }
 
 }

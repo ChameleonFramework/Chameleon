@@ -33,12 +33,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BungeeCordUsers {
 
-	public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSender sender) {
-		if (sender instanceof ProxiedPlayer) {
-			return new BungeeCordUser(chameleon, (ProxiedPlayer) sender);
-		} else {
-			return new BungeeCordConsoleUser(chameleon);
-		}
-	}
+    public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSender sender) {
+        if (sender instanceof ProxiedPlayer) {
+            return new BungeeCordUser(chameleon, (ProxiedPlayer) sender);
+        } else {
+            return new BungeeCordConsoleUser(chameleon);
+        }
+    }
 
 }

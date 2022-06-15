@@ -41,33 +41,33 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SpigotListener implements Listener {
 
-	private final @NotNull SpigotChameleon chameleon;
+    private final @NotNull SpigotChameleon chameleon;
 
-	public SpigotListener(@NotNull SpigotChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
-
-
-	@EventHandler
-	public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
-		chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
-	}
-
-	@EventHandler
-	public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
-		if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
-			event.setCancelled(true);
-		}
-	}
-
-	@EventHandler
-	public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
-		chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
-	}
+    public SpigotListener(@NotNull SpigotChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
 
-	private @NotNull ServerUser wrap(@NotNull Player player) {
-		return new SpigotUser(chameleon, player);
-	}
+    @EventHandler
+    public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+        chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+    }
+
+    @EventHandler
+    public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
+        if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
+        chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+    }
+
+
+    private @NotNull ServerUser wrap(@NotNull Player player) {
+        return new SpigotUser(chameleon, player);
+    }
 
 }

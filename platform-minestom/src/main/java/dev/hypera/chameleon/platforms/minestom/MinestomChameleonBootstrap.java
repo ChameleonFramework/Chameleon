@@ -44,7 +44,7 @@ public final class MinestomChameleonBootstrap extends ChameleonBootstrap<Minesto
     }
 
     @Override
-    public @NotNull MinestomChameleon loadInternal() throws ChameleonInstantiationException {
+    protected @NotNull MinestomChameleon loadInternal() throws ChameleonInstantiationException {
         MinestomChameleon chameleon = new MinestomChameleon(chameleonPlugin, extension, pluginData);
         chameleon.onLoad();
         return chameleon;

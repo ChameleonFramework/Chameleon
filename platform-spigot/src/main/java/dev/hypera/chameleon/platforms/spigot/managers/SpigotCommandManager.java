@@ -37,42 +37,42 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class SpigotCommandManager extends CommandManager {
 
-	private final @NotNull SpigotChameleon chameleon;
-	private final @Nullable CommandMap commandMap;
+    private final @NotNull SpigotChameleon chameleon;
+    private final @Nullable CommandMap commandMap;
 
-	public SpigotCommandManager(@NotNull SpigotChameleon chameleon) {
-		super(chameleon);
-		this.chameleon = chameleon;
+    public SpigotCommandManager(@NotNull SpigotChameleon chameleon) {
+        super(chameleon);
+        this.chameleon = chameleon;
 
-		@Nullable CommandMap map;
-		try {
-			Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-			commandMapField.setAccessible(true);
-			map = (CommandMap) commandMapField.get(Bukkit.getServer());
-		} catch (NoSuchFieldException | IllegalAccessException ex) {
-			chameleon.getInternalLogger().error("Failed to get Bukkit command map", ex);
-			map = null;
-		}
-		this.commandMap = map;
-	}
+        @Nullable CommandMap map;
+        try {
+            Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+            commandMapField.setAccessible(true);
+            map = (CommandMap) commandMapField.get(Bukkit.getServer());
+        } catch (NoSuchFieldException | IllegalAccessException ex) {
+            chameleon.getInternalLogger().error("Failed to get Bukkit command map", ex);
+            map = null;
+        }
+        this.commandMap = map;
+    }
 
-	@Override
-	protected void registerCommand(@NotNull Command command) {
-		if (null != commandMap) {
-			commandMap.register(command.getName(), chameleon.getSpigotPlugin().getName(), new SpigotCommand(chameleon, command));
-		}
-	}
+    @Override
+    protected void registerCommand(@NotNull Command command) {
+        if (null != commandMap) {
+            commandMap.register(command.getName(), chameleon.getSpigotPlugin().getName(), new SpigotCommand(chameleon, command));
+        }
+    }
 
-	@Override
-	protected void unregisterCommand(@NotNull Command command) {
-		if (null != commandMap) {
-			org.bukkit.command.Command spigotCommand = commandMap.getCommand(command.getName());
-			if (null != spigotCommand) {
-				spigotCommand.unregister(commandMap);
-			} else {
-				throw new IllegalArgumentException("Cannot find command with name '" + command.getName() + "'");
-			}
-		}
-	}
+    @Override
+    protected void unregisterCommand(@NotNull Command command) {
+        if (null != commandMap) {
+            org.bukkit.command.Command spigotCommand = commandMap.getCommand(command.getName());
+            if (null != spigotCommand) {
+                spigotCommand.unregister(commandMap);
+            } else {
+                throw new IllegalArgumentException("Cannot find command with name '" + command.getName() + "'");
+            }
+        }
+    }
 
 }

@@ -49,65 +49,65 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class MinestomChameleon extends Chameleon {
 
-	private final @NotNull Extension extension;
-	private final @NotNull MinestomAudienceProvider audienceProvider = new MinestomAudienceProvider();
-	private final @NotNull MinestomPlatform platform = new MinestomPlatform();
-	private final @NotNull MinestomCommandManager commandManager = new MinestomCommandManager(this);
-	private final @NotNull MinestomPluginManager pluginManager = new MinestomPluginManager();
-	private final @NotNull MinestomUserManager userManager = new MinestomUserManager();
-	private final @NotNull MinestomScheduler scheduler = new MinestomScheduler();
+    private final @NotNull Extension extension;
+    private final @NotNull MinestomAudienceProvider audienceProvider = new MinestomAudienceProvider();
+    private final @NotNull MinestomPlatform platform = new MinestomPlatform();
+    private final @NotNull MinestomCommandManager commandManager = new MinestomCommandManager(this);
+    private final @NotNull MinestomPluginManager pluginManager = new MinestomPluginManager();
+    private final @NotNull MinestomUserManager userManager = new MinestomUserManager();
+    private final @NotNull MinestomScheduler scheduler = new MinestomScheduler();
 
-	MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-		super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(extension.getLogger()));
-		this.extension = extension;
-		new MinestomListener(this);
-	}
+    MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+        super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(extension.getLogger()));
+        this.extension = extension;
+        new MinestomListener(this);
+    }
 
-	public static @NotNull MinestomChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) {
-		return new MinestomChameleonBootstrap(chameleonPlugin, extension, pluginData);
-	}
-
-
-	@Override
-	public @NotNull ChameleonAudienceProvider getAdventure() {
-		return audienceProvider;
-	}
-
-	@Override
-	public @NotNull Platform getPlatform() {
-		return platform;
-	}
+    public static @NotNull MinestomChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) {
+        return new MinestomChameleonBootstrap(chameleonPlugin, extension, pluginData);
+    }
 
 
-	@Override
-	public @NotNull CommandManager getCommandManager() {
-		return commandManager;
-	}
+    @Override
+    public @NotNull ChameleonAudienceProvider getAdventure() {
+        return audienceProvider;
+    }
 
-	@Override
-	public @NotNull PluginManager getPluginManager() {
-		return pluginManager;
-	}
-
-	@Override
-	public @NotNull UserManager getUserManager() {
-		return userManager;
-	}
-
-	@Override
-	public @NotNull Scheduler getScheduler() {
-		return scheduler;
-	}
+    @Override
+    public @NotNull Platform getPlatform() {
+        return platform;
+    }
 
 
-	@Override
-	public @NotNull Path getDataFolder() {
-		return extension.getDataDirectory();
-	}
+    @Override
+    public @NotNull CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    @Override
+    public @NotNull PluginManager getPluginManager() {
+        return pluginManager;
+    }
+
+    @Override
+    public @NotNull UserManager getUserManager() {
+        return userManager;
+    }
+
+    @Override
+    public @NotNull Scheduler getScheduler() {
+        return scheduler;
+    }
 
 
-	public @NotNull Extension getExtension() {
-		return extension;
-	}
+    @Override
+    public @NotNull Path getDataFolder() {
+        return extension.getDataDirectory();
+    }
+
+
+    public @NotNull Extension getExtension() {
+        return extension;
+    }
 
 }

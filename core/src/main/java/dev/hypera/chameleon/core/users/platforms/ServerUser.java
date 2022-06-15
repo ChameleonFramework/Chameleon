@@ -34,7 +34,8 @@ import org.jetbrains.annotations.NotNull;
 @PlatformSpecific(Type.SERVER)
 public interface ServerUser extends User {
 
-	@NotNull GameMode getGameMode();
-	void setGameMode(@NotNull GameMode gameMode);
+    @NotNull GameMode getGameMode();
+
+    void setGameMode(@NotNull GameMode gameMode);
 
 }

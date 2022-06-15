@@ -20,41 +20,58 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.commands.context.impl;
+package dev.hypera.chameleon.core.commands.context;
 
 import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.commands.context.Context;
 import dev.hypera.chameleon.core.users.ChatUser;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command context implementation
+ * {@link Context} implementation.
  */
 public final class ContextImpl implements Context {
 
-	private final @NotNull ChatUser sender;
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull String[] args;
+    private final @NotNull ChatUser sender;
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull String[] args;
 
-	public ContextImpl(@NotNull ChatUser sender, @NotNull Chameleon chameleon, @NotNull String[] args) {
-		this.sender = sender;
-		this.chameleon = chameleon;
-		this.args = args;
-	}
+    /**
+     * {@link ContextImpl} constructor.
+     *
+     * @param sender Command sender.
+     * @param chameleon {@link Chameleon} instance.
+     * @param args Command arguments.
+     */
+    @Internal
+    public ContextImpl(@NotNull ChatUser sender, @NotNull Chameleon chameleon, @NotNull String[] args) {
+        this.sender = sender;
+        this.chameleon = chameleon;
+        this.args = args;
+    }
 
-	@Override
-	public @NotNull ChatUser getSender() {
-		return sender;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ChatUser getSender() {
+        return this.sender;
+    }
 
-	@Override
-	public @NotNull Chameleon getChameleon() {
-		return chameleon;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Chameleon getChameleon() {
+        return this.chameleon;
+    }
 
-	@Override
-	public @NotNull String[] getArgs() {
-		return args;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String[] getArgs() {
+        return this.args;
+    }
 
 }

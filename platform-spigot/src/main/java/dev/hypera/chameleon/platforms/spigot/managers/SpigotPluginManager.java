@@ -37,19 +37,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class SpigotPluginManager extends PluginManager {
 
-	@Override
-	public @NotNull Set<PlatformPlugin> getPlugins() {
-		return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
-	}
+    @Override
+    public @NotNull Set<PlatformPlugin> getPlugins() {
+        return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
+    }
 
-	@Override
-	public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-		return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(SpigotPlugin::new);
-	}
+    @Override
+    public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
+        return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(SpigotPlugin::new);
+    }
 
-	@Override
-	public boolean isPluginEnabled(@NotNull String name) {
-		return Bukkit.getPluginManager().isPluginEnabled(name);
-	}
+    @Override
+    public boolean isPluginEnabled(@NotNull String name) {
+        return Bukkit.getPluginManager().isPluginEnabled(name);
+    }
 
 }

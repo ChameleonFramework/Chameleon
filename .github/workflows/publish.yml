@@ -1,7 +1,7 @@
 name: "Publish"
 on:
   push:
-    branches: ["main", "development"]
+    branches: [ "main", "development" ]
 
 env:
   JAVA_VERSION: 17

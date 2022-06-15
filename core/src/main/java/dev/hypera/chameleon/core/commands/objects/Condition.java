@@ -23,41 +23,68 @@
 package dev.hypera.chameleon.core.commands.objects;
 
 import dev.hypera.chameleon.core.commands.context.Context;
+import java.util.Optional;
+import java.util.function.Function;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-import java.util.function.Function;
-
 /**
- * Command condition
+ * {@link dev.hypera.chameleon.core.commands.Command} condition.
  */
 public interface Condition {
 
-	boolean test(@NotNull Context context);
-	default @NotNull Optional<Component> getErrorMessage() {
-		return Optional.empty();
-	}
+    /**
+     * Condition test.
+     *
+     * @param context {@link dev.hypera.chameleon.core.commands.Command} execution context.
+     *
+     * @return {@code true} if condition passed, otherwise {@code false}.
+     */
+    boolean test(@NotNull Context context);
+
+    /**
+     * Get error message.
+     *
+     * @return error message if available, otherwise {@code null}.
+     */
+    default @NotNull Optional<Component> getErrorMessage() {
+        return Optional.empty();
+    }
 
 
-	static @NotNull Condition of(@NotNull Function<Context, Boolean> test) {
-		return test::apply;
-	}
+    /**
+     * Create new {@link Condition}.
+     *
+     * @param test Command condition test.
+     *
+     * @return New {@link Condition} instance.
+     */
+    static @NotNull Condition of(@NotNull Function<Context, Boolean> test) {
+        return test::apply;
+    }
 
-	static @NotNull Condition of(@NotNull Function<Context, Boolean> test, @NotNull Component errorMessage) {
-		return new Condition() {
+    /**
+     * Create new {@link Condition} with an error message.
+     *
+     * @param test         Command condition test.
+     * @param errorMessage Error message {@link Component}.
+     *
+     * @return New {@link Condition} instance.
+     */
+    static @NotNull Condition of(@NotNull Function<Context, Boolean> test, @NotNull Component errorMessage) {
+        return new Condition() {
 
-			@Override
-			public boolean test(@NotNull Context context) {
-				return test.apply(context);
-			}
+            @Override
+            public boolean test(@NotNull Context context) {
+                return test.apply(context);
+            }
 
-			@Override
-			public @NotNull Optional<Component> getErrorMessage() {
-				return Optional.of(errorMessage);
-			}
+            @Override
+            public @NotNull Optional<Component> getErrorMessage() {
+                return Optional.of(errorMessage);
+            }
 
-		};
-	}
+        };
+    }
 
 }

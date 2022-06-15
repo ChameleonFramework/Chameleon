@@ -87,7 +87,7 @@ public class YamlTests {
 
         List<String> tempList = new ArrayList<>();
         objectMap.forEach((k, v) -> tempList.add(k.toString()));
-        assertArrayEquals(new String[]{ "test1", "test2", "test3", "test4", "test5" }, tempList.toArray());
+        assertArrayEquals(new String[] { "test1", "test2", "test3", "test4", "test5" }, tempList.toArray());
     }
 
     @Test

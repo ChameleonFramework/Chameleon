@@ -31,38 +31,42 @@ import net.kyori.adventure.title.Title.Times;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform net.kyori.adventure.title.Title$Times
+ * Maps shaded to platform {@link Times}.
  */
-public class TimesMapper implements IMapper<Times> {
+public final class TimesMapper implements IMapper<Times> {
 
-	private final @NotNull Method CREATE_METHOD;
+    private final @NotNull Method createMethod;
 
-	public TimesMapper() {
-		try {
-			Class<?> timesClass = Class.forName(AdventureConverter.PACKAGE + "title.Title$Times");
-			if (Arrays.stream(timesClass.getMethods()).anyMatch(m -> m.getName().equals("times"))) {
-				CREATE_METHOD = timesClass.getMethod("times", Duration.class, Duration.class, Duration.class);
-			} else {
-				CREATE_METHOD = timesClass.getMethod("of", Duration.class, Duration.class, Duration.class);
-			}
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
+    /**
+     * {@link TimesMapper} constructor.
+     */
+    public TimesMapper() {
+        try {
+            Class<?> timesClass = Class.forName(AdventureConverter.PACKAGE + "title.Title$Times");
+            if (Arrays.stream(timesClass.getMethods()).anyMatch(m -> m.getName().equals("times"))) {
+                this.createMethod = timesClass.getMethod("times", Duration.class, Duration.class, Duration.class);
+            } else {
+                this.createMethod = timesClass.getMethod("of", Duration.class, Duration.class, Duration.class);
+            }
+        } catch (ReflectiveOperationException ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
 
-	/**
-	 * Map Title$Times to the platform version of Adventure
-	 *
-	 * @param times Title$Times to be mapped
-	 * @return Platform Title$Times
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Times times) {
-		try {
-			return CREATE_METHOD.invoke(null, times.fadeIn(), times.stay(), times.fadeOut());
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * Map {@link Times} to the platform version of Adventure.
+     *
+     * @param times {@link Times} to be mapped.
+     *
+     * @return Platform instance of {@link Times}.
+     */
+    @Override
+    public @NotNull Object map(@NotNull Times times) {
+        try {
+            return this.createMethod.invoke(null, times.fadeIn(), times.stay(), times.fadeOut());
+        } catch (ReflectiveOperationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
 }
