@@ -25,22 +25,34 @@ package dev.hypera.chameleon.platforms.minestom.users;
 import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
 import dev.hypera.chameleon.core.users.ChatUser;
 import net.minestom.server.MinecraftServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom console user
+ * Minestom console {@link ChatUser} implementation.
  */
+@Internal
 public class MinestomConsoleUser extends AbstractReflectedAudience implements ChatUser {
 
+    /**
+     * {@link MinestomConsoleUser} constructor.
+     */
+    @Internal
     public MinestomConsoleUser() {
         super(MinecraftServer.getCommandManager().getConsoleSender());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
         return "Console";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasPermission(@NotNull String permission) {
         return true;

@@ -31,30 +31,41 @@ import dev.hypera.chameleon.core.scheduling.TaskImpl;
 import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
 import java.util.concurrent.TimeUnit;
 import net.md_5.bungee.api.ProxyServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord scheduler
+ * BungeeCord {@link Scheduler} implementation.
  */
+@Internal
 public final class BungeeCordScheduler extends Scheduler {
 
     private final @NotNull BungeeCordChameleon chameleon;
 
+    /**
+     * {@link BungeeCordScheduler} constructor.
+     *
+     * @param chameleon {@link BungeeCordChameleon} instance.
+     */
+    @Internal
     public BungeeCordScheduler(@NotNull BungeeCordChameleon chameleon) {
         this.chameleon = chameleon;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void schedule(@NotNull TaskImpl task) {
         if (task.getRepeat().getType().equals(Type.NONE)) {
             if (task.getDelay().getType().equals(Type.NONE)) {
-                ProxyServer.getInstance().getScheduler().runAsync(chameleon.getBungeePlugin(), task.getRunnable());
+                ProxyServer.getInstance().getScheduler().runAsync(this.chameleon.getBungeePlugin(), task.getRunnable());
             } else {
-                ProxyServer.getInstance().getScheduler().schedule(chameleon.getBungeePlugin(), task.getRunnable(), convert(task.getDelay()), TimeUnit.MILLISECONDS);
+                ProxyServer.getInstance().getScheduler().schedule(this.chameleon.getBungeePlugin(), task.getRunnable(), convert(task.getDelay()), TimeUnit.MILLISECONDS);
             }
         } else {
-            ProxyServer.getInstance().getScheduler().schedule(chameleon.getBungeePlugin(), task.getRunnable(), convert(task.getDelay()), convert(task.getRepeat()), TimeUnit.MILLISECONDS);
+            ProxyServer.getInstance().getScheduler().schedule(this.chameleon.getBungeePlugin(), task.getRunnable(), convert(task.getDelay()), convert(task.getRepeat()), TimeUnit.MILLISECONDS);
         }
     }
 

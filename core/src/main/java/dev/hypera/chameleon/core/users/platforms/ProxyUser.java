@@ -31,15 +31,33 @@ import java.util.function.BiConsumer;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * In-game player on a proxy
+ * In-game {@link User} on a {@link dev.hypera.chameleon.core.platform.proxy.ProxyPlatform}.
+ *
+ * @see dev.hypera.chameleon.core.platform.proxy.ProxyPlatform
  */
 @PlatformSpecific(Type.PROXY)
 public interface ProxyUser extends User {
 
+    /**
+     * Get the {@link Server} this user is currently on.
+     *
+     * @return optionally the {@link Server} this user is currently on, if available, otherwise empty.
+     */
     @NotNull Optional<Server> getServer();
 
+    /**
+     * Attempt to switch this user to the given {@link Server}.
+     *
+     * @param server {@link Server} to switch this user to.
+     */
     void connect(@NotNull Server server);
 
+    /**
+     * Attempt to switch this user to the given {@link Server} and then run the given callback.
+     *
+     * @param server   {@link Server} to switch this user to.
+     * @param callback Callback to run afterwards.
+     */
     void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback);
 
 }

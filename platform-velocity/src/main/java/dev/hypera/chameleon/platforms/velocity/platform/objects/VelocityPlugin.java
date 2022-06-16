@@ -31,65 +31,103 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity plugin implementation
+ * Velocity {@link PlatformPlugin} implementation.
  */
+@Internal
 public class VelocityPlugin implements PlatformPlugin {
 
     private final @NotNull PluginContainer plugin;
 
+    /**
+     * {@link VelocityPlugin} constructor.
+     *
+     * @param plugin {@link PluginContainer} to be wrapped.
+     */
+    @Internal
     public VelocityPlugin(@NotNull PluginContainer plugin) {
         this.plugin = plugin;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
-        return plugin.getDescription().getName().orElse(plugin.getDescription().getId());
+        return this.plugin.getDescription().getName().orElse(this.plugin.getDescription().getId());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getVersion() {
-        return plugin.getDescription().getVersion().orElse("0.0.0");
+        return this.plugin.getDescription().getVersion().orElse("0.0.0");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<String> getDescription() {
-        return plugin.getDescription().getDescription();
+        return this.plugin.getDescription().getDescription();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Class<?> getMainClass() {
-        return plugin.getInstance().orElseThrow(IllegalStateException::new).getClass();
+        return this.plugin.getInstance().orElseThrow(IllegalStateException::new).getClass();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull List<String> getAuthors() {
-        return plugin.getDescription().getAuthors();
+        return this.plugin.getDescription().getAuthors();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<String> getDependencies() {
-        return plugin.getDescription().getDependencies().stream().filter(d -> !d.isOptional()).map(PluginDependency::getId).collect(Collectors.toSet());
+        return this.plugin.getDescription().getDependencies().stream().filter(d -> !d.isOptional()).map(PluginDependency::getId).collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<String> getSoftDependencies() {
-        return plugin.getDescription().getDependencies().stream().filter(PluginDependency::isOptional).map(PluginDependency::getId).collect(Collectors.toSet());
+        return this.plugin.getDescription().getDependencies().stream().filter(PluginDependency::isOptional).map(PluginDependency::getId).collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Path getDataFolder() {
         return Paths.get("/");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void enable() {
         throw new UnsupportedOperationException("Velocity plugins cannot be enabled");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void disable() {
         throw new UnsupportedOperationException("Velocity plugins cannot be disabled");

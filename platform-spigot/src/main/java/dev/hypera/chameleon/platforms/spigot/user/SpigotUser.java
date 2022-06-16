@@ -29,16 +29,25 @@ import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Spigot user
+ * Spigot {@link ServerUser} implementation.
  */
+@Internal
 public class SpigotUser extends AbstractAudience implements ServerUser {
 
     private final @NotNull SpigotChameleon chameleon;
     private final @NotNull Player player;
 
+    /**
+     * {@link SpigotUser} constructor.
+     *
+     * @param chameleon {@link SpigotChameleon} instance.
+     * @param player    {@link Player} to be wrapped.
+     */
+    @Internal
     public SpigotUser(@NotNull SpigotChameleon chameleon, @NotNull Player player) {
         super(chameleon.getAdventure().player(player.getUniqueId()));
         this.chameleon = chameleon;
@@ -46,48 +55,72 @@ public class SpigotUser extends AbstractAudience implements ServerUser {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
-        return player.getName();
+        return this.player.getName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull UUID getUniqueId() {
-        return player.getUniqueId();
+        return this.player.getUniqueId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getPing() {
-        return player.getPing();
+        return this.player.getPing();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void chat(@NotNull String message) {
-        player.chat(message);
+        this.player.chat(message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
-        if (!Bukkit.getMessenger().isOutgoingChannelRegistered(chameleon.getSpigotPlugin(), channel)) {
-            Bukkit.getMessenger().registerOutgoingPluginChannel(chameleon.getSpigotPlugin(), channel);
+        if (!Bukkit.getMessenger().isOutgoingChannelRegistered(this.chameleon.getSpigotPlugin(), channel)) {
+            Bukkit.getMessenger().registerOutgoingPluginChannel(this.chameleon.getSpigotPlugin(), channel);
         }
 
-        player.sendPluginMessage(chameleon.getSpigotPlugin(), channel, data);
+        this.player.sendPluginMessage(this.chameleon.getSpigotPlugin(), channel, data);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasPermission(@NotNull String permission) {
-        return player.hasPermission(permission);
+        return this.player.hasPermission(permission);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull GameMode getGameMode() {
-        return GameMode.valueOf(player.getGameMode().name());
+        return GameMode.valueOf(this.player.getGameMode().name());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setGameMode(@NotNull GameMode gameMode) {
-        player.setGameMode(org.bukkit.GameMode.valueOf(gameMode.name()));
+        this.player.setGameMode(org.bukkit.GameMode.valueOf(gameMode.name()));
     }
 
 }

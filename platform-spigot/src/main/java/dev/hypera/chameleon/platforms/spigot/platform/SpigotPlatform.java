@@ -24,28 +24,50 @@ package dev.hypera.chameleon.platforms.spigot.platform;
 
 import dev.hypera.chameleon.core.platform.server.ServerPlatform;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Spigot platform
+ * Spigot {@link ServerPlatform} implementation.
  */
+@Internal
 public final class SpigotPlatform extends ServerPlatform {
 
+    /**
+     * {@link SpigotPlatform} constructor.
+     */
+    @Internal
+    public SpigotPlatform() {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getAPIName() {
         return "Spigot";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
         return Bukkit.getName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getVersion() {
         return Bukkit.getVersion();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Type getType() {
         return Type.SERVER;

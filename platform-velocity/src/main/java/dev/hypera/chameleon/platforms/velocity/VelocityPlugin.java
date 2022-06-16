@@ -28,14 +28,29 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 /**
- * Velocity plugin
+ * Velocity plugin.
  */
 public interface VelocityPlugin {
 
+    /**
+     * Get Velocity {@link ProxyServer} instance.
+     *
+     * @return {@link ProxyServer} instance.
+     */
     @NotNull ProxyServer getServer();
 
+    /**
+     * Get Velocity {@link Logger} instance.
+     *
+     * @return {@link Logger} instance.
+     */
     @NotNull Logger getLogger();
 
+    /**
+     * Get plugin data directory.
+     *
+     * @return {@link Path}.
+     */
     @NotNull Path getDataDirectory();
 
 }

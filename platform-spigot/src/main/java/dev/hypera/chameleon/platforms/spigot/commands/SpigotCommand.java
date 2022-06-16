@@ -30,34 +30,49 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Spigot command
+ * Spigot {@link Command} wrapper.
  */
+@Internal
 public final class SpigotCommand extends org.bukkit.command.Command {
 
     private final @NotNull Chameleon chameleon;
     private final @NotNull Command command;
 
+    /**
+     * {@link SpigotCommand} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     * @param command   {@link Command} to be wrapped.
+     */
+    @Internal
     public SpigotCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
         super(command.getName(), "", "", new ArrayList<>(command.getAliases()));
         this.chameleon = chameleon;
         this.command = command;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
-        if (args.length < 1 || command.executeSubCommand(new ContextImpl(SpigotUsers.wrap(chameleon, sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
-            command.executeCommand(new ContextImpl(SpigotUsers.wrap(chameleon, sender), chameleon, args));
+        if (args.length < 1 || this.command.executeSubCommand(new ContextImpl(SpigotUsers.wrap(this.chameleon, sender), this.chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
+            this.command.executeCommand(new ContextImpl(SpigotUsers.wrap(this.chameleon, sender), this.chameleon, args));
         }
 
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
-        return command.tabComplete(new ContextImpl(SpigotUsers.wrap(chameleon, sender), chameleon, args));
+        return this.command.tabComplete(new ContextImpl(SpigotUsers.wrap(this.chameleon, sender), this.chameleon, args));
     }
 
 }

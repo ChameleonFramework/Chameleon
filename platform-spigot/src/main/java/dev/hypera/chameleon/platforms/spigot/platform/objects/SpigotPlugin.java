@@ -32,67 +32,106 @@ import java.util.Optional;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Spigot plugin implementation
+ * Spigot {@link PlatformPlugin} implementation.
  */
+@Internal
 public class SpigotPlugin implements PlatformPlugin {
 
     private final @NotNull Plugin plugin;
 
+    /**
+     * {@link SpigotPlugin} constructor.
+     *
+     * @param plugin {@link Plugin} to be wrapped.
+     */
+    @Internal
     public SpigotPlugin(@NotNull Plugin plugin) {
         this.plugin = plugin;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
-        return ChameleonUtil.getOrDefault(plugin.getDescription().getName(), "unknown");
+        return ChameleonUtil.getOrDefault(this.plugin.getDescription().getName(), "unknown");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getVersion() {
-        return ChameleonUtil.getOrDefault(plugin.getDescription().getVersion(), "unknown");
+        return ChameleonUtil.getOrDefault(this.plugin.getDescription().getVersion(), "unknown");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<String> getDescription() {
-        return Optional.ofNullable(plugin.getDescription().getDescription());
+        return Optional.ofNullable(this.plugin.getDescription().getDescription());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Class<?> getMainClass() {
-        return plugin.getClass();
+        return this.plugin.getClass();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull List<String> getAuthors() {
-        return ChameleonUtil.getOrDefault(plugin.getDescription().getAuthors(), Collections.emptyList());
+        return ChameleonUtil.getOrDefault(this.plugin.getDescription().getAuthors(), Collections.emptyList());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<String> getDependencies() {
-        return new HashSet<>(plugin.getDescription().getDepend());
+        return new HashSet<>(this.plugin.getDescription().getDepend());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<String> getSoftDependencies() {
-        return new HashSet<>(plugin.getDescription().getSoftDepend());
+        return new HashSet<>(this.plugin.getDescription().getSoftDepend());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Path getDataFolder() {
-        return plugin.getDataFolder().toPath().toAbsolutePath();
+        return this.plugin.getDataFolder().toPath().toAbsolutePath();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void enable() {
-        Bukkit.getPluginManager().enablePlugin(plugin);
+        Bukkit.getPluginManager().enablePlugin(this.plugin);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void disable() {
-        Bukkit.getPluginManager().disablePlugin(plugin);
+        Bukkit.getPluginManager().disablePlugin(this.plugin);
     }
 
 }

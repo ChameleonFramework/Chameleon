@@ -27,13 +27,28 @@ import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.platforms.spigot.SpigotChameleon;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Spigot user utils
+ * Spigot {@link dev.hypera.chameleon.core.users.User} utilities.
  */
+@Internal
 public final class SpigotUsers {
 
+    @Internal
+    private SpigotUsers() {
+
+    }
+
+    /**
+     * Wrap provided {@link CommandSender}.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     * @param sender    {@link CommandSender} to wrap.
+     *
+     * @return {@link ChatUser}.
+     */
     public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSender sender) {
         if (sender instanceof Player) {
             return new SpigotUser((SpigotChameleon) chameleon, (Player) sender);

@@ -34,7 +34,7 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Configuration
+ * Configuration.
  */
 public abstract class Configuration {
 
@@ -46,10 +46,23 @@ public abstract class Configuration {
     protected final boolean copyDefaultFromResources;
     protected boolean loaded = false;
 
+    /**
+     * {@link Configuration} constructor.
+     *
+     * @param dataFolder Folder to store loaded configuration file in.
+     * @param fileName   Configuration file name.
+     */
     public Configuration(@NotNull Path dataFolder, @NotNull String fileName) {
         this(dataFolder, fileName, true);
     }
 
+    /**
+     * {@link Configuration} constructor.
+     *
+     * @param dataFolder               Folder to store loaded configuration file in.
+     * @param fileName                 Configuration file name.
+     * @param copyDefaultFromResources Whether this file should be copied from resources if not already loaded.
+     */
     public Configuration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
         this.dataFolder = dataFolder;
         this.fileName = fileName;
@@ -57,62 +70,165 @@ public abstract class Configuration {
         this.copyDefaultFromResources = copyDefaultFromResources;
     }
 
+    /**
+     * Load this {@link Configuration}.
+     *
+     * @return {@code this}.
+     * @throws IOException if something goes wrong while reading the file.
+     */
     public abstract @NotNull Configuration load() throws IOException;
 
+    /**
+     * Reload this {@link Configuration}.
+     *
+     * @return {@code this}.
+     * @throws IOException if something goes wrong while reading the file.
+     */
     public @NotNull Configuration reload() throws IOException {
         return unload().load();
     }
 
+    /**
+     * Unload this {@link Configuration}.
+     *
+     * @return {@code this}.
+     */
     public abstract @NotNull Configuration unload();
 
+
+    /**
+     * Get {@link Object} by path.
+     *
+     * @param path Configuration path.
+     *
+     * @return {@link Optional} containing the {@link Object} if found, otherwise empty.
+     */
     public abstract @NotNull Optional<Object> get(@NotNull String path);
 
+    /**
+     * Get {@link Object} by path and cast it to the provided type.
+     *
+     * @param path Configuration path.
+     * @param type Type to cast the found {@link Object} to.
+     * @param <T>  Type.
+     *
+     * @return an {@link Optional} containing the cast {@link Object} if found and if the object is an instanceof {@code type}, otherwise empty.
+     */
     public <T> @NotNull Optional<T> get(@NotNull String path, @NotNull Class<T> type) {
         Optional<Object> o = get(path);
-        if (!o.isPresent() || type.isInstance(o.get())) {
+        if (!o.isPresent() || !type.isInstance(o.get())) {
             return Optional.empty();
         }
         return Optional.of(type.cast(o.get()));
     }
 
+    /**
+     * Get the type of {@link Object} by path.
+     *
+     * @param path Configuration path.
+     *
+     * @return an {@link Optional} containing the {@link Object}'s type, if found, otherwise empty.
+     */
     public @NotNull Optional<Class<?>> getType(@NotNull String path) {
         return get(path).map(Object::getClass);
     }
 
+    /**
+     * Check if an {@link Object} by path is an instance of the given type.
+     *
+     * @param path Configuration path.
+     * @param type Type.
+     *
+     * @return {@code true} if the object was found and is an instance of {@code type}, otherwise {@code false}.
+     */
     public boolean isType(@NotNull String path, @NotNull Class<?> type) {
         return get(path).filter(type::isInstance).isPresent();
     }
 
+    /**
+     * Get {@link String} by path.
+     *
+     * @param path Configuration path.
+     *
+     * @return an {@link Optional} containing the {@link String}, if found, otherwise empty.
+     */
     public @NotNull Optional<String> getString(@NotNull String path) {
         return get(path).map(CastingUtil::asString);
     }
 
+    /**
+     * Get {@link Integer} by path.
+     *
+     * @param path Configuration path.
+     *
+     * @return an {@link Optional} containing the {@link Integer}, if found, otherwise empty.
+     */
     public @NotNull Optional<Integer> getInt(@NotNull String path) {
         return get(path).map(CastingUtil::asInt);
     }
 
+    /**
+     * Get {@link Double} by path.
+     *
+     * @param path Configuration path.
+     *
+     * @return an {@link Optional} containing the {@link Double}, if found, otherwise empty.
+     */
     public @NotNull Optional<Double> getDouble(@NotNull String path) {
         return get(path).map(CastingUtil::asDouble);
     }
 
+    /**
+     * Get {@link Long} by path.
+     *
+     * @param path Configuration path.
+     *
+     * @return an {@link Optional} containing the {@link Long}, if found, otherwise empty.
+     */
     public @NotNull Optional<Long> getLong(@NotNull String path) {
         return get(path).map(CastingUtil::asLong);
     }
 
+    /**
+     * Get {@link Boolean} by path.
+     *
+     * @param path Configuration path.
+     *
+     * @return an {@link Optional} containing the {@link Boolean}, if found, otherwise empty.
+     */
     public @NotNull Optional<Boolean> getBoolean(@NotNull String path) {
         return get(path).map(CastingUtil::asBoolean);
     }
 
+    /**
+     * Get {@link CastingList} by path.
+     *
+     * @param path Configuration path.
+     *
+     * @return an {@link Optional} containing the {@link CastingList}, if found, otherwise empty.
+     */
     public @NotNull Optional<CastingList> getList(@NotNull String path) {
         return get(path).map(CastingUtil::asList);
     }
 
+    /**
+     * Get {@link CastingMap} by path.
+     *
+     * @param path Configuration path.
+     *
+     * @return an {@link Optional} containing the {@link CastingMap}, if found, otherwise empty.
+     */
     public @NotNull Optional<CastingMap> getMap(@NotNull String path) {
         return get(path).map(CastingUtil::asMap);
     }
 
+    /**
+     * Get {@link Configuration} file {@link Path}.
+     *
+     * @return file {@link Path}.
+     */
     public @NotNull Path getPath() {
-        return path;
+        return this.path;
     }
 
     protected @NotNull Optional<Object> getObject(@NotNull String path, @NotNull Map<String, Object> map) {

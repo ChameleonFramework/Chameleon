@@ -31,64 +31,103 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import net.minestom.server.extensions.Extension;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom plugin implementation
+ * Minestom {@link PlatformPlugin} implementation.
  */
+@Internal
 public class MinestomPlugin implements PlatformPlugin {
 
     private final @NotNull Extension extension;
 
+    /**
+     * {@link MinestomPlugin} constructor.
+     *
+     * @param extension {@link Extension} instance.
+     */
+    @Internal
     public MinestomPlugin(@NotNull Extension extension) {
         this.extension = extension;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
-        return extension.getOrigin().getName();
+        return this.extension.getOrigin().getName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getVersion() {
-        return extension.getOrigin().getVersion();
+        return this.extension.getOrigin().getVersion();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<String> getDescription() {
         return Optional.empty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Class<?> getMainClass() {
-        return extension.getClass();
+        return this.extension.getClass();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull List<String> getAuthors() {
-        return Arrays.asList(extension.getOrigin().getAuthors());
+        return Arrays.asList(this.extension.getOrigin().getAuthors());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<String> getDependencies() {
-        return new HashSet<>(Arrays.asList(extension.getOrigin().getDependencies()));
+        return new HashSet<>(Arrays.asList(this.extension.getOrigin().getDependencies()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<String> getSoftDependencies() {
         return Collections.emptySet();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Path getDataFolder() {
-        return extension.getDataDirectory();
+        return this.extension.getDataDirectory();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void enable() {
         throw new UnsupportedOperationException("Minestom extensions cannot be enabled");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void disable() {
         throw new UnsupportedOperationException("Minestom extensions cannot be disabled");

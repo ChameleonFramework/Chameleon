@@ -41,10 +41,11 @@ import dev.hypera.chameleon.platforms.velocity.managers.VelocityScheduler;
 import dev.hypera.chameleon.platforms.velocity.managers.VelocityUserManager;
 import dev.hypera.chameleon.platforms.velocity.platform.VelocityPlatform;
 import java.nio.file.Path;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity Chameleon
+ * Velocity {@link Chameleon} implementation.
  */
 public final class VelocityChameleon extends Chameleon {
 
@@ -56,56 +57,92 @@ public final class VelocityChameleon extends Chameleon {
     private final @NotNull VelocityUserManager userManager = new VelocityUserManager(this);
     private final @NotNull VelocityScheduler scheduler = new VelocityScheduler(this);
 
+    @Internal
     VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(velocityPlugin.getLogger()));
         this.plugin = velocityPlugin;
-        this.plugin.getServer().getEventManager().register(plugin, new VelocityListener(this));
+        this.plugin.getServer().getEventManager().register(this.plugin, new VelocityListener(this));
     }
 
+    /**
+     * Create a new {@link VelocityChameleonBootstrap} instance.
+     *
+     * @param chameleonPlugin {@link ChameleonPlugin} to load.
+     * @param velocityPlugin  {@link VelocityPlugin}.
+     * @param pluginData      {@link PluginData}.
+     *
+     * @return new {@link VelocityChameleonBootstrap}.
+     */
     public static @NotNull VelocityChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) {
         return new VelocityChameleonBootstrap(chameleonPlugin, velocityPlugin, pluginData);
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull ChameleonAudienceProvider getAdventure() {
-        return audienceProvider;
+        return this.audienceProvider;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Platform getPlatform() {
-        return platform;
+        return this.platform;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull CommandManager getCommandManager() {
-        return commandManager;
+        return this.commandManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull PluginManager getPluginManager() {
-        return pluginManager;
+        return this.pluginManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull UserManager getUserManager() {
-        return userManager;
+        return this.userManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Scheduler getScheduler() {
-        return scheduler;
+        return this.scheduler;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Path getDataFolder() {
-        return plugin.getDataDirectory();
+        return this.plugin.getDataDirectory();
     }
 
-
+    /**
+     * Get stored {@link VelocityPlugin}.
+     *
+     * @return stored {@link VelocityPlugin}.
+     */
+    @Internal
     public @NotNull VelocityPlugin getVelocityPlugin() {
-        return plugin;
+        return this.plugin;
     }
 
 }

@@ -32,33 +32,50 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity user manager
+ * Velocity {@link UserManager} implementation.
  */
+@Internal
 public final class VelocityUserManager extends UserManager {
 
     private final @NotNull VelocityChameleon chameleon;
 
+    /**
+     * {@link VelocityUserManager} constructor.
+     *
+     * @param chameleon {@link VelocityChameleon} instance.
+     */
+    @Internal
     public VelocityUserManager(@NotNull VelocityChameleon chameleon) {
         this.chameleon = chameleon;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull ChatUser getConsole() {
-        return new VelocityConsoleUser(chameleon);
+        return new VelocityConsoleUser(this.chameleon);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<User> getPlayers() {
-        return chameleon.getVelocityPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(chameleon, p)).collect(Collectors.toSet());
+        return this.chameleon.getVelocityPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(this.chameleon, p)).collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
-        return chameleon.getVelocityPlugin().getServer().getPlayer(uniqueId).map(p -> new VelocityUser(chameleon, p));
+        return this.chameleon.getVelocityPlugin().getServer().getPlayer(uniqueId).map(p -> new VelocityUser(this.chameleon, p));
     }
 
 }

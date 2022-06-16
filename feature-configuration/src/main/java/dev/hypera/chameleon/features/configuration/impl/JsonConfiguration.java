@@ -36,21 +36,37 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
- * JSON configuration implementation
+ * JSON {@link Configuration} implementation.
  */
 public class JsonConfiguration extends Configuration {
 
     private @Nullable Map<String, Object> config;
 
+    /**
+     * {@link JsonConfiguration} constructor.
+     *
+     * @param dataFolder Folder to store loaded configuration file in.
+     * @param fileName   Configuration file name.
+     */
     public JsonConfiguration(@NotNull Path dataFolder, @NotNull String fileName) {
         super(dataFolder, fileName);
     }
 
+    /**
+     * {@link JsonConfiguration} constructor.
+     *
+     * @param dataFolder               Folder to store loaded configuration file in.
+     * @param fileName                 Configuration file name.
+     * @param copyDefaultFromResources Whether this file should be copied from resources if not already loaded.
+     */
     public JsonConfiguration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
         super(dataFolder, fileName, copyDefaultFromResources);
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @SuppressWarnings("unchecked")
     public @NotNull Configuration load() throws IOException {
@@ -73,8 +89,8 @@ public class JsonConfiguration extends Configuration {
         }
 
         try (BufferedReader reader = Files.newBufferedReader(path)) {
-            config = ((Map<String, Object>) new JSONParser().parse(reader));
-            loaded = true;
+            this.config = ((Map<String, Object>) new JSONParser().parse(reader));
+            this.loaded = true;
         } catch (ParseException ex) {
             throw new IOException(ex);
         }
@@ -82,21 +98,27 @@ public class JsonConfiguration extends Configuration {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Configuration unload() {
-        loaded = false;
-        config = null;
+        this.loaded = false;
+        this.config = null;
         return this;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<Object> get(@NotNull String path) {
-        if (!loaded || null == config) {
+        if (!this.loaded || null == this.config) {
             throw new IllegalStateException("Configuration has not been loaded");
         }
 
-        return getObject(path, config);
+        return getObject(path, this.config);
     }
 
 }

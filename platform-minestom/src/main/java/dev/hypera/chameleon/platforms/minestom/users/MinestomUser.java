@@ -27,60 +27,92 @@ import dev.hypera.chameleon.core.platform.server.GameMode;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
 import java.util.UUID;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom user
+ * Minestom {@link ServerUser} implementation.
  */
+@Internal
 public class MinestomUser extends AbstractReflectedAudience implements ServerUser {
 
     private final @NotNull Player player;
 
+    /**
+     * {@link MinestomUser} constructor.
+     *
+     * @param player {@link Player} to be wrapped.
+     */
+    @Internal
     public MinestomUser(@NotNull Player player) {
         super(player);
         this.player = player;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
-        return player.getUsername();
+        return this.player.getUsername();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull UUID getUniqueId() {
-        return player.getUuid();
+        return this.player.getUuid();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getPing() {
-        return player.getLatency();
+        return this.player.getLatency();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void chat(@NotNull String message) {
-        player.chat(message);
+        this.player.chat(message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
-        player.sendPluginMessage(channel, data);
+        this.player.sendPluginMessage(channel, data);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasPermission(@NotNull String permission) {
-        return player.hasPermission(permission);
+        return this.player.hasPermission(permission);
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull GameMode getGameMode() {
-        return GameMode.valueOf(player.getGameMode().name());
+        return GameMode.valueOf(this.player.getGameMode().name());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setGameMode(@NotNull GameMode gameMode) {
-        player.setGameMode(net.minestom.server.entity.GameMode.valueOf(gameMode.name()));
+        this.player.setGameMode(net.minestom.server.entity.GameMode.valueOf(gameMode.name()));
     }
 
 }

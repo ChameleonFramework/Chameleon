@@ -33,69 +33,108 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.md_5.bungee.api.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord audience provider implementation
+ * BungeeCord {@link ChameleonAudienceProvider} implementation.
  */
+@Internal
 public final class BungeeCordAudienceProvider implements ChameleonAudienceProvider {
 
     private final @NotNull Chameleon chameleon;
     private final @NotNull BungeeAudiences adventure;
 
+    /**
+     * {@link BungeeCordAudienceProvider} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     * @param plugin    {@link Plugin} instance.
+     */
+    @Internal
     public BungeeCordAudienceProvider(@NotNull Chameleon chameleon, @NotNull Plugin plugin) {
         this.chameleon = chameleon;
         this.adventure = BungeeAudiences.create(plugin);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Audience all() {
-        return adventure.all();
+        return this.adventure.all();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Audience console() {
-        return adventure.console();
+        return this.adventure.console();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Audience players() {
-        return adventure.players();
+        return this.adventure.players();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Audience player(@NotNull UUID playerId) {
-        return adventure.player(playerId);
+        return this.adventure.player(playerId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
-        return adventure.filter(c -> filter.test(BungeeCordUsers.wrap(chameleon, c)));
+        return this.adventure.filter(c -> filter.test(BungeeCordUsers.wrap(this.chameleon, c)));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Audience permission(@NotNull String permission) {
-        return adventure.permission(permission);
+        return this.adventure.permission(permission);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Audience world(@NotNull Key world) {
-        return adventure.world(world);
+        return this.adventure.world(world);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Audience server(@NotNull String serverName) {
-        return adventure.server(serverName);
+        return this.adventure.server(serverName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull ComponentFlattener flattener() {
-        return adventure.flattener();
+        return this.adventure.flattener();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
-        adventure.close();
+        this.adventure.close();
     }
 
 }

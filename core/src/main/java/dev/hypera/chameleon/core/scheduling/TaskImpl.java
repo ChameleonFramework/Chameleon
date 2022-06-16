@@ -24,6 +24,9 @@ package dev.hypera.chameleon.core.scheduling;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * {@link Task} implementation.
+ */
 public class TaskImpl implements Task {
 
     private final @NotNull Runnable runnable;
@@ -38,20 +41,40 @@ public class TaskImpl implements Task {
         this.repeat = repeat;
     }
 
+    /**
+     * Get Task {@link Runnable}.
+     *
+     * @return Task {@link Runnable}.
+     */
     public @NotNull Runnable getRunnable() {
-        return runnable;
+        return this.runnable;
     }
 
+    /**
+     * Get {@link Task.Type}.
+     *
+     * @return {@link Task.Type}.
+     */
     public @NotNull Type getType() {
-        return type;
+        return this.type;
     }
 
+    /**
+     * Get Task delay.
+     *
+     * @return Task delay {@link Schedule}.
+     */
     public @NotNull Schedule getDelay() {
-        return delay;
+        return this.delay;
     }
 
+    /**
+     * Get Task repeat.
+     *
+     * @return Task repeat {@link Schedule}.
+     */
     public @NotNull Schedule getRepeat() {
-        return repeat;
+        return this.repeat;
     }
 
 }

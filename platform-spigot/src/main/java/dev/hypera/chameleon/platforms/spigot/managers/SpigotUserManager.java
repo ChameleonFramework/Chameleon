@@ -33,33 +33,49 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Spigot user manager
+ * Spigot {@link UserManager} implementation.
  */
+@Internal
 public final class SpigotUserManager extends UserManager {
 
     private final @NotNull SpigotChameleon chameleon;
 
+    /**
+     * {@link SpigotUserManager} constructor.
+     *
+     * @param chameleon {@link SpigotChameleon} instance.
+     */
+    @Internal
     public SpigotUserManager(@NotNull SpigotChameleon chameleon) {
         this.chameleon = chameleon;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull ChatUser getConsole() {
-        return new SpigotConsoleUser(chameleon);
+        return new SpigotConsoleUser(this.chameleon);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<User> getPlayers() {
-        return Bukkit.getOnlinePlayers().stream().map(p -> new SpigotUser(chameleon, p)).collect(Collectors.toSet());
+        return Bukkit.getOnlinePlayers().stream().map(p -> new SpigotUser(this.chameleon, p)).collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
-        return Optional.ofNullable(Bukkit.getPlayer(uniqueId)).map(player -> new SpigotUser(chameleon, player));
+        return Optional.ofNullable(Bukkit.getPlayer(uniqueId)).map(player -> new SpigotUser(this.chameleon, player));
     }
 
 }

@@ -26,23 +26,37 @@ import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.adventure.AbstractAudience;
 import dev.hypera.chameleon.core.users.ChatUser;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Spigot console user
+ * Spigot console {@link ChatUser} implementation.
  */
+@Internal
 public class SpigotConsoleUser extends AbstractAudience implements ChatUser {
 
+    /**
+     * {@link SpigotConsoleUser} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    @Internal
     public SpigotConsoleUser(@NotNull Chameleon chameleon) {
         super(chameleon.getAdventure().console());
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
         return Bukkit.getConsoleSender().getName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasPermission(@NotNull String permission) {
         return true;

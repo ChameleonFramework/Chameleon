@@ -24,28 +24,50 @@ package dev.hypera.chameleon.platforms.minestom.platform;
 
 import dev.hypera.chameleon.core.platform.server.ServerPlatform;
 import net.minestom.server.MinecraftServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom platform
+ * Minestom {@link ServerPlatform} implementation.
  */
+@Internal
 public final class MinestomPlatform extends ServerPlatform {
 
+    /**
+     * {@link MinestomPlatform} constructor.
+     */
+    @Internal
+    public MinestomPlatform() {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getAPIName() {
         return "Minestom";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
         return MinecraftServer.getBrandName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getVersion() {
         return MinecraftServer.VERSION_NAME;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Type getType() {
         return Type.SERVER;

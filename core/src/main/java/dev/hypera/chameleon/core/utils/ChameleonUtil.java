@@ -27,11 +27,24 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Utilities
+ * {@link dev.hypera.chameleon.core.Chameleon} utilities.
  */
 @Internal
-public class ChameleonUtil {
+public final class ChameleonUtil {
 
+    private ChameleonUtil() {
+
+    }
+
+    /**
+     * Check if first argument is null, return it if it isn't, otherwise return the default value.
+     *
+     * @param s            Object to check if null.
+     * @param defaultValue Default return value.
+     * @param <T>          Type.
+     *
+     * @return {@code s} if not null, otherwise {@code defaultValue}.
+     */
     public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
         return null == s ? defaultValue : s;
     }

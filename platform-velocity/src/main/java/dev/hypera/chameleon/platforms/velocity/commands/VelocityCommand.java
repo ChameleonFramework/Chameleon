@@ -29,35 +29,50 @@ import dev.hypera.chameleon.core.commands.context.ContextImpl;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUsers;
 import java.util.Arrays;
 import java.util.List;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity command
+ * Velocity {@link Command} wrapper.
  */
+@Internal
 public final class VelocityCommand implements SimpleCommand {
 
     private final @NotNull Chameleon chameleon;
     private final @NotNull Command command;
 
+    /**
+     * {@link VelocityCommand} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     * @param command   {@link Command} to be wrapped.
+     */
+    @Internal
     public VelocityCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
         this.chameleon = chameleon;
         this.command = command;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(Invocation invocation) {
-        if (invocation.arguments().length < 1 || command.executeSubCommand(
-            new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, Arrays.copyOfRange(invocation.arguments(), 1, invocation.arguments().length)),
+        if (invocation.arguments().length < 1 || this.command.executeSubCommand(
+            new ContextImpl(VelocityUsers.wrap(this.chameleon, invocation.source()), this.chameleon, Arrays.copyOfRange(invocation.arguments(), 1, invocation.arguments().length)),
             invocation.arguments()[0]
         )) {
-            command.executeCommand(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, invocation.arguments()));
+            this.command.executeCommand(new ContextImpl(VelocityUsers.wrap(this.chameleon, invocation.source()), this.chameleon, invocation.arguments()));
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> suggest(Invocation invocation) {
-        return command.tabComplete(new ContextImpl(VelocityUsers.wrap(chameleon, invocation.source()), chameleon, invocation.arguments()));
+        return this.command.tabComplete(new ContextImpl(VelocityUsers.wrap(this.chameleon, invocation.source()), this.chameleon, invocation.arguments()));
     }
 
 }

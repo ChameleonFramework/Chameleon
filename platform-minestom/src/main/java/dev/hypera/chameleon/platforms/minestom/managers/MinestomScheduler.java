@@ -31,13 +31,26 @@ import dev.hypera.chameleon.core.scheduling.TaskImpl;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.TaskSchedule;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom scheduler
+ * Minestom {@link Scheduler} implementation.
  */
+@Internal
 public final class MinestomScheduler extends Scheduler {
 
+    /**
+     * {@link MinestomScheduler} constructor.
+     */
+    @Internal
+    public MinestomScheduler() {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void schedule(@NotNull TaskImpl task) {
         MinecraftServer.getSchedulerManager().buildTask(task.getRunnable()).executionType(ExecutionType.valueOf(task.getType().name())).delay(convert(task.getDelay(), false)).repeat(convert(task.getRepeat(), true)).schedule();

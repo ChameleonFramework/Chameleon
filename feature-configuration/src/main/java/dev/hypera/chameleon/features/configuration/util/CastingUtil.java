@@ -27,8 +27,22 @@ import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CastingUtil {
+/**
+ * Casting utility.
+ */
+public final class CastingUtil {
 
+    private CastingUtil() {
+
+    }
+
+    /**
+     * Cast the given object to a {@link String}.
+     *
+     * @param o {@link Object} to be cast.
+     *
+     * @return {@link String}.
+     */
     public static @NotNull String asString(@NotNull Object o) {
         if (o instanceof String) {
             return (String) o;
@@ -36,6 +50,13 @@ public class CastingUtil {
         return o.toString();
     }
 
+    /**
+     * Cast the given object to a {@link Integer}.
+     *
+     * @param o {@link Object} to be cast.
+     *
+     * @return {@link Integer}, if {@code o} is instanceof {@link Integer}, otherwise {@code null}.
+     */
     public static @Nullable Integer asInt(@NotNull Object o) {
         try {
             if (o instanceof Integer) {
@@ -51,6 +72,13 @@ public class CastingUtil {
         }
     }
 
+    /**
+     * Cast the given object to a {@link Double}.
+     *
+     * @param o {@link Object} to be cast.
+     *
+     * @return {@link Double}, if {@code o} is instanceof {@link Double}, otherwise {@code null}.
+     */
     public static @Nullable Double asDouble(@NotNull Object o) {
         try {
             if (o instanceof Double) {
@@ -64,6 +92,13 @@ public class CastingUtil {
         }
     }
 
+    /**
+     * Cast the given object to a {@link Long}.
+     *
+     * @param o {@link Object} to be cast.
+     *
+     * @return {@link Long}, if {@code o} is instanceof {@link Long}, otherwise {@code null}.
+     */
     public static @Nullable Long asLong(@NotNull Object o) {
         try {
             if (o instanceof Long) {
@@ -77,6 +112,13 @@ public class CastingUtil {
         }
     }
 
+    /**
+     * Cast the given object to a {@link Boolean}.
+     *
+     * @param o {@link Object} to be cast.
+     *
+     * @return {@link Boolean}, if {@code o} is instanceof {@link Boolean}, otherwise {@code null}.
+     */
     public static @Nullable Boolean asBoolean(@NotNull Object o) {
         if (o instanceof Boolean) {
             return (Boolean) o;
@@ -86,6 +128,13 @@ public class CastingUtil {
         return null;
     }
 
+    /**
+     * Convert the given object to a {@link CastingList}.
+     *
+     * @param o {@link Object} to be converted.
+     *
+     * @return {@link CastingList}, if {@code o} is instanceof {@link java.util.List}, otherwise {@code null}.
+     */
     public static @Nullable CastingList asList(@NotNull Object o) {
         if (o instanceof Collection) {
             CastingList list = new CastingList();
@@ -95,6 +144,13 @@ public class CastingUtil {
         return null;
     }
 
+    /**
+     * Convert the given object to a {@link CastingMap}.
+     *
+     * @param o {@link Object} to be converted.
+     *
+     * @return {@link CastingMap}, if {@code o} is instanceof {@link Map}, otherwise {@code null}.
+     */
     public static @Nullable CastingMap asMap(@NotNull Object o) {
         if (o instanceof Map) {
             CastingMap map = new CastingMap();

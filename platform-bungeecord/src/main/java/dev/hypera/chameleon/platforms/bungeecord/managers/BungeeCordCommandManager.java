@@ -28,15 +28,23 @@ import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platforms.bungeecord.commands.BungeeCordCommand;
 import java.util.Map.Entry;
 import net.md_5.bungee.api.ProxyServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord command manager
+ * BungeeCord {@link CommandManager} implementation.
  */
+@Internal
 public final class BungeeCordCommandManager extends CommandManager {
 
     private final @NotNull BungeeCordChameleon chameleon;
 
+    /**
+     * {@link BungeeCordCommandManager} constructor.
+     *
+     * @param chameleon {@link BungeeCordChameleon} instance.
+     */
+    @Internal
     public BungeeCordCommandManager(@NotNull BungeeCordChameleon chameleon) {
         super(chameleon);
         this.chameleon = chameleon;
@@ -44,7 +52,7 @@ public final class BungeeCordCommandManager extends CommandManager {
 
     @Override
     protected void registerCommand(@NotNull Command command) {
-        ProxyServer.getInstance().getPluginManager().registerCommand(chameleon.getBungeePlugin(), new BungeeCordCommand(chameleon, command));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this.chameleon.getBungeePlugin(), new BungeeCordCommand(this.chameleon, command));
     }
 
     @Override

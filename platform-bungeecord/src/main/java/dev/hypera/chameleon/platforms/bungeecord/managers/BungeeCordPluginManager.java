@@ -29,23 +29,42 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.md_5.bungee.api.ProxyServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord plugin manager
+ * BungeeCord {@link PluginManager} implementation.
  */
+@Internal
 public final class BungeeCordPluginManager extends PluginManager {
 
+    /**
+     * {@link BungeeCordPluginManager} constructor.
+     */
+    @Internal
+    public BungeeCordPluginManager() {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<PlatformPlugin> getPlugins() {
         return ProxyServer.getInstance().getPluginManager().getPlugins().stream().map(BungeeCordPlugin::new).collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
         return Optional.ofNullable(ProxyServer.getInstance().getPluginManager().getPlugin(name)).map(BungeeCordPlugin::new);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isPluginEnabled(@NotNull String name) {
         return null != ProxyServer.getInstance().getPluginManager().getPlugin(name);

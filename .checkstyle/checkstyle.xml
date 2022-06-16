@@ -140,7 +140,7 @@
 
         <!-- https://checkstyle.org/config_naming.html#MethodName -->
         <module name="MethodName">
-            <property name="format" value="^(?:(?:.{1,3})|(?:[gs]et[A-Z].*)|(?:(?:[^gsA-Z]..|.[^e].|..[^t]).+))$"/>
+            <property name="format" value="^(?:(?:.{1,3})|(?:[gs]et([A-Z].*|up))|(?:(?:[^gsA-Z]..|.[^e].|..[^t]).+))$"/>
         </module>
 
         <!-- https://checkstyle.org/config_whitespace.html#MethodParamPad -->
@@ -169,14 +169,13 @@
 
         <!-- https://checkstyle.org/config_whitespace.html#NoWhitespaceAfter -->
         <module name="NoWhitespaceAfter">
-            <property name="allowLineBreaks" value="false"/>
+            <property name="allowLineBreaks" value="true"/>
         </module>
 
         <!-- https://checkstyle.org/config_whitespace.html#NoWhitespaceBefore -->
         <module name="NoWhitespaceBefore">
             <property name="allowLineBreaks" value="true"/>
-            <property name="tokens"
-              value="COMMA, DOT, LABELED_STAT, METHOD_REF, POST_DEC, POST_INC, SEMI"/>
+            <property name="tokens" value="COMMA, DOT, LABELED_STAT, METHOD_REF, POST_DEC, POST_INC, SEMI"/>
         </module>
 
         <!-- https://checkstyle.org/config_coding.html#OneStatementPerLine -->

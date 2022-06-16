@@ -27,13 +27,22 @@ import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.commands.context.ContextImpl;
 import dev.hypera.chameleon.platforms.minestom.users.MinestomUsers;
 import java.util.Arrays;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom command
+ * Minestom {@link Command} wrapper.
  */
+@Internal
 public class MinestomCommand extends net.minestom.server.command.builder.Command {
 
+    /**
+     * {@link MinestomCommand} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     * @param command   {@link Command} to be wrapped.
+     */
+    @Internal
     public MinestomCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
         super(command.getName(), command.getAliases().toArray(new String[0]));
 

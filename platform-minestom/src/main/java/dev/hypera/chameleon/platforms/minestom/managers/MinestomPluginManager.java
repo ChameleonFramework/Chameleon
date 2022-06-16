@@ -29,23 +29,42 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.minestom.server.MinecraftServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom plugin manager
+ * Minestom {@link PluginManager} implementation.
  */
+@Internal
 public final class MinestomPluginManager extends PluginManager {
 
+    /**
+     * {@link MinestomPluginManager} constructor.
+     */
+    @Internal
+    public MinestomPluginManager() {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<PlatformPlugin> getPlugins() {
         return MinecraftServer.getExtensionManager().getExtensions().stream().map(MinestomPlugin::new).collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
         return Optional.ofNullable(MinecraftServer.getExtensionManager().getExtension(name)).map(MinestomPlugin::new);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isPluginEnabled(@NotNull String name) {
         return MinecraftServer.getExtensionManager().hasExtension(name);

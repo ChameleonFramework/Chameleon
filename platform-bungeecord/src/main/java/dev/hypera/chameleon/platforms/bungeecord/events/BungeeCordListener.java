@@ -44,7 +44,7 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord listener
+ * BungeeCord {@link Listener}.
  */
 @Internal
 @SuppressWarnings("unused")
@@ -52,40 +52,46 @@ public class BungeeCordListener implements Listener {
 
     private final @NotNull BungeeCordChameleon chameleon;
 
+    /**
+     * {@link BungeeCordListener} constructor.
+     *
+     * @param chameleon {@link BungeeCordChameleon} instance.
+     */
+    @Internal
     public BungeeCordListener(@NotNull BungeeCordChameleon chameleon) {
         this.chameleon = chameleon;
     }
 
 
     @EventHandler
-    public void onPostLoginEvent(@NotNull PostLoginEvent event) {
-        chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+    private void onPostLoginEvent(@NotNull PostLoginEvent event) {
+        this.chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
     }
 
     @EventHandler
-    public void onChatEvent(@NotNull ChatEvent event) {
-        if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap((ProxiedPlayer) event.getSender()), event.getMessage()))) {
+    private void onChatEvent(@NotNull ChatEvent event) {
+        if (!this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap((ProxiedPlayer) event.getSender()), event.getMessage()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPlayerDisconnectEvent(@NotNull PlayerDisconnectEvent event) {
-        chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+    private void onPlayerDisconnectEvent(@NotNull PlayerDisconnectEvent event) {
+        this.chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
     }
 
     @EventHandler
-    public void onServerSwitchEvent(@NotNull ServerSwitchEvent event) {
-        chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), Optional.ofNullable(event.getFrom()).map(this::wrap).orElse(null), wrap(event.getPlayer().getServer().getInfo())));
+    private void onServerSwitchEvent(@NotNull ServerSwitchEvent event) {
+        this.chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), Optional.ofNullable(event.getFrom()).map(this::wrap).orElse(null), wrap(event.getPlayer().getServer().getInfo())));
     }
 
 
     private @NotNull ProxyUser wrap(@NotNull ProxiedPlayer player) {
-        return new BungeeCordUser(chameleon, player);
+        return new BungeeCordUser(this.chameleon, player);
     }
 
     private @NotNull Server wrap(@NotNull ServerInfo server) {
-        return new BungeeCordServer(chameleon, server);
+        return new BungeeCordServer(this.chameleon, server);
     }
 
 }

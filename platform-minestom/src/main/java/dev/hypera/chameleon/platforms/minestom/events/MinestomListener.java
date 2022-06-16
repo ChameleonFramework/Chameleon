@@ -34,13 +34,21 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom listener
+ * Minestom listener.
  */
+@Internal
 public class MinestomListener {
 
+    /**
+     * {@link MinestomListener} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    @Internal
     public MinestomListener(@NotNull Chameleon chameleon) {
         GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
         handler.addListener(PlayerLoginEvent.class, event -> chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer()))));

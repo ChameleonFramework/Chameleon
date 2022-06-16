@@ -35,43 +35,67 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity server implementation
+ * Velocity {@link Server} implementation.
  */
+@Internal
 public class VelocityServer implements Server {
 
     private final @NotNull VelocityChameleon chameleon;
     private final @NotNull RegisteredServer server;
 
+    /**
+     * {@link VelocityServer} constructor.
+     *
+     * @param chameleon {@link VelocityChameleon} instance.
+     * @param server    {@link RegisteredServer} to be wrapped.
+     */
+    @Internal
     public VelocityServer(@NotNull VelocityChameleon chameleon, @NotNull RegisteredServer server) {
         this.chameleon = chameleon;
         this.server = server;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
-        return server.getServerInfo().getName();
+        return this.server.getServerInfo().getName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull SocketAddress getSocketAddress() {
-        return server.getServerInfo().getAddress();
+        return this.server.getServerInfo().getAddress();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<ProxyUser> getPlayers() {
-        return server.getPlayersConnected().stream().map(p -> new VelocityUser(chameleon, p)).collect(Collectors.toSet());
+        return this.server.getPlayersConnected().stream().map(p -> new VelocityUser(this.chameleon, p)).collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
-        server.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
+        this.server.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
     }
 
-
+    /**
+     * Get stored {@link RegisteredServer}.
+     *
+     * @return stored {@link RegisteredServer}.
+     */
     @Internal
     public @NotNull RegisteredServer getVelocity() {
-        return server;
+        return this.server;
     }
 
 }

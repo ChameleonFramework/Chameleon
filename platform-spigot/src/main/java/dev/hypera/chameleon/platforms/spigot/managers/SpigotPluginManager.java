@@ -30,23 +30,42 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Spigot plugin manager
+ * Spigot {@link PluginManager} implementation.
  */
+@Internal
 public final class SpigotPluginManager extends PluginManager {
 
+    /**
+     * {@link SpigotPluginManager} constructor.
+     */
+    @Internal
+    public SpigotPluginManager() {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<PlatformPlugin> getPlugins() {
         return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(SpigotPlugin::new).collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
         return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(SpigotPlugin::new);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isPluginEnabled(@NotNull String name) {
         return Bukkit.getPluginManager().isPluginEnabled(name);

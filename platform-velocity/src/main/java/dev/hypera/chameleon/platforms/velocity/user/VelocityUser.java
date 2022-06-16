@@ -32,65 +32,102 @@ import dev.hypera.chameleon.platforms.velocity.platform.objects.VelocityServer;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity user
+ * Velocity {@link ProxyUser} implementation.
  */
+@Internal
 public class VelocityUser extends AbstractReflectedAudience implements ProxyUser {
 
     private final @NotNull VelocityChameleon chameleon;
     private final @NotNull Player player;
 
+    /**
+     * {@link VelocityUser} constructor.
+     *
+     * @param chameleon {@link VelocityChameleon} instance.
+     * @param player    {@link Player} to be wrapped.
+     */
+    @Internal
     public VelocityUser(@NotNull VelocityChameleon chameleon, @NotNull Player player) {
         super(player);
         this.chameleon = chameleon;
         this.player = player;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
-        return player.getUsername();
+        return this.player.getUsername();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull UUID getUniqueId() {
-        return player.getUniqueId();
+        return this.player.getUniqueId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getPing() {
-        return player.getPing() > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) player.getPing();
+        return this.player.getPing() > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) this.player.getPing();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void chat(@NotNull String message) {
-        player.spoofChatInput(message);
+        this.player.spoofChatInput(message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
-        player.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
+        this.player.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasPermission(@NotNull String permission) {
-        return player.hasPermission(permission);
+        return this.player.hasPermission(permission);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<Server> getServer() {
-        return player.getCurrentServer().map(s -> new VelocityServer(chameleon, s.getServer()));
+        return this.player.getCurrentServer().map(s -> new VelocityServer(this.chameleon, s.getServer()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void connect(@NotNull Server server) {
-        player.createConnectionRequest(((VelocityServer) server).getVelocity()).fireAndForget();
+        this.player.createConnectionRequest(((VelocityServer) server).getVelocity()).fireAndForget();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback) {
-        player.createConnectionRequest(((VelocityServer) server).getVelocity()).connect().whenComplete((result, ex) -> {
+        this.player.createConnectionRequest(((VelocityServer) server).getVelocity()).connect().whenComplete((result, ex) -> {
             callback.accept(result.isSuccessful(), ex);
         });
     }

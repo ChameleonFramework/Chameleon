@@ -43,10 +43,11 @@ import dev.hypera.chameleon.platforms.bungeecord.platform.BungeeCordPlatform;
 import java.nio.file.Path;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord Chameleon
+ * BungeeCord {@link Chameleon} implementation.
  */
 public final class BungeeCordChameleon extends Chameleon {
 
@@ -58,6 +59,7 @@ public final class BungeeCordChameleon extends Chameleon {
     private final @NotNull BungeeCordUserManager userManager = new BungeeCordUserManager(this);
     private final @NotNull BungeeCordScheduler scheduler = new BungeeCordScheduler(this);
 
+    @Internal
     BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, new ChameleonJavaLogger(bungeePlugin.getLogger()));
         this.plugin = bungeePlugin;
@@ -65,51 +67,84 @@ public final class BungeeCordChameleon extends Chameleon {
         ProxyServer.getInstance().getPluginManager().registerListener(bungeePlugin, new BungeeCordListener(this));
     }
 
-
+    /**
+     * Create a new {@link BungeeCordChameleonBootstrap} instance.
+     *
+     * @param chameleonPlugin {@link ChameleonPlugin} to load.
+     * @param bungeePlugin    BungeeCord {@link Plugin}.
+     * @param pluginData      {@link PluginData}.
+     *
+     * @return new {@link BungeeCordChameleonBootstrap}.
+     */
     public static @NotNull BungeeCordChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) {
         return new BungeeCordChameleonBootstrap(chameleonPlugin, bungeePlugin, pluginData);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull ChameleonAudienceProvider getAdventure() {
-        return audienceProvider;
+        return this.audienceProvider;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Platform getPlatform() {
-        return platform;
+        return this.platform;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull CommandManager getCommandManager() {
-        return commandManager;
+        return this.commandManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull PluginManager getPluginManager() {
-        return pluginManager;
+        return this.pluginManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull UserManager getUserManager() {
-        return userManager;
+        return this.userManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Scheduler getScheduler() {
-        return scheduler;
+        return this.scheduler;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Path getDataFolder() {
-        return plugin.getDataFolder().toPath().toAbsolutePath();
+        return this.plugin.getDataFolder().toPath().toAbsolutePath();
     }
 
-
+    /**
+     * Get stored {@link Plugin}.
+     *
+     * @return stored {@link Plugin}.
+     */
+    @Internal
     public @NotNull Plugin getBungeePlugin() {
-        return plugin;
+        return this.plugin;
     }
 
 }

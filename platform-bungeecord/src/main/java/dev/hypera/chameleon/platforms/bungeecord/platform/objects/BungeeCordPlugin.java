@@ -31,70 +31,108 @@ import java.util.Optional;
 import java.util.Set;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord plugin implementation
+ * BungeeCord {@link PlatformPlugin} implementation.
  */
+@Internal
 public class BungeeCordPlugin implements PlatformPlugin {
 
     private final @NotNull Plugin plugin;
 
+    /**
+     * {@link BungeeCordPlugin} constructor.
+     *
+     * @param plugin {@link Plugin} instance.
+     */
+    @Internal
     public BungeeCordPlugin(@NotNull Plugin plugin) {
         this.plugin = plugin;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
-        return ChameleonUtil.getOrDefault(plugin.getDescription().getName(), "unknown");
+        return ChameleonUtil.getOrDefault(this.plugin.getDescription().getName(), "unknown");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getVersion() {
-        return ChameleonUtil.getOrDefault(plugin.getDescription().getVersion(), "unknown");
+        return ChameleonUtil.getOrDefault(this.plugin.getDescription().getVersion(), "unknown");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<String> getDescription() {
-        return Optional.ofNullable(plugin.getDescription().getDescription());
+        return Optional.ofNullable(this.plugin.getDescription().getDescription());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Class<?> getMainClass() {
-        return plugin.getClass();
+        return this.plugin.getClass();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull List<String> getAuthors() {
-        return null == plugin.getDescription().getAuthor() ? Collections.emptyList() : Collections.singletonList(plugin.getDescription().getAuthor());
+        return null == this.plugin.getDescription().getAuthor() ? Collections.emptyList() : Collections.singletonList(this.plugin.getDescription().getAuthor());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<String> getDependencies() {
-        return plugin.getDescription().getDepends();
+        return this.plugin.getDescription().getDepends();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Set<String> getSoftDependencies() {
-        return plugin.getDescription().getSoftDepends();
+        return this.plugin.getDescription().getSoftDepends();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Path getDataFolder() {
-        return plugin.getDataFolder().toPath().toAbsolutePath();
+        return this.plugin.getDataFolder().toPath().toAbsolutePath();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void enable() {
         throw new UnsupportedOperationException("Cannot enable plugins on BungeeCord");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void disable() {
-        ProxyServer.getInstance().getPluginManager().unregisterCommands(plugin);
-        ProxyServer.getInstance().getPluginManager().unregisterListeners(plugin);
-        plugin.onDisable();
+        ProxyServer.getInstance().getPluginManager().unregisterCommands(this.plugin);
+        ProxyServer.getInstance().getPluginManager().unregisterListeners(this.plugin);
+        this.plugin.onDisable();
     }
 
 }

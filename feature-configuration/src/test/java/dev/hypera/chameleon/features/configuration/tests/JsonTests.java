@@ -40,6 +40,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+/**
+ * {@link JsonConfiguration} tests.
+ */
 public class JsonTests {
 
     private static final @NotNull String FILE_NAME = "test.json";
@@ -48,12 +51,22 @@ public class JsonTests {
     @TempDir
     public static Path folder;
 
+    /**
+     * Setup tests.
+     *
+     * @throws IOException if something goes wrong while copying the test files.
+     */
     @BeforeAll
     public static void setup() throws IOException {
         Files.copy(Objects.requireNonNull(JsonTests.class.getResourceAsStream("/" + FILE_NAME)), folder.resolve(FILE_NAME));
         Files.copy(Objects.requireNonNull(JsonTests.class.getResourceAsStream("/" + FILE_NAME)), folder.resolve(MODIFIED_FILE_NAME));
     }
 
+    /**
+     * Load {@link JsonConfiguration} and make sure everything was loaded correctly.
+     *
+     * @throws IOException if something goes wrong while reading the configuration file.
+     */
     @Test
     public void load() throws IOException {
         Configuration config = new JsonConfiguration(folder, FILE_NAME).load();
@@ -75,6 +88,11 @@ public class JsonTests {
         assertEquals("d", map.getString("c").orElseThrow(IllegalStateException::new));
     }
 
+    /**
+     * Modify and reload the {@link JsonConfiguration}, and make sure that it updated correctly.
+     *
+     * @throws IOException if something goes wrong while reading the configuration file.
+     */
     @Test
     public void reload() throws IOException {
         Configuration config = new JsonConfiguration(folder, MODIFIED_FILE_NAME).load();
@@ -86,6 +104,11 @@ public class JsonTests {
         assertEquals(true, config.getBoolean("boolean").orElseThrow(IllegalStateException::new));
     }
 
+    /**
+     * Unload the {@link JsonConfiguration} and make sure it was properly unloaded.
+     *
+     * @throws IOException if something goes wrong while reading the configuration file.
+     */
     @Test
     public void unload() throws IOException {
         Configuration config = new JsonConfiguration(folder, FILE_NAME).load();

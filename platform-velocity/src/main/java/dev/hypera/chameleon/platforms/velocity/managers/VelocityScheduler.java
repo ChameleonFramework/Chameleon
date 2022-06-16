@@ -30,23 +30,34 @@ import dev.hypera.chameleon.core.scheduling.ScheduleImpl.TickSchedule;
 import dev.hypera.chameleon.core.scheduling.TaskImpl;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import java.util.concurrent.TimeUnit;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity scheduler
+ * Velocity {@link Scheduler} implementation.
  */
+@Internal
 public final class VelocityScheduler extends Scheduler {
 
     private final @NotNull VelocityChameleon chameleon;
 
+    /**
+     * {@link VelocityScheduler} constructor.
+     *
+     * @param chameleon {@link VelocityChameleon} instance.
+     */
+    @Internal
     public VelocityScheduler(@NotNull VelocityChameleon chameleon) {
         this.chameleon = chameleon;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void schedule(@NotNull TaskImpl task) {
-        chameleon.getVelocityPlugin().getServer().getScheduler().buildTask(chameleon.getVelocityPlugin(), task.getRunnable()).delay(convert(task.getDelay()), TimeUnit.MILLISECONDS).repeat(convert(task.getRepeat()), TimeUnit.MILLISECONDS).schedule();
+        this.chameleon.getVelocityPlugin().getServer().getScheduler().buildTask(this.chameleon.getVelocityPlugin(), task.getRunnable()).delay(convert(task.getDelay()), TimeUnit.MILLISECONDS).repeat(convert(task.getRepeat()), TimeUnit.MILLISECONDS).schedule();
     }
 
 

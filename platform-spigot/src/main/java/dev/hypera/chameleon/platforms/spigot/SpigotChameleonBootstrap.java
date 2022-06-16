@@ -29,30 +29,43 @@ import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiation
 import dev.hypera.chameleon.core.logging.ChameleonLogger;
 import dev.hypera.chameleon.core.logging.impl.ChameleonJavaLogger;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot {@link ChameleonBootstrap} implementation.
+ */
 public final class SpigotChameleonBootstrap extends ChameleonBootstrap<SpigotChameleon> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull JavaPlugin spigotPlugin;
     private final @NotNull PluginData pluginData;
 
+    @Internal
     SpigotChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) {
         this.chameleonPlugin = chameleonPlugin;
         this.spigotPlugin = spigotPlugin;
         this.pluginData = pluginData;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Internal
     @Override
     protected @NotNull SpigotChameleon loadInternal() throws ChameleonInstantiationException {
-        SpigotChameleon chameleon = new SpigotChameleon(chameleonPlugin, spigotPlugin, pluginData);
+        SpigotChameleon chameleon = new SpigotChameleon(this.chameleonPlugin, this.spigotPlugin, this.pluginData);
         chameleon.onLoad();
         return chameleon;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Internal
     @Override
     protected @NotNull ChameleonLogger createLogger() {
-        return new ChameleonJavaLogger(spigotPlugin.getLogger());
+        return new ChameleonJavaLogger(this.spigotPlugin.getLogger());
     }
 
 }

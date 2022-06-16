@@ -25,22 +25,36 @@ package dev.hypera.chameleon.platforms.velocity.user;
 import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity console user
+ * Velocity console {@link ChatUser} implementation.
  */
+@Internal
 public class VelocityConsoleUser extends AbstractReflectedAudience implements ChatUser {
 
+    /**
+     * {@link VelocityConsoleUser} constructor.
+     *
+     * @param chameleon {@link VelocityChameleon} instance.
+     */
+    @Internal
     public VelocityConsoleUser(@NotNull VelocityChameleon chameleon) {
         super(chameleon.getVelocityPlugin().getServer().getConsoleCommandSource());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
         return "Console";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasPermission(@NotNull String permission) {
         return true;

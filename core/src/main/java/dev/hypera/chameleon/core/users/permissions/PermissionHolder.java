@@ -25,10 +25,17 @@ package dev.hypera.chameleon.core.users.permissions;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Permission holder
+ * Permission holder.
  */
 public interface PermissionHolder {
 
+    /**
+     * Checks whether this {@link PermissionHolder} has the given permission.
+     *
+     * @param permission Permission to check for.
+     *
+     * @return {@code true} if the {@link PermissionHolder} has the given permission, otherwise {@code false}.
+     */
     boolean hasPermission(@NotNull String permission);
 
 }

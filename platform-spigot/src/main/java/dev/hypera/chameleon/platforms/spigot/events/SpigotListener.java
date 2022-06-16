@@ -34,40 +34,47 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Spigot listener
+ * Spigot {@link Listener}.
  */
+@Internal
 public class SpigotListener implements Listener {
 
     private final @NotNull SpigotChameleon chameleon;
 
+    /**
+     * {@link SpigotListener} constructor.
+     *
+     * @param chameleon {@link SpigotChameleon} instance.
+     */
+    @Internal
     public SpigotListener(@NotNull SpigotChameleon chameleon) {
         this.chameleon = chameleon;
     }
 
-
     @EventHandler
-    public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
-        chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+    private void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+        this.chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
     }
 
     @EventHandler
-    public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
-        if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
+    private void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
+        if (!this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
-        chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+    private void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
+        this.chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
     }
 
 
     private @NotNull ServerUser wrap(@NotNull Player player) {
-        return new SpigotUser(chameleon, player);
+        return new SpigotUser(this.chameleon, player);
     }
 
 }

@@ -43,10 +43,11 @@ import dev.hypera.chameleon.platforms.spigot.platform.SpigotPlatform;
 import java.nio.file.Path;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Spigot Chameleon
+ * Spigot {@link Chameleon} implementation.
  */
 public final class SpigotChameleon extends Chameleon {
 
@@ -58,58 +59,94 @@ public final class SpigotChameleon extends Chameleon {
     private final @NotNull SpigotUserManager userManager = new SpigotUserManager(this);
     private final @NotNull SpigotScheduler scheduler = new SpigotScheduler(this);
 
+    @Internal
     SpigotChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, new ChameleonJavaLogger(spigotPlugin.getLogger()));
         this.plugin = spigotPlugin;
         this.audienceProvider = new SpigotAudienceProvider(this, spigotPlugin);
-        Bukkit.getPluginManager().registerEvents(new SpigotListener(this), plugin);
+        Bukkit.getPluginManager().registerEvents(new SpigotListener(this), this.plugin);
     }
 
+    /**
+     * Create a new {@link SpigotChameleonBootstrap} instance.
+     *
+     * @param chameleonPlugin {@link ChameleonPlugin} to load.
+     * @param spigotPlugin    {@link JavaPlugin}.
+     * @param pluginData      {@link PluginData}.
+     *
+     * @return new {@link SpigotChameleonBootstrap}.
+     */
     public static @NotNull SpigotChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin spigotPlugin, @NotNull PluginData pluginData) {
         return new SpigotChameleonBootstrap(chameleonPlugin, spigotPlugin, pluginData);
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull ChameleonAudienceProvider getAdventure() {
-        return audienceProvider;
+        return this.audienceProvider;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Platform getPlatform() {
-        return platform;
+        return this.platform;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull CommandManager getCommandManager() {
-        return commandManager;
+        return this.commandManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull PluginManager getPluginManager() {
-        return pluginManager;
+        return this.pluginManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull UserManager getUserManager() {
-        return userManager;
+        return this.userManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Scheduler getScheduler() {
-        return scheduler;
+        return this.scheduler;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Path getDataFolder() {
-        return plugin.getDataFolder().toPath().toAbsolutePath();
+        return this.plugin.getDataFolder().toPath().toAbsolutePath();
     }
 
-
+    /**
+     * Get stored {@link JavaPlugin}.
+     *
+     * @return stored {@link JavaPlugin}
+     */
+    @Internal
     public @NotNull JavaPlugin getSpigotPlugin() {
-        return plugin;
+        return this.plugin;
     }
 
 }

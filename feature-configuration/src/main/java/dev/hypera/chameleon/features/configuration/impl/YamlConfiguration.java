@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
 
 /**
- * YAML configuration implementation
+ * YAML {@link Configuration} implementation.
  */
 public class YamlConfiguration extends Configuration {
 
@@ -43,15 +43,31 @@ public class YamlConfiguration extends Configuration {
 
     private @Nullable Map<String, Object> config;
 
+    /**
+     * {@link YamlConfiguration} constructor.
+     *
+     * @param dataFolder Folder to store loaded configuration file in.
+     * @param fileName   Configuration file name.
+     */
     public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName) {
         super(dataFolder, fileName);
     }
 
+    /**
+     * {@link YamlConfiguration} constructor.
+     *
+     * @param dataFolder               Folder to store loaded configuration file in.
+     * @param fileName                 Configuration file name.
+     * @param copyDefaultFromResources Whether this file should be copied from resources if not already loaded.
+     */
     public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
         super(dataFolder, fileName, copyDefaultFromResources);
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Configuration load() throws IOException {
         if (!Files.exists(dataFolder)) {
@@ -73,28 +89,34 @@ public class YamlConfiguration extends Configuration {
         }
 
         try (BufferedReader reader = Files.newBufferedReader(path)) {
-            config = yaml.load(reader);
-            loaded = true;
+            this.config = yaml.load(reader);
+            this.loaded = true;
         }
 
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Configuration unload() {
-        loaded = false;
-        config = null;
+        this.loaded = false;
+        this.config = null;
         return this;
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Optional<Object> get(@NotNull String path) {
-        if (!loaded || null == config) {
+        if (!this.loaded || null == this.config) {
             throw new IllegalStateException("Configuration has not been loaded");
         }
 
-        return getObject(path, config);
+        return getObject(path, this.config);
     }
 
 }
