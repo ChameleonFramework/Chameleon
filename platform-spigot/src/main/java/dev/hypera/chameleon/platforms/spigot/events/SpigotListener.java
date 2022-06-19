@@ -55,20 +55,35 @@ public class SpigotListener implements Listener {
         this.chameleon = chameleon;
     }
 
+    /**
+     * Platform {@link UserConnectEvent} handler.
+     *
+     * @param event Platform {@link PlayerJoinEvent}.
+     */
     @EventHandler
-    private void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+    public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
         this.chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
     }
 
+    /**
+     * Platform {@link UserChatEvent} handler.
+     *
+     * @param event Platform {@link AsyncPlayerChatEvent}.
+     */
     @EventHandler
-    private void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
+    public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
         if (!this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
             event.setCancelled(true);
         }
     }
 
+    /**
+     * Platform {@link UserDisconnectEvent} handler.
+     *
+     * @param event Platform {@link PlayerQuitEvent}.
+     */
     @EventHandler
-    private void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
+    public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
         this.chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
     }
 

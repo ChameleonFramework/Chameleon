@@ -60,25 +60,45 @@ public class VelocityListener {
         this.chameleon = chameleon;
     }
 
+    /**
+     * Platform {@link UserConnectEvent} handler.
+     *
+     * @param event Platform {@link PostLoginEvent}.
+     */
     @Subscribe
-    private void onPostLoginEvent(@NotNull PostLoginEvent event) {
+    public void onPostLoginEvent(@NotNull PostLoginEvent event) {
         this.chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
     }
 
+    /**
+     * Platform {@link UserChatEvent} handler.
+     *
+     * @param event Platform {@link PlayerChatEvent}.
+     */
     @Subscribe
-    private void onChatEvent(@NotNull PlayerChatEvent event) {
+    public void onChatEvent(@NotNull PlayerChatEvent event) {
         if (!this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
             event.setResult(ChatResult.denied());
         }
     }
 
+    /**
+     * Platform {@link UserDisconnectEvent} handler.
+     *
+     * @param event Platform {@link DisconnectEvent}.
+     */
     @Subscribe
-    private void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
+    public void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
         this.chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
     }
 
+    /**
+     * Platform {@link ProxyUserSwitchEvent} handler.
+     *
+     * @param event Platform {@link ServerConnectedEvent}.
+     */
     @Subscribe
-    private void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
+    public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
         this.chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), event.getPreviousServer().map(this::wrap).orElse(null), wrap(event.getServer())));
     }
 

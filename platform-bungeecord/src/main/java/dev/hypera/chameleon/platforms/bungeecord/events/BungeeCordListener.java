@@ -63,25 +63,45 @@ public class BungeeCordListener implements Listener {
     }
 
 
+    /**
+     * Platform {@link UserConnectEvent} handler.
+     *
+     * @param event Platform {@link PostLoginEvent}.
+     */
     @EventHandler
-    private void onPostLoginEvent(@NotNull PostLoginEvent event) {
+    public void onPostLoginEvent(@NotNull PostLoginEvent event) {
         this.chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
     }
 
+    /**
+     * Platform {@link UserChatEvent} handler.
+     *
+     * @param event Platform {@link ChatEvent}.
+     */
     @EventHandler
-    private void onChatEvent(@NotNull ChatEvent event) {
+    public void onChatEvent(@NotNull ChatEvent event) {
         if (!this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap((ProxiedPlayer) event.getSender()), event.getMessage()))) {
             event.setCancelled(true);
         }
     }
 
+    /**
+     * Platform {@link UserDisconnectEvent} handler.
+     *
+     * @param event Platform {@link PlayerDisconnectEvent}.
+     */
     @EventHandler
-    private void onPlayerDisconnectEvent(@NotNull PlayerDisconnectEvent event) {
+    public void onPlayerDisconnectEvent(@NotNull PlayerDisconnectEvent event) {
         this.chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
     }
 
+    /**
+     * Platform {@link ProxyUserSwitchEvent} handler.
+     *
+     * @param event Platform {@link ServerSwitchEvent}.
+     */
     @EventHandler
-    private void onServerSwitchEvent(@NotNull ServerSwitchEvent event) {
+    public void onServerSwitchEvent(@NotNull ServerSwitchEvent event) {
         this.chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), Optional.ofNullable(event.getFrom()).map(this::wrap).orElse(null), wrap(event.getPlayer().getServer().getInfo())));
     }
 
