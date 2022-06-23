@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FChameleonFramework%2FChameleon.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FChameleonFramework%2FChameleon?ref=badge_shield)
+
 <div align="center">
     <a href="#logo"><img src="https://i.hypera.dev/assets/chameleon@750x150.png" /></a>
     <p><strong>Cross-platform Minecraft plugin framework</strong></p>
@@ -11,6 +13,9 @@
    <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge">
    <img alt="Snyk Vulnerabilities for GitHub Repo" src="https://img.shields.io/snyk/vulnerabilities/github/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge">
 </div>
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FChameleonFramework%2FChameleon.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FChameleonFramework%2FChameleon?ref=badge_large)
 
 ### What is Chameleon?
 Chameleon is a framework created to aid in the creation of cross-platform Minecraft plugins.
