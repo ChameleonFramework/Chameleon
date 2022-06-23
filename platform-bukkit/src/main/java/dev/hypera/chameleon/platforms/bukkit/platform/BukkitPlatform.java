@@ -20,19 +20,57 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-plugins {
-    id("chameleon.api")
-}
+package dev.hypera.chameleon.platforms.bukkit.platform;
 
-dependencies {
-    implementation(project(":chameleon-core"))
-    implementation(libs.javapoet)
+import dev.hypera.chameleon.core.platform.server.ServerPlatform;
+import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
-    implementation(libs.yaml) {
-        exclude(group = "joda-time", module = "joda-time")
-        exclude(group = "junit", module = "joda-time")
-        exclude(group = "org.apache", module = "velocity")
+/**
+ * Bukkit {@link ServerPlatform} implementation.
+ */
+@Internal
+public final class BukkitPlatform extends ServerPlatform {
+
+    /**
+     * {@link BukkitPlatform} constructor.
+     */
+    @Internal
+    public BukkitPlatform() {
+
     }
 
-    implementation(libs.gson)
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getAPIName() {
+        return "Bukkit";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return Bukkit.getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return Bukkit.getVersion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Type getType() {
+        return Type.SERVER;
+    }
+
 }

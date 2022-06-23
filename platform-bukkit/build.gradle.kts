@@ -21,18 +21,17 @@
  *  SOFTWARE.
  */
 plugins {
+    id("java-library")
     id("chameleon.api")
 }
 
+repositories {
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+}
+
 dependencies {
-    implementation(project(":chameleon-core"))
-    implementation(libs.javapoet)
-
-    implementation(libs.yaml) {
-        exclude(group = "joda-time", module = "joda-time")
-        exclude(group = "junit", module = "joda-time")
-        exclude(group = "org.apache", module = "velocity")
-    }
-
-    implementation(libs.gson)
+    api(project(":chameleon-core"))
+    compileOnly(libs.platform.bukkit)
+    implementation(libs.adventure.platform.bukkit)
+    compileOnlyApi(libs.annotations)
 }

@@ -114,7 +114,7 @@ public class PluginData {
      * Platform.
      */
     public enum Platform {
-        BUNGEECORD, MINESTOM, SPIGOT, VELOCITY
+        BUNGEECORD, MINESTOM, BUKKIT, VELOCITY
     }
 
 }

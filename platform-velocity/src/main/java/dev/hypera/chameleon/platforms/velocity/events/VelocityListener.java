@@ -77,7 +77,12 @@ public class VelocityListener {
      */
     @Subscribe
     public void onChatEvent(@NotNull PlayerChatEvent event) {
-        if (!this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
+        UserChatEvent chameleonEvent = this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+        if (!event.getMessage().equals(chameleonEvent.getMessage())) {
+            event.setResult(ChatResult.message(chameleonEvent.getMessage()));
+        }
+
+        if (chameleonEvent.isCancelled()) {
             event.setResult(ChatResult.denied());
         }
     }

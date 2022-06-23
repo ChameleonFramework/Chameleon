@@ -1,0 +1,54 @@
+[metadata]
+version = "1.0"
+
+[versions]
+# Kyori
+adventure = "4.11.0"
+adventure-platform = "4.1.1"
+indra = "2.1.1"
+
+# Platforms
+platform-spigot = "1.19-R0.1-SNAPSHOT"
+platform-bungeecord = "1.19-R0.1-SNAPSHOT"
+platform-minestom = "1d469ca6a6"
+platform-velocity = "3.1.0"
+
+
+[libraries]
+# Adventure
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+adventure-textSerializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure" }
+adventure-textSerializer-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure" }
+adventure-platform-api = { module = "net.kyori:adventure-platform-api", version.ref = "adventure-platform" }
+adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
+adventure-platform-bungeecord = { module = "net.kyori:adventure-platform-bungeecord", version.ref = "adventure-platform" }
+
+# Platforms
+platform-bukkit = { module = "org.spigotmc:spigot-api", version.ref = "platform-spigot" }
+platform-bungeecord = { module = "net.md-5:bungeecord-api", version.ref = "platform-bungeecord" }
+platform-minestom = { module = "com.github.Minestom:Minestom", version.ref = "platform-minestom" }
+platform-velocity = { module = "com.velocitypowered:velocity-api", version.ref = "platform-velocity" }
+
+# File reading/writing
+gson = "com.google.code.gson:gson:2.9.0"
+jsonSimple = "com.googlecode.json-simple:json-simple:1.1.1"
+yaml = "org.yaml:snakeyaml:1.30"
+
+# Code generation
+javapoet = "com.squareup:javapoet:1.13.0"
+
+# Build
+build-indra-common = { module = "net.kyori:indra-common", version.ref = "indra" }
+build-indra-publishing = { module = "net.kyori:indra-publishing-gradle-plugin", version.ref = "indra" }
+build-testLogger = "com.adarshr:gradle-test-logger-plugin:3.2.0"
+
+# Testing
+test-junit-bom = "org.junit:junit-bom:5.8.2"
+test-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+
+# Miscellaneous
+annotations = "org.jetbrains:annotations:23.0.0"
+slf4j = "org.slf4j:slf4j-api:1.7.36"
+
+
+[plugins]

@@ -29,12 +29,15 @@ pluginManagement {
 
 rootProject.name = "chameleon-parent"
 
-include(
+sequenceOf(
     "core",
     "annotations",
     "feature-configuration",
+    "platform-bukkit",
     "platform-bungeecord",
     "platform-minestom",
-    "platform-spigot",
     "platform-velocity"
-)
+).forEach {
+    include("chameleon-$it")
+    project(":chameleon-$it").projectDir = file(it)
+}

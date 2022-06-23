@@ -53,7 +53,12 @@ public class MinestomListener {
         GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
         handler.addListener(PlayerLoginEvent.class, event -> chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer()))));
         handler.addListener(PlayerChatEvent.class, event -> {
-            if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
+            UserChatEvent chameleonEvent = chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+            if (!event.getMessage().equals(chameleonEvent.getMessage())) {
+                event.setMessage(chameleonEvent.getMessage());
+            }
+
+            if (chameleonEvent.isCancelled()) {
                 event.setCancelled(true);
             }
         });

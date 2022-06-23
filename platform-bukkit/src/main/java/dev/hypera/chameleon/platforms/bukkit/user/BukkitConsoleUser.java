@@ -20,19 +20,46 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-plugins {
-    id("chameleon.api")
-}
+package dev.hypera.chameleon.platforms.bukkit.user;
 
-dependencies {
-    implementation(project(":chameleon-core"))
-    implementation(libs.javapoet)
+import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.adventure.AbstractAudience;
+import dev.hypera.chameleon.core.users.ChatUser;
+import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
-    implementation(libs.yaml) {
-        exclude(group = "joda-time", module = "joda-time")
-        exclude(group = "junit", module = "joda-time")
-        exclude(group = "org.apache", module = "velocity")
+/**
+ * Bukkit console {@link ChatUser} implementation.
+ */
+@Internal
+public class BukkitConsoleUser extends AbstractAudience implements ChatUser {
+
+    /**
+     * {@link BukkitConsoleUser} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    @Internal
+    public BukkitConsoleUser(@NotNull Chameleon chameleon) {
+        super(chameleon.getAdventure().console());
     }
 
-    implementation(libs.gson)
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return Bukkit.getConsoleSender().getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return true;
+    }
+
 }

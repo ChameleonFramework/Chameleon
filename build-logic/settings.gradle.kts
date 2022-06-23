@@ -20,19 +20,12 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-plugins {
-    id("chameleon.api")
-}
+rootProject.name = "chameleon-build-logic"
 
-dependencies {
-    implementation(project(":chameleon-core"))
-    implementation(libs.javapoet)
-
-    implementation(libs.yaml) {
-        exclude(group = "joda-time", module = "joda-time")
-        exclude(group = "junit", module = "joda-time")
-        exclude(group = "org.apache", module = "velocity")
+dependencyResolutionManagement {
+    versionCatalogs {
+        register("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
     }
-
-    implementation(libs.gson)
 }

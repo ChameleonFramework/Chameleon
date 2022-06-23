@@ -20,40 +20,41 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations.processing.generation.impl.minestom;
+package dev.hypera.chameleon.annotations.processing.generation.impl.bukkit;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import dev.hypera.chameleon.annotations.PlatformDependency;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.Plugin.Platform;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
+import dev.hypera.chameleon.annotations.utils.MapBuilder;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
+import org.yaml.snakeyaml.Yaml;
 
 /**
- * Minestom extension main class and 'extension.json' description file generator.
+ * Bukkit plugin main class and 'plugin.yml' description file generator.
  */
-public class MinestomGenerator extends Generator {
+public class BukkitGenerator extends Generator {
 
-    private static final @NotNull String DESCRIPTION_FILE = "extension.json";
-    private static final @NotNull Gson GSON = new GsonBuilder().create();
+    private static final @NotNull String DESCRIPTION_FILE = "plugin.yml";
 
     /**
-     * Generate Minestom extension main class and 'extension.json' description file.
+     * Generate Bukkit plugin main class and 'plugin.yml' description file.
      *
      * @param data   {@link Plugin} data
      * @param plugin Chameleon plugin main class
@@ -63,49 +64,56 @@ public class MinestomGenerator extends Generator {
      */
     @Override
     public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
-        Platform[] platforms = data.platforms().length > 0 ? data.platforms() : Platform.values();
-
-        MethodSpec constructorSpec = MethodSpec.constructorBuilder()
+        MethodSpec loadSpec = MethodSpec.methodBuilder("onLoad")
+            .addAnnotation(Override.class)
             .addModifiers(Modifier.PUBLIC)
             .beginControlFlow("try")
             .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platforms.minestom", "MinestomChameleon"), plugin, "pluginData")
-            .addStatement("this.$N.onEnable()", "chameleon")
+            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platforms.bukkit", "BukkitChameleon"), plugin, "pluginData")
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
             .addStatement("$N.printStackTrace()", "ex")
             .endControlFlow()
             .build();
 
-        MethodSpec initializeSpec = MethodSpec.methodBuilder("initialize")
+        MethodSpec enableSpec = MethodSpec.methodBuilder("onEnable")
             .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
             .addStatement("this.$N.onEnable()", "chameleon").build();
 
-        MethodSpec terminateSpec = MethodSpec.methodBuilder("terminate")
+        MethodSpec disableSpec = MethodSpec.methodBuilder("onDisable")
             .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
             .addStatement("this.$N.onDisable()", "chameleon").build();
 
-        TypeSpec minestomMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Minestom")
+        TypeSpec bukkitMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Bukkit")
             .addModifiers(Modifier.PUBLIC)
-            .superclass(clazz("net.minestom.server.extensions", "Extension"))
-            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platforms.minestom", "MinestomChameleon"), "chameleon", Modifier.PRIVATE).build())
-            .addMethod(constructorSpec)
-            .addMethod(initializeSpec)
-            .addMethod(terminateSpec)
+            .superclass(clazz("org.bukkit.plugin.java", "JavaPlugin"))
+            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platforms.bukkit", "BukkitChameleon"), "chameleon", Modifier.PRIVATE).build())
+            .addMethod(loadSpec)
+            .addMethod(enableSpec)
+            .addMethod(disableSpec)
             .build();
 
         String packageName = ((PackageElement) plugin.getEnclosingElement()).getQualifiedName().toString();
         if (packageName.endsWith("core") || packageName.endsWith("common")) {
             packageName = packageName.substring(0, packageName.lastIndexOf("."));
         }
-        packageName = packageName + ".platform.minestom";
+        packageName = packageName + ".platform.bukkit";
 
-        JavaFile.builder(packageName, minestomMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
+        JavaFile.builder(packageName, bukkitMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
         generateDescriptionFile(data, plugin, env, packageName);
     }
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))) {
-            GSON.toJson(new ExtensionDescription(data.name().isEmpty() ? data.id() : data.name(), packageName + "." + plugin.getSimpleName() + "Minestom", data.version(), Arrays.asList(data.authors()), Arrays.asList(data.dependencies())), writer);
+            new Yaml().dump(new MapBuilder<String, Object>().add("name", data.name().isEmpty() ? data.id() : data.name())
+                .add("main", packageName + "." + plugin.getSimpleName() + "Bukkit")
+                .add("version", data.version())
+                .add("api-version", "1.13")
+                .add("author", data.authors().length > 0 ? String.join(", ", data.authors()) : "Unknown")
+                .add("authors", data.authors())
+                .add("website", data.url())
+                .add("depend", Arrays.stream(data.dependencies()).filter(d -> !d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.BUKKIT))).map(PlatformDependency::name).collect(Collectors.toList()))
+                .add("softdepend", Arrays.stream(data.dependencies()).filter(d -> d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.BUKKIT))).map(PlatformDependency::name).collect(Collectors.toList()))
+                .add("description", data.description()), writer);
         }
     }
 

@@ -80,7 +80,12 @@ public class BungeeCordListener implements Listener {
      */
     @EventHandler
     public void onChatEvent(@NotNull ChatEvent event) {
-        if (!this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap((ProxiedPlayer) event.getSender()), event.getMessage()))) {
+        UserChatEvent chameleonEvent = this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap((ProxiedPlayer) event.getSender()), event.getMessage()));
+        if (!event.getMessage().equals(chameleonEvent.getMessage())) {
+            event.setMessage(chameleonEvent.getMessage());
+        }
+
+        if (chameleonEvent.isCancelled()) {
             event.setCancelled(true);
         }
     }

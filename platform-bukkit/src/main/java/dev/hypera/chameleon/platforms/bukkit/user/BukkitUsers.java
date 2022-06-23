@@ -20,19 +20,41 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-plugins {
-    id("chameleon.api")
-}
+package dev.hypera.chameleon.platforms.bukkit.user;
 
-dependencies {
-    implementation(project(":chameleon-core"))
-    implementation(libs.javapoet)
+import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.platforms.bukkit.BukkitChameleon;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
-    implementation(libs.yaml) {
-        exclude(group = "joda-time", module = "joda-time")
-        exclude(group = "junit", module = "joda-time")
-        exclude(group = "org.apache", module = "velocity")
+/**
+ * Bukkit {@link dev.hypera.chameleon.core.users.User} utilities.
+ */
+@Internal
+public final class BukkitUsers {
+
+    @Internal
+    private BukkitUsers() {
+
     }
 
-    implementation(libs.gson)
+    /**
+     * Wrap provided {@link CommandSender}.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     * @param sender    {@link CommandSender} to wrap.
+     *
+     * @return {@link ChatUser}.
+     */
+    public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSender sender) {
+        if (sender instanceof Player) {
+            return new BukkitUser((BukkitChameleon) chameleon, (Player) sender);
+        } else {
+            return new BukkitConsoleUser(chameleon);
+        }
+    }
+
 }

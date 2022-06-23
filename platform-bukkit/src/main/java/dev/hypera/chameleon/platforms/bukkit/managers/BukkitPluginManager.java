@@ -20,57 +20,55 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.events.impl.common;
+package dev.hypera.chameleon.platforms.bukkit.managers;
 
-import dev.hypera.chameleon.core.events.cancellable.AbstractCancellable;
-import dev.hypera.chameleon.core.users.User;
+import dev.hypera.chameleon.core.managers.PluginManager;
+import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.platforms.bukkit.platform.objects.BukkitPlugin;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link User} chat event, dispatched when a player sends a chat message.
+ * Bukkit {@link PluginManager} implementation.
  */
-public class UserChatEvent extends AbstractCancellable implements UserEvent {
-
-    private final @NotNull User user;
-    private @NotNull String message;
+@Internal
+public final class BukkitPluginManager extends PluginManager {
 
     /**
-     * {@link UserChatEvent} constructor.
-     *
-     * @param user    {@link User} that sent the message.
-     * @param message Message that the user attempted to send.
+     * {@link BukkitPluginManager} constructor.
      */
-    public UserChatEvent(@NotNull User user, @NotNull String message) {
-        this.user = user;
-        this.message = message;
-    }
+    @Internal
+    public BukkitPluginManager() {
 
-
-    /**
-     * Get the {@link User} who attempted to send this message.
-     *
-     * @return {@link User} who attempted to send this message.
-     */
-    public @NotNull User getUser() {
-        return this.user;
     }
 
     /**
-     * Get the message that the {@link User} attempted to send this message.
-     *
-     * @return the message that the {@link User} attempted to send.
+     * {@inheritDoc}
      */
-    public @NotNull String getMessage() {
-        return this.message;
+    @Override
+    public @NotNull Set<PlatformPlugin> getPlugins() {
+        return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(BukkitPlugin::new).collect(Collectors.toSet());
     }
 
     /**
-     * Sets the message that the {@link User} will send.
-     *
-     * @param message New message that will be sent.
+     * {@inheritDoc}
      */
-    public void setMessage(@NotNull String message) {
-        this.message = message;
+    @Override
+    public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
+        return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(BukkitPlugin::new);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isPluginEnabled(@NotNull String name) {
+        return Bukkit.getPluginManager().isPluginEnabled(name);
     }
 
 }

@@ -91,11 +91,12 @@ public final class EventManager {
      * Dispatch an {@link ChameleonEvent} to registered listeners.
      *
      * @param event {@link ChameleonEvent} to be dispatched.
+     * @param <T>   Type of {@link ChameleonEvent}.
      *
      * @return {@code true} if the event isn't instanceof {@link Cancellable} or if the event wasn't cancelled, otherwise {@code false}.
      */
     @Internal
-    public boolean dispatch(@NotNull ChameleonEvent event) {
+    public <T extends ChameleonEvent> @NotNull T dispatch(@NotNull T event) {
         this.registeredListeners.stream()
             .map(listener -> Arrays.stream(listener.getClass().getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(EventHandler.class) && method.getParameterCount() == 1 && method.getParameterTypes()[0].isInstance(event))
@@ -112,11 +113,7 @@ public final class EventManager {
                 }
             });
 
-        if (event instanceof Cancellable) {
-            return !((Cancellable) event).isCancelled();
-        } else {
-            return true;
-        }
+        return event;
     }
 
     @Internal

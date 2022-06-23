@@ -31,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":core"))
-    compileOnly("com.github.Minestom:Minestom:3821d204cf")
-    compileOnlyApi("org.jetbrains:annotations:23.0.0")
+    api(project(":chameleon-core"))
+    compileOnly(libs.platform.minestom)
+    compileOnlyApi(libs.annotations)
 }
