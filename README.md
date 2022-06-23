@@ -7,7 +7,7 @@
 
 <div align="center">
   <img alt="Stable version" src="https://img.shields.io/badge/Stable-N/A-%2317aaaa?style=for-the-badge">
-  <img alt="Latest version" src="https://img.shields.io/badge/dynamic/xml?color=%2317aaaa&label=Latest&query=%2F%2Fmetadata%2Fversioning%2Flatest&style=for-the-badge&url=https%3A%2F%2Frepo.hypera.dev%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon%2Fcore%2Fmaven-metadata.xml"><br/>
+  <img alt="Latest version" src="https://img.shields.io/badge/dynamic/xml?color=%2317aaaa&label=Latest&query=%2F%2Fmetadata%2Fversioning%2Flatest&style=for-the-badge&url=https%3A%2F%2Frepo.hypera.dev%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon-core%2Fmaven-metadata.xml"><br/>
   <img alt="License" src="https://img.shields.io/badge/License-MIT-%2317aaaa?style=for-the-badge">
   <img alt="Checks" src="https://img.shields.io/github/checks-status/ChameleonFramework/Chameleon/main?color=17aaaa&style=for-the-badge">
   <img alt="Code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/main?style=for-the-badge&color=%2317aaaa">
@@ -35,7 +35,7 @@ If you have any questions, feel free to ask in our [official Discord server][dis
 
 ### Project structure
  - `chameleon-core` - Chameleon's core, most things happen here.
- - `chameleon-feature-configuration` - An easy-to-use and simple configuration library, can be used without Chameleon.
+ - `chameleon-feature-configuration` - An easy-to-use configuration library, can be used without Chameleon.
  - `chameleon-platform-<name>` - Chameleon implementation for the named platform, supported:
    - `bukkit`
    - `bungeecord`
@@ -43,6 +43,8 @@ If you have any questions, feel free to ask in our [official Discord server][dis
    - `minestom`
 
 ### Dependencies
+You can find the latest versions at the top of this file.
+
 #### Gradle (Kotlin)
 ```kotlin
 repositories {
@@ -53,7 +55,7 @@ repositories {
 dependencies {
     val chameleonVersion = "<version>"
     implementation("dev.hypera:chameleon-core:$chameleonVersion")
-    // Repeat the line below and replace <module> with the module you wish to use, e.g. platform-bukkit
+    // Repeat the line below and replace <module> with the module you wish to use.
     implementation("dev.hypera:chameleon-<module>:$chameleonVersion")
 }
 ```
@@ -68,7 +70,7 @@ repositories {
 dependencies {
     def chameleonVersion = '<version>'
     implementation 'dev.hypera:chameleon-core:$chameleonVersion'
-    // Repeat the line below and replace <module> with the module you wish to use, e.g. platform-bukkit
+    // Repeat the line below and replace <module> with the module you wish to use.
     implementation 'dev.hypera:chameleon-<module>:$chameleonVersion'
 }
 ```
@@ -94,7 +96,7 @@ dependencies {
         <version>${chameleon.version}</version>
     </dependency>
 
-    <!-- Repeat the block below and replace 'MODULE' with the module you wish to use, e.g. platform-bukkit -->
+    <!-- Repeat the block below and replace 'MODULE' with the module you wish to use. -->
     <dependency>
        <groupId>dev.hypera</groupId>
        <artifactId>chameleon-MODULE</artifactId>
@@ -107,10 +109,9 @@ dependencies {
 
 Please read [CONTRIBUTING][contributing].
 
-## License
+### License
 The contents of this repository is licensed under the [MIT License](LICENSE).
 
 [example]: https://github.com/ChameleonFramework/Example
-[roadmap]: DEVELOPMENT.md
 [discord]: https://discord.hypera.dev/
 [contributing]: CONTRIBUTING.md
