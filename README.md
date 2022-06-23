@@ -1,86 +1,116 @@
 <div align="center">
-    <a href="#logo"><img src="https://i.hypera.dev/assets/chameleon@750x150.png" /></a>
-    <p><strong>Cross-platform Minecraft plugin framework</strong></p>
+  <a href="https://github.com/ChameleonFramework/Chameleon">
+    <img src="https://i.hypera.dev/assets/chameleon@750x150.png" />
+  </a>
+  <p><strong>Cross-platform Minecraft plugin framework</strong></p>
 </div>
 
------------
 <div align="center">
-   <img alt="GitHub license" src="https://img.shields.io/badge/License-MIT%20LICENSE-%2317aaaa?style=for-the-badge">
-   <img alt="Libraries.io dependency status for GitHub repo" src="https://img.shields.io/librariesio/github/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge"><br />
-   <img alt="GitHub code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/main?style=for-the-badge&color=%2317aaaa">
-   <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge">
-   <img alt="Snyk Vulnerabilities for GitHub Repo" src="https://img.shields.io/snyk/vulnerabilities/github/ChameleonFramework/Chameleon?color=%2317aaaa&style=for-the-badge">
+  <img alt="Stable version" src="https://img.shields.io/badge/Stable-N/A-%2317aaaa?style=for-the-badge">
+  <img alt="Latest version" src="https://img.shields.io/badge/dynamic/xml?color=%2317aaaa&label=Latest&query=%2F%2Fmetadata%2Fversioning%2Flatest&style=for-the-badge&url=https%3A%2F%2Frepo.hypera.dev%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon%2Fcore%2Fmaven-metadata.xml"><br/>
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-%2317aaaa?style=for-the-badge">
+  <img alt="Checks" src="https://img.shields.io/github/checks-status/ChameleonFramework/Chameleon/main?color=17aaaa&style=for-the-badge">
+  <img alt="Code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/main?style=for-the-badge&color=%2317aaaa">
+  <img alt="Code size" src="https://img.shields.io/github/languages/code-size/ChameleonFramework/Chameleon?color=17aaaa&style=for-the-badge">
 </div>
 
-### What is Chameleon?
-
-Chameleon is a framework created to aid in the creation of cross-platform Minecraft plugins.
+## What is Chameleon?
+Chameleon is a framework created to allow developers to easily create Minecraft plugins that work across multiple platforms.
 
 ### Supported Platforms
+Chameleon plans to support every platform in this list. If you have ideas for other platforms that we could support, please suggest them in our [official Discord server][discord].
+- [x] Bukkit
+- [x] BungeeCord
+- [x] Velocity
+- [x] Minestom
+- [ ] Fabric
+- [ ] Sponge
+- [ ] Nukkit
 
-Chameleon plans to support every platform in this list. If you have ideas for other platforms that
-we could support, please suggest them in our [Official Discord Server][Discord].
 
-- [x] [BungeeCord]
-- [x] [Spigot]
-- [x] [Velocity]
-- [x] [Minestom]
-- [ ] [Sponge]
-- [ ] [Nukkit]
+## Getting started
+**Proper documentation is coming soon**.  
+**You can find an Example Chameleon project [here][example]**.  
+If you have any questions, feel free to ask in our [official Discord server][discord].
 
-### How do I use Chameleon?
+### Project structure
+ - `chameleon-core` - Chameleon's core, most things happen here.
+ - `chameleon-feature-configuration` - An easy-to-use and simple configuration library, can be used without Chameleon.
+ - `chameleon-platform-<name>` - Chameleon implementation for the named platform, supported:
+   - `bukkit`
+   - `bungeecord`
+   - `velocity`
+   - `minestom`
 
-As this is hard to explain, we have created an [Example Project][Example]. In short, you have a
-common module with non-platform-specific code (this would only be Chameleon code), then you have a
-module for each platform you would like to support.  
-You can also check out our [Development Roadmap][Roadmap] or various examples
-of [BungeeCord support][platform-bungeecord], [Spigot support][platform-spigot]
-, [Velocity support][platform-velocity] and [Minestom support][platform-minestom] for reference.
+### Dependencies
+#### Gradle (Kotlin)
+```kotlin
+repositories {
+    // Replace 'snapshots' with 'releases' to use a non-snapshot version.
+    maven("https://repo.hypera.dev/snapshots/")
+}
 
-### Project Structure
+dependencies {
+    val chameleonVersion = "<version>"
+    implementation("dev.hypera:chameleon-core:$chameleonVersion")
+    // Repeat the line below and replace <module> with the module you wish to use, e.g. platform-bukkit
+    implementation("dev.hypera:chameleon-<module>:$chameleonVersion")
+}
+```
 
-* **Core** - Most of Chameleon's non-platform-specific code belongs here.
-* **Features** - Features that are not deemed to be a core part of Chameleon.
-    * *Configuration* - YAML and JSON configuration file loaders.
-* **Platforms** - Any platform-specific code belongs inside here.
-    * *BungeeCord* - Any code that interacts with BungeeCord belongs here.
-    * *Minestom* - Any code that interacts with Minestom belongs here.
-    * *Spigot* - Any code that interacts with Spigot belongs here.
-    * *Velocity* - Any code that interacts with Velocity belongs here.
+#### Gradle (Groovy)
+```groovy
+repositories {
+    // Replace 'snapshots' with 'releases' to use a non-snapshot version.
+    maven { url 'https://repo.hypera.dev/snapshots/' }
+}
 
-### Contributing
+dependencies {
+    def chameleonVersion = '<version>'
+    implementation 'dev.hypera:chameleon-core:$chameleonVersion'
+    // Repeat the line below and replace <module> with the module you wish to use, e.g. platform-bukkit
+    implementation 'dev.hypera:chameleon-<module>:$chameleonVersion'
+}
+```
 
-Please read [CONTRIBUTING].
+#### Maven
+```xml
+<properties>
+   <chameleon.version>VERSION</chameleon.version>
+</properties>
 
-### License
+<repositories>
+    <!-- Replace 'snapshots' with 'releases' to use a non-snapshot version. -->
+    <repository>
+        <id>hypera-snapshots</id>
+        <url>https://repo.hypera.dev/snapshots/</url>
+    </repository>
+</repositories>
 
+<dependencies>
+    <dependency>
+        <groupId>dev.hypera</groupId>
+        <artifactId>chameleon-core</artifactId>
+        <version>${chameleon.version}</version>
+    </dependency>
+
+    <!-- Repeat the block below and replace 'MODULE' with the module you wish to use, e.g. platform-bukkit -->
+    <dependency>
+       <groupId>dev.hypera</groupId>
+       <artifactId>chameleon-MODULE</artifactId>
+       <version>${chameleon.version}</version>
+    </dependency>
+</dependencies>
+```
+
+## Contributing
+
+Please read [CONTRIBUTING][contributing].
+
+## License
 The contents of this repository is licensed under the [MIT License](LICENSE).
 
-
-[BungeeCord]: https://www.spigotmc.org/wiki/bungeecord/
-
-[Spigot]: https://www.spigotmc.org/
-
-[Velocity]: https://velocitypowered.com/
-
-[Minestom]: https://www.minestom.net/
-
-[Sponge]: https://www.spongepowered.org/
-
-[Nukkit]: https://github.com/CloudburstMC/Nukkit
-
-[Example]: https://github.com/ChameleonFramework/Example
-
-[Roadmap]: DEVELOPMENT.md
-
-[Discord]: https://discord.hypera.dev/
-
-[platform-bungeecord]: platform-bungeecord/
-
-[platform-spigot]: platform-spigot/
-
-[platform-velocity]: platform-velocity/
-
-[platform-minestom]: platform-minestom/
-
-[CONTRIBUTING]: CONTRIBUTING.md
+[example]: https://github.com/ChameleonFramework/Example
+[roadmap]: DEVELOPMENT.md
+[discord]: https://discord.hypera.dev/
+[contributing]: CONTRIBUTING.md

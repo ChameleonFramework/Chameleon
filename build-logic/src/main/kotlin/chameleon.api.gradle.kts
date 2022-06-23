@@ -1,5 +1,4 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
-import gradle.kotlin.dsl.accessors._d5fd66abff6fbcbd4777caf19a546130.testlogger
 
 /*
  * Chameleon Framework - Cross-platform Minecraft plugin framework
@@ -33,4 +32,3 @@ plugins {
 testlogger {
     theme = ThemeType.MOCHA_PARALLEL
 }
-
