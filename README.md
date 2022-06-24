@@ -35,12 +35,23 @@ If you have any questions, feel free to ask in our [official Discord server][dis
 
 ### Project structure
  - `chameleon-core` - Chameleon's core, most things happen here.
+ - `chameleon-annotations` - Chameleon annotation-based platform class generator.
  - `chameleon-feature-configuration` - An easy-to-use configuration library, can be used without Chameleon.
  - `chameleon-platform-<name>` - Chameleon implementation for the named platform, supported:
    - `bukkit`
    - `bungeecord`
    - `velocity`
    - `minestom`
+
+### Annotation-based platform class generator
+`chameleon-annotations` can be used to automatically generate the main classes that each platform requires in-order to load the plugin then start Chameleon.  
+To use this, all you have to do is add the `chameleon-annotations` module as a compileOnly dependency and annotationProcessor (gradle) or provided dependency (maven) and add the `@Plugin` annotation to your ChameleonPlugin class.  
+```java
+@Plugin(
+    id = "myplugin",
+    name = "MyPlugin"
+)
+```
 
 ### Dependencies
 You can find the latest versions at the top of this file.
@@ -57,6 +68,10 @@ dependencies {
     implementation("dev.hypera:chameleon-core:$chameleonVersion")
     // Repeat the line below and replace <module> with the module you wish to use.
     implementation("dev.hypera:chameleon-<module>:$chameleonVersion")
+   
+   // If you wish to use the automatic platform main class generation:
+   compileOnly("dev.hypera:chameleon-annotations:$chameleonVersion")
+   annotationProcessor("dev.hypera:chameleon-annotations:$chameleonVersion")
 }
 ```
 
@@ -72,6 +87,10 @@ dependencies {
     implementation 'dev.hypera:chameleon-core:$chameleonVersion'
     // Repeat the line below and replace <module> with the module you wish to use.
     implementation 'dev.hypera:chameleon-<module>:$chameleonVersion'
+
+   // If you wish to use the automatic platform main class generation:
+   compileOnly 'dev.hypera:chameleon-annotations:$chameleonVersion'
+   annotationProcessor 'dev.hypera:chameleon-annotations:$chameleonVersion'
 }
 ```
 
@@ -101,6 +120,14 @@ dependencies {
        <groupId>dev.hypera</groupId>
        <artifactId>chameleon-MODULE</artifactId>
        <version>${chameleon.version}</version>
+    </dependency>
+
+    <!-- If you wish to use the automatic platform main class generation: -->
+    <dependency>
+       <groupId>dev.hypera</groupId>
+       <artifactId>chameleon-annotations</artifactId>
+       <version>${chameleon.version}</version>
+       <scope>provided</scope>
     </dependency>
 </dependencies>
 ```
