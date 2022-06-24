@@ -120,7 +120,7 @@ public class VelocityGenerator extends Generator {
         for (PlatformDependency dependency : data.dependencies()) {
             AnnotationSpec dependencyAnnotationSpec = AnnotationSpec.builder(clazz("com.velocitypowered.api.plugin", "Dependency")).addMember("id", "$S", dependency.name().toLowerCase()).addMember("optional", "$L", dependency.soft()).build();
 
-            pluginAnnotationSpecBuilder.addMember("authors", "$L", dependencyAnnotationSpec);
+            pluginAnnotationSpecBuilder.addMember("dependencies", "$L", dependencyAnnotationSpec);
         }
 
         TypeSpec velocityMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Velocity")

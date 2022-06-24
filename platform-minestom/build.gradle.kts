@@ -32,6 +32,6 @@ repositories {
 
 dependencies {
     api(project(":chameleon-core"))
-    compileOnly(libs.platform.minestom)
+    compileOnlyApi(libs.platform.minestom)
     compileOnlyApi(libs.annotations)
 }

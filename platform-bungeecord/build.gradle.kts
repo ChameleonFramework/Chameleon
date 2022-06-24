@@ -33,7 +33,7 @@ repositories {
 
 dependencies {
     api(project(":chameleon-core"))
-    compileOnly(libs.platform.bungeecord)
+    compileOnlyApi(libs.platform.bungeecord)
     implementation(libs.adventure.platform.bungeecord)
     compileOnlyApi(libs.annotations)
 }
