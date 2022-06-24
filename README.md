@@ -84,13 +84,13 @@ repositories {
 
 dependencies {
     def chameleonVersion = '<version>'
-    implementation 'dev.hypera:chameleon-core:$chameleonVersion'
+    implementation 'dev.hypera:chameleon-core:${chameleonVersion}'
     // Repeat the line below and replace <module> with the module you wish to use.
-    implementation 'dev.hypera:chameleon-<module>:$chameleonVersion'
+    implementation 'dev.hypera:chameleon-<module>:${chameleonVersion}'
 
    // If you wish to use the automatic platform main class generation:
-   compileOnly 'dev.hypera:chameleon-annotations:$chameleonVersion'
-   annotationProcessor 'dev.hypera:chameleon-annotations:$chameleonVersion'
+   compileOnly 'dev.hypera:chameleon-annotations:${chameleonVersion}'
+   annotationProcessor 'dev.hypera:chameleon-annotations:${chameleonVersion}'
 }
 ```
 
