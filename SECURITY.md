@@ -9,8 +9,8 @@
 
 | Version | Supported          |
 |---------|--------------------|
-| 0.4.0   | :white_check_mark: |
-| < 0.4   | :x:                |
+| 0.7.0   | :white_check_mark: |
+| < 0.7   | :x:                |
 
 <br>
 
