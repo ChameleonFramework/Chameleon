@@ -58,7 +58,7 @@ public final class VelocityCommand implements SimpleCommand {
      * {@inheritDoc}
      */
     @Override
-    public void execute(Invocation invocation) {
+    public void execute(@NotNull Invocation invocation) {
         if (invocation.arguments().length < 1 || this.command.executeSubCommand(
             new ContextImpl(VelocityUsers.wrap(this.chameleon, invocation.source()), this.chameleon, Arrays.copyOfRange(invocation.arguments(), 1, invocation.arguments().length)),
             invocation.arguments()[0]
@@ -71,7 +71,7 @@ public final class VelocityCommand implements SimpleCommand {
      * {@inheritDoc}
      */
     @Override
-    public List<String> suggest(Invocation invocation) {
+    public List<String> suggest(@NotNull Invocation invocation) {
         return this.command.tabComplete(new ContextImpl(VelocityUsers.wrap(this.chameleon, invocation.source()), this.chameleon, invocation.arguments()));
     }
 
