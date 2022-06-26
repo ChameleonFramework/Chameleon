@@ -23,71 +23,114 @@
 package dev.hypera.chameleon.platforms.minestom.platform.objects;
 
 import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import net.minestom.server.extensions.Extension;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.file.Path;
-import java.util.*;
-
 /**
- * Minestom plugin implementation
+ * Minestom {@link PlatformPlugin} implementation.
  */
+@Internal
 public class MinestomPlugin implements PlatformPlugin {
 
-	private final @NotNull Extension extension;
+    private final @NotNull Extension extension;
 
-	public MinestomPlugin(@NotNull Extension extension) {
-		this.extension = extension;
-	}
+    /**
+     * {@link MinestomPlugin} constructor.
+     *
+     * @param extension {@link Extension} instance.
+     */
+    @Internal
+    public MinestomPlugin(@NotNull Extension extension) {
+        this.extension = extension;
+    }
 
-	@Override
-	public @NotNull String getName() {
-		return extension.getOrigin().getName();
-	}
 
-	@Override
-	public @NotNull String getVersion() {
-		return extension.getOrigin().getVersion();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return this.extension.getOrigin().getName();
+    }
 
-	@Override
-	public @NotNull Optional<String> getDescription() {
-		return Optional.empty();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return this.extension.getOrigin().getVersion();
+    }
 
-	@Override
-	public @NotNull Class<?> getMainClass() {
-		return extension.getClass();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Optional<String> getDescription() {
+        return Optional.empty();
+    }
 
-	@Override
-	public @NotNull List<String> getAuthors() {
-		return Arrays.asList(extension.getOrigin().getAuthors());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Class<?> getMainClass() {
+        return this.extension.getClass();
+    }
 
-	@Override
-	public @NotNull Set<String> getDependencies() {
-		return new HashSet<>(Arrays.asList(extension.getOrigin().getDependencies()));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull List<String> getAuthors() {
+        return Arrays.asList(this.extension.getOrigin().getAuthors());
+    }
 
-	@Override
-	public @NotNull Set<String> getSoftDependencies() {
-		return Collections.emptySet();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<String> getDependencies() {
+        return new HashSet<>(Arrays.asList(this.extension.getOrigin().getDependencies()));
+    }
 
-	@Override
-	public @NotNull Path getDataFolder() {
-		return extension.getDataDirectory();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<String> getSoftDependencies() {
+        return Collections.emptySet();
+    }
 
-	@Override
-	public void enable() {
-		throw new UnsupportedOperationException("Minestom extensions cannot be enabled");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Path getDataFolder() {
+        return this.extension.getDataDirectory();
+    }
 
-	@Override
-	public void disable() {
-		throw new UnsupportedOperationException("Minestom extensions cannot be disabled");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void enable() {
+        throw new UnsupportedOperationException("Minestom extensions cannot be enabled");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void disable() {
+        throw new UnsupportedOperationException("Minestom extensions cannot be disabled");
+    }
 
 }

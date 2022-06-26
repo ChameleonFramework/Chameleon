@@ -34,25 +34,39 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom listener
+ * Minestom listener.
  */
+@Internal
 public class MinestomListener {
 
-	public MinestomListener(@NotNull Chameleon chameleon) {
-		GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
-		handler.addListener(PlayerLoginEvent.class, event -> chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer()))));
-		handler.addListener(PlayerChatEvent.class, event -> {
-			if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
-				event.setCancelled(true);
-			}
-		});
-		handler.addListener(PlayerDisconnectEvent.class, event -> chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()))));
-	}
+    /**
+     * {@link MinestomListener} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    @Internal
+    public MinestomListener(@NotNull Chameleon chameleon) {
+        GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
+        handler.addListener(PlayerLoginEvent.class, event -> chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer()))));
+        handler.addListener(PlayerChatEvent.class, event -> {
+            UserChatEvent chameleonEvent = chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+            if (!event.getMessage().equals(chameleonEvent.getMessage())) {
+                event.setMessage(chameleonEvent.getMessage());
+            }
 
-	private @NotNull ServerUser wrap(@NotNull Player player) {
-		return (ServerUser) MinestomUsers.wrap(player);
-	}
+            if (chameleonEvent.isCancelled()) {
+                event.setCancelled(true);
+            }
+        });
+        handler.addListener(PlayerDisconnectEvent.class, event -> chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()))));
+    }
+
+    private @NotNull ServerUser wrap(@NotNull Player player) {
+        return (ServerUser) MinestomUsers.wrap(player);
+    }
+
 }

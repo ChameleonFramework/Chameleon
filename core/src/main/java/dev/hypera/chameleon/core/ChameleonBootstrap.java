@@ -28,25 +28,43 @@ import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * {@link Chameleon} bootstrap. Allows for runtime dependency loading, etc. before Chameleon is actually loaded.
+ *
+ * @param <T> {@link Chameleon} implementation
+ */
 public abstract class ChameleonBootstrap<T extends Chameleon> {
 
     private @Nullable Consumer<ChameleonLogger> preLoad;
 
-
+    /**
+     * Set pre-load handler.
+     *
+     * @param preLoad Pre-load handler.
+     *
+     * @return {@code this}
+     */
     public final @NotNull ChameleonBootstrap<T> onPreLoad(@NotNull Consumer<ChameleonLogger> preLoad) {
         this.preLoad = preLoad;
         return this;
     }
 
+    /**
+     * Load {@link Chameleon} implementation.
+     *
+     * @return {@link Chameleon} implementation instance.
+     * @throws ChameleonInstantiationException if something goes wrong while loading the {@link Chameleon} implementation.
+     */
     public final @NotNull T load() throws ChameleonInstantiationException {
-        if (null != preLoad) {
-            preLoad.accept(createLogger());
+        if (null != this.preLoad) {
+            this.preLoad.accept(createLogger());
         }
 
         return loadInternal();
     }
 
     protected abstract @NotNull T loadInternal() throws ChameleonInstantiationException;
+
     protected abstract @NotNull ChameleonLogger createLogger();
 
 }

@@ -26,14 +26,11 @@ import dev.hypera.chameleon.core.annotations.PlatformSpecific;
 import dev.hypera.chameleon.core.platform.Platform.Type;
 
 /**
- * Game mode
+ * {@link dev.hypera.chameleon.core.users.platforms.ServerUser} Game mode.
  */
 @PlatformSpecific(Type.SERVER)
 public enum GameMode {
 
-	SURVIVAL,
-	CREATIVE,
-	ADVENTURE,
-	SPECTATOR
+    SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR
 
 }

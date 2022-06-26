@@ -25,59 +25,83 @@ package dev.hypera.chameleon.core.commands;
 import dev.hypera.chameleon.core.commands.annotations.Permission;
 import dev.hypera.chameleon.core.commands.context.Context;
 import dev.hypera.chameleon.core.exceptions.command.ChameleonCommandException;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Sub command
+ * Sub command.
  */
 @Internal
 public final class SubCommand {
 
-	private final @NotNull List<String> names;
-	private final @Nullable Permission permission;
-	private final @NotNull Method method;
+    private final @NotNull List<String> names;
+    private final @Nullable Permission permission;
+    private final @NotNull Method method;
 
-	SubCommand(@NotNull String names, @NotNull Method method) {
-		this.names = Arrays.asList(names.split("\\|"));
-		this.method = method;
+    /**
+     * {@link SubCommand} constructor.
+     *
+     * @param names Command names, separated by '|'.
+     * @param method Command method.
+     */
+    @Internal
+    SubCommand(@NotNull String names, @NotNull Method method) {
+        this.names = Arrays.asList(names.split("\\|"));
+        this.method = method;
 
-		this.permission = method.isAnnotationPresent(Permission.class) ? method.getAnnotation(Permission.class) : null;
-	}
+        this.permission = method.isAnnotationPresent(Permission.class) ? method.getAnnotation(Permission.class) : null;
+    }
 
-	public @NotNull List<String> getNames() {
-		return names;
-	}
+    /**
+     * Get command names.
+     *
+     * @return command names.
+     */
+    public @NotNull List<String> getNames() {
+        return this.names;
+    }
 
-	public @NotNull String getName() {
-		return names.get(0);
-	}
+    /**
+     * Get command name.
+     *
+     * @return command name.
+     */
+    public @NotNull String getName() {
+        return this.names.get(0);
+    }
 
-	public @NotNull List<String> getAliases() {
-		return names.subList(1, names.size());
-	}
+    /**
+     * Get command aliases.
+     *
+     * @return command aliases.
+     */
+    public @NotNull List<String> getAliases() {
+        return this.names.subList(1, this.names.size());
+    }
 
-	public void execute(@NotNull Context context, @NotNull Command parent) {
-		try {
-			if (null != permission && !permission.value().isEmpty() && !context.getSender().hasPermission(permission.value())) {
-				parent.getPermissionErrorMessage().ifPresent(component -> context.getSender().sendMessage(component));
-				return;
-			}
+    /**
+     * Execute the command.
+     *
+     * @param context Execution {@link Context}.
+     * @param parent Parent {@link Command}.
+     */
+    public void execute(@NotNull Context context, @NotNull Command parent) {
+        try {
+            if (null != this.permission && !this.permission.value().isEmpty() && !context.getSender().hasPermission(this.permission.value())) {
+                parent.getPermissionErrorMessage().ifPresent(component -> context.getSender().sendMessage(component));
+                return;
+            }
 
-			if (!method.isAccessible()) {
-				method.setAccessible(true);
-			}
-
-			method.invoke(parent, context);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			throw new ChameleonCommandException("Failed to execute sub-command", ex);
-		}
-	}
+            this.method.setAccessible(true);
+            this.method.invoke(parent, context);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            throw new ChameleonCommandException("Failed to execute sub-command", ex);
+        }
+    }
 
 }

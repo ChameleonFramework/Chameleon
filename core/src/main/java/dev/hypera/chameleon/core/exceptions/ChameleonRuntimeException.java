@@ -23,30 +23,49 @@
 package dev.hypera.chameleon.core.exceptions;
 
 /**
- * Chameleon runtime exception
+ * {@link dev.hypera.chameleon.core.Chameleon} runtime exception.
  */
 public class ChameleonRuntimeException extends RuntimeException {
 
-	private static final long serialVersionUID = -5120195040769782664L;
+    private static final long serialVersionUID = -5120195040769782664L;
 
-	public ChameleonRuntimeException() {
-		super();
-	}
+    /**
+     * {@link ChameleonRuntimeException} constructor.
+     */
+    public ChameleonRuntimeException() {
+        super();
+    }
 
-	public ChameleonRuntimeException(String message) {
-		super(message);
-	}
+    /**
+     * {@link ChameleonRuntimeException} constructor.
+     *
+     * @param message Exception message.
+     */
+    public ChameleonRuntimeException(String message) {
+        super(message);
+    }
 
-	public ChameleonRuntimeException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * {@link ChameleonRuntimeException} constructor.
+     *
+     * @param message Exception message.
+     * @param cause   Exception cause.
+     */
+    public ChameleonRuntimeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public ChameleonRuntimeException(Throwable cause) {
-		super(cause);
-	}
+    /**
+     * {@link ChameleonRuntimeException} constructor.
+     *
+     * @param cause Exception cause.
+     */
+    public ChameleonRuntimeException(Throwable cause) {
+        super(cause);
+    }
 
-	protected ChameleonRuntimeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
+    protected ChameleonRuntimeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 
 }

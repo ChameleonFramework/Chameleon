@@ -46,10 +46,22 @@ import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
 
+/**
+ * BungeeCord plugin main class and 'bungee.yml' description file generator.
+ */
 public class BungeeCordGenerator extends Generator {
 
     private static final @NotNull String DESCRIPTION_FILE = "bungee.yml";
 
+    /**
+     * Generate BungeeCord plugin main class and 'bungee.yml' description file.
+     *
+     * @param data   {@link Plugin} data
+     * @param plugin Chameleon plugin main class
+     * @param env    Processing environment
+     *
+     * @throws Exception if something goes wrong while creating the files.
+     */
     @Override
     public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
         MethodSpec loadSpec = MethodSpec.methodBuilder("onLoad")
@@ -64,29 +76,21 @@ public class BungeeCordGenerator extends Generator {
             .build();
 
         MethodSpec enableSpec = MethodSpec.methodBuilder("onEnable")
-                .addAnnotation(Override.class)
-                .addModifiers(Modifier.PUBLIC)
-                .addStatement("this.$N.onEnable()", "chameleon")
-                .build();
+            .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
+            .addStatement("this.$N.onEnable()", "chameleon").build();
 
         MethodSpec disableSpec = MethodSpec.methodBuilder("onDisable")
-                .addAnnotation(Override.class)
-                .addModifiers(Modifier.PUBLIC)
-                .addStatement("this.$N.onDisable()", "chameleon")
-                .build();
+            .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
+            .addStatement("this.$N.onDisable()", "chameleon").build();
 
         TypeSpec bungeeCordMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "BungeeCord")
-                .addModifiers(Modifier.PUBLIC)
-                .superclass(clazz("net.md_5.bungee.api.plugin", "Plugin"))
-                .addField(FieldSpec.builder(
-                        clazz("dev.hypera.chameleon.platforms.bungeecord", "BungeeCordChameleon"),
-                        "chameleon",
-                        Modifier.PRIVATE
-                ).build())
-                .addMethod(loadSpec)
-                .addMethod(enableSpec)
-                .addMethod(disableSpec)
-                .build();
+            .addModifiers(Modifier.PUBLIC)
+            .superclass(clazz("net.md_5.bungee.api.plugin", "Plugin"))
+            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platforms.bungeecord", "BungeeCordChameleon"), "chameleon", Modifier.PRIVATE).build())
+            .addMethod(loadSpec)
+            .addMethod(enableSpec)
+            .addMethod(disableSpec)
+            .build();
 
         String packageName = ((PackageElement) plugin.getEnclosingElement()).getQualifiedName().toString();
         if (packageName.endsWith("core") || packageName.endsWith("common")) {
@@ -100,21 +104,13 @@ public class BungeeCordGenerator extends Generator {
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))) {
-            new Yaml().dump(
-                    new MapBuilder<String, Object>()
-                            .add("name", data.name().isEmpty() ? data.id() : data.name())
-                            .add("main", packageName + "." + plugin.getSimpleName() + "BungeeCord")
-                            .add("version", data.version())
-                            .add("author", data.authors().length > 0 ? String.join(", ", data.authors()) : "Unknown")
-                            .add("depends", Arrays.stream(data.dependencies())
-                                    .filter(d -> !d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.BUNGEECORD)))
-                                    .map(PlatformDependency::name).collect(Collectors.toList())
-                            ).add("softDepends", Arrays.stream(data.dependencies())
-                                    .filter(d -> d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.BUNGEECORD)))
-                                    .map(PlatformDependency::name).collect(Collectors.toList())
-                            ).add("description", data.description()),
-                    writer
-            );
+            new Yaml().dump(new MapBuilder<String, Object>().add("name", data.name().isEmpty() ? data.id() : data.name())
+                .add("main", packageName + "." + plugin.getSimpleName() + "BungeeCord")
+                .add("version", data.version())
+                .add("author", data.authors().length > 0 ? String.join(", ", data.authors()) : "Unknown")
+                .add("depends", Arrays.stream(data.dependencies()).filter(d -> !d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.BUNGEECORD))).map(PlatformDependency::name).collect(Collectors.toList()))
+                .add("softDepends", Arrays.stream(data.dependencies()).filter(d -> d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.BUNGEECORD))).map(PlatformDependency::name).collect(Collectors.toList()))
+                .add("description", data.description()), writer);
         }
     }
 

@@ -42,91 +42,178 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Chameleon
+ * Chameleon.
  */
 public abstract class Chameleon {
 
-	private static final @NotNull String VERSION = "@version@";
+    private static final @NotNull String VERSION = "@version@";
 
-	private final @NotNull ChameleonLogger logger;
-	private final @NotNull ChameleonLogger internalLogger;
+    private final @NotNull ChameleonLogger logger;
+    private final @NotNull ChameleonLogger internalLogger;
 
-	private final @NotNull ChameleonPlugin plugin;
-	private final @NotNull PluginData pluginData;
-	private final @NotNull EventManager eventMapper = new EventManager(this);
-	private final @NotNull ModuleLoader moduleLoader = new ModuleLoader(this);
+    private final @NotNull ChameleonPlugin plugin;
+    private final @NotNull PluginData pluginData;
+    private final @NotNull EventManager eventMapper = new EventManager(this);
+    private final @NotNull ModuleLoader moduleLoader = new ModuleLoader(this);
 
-	@Internal
-	protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull PluginData pluginData, @NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
-		try {
-			this.logger = logger;
-			this.internalLogger = new InternalChameleonLogger(logger);
+    @Internal
+    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull PluginData pluginData, @NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
+        try {
+            this.logger = logger;
+            this.internalLogger = new InternalChameleonLogger(logger);
 
-			this.plugin = plugin.getConstructor(Chameleon.class).newInstance(this);
-			this.pluginData = pluginData;
+            this.plugin = plugin.getConstructor(Chameleon.class).newInstance(this);
+            this.pluginData = pluginData;
 
-			for (Field field : plugin.getDeclaredFields()) {
-				try {
-					moduleLoader.injectModule(field, this.plugin);
-				} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException ex) {
-					throw new ChameleonModuleInjectionException("Failed to inject module for field '" + field.getName() + "' of '" + this.plugin.getClass().getCanonicalName() + "'");
-				}
-			}
-		} catch (Exception ex) {
-			throw new ChameleonInstantiationException("Failed to initialise instance of " + plugin.getCanonicalName(), ex);
-		}
-	}
-
-
-	public final void onLoad() {
-		plugin.onLoad();
-	}
-
-	public final void onEnable() {
-		plugin.onEnable();
-	}
-
-	public final void onDisable() {
-		plugin.onDisable();
-	}
+            for (Field field : plugin.getDeclaredFields()) {
+                try {
+                    this.moduleLoader.injectModule(field, this.plugin);
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException ex) {
+                    throw new ChameleonModuleInjectionException("Failed to inject module for field '" + field.getName() + "' of '" + this.plugin.getClass().getCanonicalName() + "'");
+                }
+            }
+        } catch (Exception ex) {
+            throw new ChameleonInstantiationException("Failed to initialise instance of " + plugin.getCanonicalName(), ex);
+        }
+    }
 
 
+    /**
+     * Called after Chameleon has been loaded.
+     */
+    public final void onLoad() {
+        this.plugin.onLoad();
+    }
 
-	public final @NotNull ChameleonPlugin getPlugin() {
-		return plugin;
-	}
-	public final @NotNull PluginData getData() {
-		return pluginData;
-	}
+    /**
+     * Called when the platform plugin is enabled.
+     */
+    public final void onEnable() {
+        this.plugin.onEnable();
+    }
 
-	public final @NotNull ChameleonLogger getLogger() {
-		return logger;
-	}
-	public final @Internal @NotNull ChameleonLogger getInternalLogger() {
-		return internalLogger;
-	}
-
-	public @NotNull EventManager getEventManager() {
-		return eventMapper;
-	}
-
-	public @NotNull ModuleLoader getModuleLoader() {
-		return moduleLoader;
-	}
+    /**
+     * Called when the platform plugin is disabled.
+     */
+    public final void onDisable() {
+        this.plugin.onDisable();
+    }
 
 
-	public abstract @NotNull ChameleonAudienceProvider getAdventure();
-	public abstract @NotNull Platform getPlatform();
-	public abstract @NotNull CommandManager getCommandManager();
-	public abstract @NotNull PluginManager getPluginManager();
-	public abstract @NotNull UserManager getUserManager();
-	public abstract @NotNull Scheduler getScheduler();
-	public abstract @NotNull Path getDataFolder();
+    /**
+     * Get {@link ChameleonPlugin} instance.
+     *
+     * @return the stored {@link ChameleonPlugin} instance.
+     */
+    public final @NotNull ChameleonPlugin getPlugin() {
+        return this.plugin;
+    }
+
+    /**
+     * Get {@link PluginData} instance.
+     *
+     * @return the stored {@link PluginData} instance.
+     */
+    public final @NotNull PluginData getData() {
+        return this.pluginData;
+    }
+
+    /**
+     * Get {@link ChameleonLogger} instance.
+     *
+     * @return the stored {@link ChameleonLogger} instance.
+     */
+    public final @NotNull ChameleonLogger getLogger() {
+        return this.logger;
+    }
+
+    /**
+     * Get internal {@link ChameleonLogger} instance.
+     * This is only to be used internally by Chameleon for debugging and error reporting.
+     *
+     * @return the stored internal {@link ChameleonLogger} instance.
+     */
+    @Internal
+    public final @NotNull ChameleonLogger getInternalLogger() {
+        return this.internalLogger;
+    }
+
+    /**
+     * Get {@link EventManager} instance.
+     *
+     * @return the stored {@link EventManager} instance.
+     */
+    public final @NotNull EventManager getEventManager() {
+        return this.eventMapper;
+    }
+
+    /**
+     * Get {@link ModuleLoader} instance.
+     *
+     * @return the stored {@link ModuleLoader} instance.
+     */
+    public final @NotNull ModuleLoader getModuleLoader() {
+        return this.moduleLoader;
+    }
 
 
+    /**
+     * Get Adventure {@link ChameleonAudienceProvider} instance.
+     *
+     * @return Adventure {@link ChameleonAudienceProvider} instance.
+     */
+    public abstract @NotNull ChameleonAudienceProvider getAdventure();
 
-	public static @NotNull String getVersion() {
-		return VERSION;
-	}
+    /**
+     * Get {@link Platform} instance.
+     *
+     * @return {@link Platform} instance.
+     */
+    public abstract @NotNull Platform getPlatform();
+
+    /**
+     * Get {@link CommandManager} instance.
+     *
+     * @return {@link CommandManager} instance.
+     */
+    public abstract @NotNull CommandManager getCommandManager();
+
+    /**
+     * Get {@link PluginManager} instance.
+     *
+     * @return {@link PluginManager} instance.
+     */
+    public abstract @NotNull PluginManager getPluginManager();
+
+    /**
+     * Get {@link UserManager} instance.
+     *
+     * @return {@link UserManager} instance.
+     */
+    public abstract @NotNull UserManager getUserManager();
+
+    /**
+     * Get {@link Scheduler} instance.
+     *
+     * @return {@link Scheduler} instance.
+     */
+    public abstract @NotNull Scheduler getScheduler();
+
+    /**
+     * Get the plugin's data folder.
+     *
+     * @return plugin data folder as a {@link Path}.
+     */
+    public abstract @NotNull Path getDataFolder();
+
+
+    /**
+     * Get the current Chameleon version.
+     *
+     * @return the current {@link Chameleon} version.
+     */
+    public static @NotNull String getVersion() {
+        return VERSION;
+    }
 
 }

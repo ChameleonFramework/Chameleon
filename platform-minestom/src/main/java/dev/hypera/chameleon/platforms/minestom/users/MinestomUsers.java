@@ -25,25 +25,44 @@ package dev.hypera.chameleon.platforms.minestom.users;
 import dev.hypera.chameleon.core.users.ChatUser;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom user utils
+ * Minestom {@link dev.hypera.chameleon.core.users.User} utilities.
  */
+@Internal
 public final class MinestomUsers {
 
-	private static final @NotNull MinestomConsoleUser CONSOLE = new MinestomConsoleUser();
+    private static final @NotNull MinestomConsoleUser CONSOLE = new MinestomConsoleUser();
 
-	public static @NotNull ChatUser wrap(@NotNull CommandSender sender) {
-		if (sender instanceof Player) {
-			return new MinestomUser((Player) sender);
-		} else {
-			return CONSOLE;
-		}
-	}
+    @Internal
+    private MinestomUsers() {
 
-	public static @NotNull ChatUser console() {
-		return CONSOLE;
-	}
+    }
+
+    /**
+     * Wrap provided {@link CommandSender}.
+     *
+     * @param sender {@link CommandSender} to wrap.
+     *
+     * @return {@link ChatUser}.
+     */
+    public static @NotNull ChatUser wrap(@NotNull CommandSender sender) {
+        if (sender instanceof Player) {
+            return new MinestomUser((Player) sender);
+        } else {
+            return CONSOLE;
+        }
+    }
+
+    /**
+     * Get console {@link ChatUser}.
+     *
+     * @return console {@link ChatUser}.
+     */
+    public static @NotNull ChatUser console() {
+        return CONSOLE;
+    }
 
 }

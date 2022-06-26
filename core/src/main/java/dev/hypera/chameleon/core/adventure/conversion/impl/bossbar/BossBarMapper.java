@@ -31,59 +31,62 @@ import net.kyori.adventure.bossbar.BossBar;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform net.kyori.adventure.bossbar.BossBar
+ * Maps shaded to platform {@link BossBar}.
  */
-public class BossBarMapper implements IMapper<BossBar> {
+public final class BossBarMapper implements IMapper<BossBar> {
 
-	private final @NotNull Method CREATE_METHOD;
-	private final @NotNull Method COLOR_VALUE_OF;
-	private final @NotNull Method OVERLAY_VALUE_OF;
-	private final @NotNull Method FLAG_VALUE_OF;
+    private final @NotNull Method createMethod;
+    private final @NotNull Method colorValueOf;
+    private final @NotNull Method overlayValueOf;
+    private final @NotNull Method flagValueOf;
 
-	public BossBarMapper() {
-		try {
-			Class<?> componentLikeClass = Class.forName(AdventureConverter.PACKAGE + "text.ComponentLike");
-			Class<?> bossBarClass = Class.forName(AdventureConverter.PACKAGE + "bossbar.BossBar");
+    /**
+     * {@link BossBarMapper} constructor.
+     */
+    public BossBarMapper() {
+        try {
+            Class<?> componentLikeClass = Class.forName(AdventureConverter.PACKAGE + "text.ComponentLike");
+            Class<?> bossBarClass = Class.forName(AdventureConverter.PACKAGE + "bossbar.BossBar");
 
-			Class<?> colorEnum = Class.forName(bossBarClass.getCanonicalName() + "$Color");
-			Class<?> overlayEnum = Class.forName(bossBarClass.getCanonicalName() + "$Overlay");
-			Class<?> flagEnum = Class.forName(bossBarClass.getCanonicalName() + "$Flag");
+            Class<?> colorEnum = Class.forName(bossBarClass.getCanonicalName() + "$Color");
+            Class<?> overlayEnum = Class.forName(bossBarClass.getCanonicalName() + "$Overlay");
+            Class<?> flagEnum = Class.forName(bossBarClass.getCanonicalName() + "$Flag");
 
-			CREATE_METHOD = bossBarClass.getMethod("bossBar", componentLikeClass, float.class, colorEnum, overlayEnum, Set.class);
-			COLOR_VALUE_OF = colorEnum.getMethod("valueOf", String.class);
-			OVERLAY_VALUE_OF = overlayEnum.getMethod("valueOf", String.class);
-			FLAG_VALUE_OF = flagEnum.getMethod("valueOf", String.class);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
+            this.createMethod = bossBarClass.getMethod("bossBar", componentLikeClass, float.class, colorEnum, overlayEnum, Set.class);
+            this.colorValueOf = colorEnum.getMethod("valueOf", String.class);
+            this.overlayValueOf = overlayEnum.getMethod("valueOf", String.class);
+            this.flagValueOf = flagEnum.getMethod("valueOf", String.class);
+        } catch (ReflectiveOperationException ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
 
-	/**
-	 * Map BossBar to the platform version of Adventure
-	 *
-	 * @param bossBar BossBar to be mapped
-	 * @return Platform BossBar
-	 */
-	@Override
-	public @NotNull Object map(@NotNull BossBar bossBar) {
-		try {
-			return CREATE_METHOD.invoke(
-					null,
-					AdventureConverter.convertComponent(bossBar.name()),
-					bossBar.progress(),
-					COLOR_VALUE_OF.invoke(null, bossBar.color().name()),
-					OVERLAY_VALUE_OF.invoke(null, bossBar.overlay().name()),
-					bossBar.flags().stream().map(f -> {
-						try {
-							return FLAG_VALUE_OF.invoke(null, f.name());
-						} catch (ReflectiveOperationException ex) {
-							throw new RuntimeException(ex);
-						}
-					}).collect(Collectors.toSet())
-			);
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * Map {@link BossBar} to the platform version of Adventure.
+     *
+     * @param bossBar {@link BossBar} to be mapped.
+     *
+     * @return Platform instance of {@link BossBar}.
+     */
+    @Override
+    public @NotNull Object map(@NotNull BossBar bossBar) {
+        try {
+            return this.createMethod.invoke(null,
+                AdventureConverter.convertComponent(bossBar.name()),
+                bossBar.progress(),
+                this.colorValueOf.invoke(null, bossBar.color().name()),
+                this.overlayValueOf.invoke(null, bossBar.overlay().name()),
+                bossBar.flags().stream().map(f -> {
+                    try {
+                        return this.flagValueOf.invoke(null, f.name());
+                    } catch (ReflectiveOperationException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }).collect(Collectors.toSet())
+            );
+        } catch (ReflectiveOperationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
 }

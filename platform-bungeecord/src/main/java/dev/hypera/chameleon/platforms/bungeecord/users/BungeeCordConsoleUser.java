@@ -26,26 +26,40 @@ import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.adventure.AbstractAudience;
 import dev.hypera.chameleon.core.users.ChatUser;
 import net.md_5.bungee.api.ProxyServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord console user
+ * BungeeCord console {@link ChatUser} implementation.
  */
+@Internal
 public class BungeeCordConsoleUser extends AbstractAudience implements ChatUser {
 
-	public BungeeCordConsoleUser(@NotNull Chameleon chameleon) {
-		super(chameleon.getAdventure().console());
-	}
+    /**
+     * {@link BungeeCordConsoleUser} implementation.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    @Internal
+    public BungeeCordConsoleUser(@NotNull Chameleon chameleon) {
+        super(chameleon.getAdventure().console());
+    }
 
 
-	@Override
-	public @NotNull String getName() {
-		return ProxyServer.getInstance().getConsole().getName();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return ProxyServer.getInstance().getConsole().getName();
+    }
 
-	@Override
-	public boolean hasPermission(@NotNull String permission) {
-		return true;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return true;
+    }
 
 }

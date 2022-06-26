@@ -27,33 +27,41 @@ import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.managers.CommandManager;
 import dev.hypera.chameleon.platforms.minestom.command.MinestomCommand;
 import net.minestom.server.MinecraftServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom command manager
+ * Minestom {@link CommandManager} implementation.
  */
+@Internal
 public final class MinestomCommandManager extends CommandManager {
 
-	private final @NotNull Chameleon chameleon;
+    private final @NotNull Chameleon chameleon;
 
-	public MinestomCommandManager(@NotNull Chameleon chameleon) {
-		super(chameleon);
-		this.chameleon = chameleon;
-	}
+    /**
+     * {@link MinestomCommandManager} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    @Internal
+    public MinestomCommandManager(@NotNull Chameleon chameleon) {
+        super(chameleon);
+        this.chameleon = chameleon;
+    }
 
-	@Override
-	protected void registerCommand(@NotNull Command command) {
-		MinecraftServer.getCommandManager().register(new MinestomCommand(chameleon, command));
-	}
+    @Override
+    protected void registerCommand(@NotNull Command command) {
+        MinecraftServer.getCommandManager().register(new MinestomCommand(this.chameleon, command));
+    }
 
-	@Override
-	protected void unregisterCommand(@NotNull Command command) {
-		net.minestom.server.command.builder.Command minestomCommand = MinecraftServer.getCommandManager().getCommand(command.getName());
-		if (null != minestomCommand) {
-			MinecraftServer.getCommandManager().unregister(minestomCommand);
-		} else {
-			throw new IllegalArgumentException("Cannot find command with name '" + command.getName() + "'");
-		}
-	}
+    @Override
+    protected void unregisterCommand(@NotNull Command command) {
+        net.minestom.server.command.builder.Command minestomCommand = MinecraftServer.getCommandManager().getCommand(command.getName());
+        if (null != minestomCommand) {
+            MinecraftServer.getCommandManager().unregister(minestomCommand);
+        } else {
+            throw new IllegalArgumentException("Cannot find command with name '" + command.getName() + "'");
+        }
+    }
 
 }

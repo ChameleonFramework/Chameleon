@@ -25,14 +25,14 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation("com.squareup:javapoet:1.13.0")
+    implementation(project(":chameleon-core"))
+    implementation(libs.javapoet)
 
-    implementation("org.yaml:snakeyaml:1.30") {
+    implementation(libs.yaml) {
         exclude(group = "joda-time", module = "joda-time")
         exclude(group = "junit", module = "joda-time")
         exclude(group = "org.apache", module = "velocity")
     }
 
-    implementation("com.google.code.gson:gson:2.9.0")
+    implementation(libs.gson)
 }

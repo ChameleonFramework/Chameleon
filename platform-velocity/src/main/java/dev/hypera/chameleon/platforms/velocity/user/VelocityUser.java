@@ -29,71 +29,107 @@ import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.platform.objects.VelocityServer;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity user
+ * Velocity {@link ProxyUser} implementation.
  */
+@Internal
 public class VelocityUser extends AbstractReflectedAudience implements ProxyUser {
 
-	private final @NotNull VelocityChameleon chameleon;
-	private final @NotNull Player player;
+    private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull Player player;
 
-	public VelocityUser(@NotNull VelocityChameleon chameleon, @NotNull Player player) {
-		super(player);
-		this.chameleon = chameleon;
-		this.player = player;
-	}
+    /**
+     * {@link VelocityUser} constructor.
+     *
+     * @param chameleon {@link VelocityChameleon} instance.
+     * @param player    {@link Player} to be wrapped.
+     */
+    @Internal
+    public VelocityUser(@NotNull VelocityChameleon chameleon, @NotNull Player player) {
+        super(player);
+        this.chameleon = chameleon;
+        this.player = player;
+    }
 
-	@Override
-	public @NotNull String getName() {
-		return player.getUsername();
-	}
 
-	@Override
-	public @NotNull UUID getUniqueId() {
-		return player.getUniqueId();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return this.player.getUsername();
+    }
 
-	@Override
-	public int getPing() {
-		return player.getPing() > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) player.getPing();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull UUID getUniqueId() {
+        return this.player.getUniqueId();
+    }
 
-	@Override
-	public void chat(@NotNull String message) {
-		player.spoofChatInput(message);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getPing() {
+        return this.player.getPing() > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) this.player.getPing();
+    }
 
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		player.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void chat(@NotNull String message) {
+        this.player.spoofChatInput(message);
+    }
 
-	@Override
-	public boolean hasPermission(@NotNull String permission) {
-		return player.hasPermission(permission);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendData(@NotNull String channel, byte[] data) {
+        this.player.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
+    }
 
-	@Override
-	public @NotNull Optional<Server> getServer() {
-		return player.getCurrentServer().map(s -> new VelocityServer(chameleon, s.getServer()));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return this.player.hasPermission(permission);
+    }
 
-	@Override
-	public void connect(@NotNull Server server) {
-		player.createConnectionRequest(((VelocityServer) server).getVelocity()).fireAndForget();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Optional<Server> getServer() {
+        return this.player.getCurrentServer().map(s -> new VelocityServer(this.chameleon, s.getServer()));
+    }
 
-	@Override
-	public void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback) {
-		player.createConnectionRequest(((VelocityServer) server).getVelocity()).connect().whenComplete((result, ex) -> {
-			callback.accept(result.isSuccessful(), ex);
-		});
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void connect(@NotNull Server server) {
+        this.player.createConnectionRequest(((VelocityServer) server).getVelocity()).fireAndForget();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback) {
+        this.player.createConnectionRequest(((VelocityServer) server).getVelocity()).connect().whenComplete((result, ex) -> {
+            callback.accept(result.isSuccessful(), ex);
+        });
+    }
 
 }

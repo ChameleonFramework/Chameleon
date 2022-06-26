@@ -40,160 +40,255 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractAudience implements Audience {
 
-	private final @NotNull Audience audience;
+    private final @NotNull Audience audience;
 
-	public AbstractAudience(@NotNull Audience audience) {
-		this.audience = audience;
-	}
+    /**
+     * {@link AbstractAudience} constructor.
+     *
+     * @param audience Adventure {@link Audience}.
+     */
+    public AbstractAudience(@NotNull Audience audience) {
+        this.audience = audience;
+    }
 
-	@Override
-	public void sendMessage(@NotNull ComponentLike message) {
-		audience.sendMessage(message);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull ComponentLike message) {
+        this.audience.sendMessage(message);
+    }
 
-	@Override
-	public void sendMessage(@NotNull Identified source, @NotNull ComponentLike message) {
-		audience.sendMessage(source, message);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull Identified source, @NotNull ComponentLike message) {
+        this.audience.sendMessage(source, message);
+    }
 
-	@Override
-	public void sendMessage(@NotNull Identity source, @NotNull ComponentLike message) {
-		audience.sendMessage(source, message);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull Identity source, @NotNull ComponentLike message) {
+        this.audience.sendMessage(source, message);
+    }
 
-	@Override
-	public void sendMessage(@NotNull Component message) {
-		audience.sendMessage(message);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull Component message) {
+        this.audience.sendMessage(message);
+    }
 
-	@Override
-	public void sendMessage(@NotNull Identified source, @NotNull Component message) {
-		audience.sendMessage(source, message);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull Identified source, @NotNull Component message) {
+        this.audience.sendMessage(source, message);
+    }
 
-	@Override
-	public void sendMessage(@NotNull Identity source, @NotNull Component message) {
-		audience.sendMessage(source, message);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull Identity source, @NotNull Component message) {
+        this.audience.sendMessage(source, message);
+    }
 
-	@Override
-	public void sendMessage(@NotNull ComponentLike message, @NotNull MessageType type) {
-		audience.sendMessage(message, type);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull ComponentLike message, @NotNull MessageType type) {
+        this.audience.sendMessage(message, type);
+    }
 
-	@Override
-	public void sendMessage(@NotNull Identified source, @NotNull ComponentLike message, @NotNull MessageType type) {
-		audience.sendMessage(source, message, type);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull Identified source, @NotNull ComponentLike message, @NotNull MessageType type) {
+        this.audience.sendMessage(source, message, type);
+    }
 
-	@Override
-	public void sendMessage(@NotNull Identity source, @NotNull ComponentLike message, @NotNull MessageType type) {
-		audience.sendMessage(source, message, type);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull Identity source, @NotNull ComponentLike message, @NotNull MessageType type) {
+        this.audience.sendMessage(source, message, type);
+    }
 
-	@Override
-	public void sendMessage(@NotNull Component message, @NotNull MessageType type) {
-		audience.sendMessage(message, type);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull Component message, @NotNull MessageType type) {
+        this.audience.sendMessage(message, type);
+    }
 
-	@Override
-	public void sendMessage(@NotNull Identified source, @NotNull Component message, @NotNull MessageType type) {
-		audience.sendMessage(source, message, type);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull Identified source, @NotNull Component message, @NotNull MessageType type) {
+        this.audience.sendMessage(source, message, type);
+    }
 
-	@Override
-	public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-		audience.sendMessage(source, message, type);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
+        this.audience.sendMessage(source, message, type);
+    }
 
-	@Override
-	public void sendActionBar(@NotNull ComponentLike message) {
-		audience.sendActionBar(message);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendActionBar(@NotNull ComponentLike message) {
+        this.audience.sendActionBar(message);
+    }
 
-	@Override
-	public void sendActionBar(@NotNull Component message) {
-		audience.sendActionBar(message);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendActionBar(@NotNull Component message) {
+        this.audience.sendActionBar(message);
+    }
 
-	@Override
-	public void sendPlayerListHeader(@NotNull ComponentLike header) {
-		audience.sendPlayerListHeader(header);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendPlayerListHeader(@NotNull ComponentLike header) {
+        this.audience.sendPlayerListHeader(header);
+    }
 
-	@Override
-	public void sendPlayerListHeader(@NotNull Component header) {
-		audience.sendPlayerListHeader(header);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendPlayerListHeader(@NotNull Component header) {
+        this.audience.sendPlayerListHeader(header);
+    }
 
-	@Override
-	public void sendPlayerListFooter(@NotNull ComponentLike footer) {
-		audience.sendPlayerListFooter(footer);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendPlayerListFooter(@NotNull ComponentLike footer) {
+        this.audience.sendPlayerListFooter(footer);
+    }
 
-	@Override
-	public void sendPlayerListFooter(@NotNull Component footer) {
-		audience.sendPlayerListFooter(footer);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendPlayerListFooter(@NotNull Component footer) {
+        this.audience.sendPlayerListFooter(footer);
+    }
 
-	@Override
-	public void sendPlayerListHeaderAndFooter(@NotNull ComponentLike header, @NotNull ComponentLike footer) {
-		audience.sendPlayerListHeaderAndFooter(header, footer);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendPlayerListHeaderAndFooter(@NotNull ComponentLike header, @NotNull ComponentLike footer) {
+        this.audience.sendPlayerListHeaderAndFooter(header, footer);
+    }
 
-	@Override
-	public void sendPlayerListHeaderAndFooter(@NotNull Component header, @NotNull Component footer) {
-		audience.sendPlayerListHeaderAndFooter(header, footer);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendPlayerListHeaderAndFooter(@NotNull Component header, @NotNull Component footer) {
+        this.audience.sendPlayerListHeaderAndFooter(header, footer);
+    }
 
-	@Override
-	public void showTitle(@NotNull Title title) {
-		audience.showTitle(title);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void showTitle(@NotNull Title title) {
+        this.audience.showTitle(title);
+    }
 
-	@Override
-	public void clearTitle() {
-		audience.clearTitle();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clearTitle() {
+        this.audience.clearTitle();
+    }
 
-	@Override
-	public void resetTitle() {
-		audience.resetTitle();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void resetTitle() {
+        this.audience.resetTitle();
+    }
 
-	@Override
-	public void showBossBar(@NotNull BossBar bar) {
-		audience.showBossBar(bar);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void showBossBar(@NotNull BossBar bar) {
+        this.audience.showBossBar(bar);
+    }
 
-	@Override
-	public void hideBossBar(@NotNull BossBar bar) {
-		audience.hideBossBar(bar);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hideBossBar(@NotNull BossBar bar) {
+        this.audience.hideBossBar(bar);
+    }
 
-	@Override
-	public void playSound(@NotNull Sound sound) {
-		audience.playSound(sound);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void playSound(@NotNull Sound sound) {
+        this.audience.playSound(sound);
+    }
 
-	@Override
-	public void playSound(@NotNull Sound sound, double x, double y, double z) {
-		audience.playSound(sound, x, y, z);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void playSound(@NotNull Sound sound, double x, double y, double z) {
+        this.audience.playSound(sound, x, y, z);
+    }
 
-	@Override
-	public void stopSound(@NotNull SoundStop stop) {
-		audience.stopSound(stop);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void stopSound(@NotNull SoundStop stop) {
+        this.audience.stopSound(stop);
+    }
 
-	@Override
-	public void openBook(Book.@NotNull Builder book) {
-		audience.openBook(book);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void openBook(Book.@NotNull Builder book) {
+        this.audience.openBook(book);
+    }
 
-	@Override
-	public void openBook(@NotNull Book book) {
-		audience.openBook(book);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void openBook(@NotNull Book book) {
+        this.audience.openBook(book);
+    }
 
 }

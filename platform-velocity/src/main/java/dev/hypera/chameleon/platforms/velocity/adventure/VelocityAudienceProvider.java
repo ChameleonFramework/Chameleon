@@ -22,6 +22,7 @@
  */
 package dev.hypera.chameleon.platforms.velocity.adventure;
 
+import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
@@ -29,74 +30,111 @@ import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityConsoleUser;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUsers;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.flattener.ComponentFlattener;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.flattener.ComponentFlattener;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity audience provider implementation
+ * Velocity {@link ChameleonAudienceProvider} implementation.
  */
+@Internal
 public class VelocityAudienceProvider implements ChameleonAudienceProvider {
 
-	private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull VelocityChameleon chameleon;
 
-	public VelocityAudienceProvider(@NotNull VelocityChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+    /**
+     * {@link VelocityAudienceProvider} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    @Internal
+    public VelocityAudienceProvider(@NotNull VelocityChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
-	@Override
-	public @NotNull Audience all() {
-		return Audience.audience(players(), console());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience all() {
+        return Audience.audience(players(), console());
+    }
 
-	@Override
-	public @NotNull Audience console() {
-		return new VelocityConsoleUser(chameleon);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience console() {
+        return new VelocityConsoleUser(this.chameleon);
+    }
 
-	@Override
-	public @NotNull Audience players() {
-		return Audience.audience(chameleon.getVelocityPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(chameleon, p)).collect(Collectors.toSet()));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience players() {
+        return Audience.audience(this.chameleon.getVelocityPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(this.chameleon, p)).collect(Collectors.toSet()));
+    }
 
-	@Override
-	public @NotNull Audience player(@NotNull UUID playerId) {
-		return VelocityUsers.wrap(chameleon, chameleon.getVelocityPlugin().getServer().getPlayer(playerId).orElseThrow(() -> new IllegalArgumentException("Cannot find player with id '" + playerId + "'")));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience player(@NotNull UUID playerId) {
+        return VelocityUsers.wrap(this.chameleon, this.chameleon.getVelocityPlugin().getServer().getPlayer(playerId).orElseThrow(() -> new IllegalArgumentException("Cannot find player with id '" + playerId + "'")));
+    }
 
-	@Override
-	public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
-		return all().filterAudience(f -> filter.test((ChatUser) f));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
+        return all().filterAudience(f -> filter.test((ChatUser) f));
+    }
 
-	@Override
-	public @NotNull Audience permission(@NotNull String permission) {
-		return filter(p -> p.hasPermission(permission));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience permission(@NotNull String permission) {
+        return filter(p -> p.hasPermission(permission));
+    }
 
-	@Override
-	public @NotNull Audience world(@NotNull Key world) {
-		return all();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience world(@NotNull Key world) {
+        return all();
+    }
 
-	@Override
-	public @NotNull Audience server(@NotNull String serverName) {
-		return filter(p -> p instanceof ProxyUser && ((ProxyUser) p).getServer().isPresent() && ((ProxyUser) p).getServer().get().getName().equals(serverName));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience server(@NotNull String serverName) {
+        return filter(p -> p instanceof ProxyUser && ((ProxyUser) p).getServer().isPresent() && ((ProxyUser) p).getServer().get().getName().equals(serverName));
+    }
 
-	@Override
-	public @NotNull ComponentFlattener flattener() {
-		return ComponentFlattener.basic();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ComponentFlattener flattener() {
+        return ComponentFlattener.basic();
+    }
 
-	@Override
-	public void close() {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() {
 
-	}
+    }
 
 }

@@ -23,79 +23,116 @@
 package dev.hypera.chameleon.platforms.bungeecord.platform.objects;
 
 import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.core.utils.BasicUtil;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-
+import dev.hypera.chameleon.core.utils.ChameleonUtil;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord plugin implementation
+ * BungeeCord {@link PlatformPlugin} implementation.
  */
+@Internal
 public class BungeeCordPlugin implements PlatformPlugin {
 
-	private final @NotNull Plugin plugin;
+    private final @NotNull Plugin plugin;
 
-	public BungeeCordPlugin(@NotNull Plugin plugin) {
-		this.plugin = plugin;
-	}
+    /**
+     * {@link BungeeCordPlugin} constructor.
+     *
+     * @param plugin {@link Plugin} instance.
+     */
+    @Internal
+    public BungeeCordPlugin(@NotNull Plugin plugin) {
+        this.plugin = plugin;
+    }
 
 
-	@Override
-	public @NotNull String getName() {
-		return BasicUtil.getOrDefault(plugin.getDescription().getName(), "unknown");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return ChameleonUtil.getOrDefault(this.plugin.getDescription().getName(), "unknown");
+    }
 
-	@Override
-	public @NotNull String getVersion() {
-		return BasicUtil.getOrDefault(plugin.getDescription().getVersion(), "unknown");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return ChameleonUtil.getOrDefault(this.plugin.getDescription().getVersion(), "unknown");
+    }
 
-	@Override
-	public @NotNull Optional<String> getDescription() {
-		return Optional.ofNullable(plugin.getDescription().getDescription());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Optional<String> getDescription() {
+        return Optional.ofNullable(this.plugin.getDescription().getDescription());
+    }
 
-	@Override
-	public @NotNull Class<?> getMainClass() {
-		return plugin.getClass();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Class<?> getMainClass() {
+        return this.plugin.getClass();
+    }
 
-	@Override
-	public @NotNull List<String> getAuthors() {
-		return null == plugin.getDescription().getAuthor() ? Collections.emptyList() : Collections.singletonList(plugin.getDescription().getAuthor());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull List<String> getAuthors() {
+        return null == this.plugin.getDescription().getAuthor() ? Collections.emptyList() : Collections.singletonList(this.plugin.getDescription().getAuthor());
+    }
 
-	@Override
-	public @NotNull Set<String> getDependencies() {
-		return plugin.getDescription().getDepends();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<String> getDependencies() {
+        return this.plugin.getDescription().getDepends();
+    }
 
-	@Override
-	public @NotNull Set<String> getSoftDependencies() {
-		return plugin.getDescription().getSoftDepends();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<String> getSoftDependencies() {
+        return this.plugin.getDescription().getSoftDepends();
+    }
 
-	@Override
-	public @NotNull Path getDataFolder() {
-		return plugin.getDataFolder().toPath().toAbsolutePath();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Path getDataFolder() {
+        return this.plugin.getDataFolder().toPath().toAbsolutePath();
+    }
 
-	@Override
-	public void enable() {
-		throw new UnsupportedOperationException("Cannot enable plugins on BungeeCord");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void enable() {
+        throw new UnsupportedOperationException("Cannot enable plugins on BungeeCord");
+    }
 
-	@Override
-	public void disable() {
-		ProxyServer.getInstance().getPluginManager().unregisterCommands(plugin);
-		ProxyServer.getInstance().getPluginManager().unregisterListeners(plugin);
-		plugin.onDisable();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void disable() {
+        ProxyServer.getInstance().getPluginManager().unregisterCommands(this.plugin);
+        ProxyServer.getInstance().getPluginManager().unregisterListeners(this.plugin);
+        this.plugin.onDisable();
+    }
 
 }

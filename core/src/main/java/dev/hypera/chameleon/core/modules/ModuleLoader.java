@@ -29,43 +29,52 @@ import java.lang.reflect.Field;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * {@link AbstractModule} loader.
+ */
 public class ModuleLoader {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull PlatformModuleLoader platformModuleLoader;
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull PlatformModuleLoader platformModuleLoader;
 
-	@Internal
-	public ModuleLoader(@NotNull Chameleon chameleon) {
-		this.chameleon = chameleon;
-		this.platformModuleLoader = new PlatformModuleLoader(chameleon);
-	}
+    /**
+     * {@link ModuleLoader} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    @Internal
+    public ModuleLoader(@NotNull Chameleon chameleon) {
+        this.chameleon = chameleon;
+        this.platformModuleLoader = new PlatformModuleLoader(chameleon);
+    }
 
-	/**
-	 * Attempt to inject a module into a field
-	 *
-	 * @param field Field to attempt injection on
-	 * @param obj   Object to attempt injection on
-	 * @throws ReflectiveOperationException if something goes wrong during the injection
-	 */
-	public void injectModule(@NotNull Field field, @NotNull Object obj) throws ReflectiveOperationException {
-		if (field.isAnnotationPresent(Module.class) && AbstractModule.class.isAssignableFrom(field.getType())) {
-			field.setAccessible(true);
-			if (null == field.get(obj)) {
-				field.set(obj, loadModule(field.getType().asSubclass(AbstractModule.class)));
-			}
-		}
-	}
+    /**
+     * Attempt to inject an {@link AbstractModule} into a field.
+     *
+     * @param field Field to attempt injection on.
+     * @param obj   Object to attempt injection on.
+     *
+     * @throws ReflectiveOperationException if something goes wrong during the injection.
+     */
+    public void injectModule(@NotNull Field field, @NotNull Object obj) throws ReflectiveOperationException {
+        if (field.isAnnotationPresent(Module.class) && AbstractModule.class.isAssignableFrom(field.getType())) {
+            field.setAccessible(true);
+            if (null == field.get(obj)) {
+                field.set(obj, loadModule(field.getType().asSubclass(AbstractModule.class)));
+            }
+        }
+    }
 
-	/**
-	 * Load a module
-	 *
-	 * @param clazz Module type
-	 * @return Loaded module
-	 * @throws ReflectiveOperationException if something goes wrong while loading the module
-	 */
-	private @NotNull AbstractModule loadModule(@NotNull Class<? extends AbstractModule> clazz) throws ReflectiveOperationException {
-		return clazz.getConstructor(Chameleon.class, PlatformModuleLoader.class)
-				.newInstance(chameleon, platformModuleLoader);
-	}
+    /**
+     * Load an {@link AbstractModule}.
+     *
+     * @param clazz {@link AbstractModule} type.
+     *
+     * @return Loaded {@link AbstractModule}.
+     * @throws ReflectiveOperationException if something goes wrong while loading the module.
+     */
+    private @NotNull AbstractModule loadModule(@NotNull Class<? extends AbstractModule> clazz) throws ReflectiveOperationException {
+        return clazz.getConstructor(Chameleon.class, PlatformModuleLoader.class).newInstance(this.chameleon, this.platformModuleLoader);
+    }
 
 }

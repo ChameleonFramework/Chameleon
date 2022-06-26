@@ -33,67 +33,99 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom audience provider implementation
+ * Minestom {@link ChameleonAudienceProvider} implementation.
  */
+@Internal
 public class MinestomAudienceProvider implements ChameleonAudienceProvider {
 
-	@Override
-	public @NotNull Audience all() {
-		return Audience.audience(players(), console());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience all() {
+        return Audience.audience(players(), console());
+    }
 
-	@Override
-	public @NotNull Audience console() {
-		return MinestomUsers.console();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience console() {
+        return MinestomUsers.console();
+    }
 
-	@Override
-	public @NotNull Audience players() {
-		return Audience.audience(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().map(MinestomUsers::wrap).collect(Collectors.toSet()));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience players() {
+        return Audience.audience(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().map(MinestomUsers::wrap).collect(Collectors.toSet()));
+    }
 
-	@Override
-	public @NotNull Audience player(@NotNull UUID playerId) {
-		Player player = MinecraftServer.getConnectionManager().getPlayer(playerId);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience player(@NotNull UUID playerId) {
+        Player player = MinecraftServer.getConnectionManager().getPlayer(playerId);
 
-		if (null != player) {
-			return MinestomUsers.wrap(player);
-		} else {
-			throw new IllegalArgumentException("Cannot find player with id '" + playerId + "'");
-		}
-	}
+        if (null != player) {
+            return MinestomUsers.wrap(player);
+        } else {
+            throw new IllegalArgumentException("Cannot find player with id '" + playerId + "'");
+        }
+    }
 
-	@Override
-	public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
-		return all().filterAudience(f -> filter.test((ChatUser) f));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
+        return all().filterAudience(f -> filter.test((ChatUser) f));
+    }
 
-	@Override
-	public @NotNull Audience permission(@NotNull String permission) {
-		return filter(p -> p.hasPermission(permission));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience permission(@NotNull String permission) {
+        return filter(p -> p.hasPermission(permission));
+    }
 
-	@Override
-	public @NotNull Audience world(@NotNull Key world) {
-		return all();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience world(@NotNull Key world) {
+        return all();
+    }
 
-	@Override
-	public @NotNull Audience server(@NotNull String serverName) {
-		return all();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Audience server(@NotNull String serverName) {
+        return all();
+    }
 
-	@Override
-	public @NotNull ComponentFlattener flattener() {
-		return ComponentFlattener.basic();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ComponentFlattener flattener() {
+        return ComponentFlattener.basic();
+    }
 
-	@Override
-	public void close() {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() {
 
-	}
+    }
 
 }

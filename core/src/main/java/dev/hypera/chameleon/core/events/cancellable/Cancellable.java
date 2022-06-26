@@ -23,11 +23,36 @@
 package dev.hypera.chameleon.core.events.cancellable;
 
 /**
- * Cancellable
+ * Cancellable.
  */
 public interface Cancellable {
 
-	void setCancelled(boolean cancelled);
-	boolean isCancelled();
+    /**
+     * Cancel the event.
+     */
+    default void cancel() {
+        setCancelled(true);
+    }
+
+    /**
+     * Uncancel the event.
+     */
+    default void uncancel() {
+        setCancelled(false);
+    }
+
+    /**
+     * Set cancelled.
+     *
+     * @param cancelled {@code true} if the event is cancelled, otherwise {@code false}.
+     */
+    void setCancelled(boolean cancelled);
+
+    /**
+     * Whether this event is cancelled.
+     *
+     * @return {@code true} if the event is cancelled, otherwise {@code false}.
+     */
+    boolean isCancelled();
 
 }

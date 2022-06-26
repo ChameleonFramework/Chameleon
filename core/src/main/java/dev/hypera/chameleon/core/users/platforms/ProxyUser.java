@@ -26,20 +26,38 @@ import dev.hypera.chameleon.core.annotations.PlatformSpecific;
 import dev.hypera.chameleon.core.platform.Platform.Type;
 import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.core.users.User;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * In-game player on a proxy
+ * In-game {@link User} on a {@link dev.hypera.chameleon.core.platform.proxy.ProxyPlatform}.
+ *
+ * @see dev.hypera.chameleon.core.platform.proxy.ProxyPlatform
  */
 @PlatformSpecific(Type.PROXY)
 public interface ProxyUser extends User {
 
-	@NotNull Optional<Server> getServer();
+    /**
+     * Get the {@link Server} this user is currently on.
+     *
+     * @return optionally the {@link Server} this user is currently on, if available, otherwise empty.
+     */
+    @NotNull Optional<Server> getServer();
 
-	void connect(@NotNull Server server);
-	void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback);
+    /**
+     * Attempt to switch this user to the given {@link Server}.
+     *
+     * @param server {@link Server} to switch this user to.
+     */
+    void connect(@NotNull Server server);
+
+    /**
+     * Attempt to switch this user to the given {@link Server} and then run the given callback.
+     *
+     * @param server   {@link Server} to switch this user to.
+     * @param callback Callback to run afterwards.
+     */
+    void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback);
 
 }

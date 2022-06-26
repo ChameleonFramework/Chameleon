@@ -30,12 +30,17 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Marks a method or class as only working on a particular platform type
+ * Marks a method or class as only working on a particular {@link Platform.Type}.
  */
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PlatformSpecific {
 
-	@NotNull Platform.Type value();
+    /**
+     * Get {@link Platform.Type}.
+     *
+     * @return the {@link Platform.Type} this method or class works on.
+     */
+    @NotNull Platform.Type value();
 
 }

@@ -25,30 +25,49 @@ package dev.hypera.chameleon.core.exceptions.modules;
 import dev.hypera.chameleon.core.exceptions.ChameleonException;
 
 /**
- * Chameleon module injection exception
+ * {@link dev.hypera.chameleon.core.Chameleon} module injection exception.
  */
 public class ChameleonModuleInjectionException extends ChameleonException {
 
-	private static final long serialVersionUID = -7069863802076540971L;
+    private static final long serialVersionUID = -7069863802076540971L;
 
-	public ChameleonModuleInjectionException() {
-		super();
-	}
+    /**
+     * {@link ChameleonModuleInjectionException} constructor.
+     */
+    public ChameleonModuleInjectionException() {
+        super();
+    }
 
-	public ChameleonModuleInjectionException(String message) {
-		super(message);
-	}
+    /**
+     * {@link ChameleonModuleInjectionException} constructor.
+     *
+     * @param message Exception message.
+     */
+    public ChameleonModuleInjectionException(String message) {
+        super(message);
+    }
 
-	public ChameleonModuleInjectionException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * {@link ChameleonModuleInjectionException} constructor.
+     *
+     * @param message Exception message.
+     * @param cause   Exception cause.
+     */
+    public ChameleonModuleInjectionException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public ChameleonModuleInjectionException(Throwable cause) {
-		super(cause);
-	}
+    /**
+     * {@link ChameleonModuleInjectionException} constructor.
+     *
+     * @param cause Exception cause.
+     */
+    public ChameleonModuleInjectionException(Throwable cause) {
+        super(cause);
+    }
 
-	public ChameleonModuleInjectionException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
+    protected ChameleonModuleInjectionException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 
 }

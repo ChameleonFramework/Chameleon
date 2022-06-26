@@ -17,9 +17,10 @@ Provide example code that caused the bug.
 If applicable, add screenshots to help explain your problem.
 
 **Environment information (please complete the following information):**
- - OS: [e.g. Windows]
- - Server (if applicable): [e.g. Spigot, Velocity]
- - Version: [e.g. 0.1.0]
+
+- OS: [e.g. Windows]
+- Server (if applicable): [e.g. Spigot, Velocity]
+- Version: [e.g. 0.1.0]
 
 **Additional context**
 Add any other context about the problem here.

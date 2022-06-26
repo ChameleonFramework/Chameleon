@@ -26,19 +26,33 @@ import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.users.ChatUser;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord user utils
+ * BungeeCord {@link dev.hypera.chameleon.core.users.User} utilities.
  */
+@Internal
 public final class BungeeCordUsers {
 
-	public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSender sender) {
-		if (sender instanceof ProxiedPlayer) {
-			return new BungeeCordUser(chameleon, (ProxiedPlayer) sender);
-		} else {
-			return new BungeeCordConsoleUser(chameleon);
-		}
-	}
+    private BungeeCordUsers() {
+
+    }
+
+    /**
+     * Wrap provided {@link CommandSender}.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     * @param sender    {@link CommandSender} to wrap.
+     *
+     * @return {@link ChatUser}.
+     */
+    public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSender sender) {
+        if (sender instanceof ProxiedPlayer) {
+            return new BungeeCordUser(chameleon, (ProxiedPlayer) sender);
+        } else {
+            return new BungeeCordConsoleUser(chameleon);
+        }
+    }
 
 }

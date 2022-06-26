@@ -29,12 +29,23 @@ import dev.hypera.chameleon.core.users.User;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * In-game player on a server
+ * In-game {@link User} on a {@link dev.hypera.chameleon.core.platform.server.ServerPlatform}.
  */
 @PlatformSpecific(Type.SERVER)
 public interface ServerUser extends User {
 
-	@NotNull GameMode getGameMode();
-	void setGameMode(@NotNull GameMode gameMode);
+    /**
+     * Get the current {@link GameMode} of this user.
+     *
+     * @return current {@link GameMode}.
+     */
+    @NotNull GameMode getGameMode();
+
+    /**
+     * Set the {@link GameMode} of this user.
+     *
+     * @param gameMode New {@link GameMode}.
+     */
+    void setGameMode(@NotNull GameMode gameMode);
 
 }

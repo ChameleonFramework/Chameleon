@@ -33,20 +33,41 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Platform main class generator.
+ */
 public abstract class Generator {
 
     public static final @NotNull String INDENT = "    ";
 
+    /**
+     * Generate main class and any required files.
+     *
+     * @param data   {@link Plugin} data
+     * @param plugin Chameleon plugin main class
+     * @param env    Processing environment
+     *
+     * @throws Exception if something goes wrong while generating the files.
+     */
     public abstract void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception;
+
 
     protected @NotNull CodeBlock createPluginData(@NotNull Plugin data) {
         return CodeBlock.builder().add(
             "$T pluginData = new $T($S, $S, $S, $S, $T.asList($L), $T.asList($L))",
-            PluginData.class, PluginData.class, data.name().isEmpty() ? (data.id().isEmpty() ? "Unknown" : data.id()) : data.name(), data.version(), data.description(), data.url(),
-            Arrays.class, data.authors().length > 0 ? '"' + String.join("\",\"", data.authors()) + '"' : "",
-            Arrays.class, CodeBlock.builder().add(Arrays.stream(data.platforms().length > 0 ? data.platforms() : Platform.values()).map(p -> "$1T." + p.name()).collect(Collectors.joining(", ")), PluginData.Platform.class).build()
+            PluginData.class,
+            PluginData.class,
+            data.name().isEmpty() ? (data.id().isEmpty() ? "Unknown" : data.id()) : data.name(),
+            data.version(),
+            data.description(),
+            data.url(),
+            Arrays.class,
+            data.authors().length > 0 ? '"' + String.join("\",\"", data.authors()) + '"' : "",
+            Arrays.class,
+            CodeBlock.builder().add(Arrays.stream(data.platforms().length > 0 ? data.platforms() : Platform.values()).map(p -> "$1T." + p.name()).collect(Collectors.joining(", ")), PluginData.Platform.class).build()
         ).build();
     }
+
     protected @NotNull ClassName clazz(@NotNull String p, @NotNull String n) {
         return ClassName.get(p, n);
     }

@@ -22,22 +22,75 @@
  */
 package dev.hypera.chameleon.core.logging;
 
-import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Chameleon logger
+ * {@link dev.hypera.chameleon.core.Chameleon} logger.
  */
 public interface ChameleonLogger {
 
-	void info(@NotNull String message, @NotNull Object... o);
-	void debug(@NotNull String message, @NotNull Object... o);
-	void warn(@NotNull String message, @NotNull Object... o);
-	void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o);
-	void error(@NotNull String message, @NotNull Object... o);
-	void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o);
+    /**
+     * Log an informational message.
+     *
+     * @param message Message to be logged.
+     * @param args    Message arguments.
+     */
+    void info(@NotNull String message, @NotNull Object... args);
 
-	@NotNull ChameleonLogger enableDebug();
-	@NotNull ChameleonLogger disableDebug();
+    /**
+     * Log a debug message.
+     *
+     * @param message Message to be logged.
+     * @param args    Message arguments.
+     */
+    void debug(@NotNull String message, @NotNull Object... args);
+
+    /**
+     * Log a warning message.
+     *
+     * @param message Message to be logged.
+     * @param args    Message arguments.
+     */
+    void warn(@NotNull String message, @NotNull Object... args);
+
+    /**
+     * Log a warning message with an exception.
+     *
+     * @param message   Message to be logged.
+     * @param throwable Exception to be logged.
+     * @param args      Message arguments.
+     */
+    void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... args);
+
+    /**
+     * Log an error message.
+     *
+     * @param message Message to be logged.
+     * @param args    Message arguments.
+     */
+    void error(@NotNull String message, @NotNull Object... args);
+
+    /**
+     * Log an error message with an exception.
+     *
+     * @param message   Message to be logged.
+     * @param throwable Exception to be logged.
+     * @param args      Message arguments.
+     */
+    void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... args);
+
+    /**
+     * Enable debug logs.
+     *
+     * @return {@code this}.
+     */
+    @NotNull ChameleonLogger enableDebug();
+
+    /**
+     * Disable debug logs.
+     *
+     * @return {@code this}.
+     */
+    @NotNull ChameleonLogger disableDebug();
 
 }

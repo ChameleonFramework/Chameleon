@@ -31,33 +31,41 @@ import dev.hypera.chameleon.core.scheduling.TaskImpl;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.TaskSchedule;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom scheduler
+ * Minestom {@link Scheduler} implementation.
  */
+@Internal
 public final class MinestomScheduler extends Scheduler {
 
-	@Override
-	protected void schedule(@NotNull TaskImpl task) {
-		MinecraftServer.getSchedulerManager()
-				.buildTask(task.getRunnable())
-				.executionType(ExecutionType.valueOf(task.getType().name()))
-				.delay(convert(task.getDelay(), false))
-				.repeat(convert(task.getRepeat(), true))
-				.schedule();
-	}
+    /**
+     * {@link MinestomScheduler} constructor.
+     */
+    @Internal
+    public MinestomScheduler() {
 
-	private @NotNull TaskSchedule convert(@NotNull Schedule schedule, boolean repeat) {
-		if (schedule.getType().equals(Type.NONE)) {
-			return repeat ? TaskSchedule.stop() : TaskSchedule.immediate();
-		} else if (schedule.getType().equals(Type.DURATION)) {
-			return TaskSchedule.duration(((DurationSchedule) schedule).getDuration());
-		} else if (schedule.getType().equals(Type.TICK)) {
-			return TaskSchedule.tick(((TickSchedule) schedule).getTicks());
-		} else {
-			throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
-		}
-	}
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void schedule(@NotNull TaskImpl task) {
+        MinecraftServer.getSchedulerManager().buildTask(task.getRunnable()).executionType(ExecutionType.valueOf(task.getType().name())).delay(convert(task.getDelay(), false)).repeat(convert(task.getRepeat(), true)).schedule();
+    }
+
+    private @NotNull TaskSchedule convert(@NotNull Schedule schedule, boolean repeat) {
+        if (schedule.getType().equals(Type.NONE)) {
+            return repeat ? TaskSchedule.stop() : TaskSchedule.immediate();
+        } else if (schedule.getType().equals(Type.DURATION)) {
+            return TaskSchedule.duration(((DurationSchedule) schedule).getDuration());
+        } else if (schedule.getType().equals(Type.TICK)) {
+            return TaskSchedule.tick(((TickSchedule) schedule).getTicks());
+        } else {
+            throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
+        }
+    }
 
 }

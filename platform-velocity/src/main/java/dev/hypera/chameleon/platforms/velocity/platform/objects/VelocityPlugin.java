@@ -25,75 +25,112 @@ package dev.hypera.chameleon.platforms.velocity.platform.objects;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.meta.PluginDependency;
 import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import org.jetbrains.annotations.NotNull;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity plugin implementation
+ * Velocity {@link PlatformPlugin} implementation.
  */
+@Internal
 public class VelocityPlugin implements PlatformPlugin {
 
-	private final @NotNull PluginContainer plugin;
+    private final @NotNull PluginContainer plugin;
 
-	public VelocityPlugin(@NotNull PluginContainer plugin) {
-		this.plugin = plugin;
-	}
+    /**
+     * {@link VelocityPlugin} constructor.
+     *
+     * @param plugin {@link PluginContainer} to be wrapped.
+     */
+    @Internal
+    public VelocityPlugin(@NotNull PluginContainer plugin) {
+        this.plugin = plugin;
+    }
 
 
-	@Override
-	public @NotNull String getName() {
-		return plugin.getDescription().getName().orElse(plugin.getDescription().getId());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return this.plugin.getDescription().getName().orElse(this.plugin.getDescription().getId());
+    }
 
-	@Override
-	public @NotNull String getVersion() {
-		return plugin.getDescription().getVersion().orElse("0.0.0");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return this.plugin.getDescription().getVersion().orElse("0.0.0");
+    }
 
-	@Override
-	public @NotNull Optional<String> getDescription() {
-		return plugin.getDescription().getDescription();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Optional<String> getDescription() {
+        return this.plugin.getDescription().getDescription();
+    }
 
-	@Override
-	public @NotNull Class<?> getMainClass() {
-		return plugin.getInstance().orElseThrow(IllegalStateException::new).getClass();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Class<?> getMainClass() {
+        return this.plugin.getInstance().orElseThrow(IllegalStateException::new).getClass();
+    }
 
-	@Override
-	public @NotNull List<String> getAuthors() {
-		return plugin.getDescription().getAuthors();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull List<String> getAuthors() {
+        return this.plugin.getDescription().getAuthors();
+    }
 
-	@Override
-	public @NotNull Set<String> getDependencies() {
-		return plugin.getDescription().getDependencies().stream().filter(d -> !d.isOptional()).map(PluginDependency::getId).collect(Collectors.toSet());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<String> getDependencies() {
+        return this.plugin.getDescription().getDependencies().stream().filter(d -> !d.isOptional()).map(PluginDependency::getId).collect(Collectors.toSet());
+    }
 
-	@Override
-	public @NotNull Set<String> getSoftDependencies() {
-		return plugin.getDescription().getDependencies().stream().filter(PluginDependency::isOptional).map(PluginDependency::getId).collect(Collectors.toSet());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<String> getSoftDependencies() {
+        return this.plugin.getDescription().getDependencies().stream().filter(PluginDependency::isOptional).map(PluginDependency::getId).collect(Collectors.toSet());
+    }
 
-	@Override
-	public @NotNull Path getDataFolder() {
-		return Paths.get("/");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Path getDataFolder() {
+        return Paths.get("/");
+    }
 
-	@Override
-	public void enable() {
-		throw new UnsupportedOperationException("Velocity plugins cannot be enabled");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void enable() {
+        throw new UnsupportedOperationException("Velocity plugins cannot be enabled");
+    }
 
-	@Override
-	public void disable() {
-		throw new UnsupportedOperationException("Velocity plugins cannot be disabled");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void disable() {
+        throw new UnsupportedOperationException("Velocity plugins cannot be disabled");
+    }
 
 }

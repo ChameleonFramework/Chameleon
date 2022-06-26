@@ -26,11 +26,32 @@ import dev.hypera.chameleon.annotations.Plugin.Platform;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Platform Dependency.
+ */
 @Retention(RetentionPolicy.SOURCE)
 public @interface PlatformDependency {
 
+    /**
+     * The ID or name of the dependency.
+     *
+     * @return the dependency's ID or name.
+     */
     String name();
-    boolean soft();
+
+    /**
+     * Whether this dependency is not required to load the dependant.
+     * By default, this is {@code false}, meaning the dependency is required.
+     *
+     * @return {@code true} if the dependency is not required for the dependant to load.
+     */
+    boolean soft() default false;
+
+    /**
+     * The {@link Platform}s this dependency is loaded on.
+     *
+     * @return the {@link Platform}s this dependency should be loaded on.
+     */
     Platform[] platforms() default {};
 
 }

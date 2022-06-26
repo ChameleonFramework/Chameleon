@@ -29,34 +29,38 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform net.kyori.adventure.key.Key
+ * Maps shaded to platform {@link Key}.
  */
-public class KeyMapper implements IMapper<Key> {
+public final class KeyMapper implements IMapper<Key> {
 
-	private final @NotNull Method CREATE_METHOD;
+    private final @NotNull Method createMethod;
 
-	public KeyMapper() {
-		try {
-			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-			CREATE_METHOD = keyClass.getMethod("key", String.class);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
+    /**
+     * {@link KeyMapper} constructor.
+     */
+    public KeyMapper() {
+        try {
+            Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
+            this.createMethod = keyClass.getMethod("key", String.class);
+        } catch (ReflectiveOperationException ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
 
-	/**
-	 * Map Key to the platform version of Adventure
-	 *
-	 * @param key Key to be mapped
-	 * @return Platform Key
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Key key) {
-		try {
-			return CREATE_METHOD.invoke(null, key.asString());
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * Map {@link Key} to the platform version of Adventure.
+     *
+     * @param key {@link Key} to be mapped.
+     *
+     * @return Platform instance of {@link Key}.
+     */
+    @Override
+    public @NotNull Object map(@NotNull Key key) {
+        try {
+            return this.createMethod.invoke(null, key.asString());
+        } catch (ReflectiveOperationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
 }
