@@ -112,7 +112,7 @@ public class BukkitUser extends AbstractAudience implements ServerUser {
      */
     @Override
     public @NotNull GameMode getGameMode() {
-        return convertGameModeToChameleon(player.getGameMode());
+        return convertGameModeToChameleon(this.player.getGameMode());
     }
 
     /**

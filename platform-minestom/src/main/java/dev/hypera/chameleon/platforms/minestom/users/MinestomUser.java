@@ -104,7 +104,7 @@ public class MinestomUser extends AbstractReflectedAudience implements ServerUse
      */
     @Override
     public @NotNull GameMode getGameMode() {
-        return convertGameModeToChameleon(player.getGameMode());
+        return convertGameModeToChameleon(this.player.getGameMode());
     }
 
     /**
