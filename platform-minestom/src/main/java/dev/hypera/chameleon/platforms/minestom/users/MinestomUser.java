@@ -104,7 +104,7 @@ public class MinestomUser extends AbstractReflectedAudience implements ServerUse
      */
     @Override
     public @NotNull GameMode getGameMode() {
-        return GameMode.valueOf(this.player.getGameMode().name());
+        return convertGameModeToChameleon(player.getGameMode());
     }
 
     /**
@@ -112,7 +112,26 @@ public class MinestomUser extends AbstractReflectedAudience implements ServerUse
      */
     @Override
     public void setGameMode(@NotNull GameMode gameMode) {
-        this.player.setGameMode(net.minestom.server.entity.GameMode.valueOf(gameMode.name()));
+        this.player.setGameMode(convertGameModeToMinestom(gameMode));
     }
 
+    
+    private @NotNull net.minestom.server.entity.GameMode convertGameModeToMinestom(@NotNull GameMode gameMode) {
+        return switch (gameMode) {
+            case CREATIVE -> net.minestom.server.entity.GameMode.CREATIVE;
+            case ADVENTURE -> net.minestom.server.entity.GameMode.ADVENTURE;
+            case SPECTATOR -> net.minestom.server.entity.GameMode.SPECTATOR;
+            default -> net.minestom.server.entity.GameMode.SURVIVAL;
+        };
+    }
+
+    private @NotNull GameMode convertGameModeToChameleon(@NotNull net.minestom.server.entity.GameMode gameMode) {
+        return switch (gameMode) {
+            case CREATIVE -> GameMode.CREATIVE;
+            case ADVENTURE -> GameMode.ADVENTURE;
+            case SPECTATOR -> GameMode.SPECTATOR;
+            default -> GameMode.SURVIVAL;
+        };
+    }
+    
 }
