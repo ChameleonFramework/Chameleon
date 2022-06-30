@@ -28,11 +28,24 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Proxy platform
+ * Proxy {@link Platform}.
  */
 public abstract class ProxyPlatform extends Platform {
 
-	public abstract @NotNull Set<Server> getServers();
-	public abstract @NotNull Optional<Server> getServer(@NotNull String name);
+    /**
+     * Get {@link Server}s.
+     *
+     * @return set of {@link Server}s.
+     */
+    public abstract @NotNull Set<Server> getServers();
+
+    /**
+     * Attempt to find {@link Server} by name.
+     *
+     * @param name The name to search for.
+     *
+     * @return {@link Optional} containing the {@link Server} if found, otherwise empty.
+     */
+    public abstract @NotNull Optional<Server> getServer(@NotNull String name);
 
 }

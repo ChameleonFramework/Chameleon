@@ -23,81 +23,100 @@
 package dev.hypera.chameleon.features.configuration.impl;
 
 import dev.hypera.chameleon.features.configuration.Configuration;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.yaml.snakeyaml.Yaml;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.yaml.snakeyaml.Yaml;
 
 /**
- * YAML configuration implementation
+ * YAML {@link Configuration} implementation.
  */
 public class YamlConfiguration extends Configuration {
 
-	private static final @NotNull Yaml yaml = new Yaml();
+    private static final @NotNull Yaml yaml = new Yaml();
 
-	private @Nullable Map<String, Object> config;
+    private @Nullable Map<String, Object> config;
 
-	public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName) {
-		super(dataFolder, fileName);
-	}
+    /**
+     * {@link YamlConfiguration} constructor.
+     *
+     * @param dataFolder Folder to store loaded configuration file in.
+     * @param fileName   Configuration file name.
+     */
+    public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName) {
+        super(dataFolder, fileName);
+    }
 
-	public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
-		super(dataFolder, fileName, copyDefaultFromResources);
-	}
-
-
-	@Override
-	public @NotNull Configuration load() throws IOException {
-		if (!Files.exists(dataFolder)) {
-			Files.createDirectories(dataFolder);
-		}
-
-		if (!Files.exists(path)) {
-			if (copyDefaultFromResources) {
-				try (InputStream defaultResource = YamlConfiguration.class.getResourceAsStream("/" + fileName)) {
-					if (null == defaultResource) {
-						throw new IllegalStateException("Failed to load resource '" + fileName + "'");
-					}
-
-					Files.copy(defaultResource, path);
-				}
-			} else {
-				Files.createFile(path);
-			}
-		}
-
-		try (BufferedReader reader = Files.newBufferedReader(path)) {
-			config = yaml.load(reader);
-			loaded = true;
-		}
-
-		return this;
-	}
-
-	@Override
-	public @NotNull Configuration unload() {
-		loaded = false;
-		config = null;
-		return this;
-	}
+    /**
+     * {@link YamlConfiguration} constructor.
+     *
+     * @param dataFolder               Folder to store loaded configuration file in.
+     * @param fileName                 Configuration file name.
+     * @param copyDefaultFromResources Whether this file should be copied from resources if not already loaded.
+     */
+    public YamlConfiguration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
+        super(dataFolder, fileName, copyDefaultFromResources);
+    }
 
 
-	@Override
-	public @NotNull Optional<Object> get(@NotNull String path) {
-		if (!loaded || null == config) {
-			throw new IllegalStateException("Configuration has not been loaded");
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Configuration load() throws IOException {
+        if (!Files.exists(dataFolder)) {
+            Files.createDirectories(dataFolder);
+        }
 
-		return getObject(path, config);
-	}
+        if (!Files.exists(path)) {
+            if (copyDefaultFromResources) {
+                try (InputStream defaultResource = YamlConfiguration.class.getResourceAsStream("/" + fileName)) {
+                    if (null == defaultResource) {
+                        throw new IllegalStateException("Failed to load resource '" + fileName + "'");
+                    }
+
+                    Files.copy(defaultResource, path);
+                }
+            } else {
+                Files.createFile(path);
+            }
+        }
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            this.config = yaml.load(reader);
+            this.loaded = true;
+        }
+
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Configuration unload() {
+        this.loaded = false;
+        this.config = null;
+        return this;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Optional<Object> get(@NotNull String path) {
+        if (!this.loaded || null == this.config) {
+            throw new IllegalStateException("Configuration has not been loaded");
+        }
+
+        return getObject(path, this.config);
+    }
 
 }

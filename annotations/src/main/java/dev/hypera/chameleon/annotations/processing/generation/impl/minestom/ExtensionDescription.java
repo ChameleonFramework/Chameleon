@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({ "unused", "FieldCanBeLocal" })
-public class ExtensionDescription {
+class ExtensionDescription {
 
     private final @NotNull String name;
     private final @NotNull String entrypoint;
@@ -36,7 +36,7 @@ public class ExtensionDescription {
     private final @NotNull List<String> authors;
     private final @NotNull List<String> dependencies;
 
-    public ExtensionDescription(@NotNull String name, @NotNull String entrypoint, @NotNull String version, @NotNull List<String> authors, @NotNull List<PlatformDependency> dependencies) {
+    ExtensionDescription(@NotNull String name, @NotNull String entrypoint, @NotNull String version, @NotNull List<String> authors, @NotNull List<PlatformDependency> dependencies) {
         this.name = name;
         this.entrypoint = entrypoint;
         this.version = version;

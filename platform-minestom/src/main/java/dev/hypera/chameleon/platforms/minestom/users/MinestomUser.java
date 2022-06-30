@@ -27,60 +27,111 @@ import dev.hypera.chameleon.core.platform.server.GameMode;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
 import java.util.UUID;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom user
+ * Minestom {@link ServerUser} implementation.
  */
+@Internal
 public class MinestomUser extends AbstractReflectedAudience implements ServerUser {
 
-	private final @NotNull Player player;
+    private final @NotNull Player player;
 
-	public MinestomUser(@NotNull Player player) {
-		super(player);
-		this.player = player;
-	}
-
-
-	@Override
-	public @NotNull String getName() {
-		return player.getUsername();
-	}
-
-	@Override
-	public @NotNull UUID getUniqueId() {
-		return player.getUuid();
-	}
-
-	@Override
-	public int getPing() {
-		return player.getLatency();
-	}
-
-	@Override
-	public void chat(@NotNull String message) {
-		player.chat(message);
-	}
-
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		player.sendPluginMessage(channel, data);
-	}
-
-	@Override
-	public boolean hasPermission(@NotNull String permission) {
-		return player.hasPermission(permission);
-	}
+    /**
+     * {@link MinestomUser} constructor.
+     *
+     * @param player {@link Player} to be wrapped.
+     */
+    @Internal
+    public MinestomUser(@NotNull Player player) {
+        super(player);
+        this.player = player;
+    }
 
 
-	@Override
-	public @NotNull GameMode getGameMode() {
-		return GameMode.valueOf(player.getGameMode().name());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return this.player.getUsername();
+    }
 
-	@Override
-	public void setGameMode(@NotNull GameMode gameMode) {
-		player.setGameMode(net.minestom.server.entity.GameMode.valueOf(gameMode.name()));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull UUID getUniqueId() {
+        return this.player.getUuid();
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getPing() {
+        return this.player.getLatency();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void chat(@NotNull String message) {
+        this.player.chat(message);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendData(@NotNull String channel, byte[] data) {
+        this.player.sendPluginMessage(channel, data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return this.player.hasPermission(permission);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull GameMode getGameMode() {
+        return convertGameModeToChameleon(this.player.getGameMode());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setGameMode(@NotNull GameMode gameMode) {
+        this.player.setGameMode(convertGameModeToMinestom(gameMode));
+    }
+
+    
+    private @NotNull net.minestom.server.entity.GameMode convertGameModeToMinestom(@NotNull GameMode gameMode) {
+        return switch (gameMode) {
+            case CREATIVE -> net.minestom.server.entity.GameMode.CREATIVE;
+            case ADVENTURE -> net.minestom.server.entity.GameMode.ADVENTURE;
+            case SPECTATOR -> net.minestom.server.entity.GameMode.SPECTATOR;
+            default -> net.minestom.server.entity.GameMode.SURVIVAL;
+        };
+    }
+
+    private @NotNull GameMode convertGameModeToChameleon(@NotNull net.minestom.server.entity.GameMode gameMode) {
+        return switch (gameMode) {
+            case CREATIVE -> GameMode.CREATIVE;
+            case ADVENTURE -> GameMode.ADVENTURE;
+            case SPECTATOR -> GameMode.SPECTATOR;
+            default -> GameMode.SURVIVAL;
+        };
+    }
+    
 }

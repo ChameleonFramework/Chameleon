@@ -22,38 +22,60 @@
  */
 package dev.hypera.chameleon.features.configuration.tests;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dev.hypera.chameleon.features.configuration.Configuration;
 import dev.hypera.chameleon.features.configuration.impl.YamlConfiguration;
 import dev.hypera.chameleon.features.configuration.util.CastingList;
 import dev.hypera.chameleon.features.configuration.util.CastingMap;
+import dev.hypera.chameleon.features.configuration.util.CastingUtil;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+/**
+ * {@link YamlConfiguration} tests.
+ */
 public class YamlTests {
 
     private static final String FILE_NAME = "test.yml";
     private static final @NotNull String MODIFIED_FILE_NAME = "test-modified.yml";
+    private static final @NotNull String[] ORDERED_LIST = new String[] {
+        "test1", "test2", "test3", "test4", "test5"
+    };
 
     @TempDir
     public static Path folder;
 
+    /**
+     * Setup tests.
+     *
+     * @throws IOException if something goes wrong while copying the test files.
+     */
     @BeforeAll
     public static void setup() throws IOException {
         Files.copy(Objects.requireNonNull(YamlTests.class.getResourceAsStream("/" + FILE_NAME)), folder.resolve(FILE_NAME));
         Files.copy(Objects.requireNonNull(YamlTests.class.getResourceAsStream("/" + FILE_NAME)), folder.resolve(MODIFIED_FILE_NAME));
     }
 
+    /**
+     * Load {@link YamlConfiguration} and make sure everything was loaded correctly.
+     *
+     * @throws IOException if something goes wrong while reading the configuration file.
+     */
     @Test
     public void load() throws IOException {
         Configuration config = new YamlConfiguration(folder, FILE_NAME, false).load();
@@ -73,8 +95,22 @@ public class YamlTests {
         CastingMap map = config.getMap("map").orElseThrow(IllegalStateException::new);
         assertEquals("b", map.getString("a").orElseThrow(IllegalStateException::new));
         assertEquals("d", map.getString("c").orElseThrow(IllegalStateException::new));
+
+        /* Order testing */
+        CastingMap objectMap = config.getMap("object_map").orElseThrow(IllegalStateException::new);
+        assertTrue(objectMap.get("test1") instanceof Map);
+        assertEquals("test1", Objects.requireNonNull(CastingUtil.asMap(objectMap.get("test1"))).getString("iam").orElseThrow(IllegalStateException::new));
+
+        List<String> tempList = new ArrayList<>();
+        objectMap.forEach((k, v) -> tempList.add(k.toString()));
+        assertArrayEquals(ORDERED_LIST, tempList.toArray());
     }
 
+    /**
+     * Modify and reload the {@link YamlConfiguration}, and make sure that it updated correctly.
+     *
+     * @throws IOException if something goes wrong while reading the configuration file.
+     */
     @Test
     public void reload() throws IOException {
         Configuration config = new YamlConfiguration(folder, MODIFIED_FILE_NAME).load();
@@ -86,6 +122,11 @@ public class YamlTests {
         assertEquals(true, config.getBoolean("boolean").orElseThrow(IllegalStateException::new));
     }
 
+    /**
+     * Unload the {@link YamlConfiguration} and make sure it was properly unloaded.
+     *
+     * @throws IOException if something goes wrong while reading the configuration file.
+     */
     @Test
     public void unload() throws IOException {
         Configuration config = new YamlConfiguration(folder, FILE_NAME).load();

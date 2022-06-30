@@ -39,52 +39,81 @@ import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.platform.objects.VelocityServer;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity listener
+ * Velocity listener.
  */
+@Internal
 public class VelocityListener {
 
-	private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull VelocityChameleon chameleon;
 
-	public VelocityListener(@NotNull VelocityChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+    /**
+     * {@link VelocityListener} constructor.
+     *
+     * @param chameleon {@link VelocityChameleon} instance.
+     */
+    @Internal
+    public VelocityListener(@NotNull VelocityChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
-	@Subscribe
-	public void onPostLoginEvent(@NotNull PostLoginEvent event) {
-		chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
-	}
+    /**
+     * Platform {@link UserConnectEvent} handler.
+     *
+     * @param event Platform {@link PostLoginEvent}.
+     */
+    @Subscribe
+    public void onPostLoginEvent(@NotNull PostLoginEvent event) {
+        this.chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+    }
 
-	@Subscribe
-	public void onChatEvent(@NotNull PlayerChatEvent event) {
-		if (!chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()))) {
-			event.setResult(ChatResult.denied());
-		}
-	}
+    /**
+     * Platform {@link UserChatEvent} handler.
+     *
+     * @param event Platform {@link PlayerChatEvent}.
+     */
+    @Subscribe
+    public void onChatEvent(@NotNull PlayerChatEvent event) {
+        UserChatEvent chameleonEvent = this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+        if (!event.getMessage().equals(chameleonEvent.getMessage())) {
+            event.setResult(ChatResult.message(chameleonEvent.getMessage()));
+        }
 
-	@Subscribe
-	public void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
-		chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
-	}
+        if (chameleonEvent.isCancelled()) {
+            event.setResult(ChatResult.denied());
+        }
+    }
 
-	@Subscribe
-	public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
-		chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(
-				wrap(event.getPlayer()),
-				event.getPreviousServer().map(this::wrap).orElse(null),
-				wrap(event.getServer())
-		));
-	}
+    /**
+     * Platform {@link UserDisconnectEvent} handler.
+     *
+     * @param event Platform {@link DisconnectEvent}.
+     */
+    @Subscribe
+    public void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
+        this.chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+    }
+
+    /**
+     * Platform {@link ProxyUserSwitchEvent} handler.
+     *
+     * @param event Platform {@link ServerConnectedEvent}.
+     */
+    @Subscribe
+    public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
+        this.chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), event.getPreviousServer().map(this::wrap).orElse(null), wrap(event.getServer())));
+    }
 
 
-	private @NotNull ProxyUser wrap(@NotNull Player player) {
-		return new VelocityUser(chameleon, player);
-	}
+    private @NotNull ProxyUser wrap(@NotNull Player player) {
+        return new VelocityUser(this.chameleon, player);
+    }
 
-	private @NotNull Server wrap(@NotNull RegisteredServer server) {
-		return new VelocityServer(chameleon, server);
-	}
+    private @NotNull Server wrap(@NotNull RegisteredServer server) {
+        return new VelocityServer(this.chameleon, server);
+    }
 
 }

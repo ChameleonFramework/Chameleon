@@ -29,7 +29,7 @@ plugins {
 indra {
 
     javaVersions {
-        if (project.name == "platform-minestom") {
+        if (project.name.contains("minestom")) {
             target(17)
             testWith(17)
         } else {

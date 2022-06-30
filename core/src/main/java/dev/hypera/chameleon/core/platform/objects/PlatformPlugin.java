@@ -22,29 +22,84 @@
  */
 package dev.hypera.chameleon.core.platform.objects;
 
-import org.jetbrains.annotations.ApiStatus.Experimental;
-import org.jetbrains.annotations.NotNull;
-
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.jetbrains.annotations.ApiStatus.Experimental;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Platform plugin
+ * {@link dev.hypera.chameleon.core.platform.Platform} plugin.
  */
 public interface PlatformPlugin {
 
-	@NotNull String getName();
-	@NotNull String getVersion();
-	@NotNull Optional<String> getDescription();
-	@NotNull Class<?> getMainClass();
-	@NotNull List<String> getAuthors();
-	@NotNull Set<String> getDependencies();
-	@NotNull Set<String> getSoftDependencies();
-	@NotNull Path getDataFolder();
+    /**
+     * Get {@link PlatformPlugin} name.
+     *
+     * @return {@link PlatformPlugin} name.
+     */
+    @NotNull String getName();
 
-	@Experimental void enable();
-	@Experimental void disable();
+    /**
+     * Get {@link PlatformPlugin} version.
+     *
+     * @return {@link PlatformPlugin} version.
+     */
+    @NotNull String getVersion();
+
+    /**
+     * Get {@link PlatformPlugin} description.
+     *
+     * @return optionally {@link PlatformPlugin} description.
+     */
+    @NotNull Optional<String> getDescription();
+
+    /**
+     * Get {@link PlatformPlugin} main class.
+     *
+     * @return {@link PlatformPlugin} main class.
+     */
+    @NotNull Class<?> getMainClass();
+
+    /**
+     * Get {@link PlatformPlugin} authors.
+     *
+     * @return {@link PlatformPlugin} authors.
+     */
+    @NotNull List<String> getAuthors();
+
+    /**
+     * Get {@link PlatformPlugin} required dependencies.
+     *
+     * @return {@link PlatformPlugin} required dependencies.
+     */
+    @NotNull Set<String> getDependencies();
+
+    /**
+     * Get {@link PlatformPlugin} optional dependencies.
+     *
+     * @return {@link PlatformPlugin} optional dependencies.
+     */
+    @NotNull Set<String> getSoftDependencies();
+
+    /**
+     * Get {@link PlatformPlugin} data folder.
+     *
+     * @return {@link PlatformPlugin} data folder.
+     */
+    @NotNull Path getDataFolder();
+
+    /**
+     * Attempt to enable the {@link PlatformPlugin}.
+     */
+    @Experimental
+    void enable();
+
+    /**
+     * Attempt to disable the {@link PlatformPlugin}.
+     */
+    @Experimental
+    void disable();
 
 }

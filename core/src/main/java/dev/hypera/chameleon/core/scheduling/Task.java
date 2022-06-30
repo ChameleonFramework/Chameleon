@@ -27,49 +27,88 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Task.
+ */
 public interface Task {
 
-	class Builder {
+    /**
+     * {@link Task} builder.
+     */
+    class Builder {
 
-		private final @NotNull Consumer<TaskImpl> schedule;
-		private final @NotNull Runnable runnable;
+        private final @NotNull Consumer<TaskImpl> schedule;
+        private final @NotNull Runnable runnable;
 
-		private @NotNull Type type = Type.ASYNC;
-		private @NotNull Schedule delay = Schedule.none();
-		private @NotNull Schedule repeat = Schedule.none();
+        private @NotNull Type type = Type.ASYNC;
+        private @NotNull Schedule delay = Schedule.none();
+        private @NotNull Schedule repeat = Schedule.none();
 
-		@Internal
-		public Builder(@NotNull Consumer<TaskImpl> schedule, @NotNull Runnable runnable) {
-			this.schedule = schedule;
-			this.runnable = runnable;
-		}
+        /**
+         * {@link Builder} constructor.
+         *
+         * @param schedule {@link TaskImpl} schedule consumer.
+         * @param runnable Task {@link Runnable}.
+         */
+        @Internal
+        public Builder(@NotNull Consumer<TaskImpl> schedule, @NotNull Runnable runnable) {
+            this.schedule = schedule;
+            this.runnable = runnable;
+        }
 
-		@Contract("_ -> this")
-		public @NotNull Builder type(@NotNull Type type) {
-			this.type = type;
-			return this;
-		}
+        /**
+         * Set Task {@link Type}.
+         *
+         * @param type {@link Type}.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        public @NotNull Builder type(@NotNull Type type) {
+            this.type = type;
+            return this;
+        }
 
-		@Contract("_ -> this")
-		public @NotNull Builder delay(@NotNull Schedule delay) {
-			this.delay = delay;
-			return this;
-		}
+        /**
+         * Set Task delay.
+         *
+         * @param delay Task delay {@link Schedule}.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        public @NotNull Builder delay(@NotNull Schedule delay) {
+            this.delay = delay;
+            return this;
+        }
 
-		@Contract("_ -> this")
-		public @NotNull Builder repeat(@NotNull Schedule repeat) {
-			this.repeat = repeat;
-			return this;
-		}
+        /**
+         * Set Task repeat.
+         *
+         * @param repeat Task repeat {@link Schedule}.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        public @NotNull Builder repeat(@NotNull Schedule repeat) {
+            this.repeat = repeat;
+            return this;
+        }
 
-		public void build() {
-			schedule.accept(new TaskImpl(runnable, type, delay, repeat));
-		}
+        /**
+         * Build new {@link Schedule}.
+         */
+        public void build() {
+            this.schedule.accept(new TaskImpl(this.runnable, this.type, this.delay, this.repeat));
+        }
 
-	}
+    }
 
-	enum Type {
-		SYNC, ASYNC
-	}
+    /**
+     * Task type.
+     */
+    enum Type {
+        SYNC, ASYNC
+    }
 
 }

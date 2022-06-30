@@ -2,5 +2,7 @@
   "extends": [
     "config:base"
   ],
-  "baseBranches": ["development"]
+  "baseBranches": [
+    "development"
+  ]
 }

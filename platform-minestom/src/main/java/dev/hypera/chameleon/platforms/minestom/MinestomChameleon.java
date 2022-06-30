@@ -42,72 +42,99 @@ import dev.hypera.chameleon.platforms.minestom.managers.MinestomUserManager;
 import dev.hypera.chameleon.platforms.minestom.platform.MinestomPlatform;
 import java.nio.file.Path;
 import net.minestom.server.extensions.Extension;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom Chameleon
+ * Minestom {@link Chameleon} implementation.
  */
 public final class MinestomChameleon extends Chameleon {
 
-	private final @NotNull Extension extension;
-	private final @NotNull MinestomAudienceProvider audienceProvider = new MinestomAudienceProvider();
-	private final @NotNull MinestomPlatform platform = new MinestomPlatform();
-	private final @NotNull MinestomCommandManager commandManager = new MinestomCommandManager(this);
-	private final @NotNull MinestomPluginManager pluginManager = new MinestomPluginManager();
-	private final @NotNull MinestomUserManager userManager = new MinestomUserManager();
-	private final @NotNull MinestomScheduler scheduler = new MinestomScheduler();
+    private final @NotNull Extension extension;
+    private final @NotNull MinestomAudienceProvider audienceProvider = new MinestomAudienceProvider();
+    private final @NotNull MinestomPlatform platform = new MinestomPlatform();
+    private final @NotNull MinestomCommandManager commandManager = new MinestomCommandManager(this);
+    private final @NotNull MinestomPluginManager pluginManager = new MinestomPluginManager();
+    private final @NotNull MinestomUserManager userManager = new MinestomUserManager();
+    private final @NotNull MinestomScheduler scheduler = new MinestomScheduler();
 
-	MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-		super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(extension.getLogger()));
-		this.extension = extension;
-		new MinestomListener(this);
-	}
+    @Internal
+    MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+        super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(extension.getLogger()));
+        this.extension = extension;
+        new MinestomListener(this);
+    }
 
-	public static @NotNull MinestomChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) {
-		return new MinestomChameleonBootstrap(chameleonPlugin, extension, pluginData);
-	}
-
-
-	@Override
-	public @NotNull ChameleonAudienceProvider getAdventure() {
-		return audienceProvider;
-	}
-
-	@Override
-	public @NotNull Platform getPlatform() {
-		return platform;
-	}
-
-
-	@Override
-	public @NotNull CommandManager getCommandManager() {
-		return commandManager;
-	}
-
-	@Override
-	public @NotNull PluginManager getPluginManager() {
-		return pluginManager;
-	}
-
-	@Override
-	public @NotNull UserManager getUserManager() {
-		return userManager;
-	}
-
-	@Override
-	public @NotNull Scheduler getScheduler() {
-		return scheduler;
-	}
+    /**
+     * Create a new {@link MinestomChameleonBootstrap} instance.
+     *
+     * @param chameleonPlugin {@link ChameleonPlugin} to load.
+     * @param extension       Minestom {@link Extension}.
+     * @param pluginData      {@link PluginData}.
+     *
+     * @return new {@link MinestomChameleonBootstrap}.
+     */
+    public static @NotNull MinestomChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) {
+        return new MinestomChameleonBootstrap(chameleonPlugin, extension, pluginData);
+    }
 
 
-	@Override
-	public @NotNull Path getDataFolder() {
-		return extension.getDataDirectory();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ChameleonAudienceProvider getAdventure() {
+        return this.audienceProvider;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Platform getPlatform() {
+        return this.platform;
+    }
 
 
-	public @NotNull Extension getExtension() {
-		return extension;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull CommandManager getCommandManager() {
+        return this.commandManager;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull PluginManager getPluginManager() {
+        return this.pluginManager;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull UserManager getUserManager() {
+        return this.userManager;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Scheduler getScheduler() {
+        return this.scheduler;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Path getDataFolder() {
+        return this.extension.getDataDirectory();
+    }
 
 }

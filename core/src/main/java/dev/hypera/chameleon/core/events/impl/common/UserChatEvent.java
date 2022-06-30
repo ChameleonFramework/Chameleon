@@ -27,25 +27,50 @@ import dev.hypera.chameleon.core.users.User;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Dispatched when a user sends a chat message
+ * {@link User} chat event, dispatched when a player sends a chat message.
  */
 public class UserChatEvent extends AbstractCancellable implements UserEvent {
 
-	private final @NotNull User user;
-	private final @NotNull String message;
+    private final @NotNull User user;
+    private @NotNull String message;
 
-	public UserChatEvent(@NotNull User user, @NotNull String message) {
-		this.user = user;
-		this.message = message;
-	}
+    /**
+     * {@link UserChatEvent} constructor.
+     *
+     * @param user    {@link User} that sent the message.
+     * @param message Message that the user attempted to send.
+     */
+    public UserChatEvent(@NotNull User user, @NotNull String message) {
+        this.user = user;
+        this.message = message;
+    }
 
 
-	public @NotNull User getUser() {
-		return user;
-	}
+    /**
+     * Get the {@link User} who attempted to send this message.
+     *
+     * @return {@link User} who attempted to send this message.
+     */
+    public @NotNull User getUser() {
+        return this.user;
+    }
 
-	public @NotNull String getMessage() {
-		return message;
-	}
+    /**
+     * Get the message that the {@link User} attempted to send this message.
+     *
+     * @return the message that the {@link User} attempted to send.
+     */
+    public @NotNull String getMessage() {
+        return this.message;
+    }
+
+    /**
+     * Sets the message that the {@link User} will send.
+     *
+     * @param message New message that will be sent.
+     */
+    public void setMessage(@NotNull String message) {
+        this.message = message;
+    }
 
 }

@@ -25,57 +25,90 @@ package dev.hypera.chameleon.core.logging.impl;
 import dev.hypera.chameleon.core.logging.ChameleonLogger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Java {@link ChameleonLogger} implementation.
+ */
+@Internal
 public class ChameleonJavaLogger implements ChameleonLogger {
 
     private final @NotNull Logger logger;
     private boolean debug = false;
 
+    /**
+     * {@link ChameleonJavaLogger} constructor.
+     *
+     * @param logger {@link Logger} instance to use.
+     */
     public ChameleonJavaLogger(@NotNull Logger logger) {
         this.logger = logger;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void info(@NotNull String message, @NotNull Object... o) {
-        logger.log(Level.INFO, String.format(message, o));
+        this.logger.log(Level.INFO, String.format(message, o));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void debug(@NotNull String message, @NotNull Object... o) {
-        if (debug) {
-            logger.log(Level.FINE, String.format(message, o));
+        if (this.debug) {
+            this.logger.log(Level.FINE, String.format(message, o));
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void warn(@NotNull String message, @NotNull Object... o) {
-        logger.log(Level.WARNING, String.format(message, o));
+        this.logger.log(Level.WARNING, String.format(message, o));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
-        logger.log(Level.WARNING, String.format(message, o), throwable);
+        this.logger.log(Level.WARNING, String.format(message, o), throwable);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void error(@NotNull String message, @NotNull Object... o) {
-        logger.log(Level.SEVERE, String.format(message, o));
+        this.logger.log(Level.SEVERE, String.format(message, o));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
-        logger.log(Level.SEVERE, String.format(message, o), throwable);
+        this.logger.log(Level.SEVERE, String.format(message, o), throwable);
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull ChameleonLogger enableDebug() {
         this.debug = true;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull ChameleonLogger disableDebug() {
         this.debug = false;

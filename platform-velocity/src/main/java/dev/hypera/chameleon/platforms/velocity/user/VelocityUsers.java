@@ -27,19 +27,34 @@ import com.velocitypowered.api.proxy.Player;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity user utils
+ * Velocity {@link dev.hypera.chameleon.core.users.User} utilities.
  */
+@Internal
 public final class VelocityUsers {
 
-	public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSource source) {
-		if (source instanceof Player) {
-			return new VelocityUser((VelocityChameleon) chameleon, (Player) source);
-		} else {
-			return new VelocityConsoleUser((VelocityChameleon) chameleon);
-		}
-	}
+    @Internal
+    private VelocityUsers() {
+
+    }
+
+    /**
+     * Wrap provided {@link CommandSource}.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     * @param source    {@link CommandSource} to wrap.
+     *
+     * @return {@link ChatUser}.
+     */
+    public static @NotNull ChatUser wrap(@NotNull Chameleon chameleon, @NotNull CommandSource source) {
+        if (source instanceof Player) {
+            return new VelocityUser((VelocityChameleon) chameleon, (Player) source);
+        } else {
+            return new VelocityConsoleUser((VelocityChameleon) chameleon);
+        }
+    }
 
 }

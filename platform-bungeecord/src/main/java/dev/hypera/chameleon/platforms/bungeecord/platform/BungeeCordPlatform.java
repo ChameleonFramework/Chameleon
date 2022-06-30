@@ -30,49 +30,75 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.md_5.bungee.api.ProxyServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord platform
+ * BungeeCord {@link ProxyPlatform} implementation.
  */
+@Internal
 public final class BungeeCordPlatform extends ProxyPlatform {
 
-	private final @NotNull BungeeCordChameleon chameleon;
+    private final @NotNull BungeeCordChameleon chameleon;
 
-	public BungeeCordPlatform(@NotNull BungeeCordChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
-
-
-	@Override
-	public @NotNull String getAPIName() {
-		return "BungeeCord";
-	}
-
-	@Override
-	public @NotNull String getName() {
-		return ProxyServer.getInstance().getName();
-	}
-
-	@Override
-	public @NotNull String getVersion() {
-		return ProxyServer.getInstance().getVersion();
-	}
-
-	@Override
-	public @NotNull Type getType() {
-		return Type.PROXY;
-	}
+    /**
+     * {@link BungeeCordPlatform} constructor.
+     *
+     * @param chameleon {@link BungeeCordChameleon} instance.
+     */
+    @Internal
+    public BungeeCordPlatform(@NotNull BungeeCordChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
 
-	@Override
-	public @NotNull Set<Server> getServers() {
-		return ProxyServer.getInstance().getServers().values().stream().map(s -> new BungeeCordServer(chameleon, s)).collect(Collectors.toSet());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getAPIName() {
+        return "BungeeCord";
+    }
 
-	@Override
-	public @NotNull Optional<Server> getServer(@NotNull String name) {
-		return Optional.ofNullable(ProxyServer.getInstance().getServerInfo(name)).map(s -> new BungeeCordServer(chameleon, s));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return ProxyServer.getInstance().getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return ProxyServer.getInstance().getVersion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Type getType() {
+        return Type.PROXY;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<Server> getServers() {
+        return ProxyServer.getInstance().getServers().values().stream().map(s -> new BungeeCordServer(this.chameleon, s)).collect(Collectors.toSet());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Optional<Server> getServer(@NotNull String name) {
+        return Optional.ofNullable(ProxyServer.getInstance().getServerInfo(name)).map(s -> new BungeeCordServer(this.chameleon, s));
+    }
 
 }

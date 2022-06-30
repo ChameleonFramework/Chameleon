@@ -25,28 +25,42 @@ package dev.hypera.chameleon.core.events.listener;
 import dev.hypera.chameleon.core.events.ChameleonEvent;
 import dev.hypera.chameleon.core.events.listener.annotations.EventHandler;
 import java.util.function.Consumer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Inline listener
- * @param <T> Event type
+ * Inline {@link ChameleonListener} implementation.
+ *
+ * @param <T> {@link ChameleonEvent} type.
  */
+@Internal
 public class InlineChameleonListener<T extends ChameleonEvent> implements ChameleonListener {
 
-	private final @NotNull Class<T> type;
-	private final @NotNull Consumer<T> listener;
+    private final @NotNull Class<T> type;
+    private final @NotNull Consumer<T> listener;
 
-	public InlineChameleonListener(@NotNull Class<T> type, @NotNull Consumer<T> listener) {
-		this.type = type;
-		this.listener = listener;
-	}
+    /**
+     * {@link InlineChameleonListener} constructor.
+     *
+     * @param type     The {@link ChameleonEvent} type.
+     * @param listener The {@link ChameleonEvent} consumer.
+     */
+    @Internal
+    public InlineChameleonListener(@NotNull Class<T> type, @NotNull Consumer<T> listener) {
+        this.type = type;
+        this.listener = listener;
+    }
 
-
-	@EventHandler
-	public void onEvent(@NotNull ChameleonEvent event) {
-		if (type.isInstance(event)) {
-			listener.accept(type.cast(event));
-		}
-	}
+    /**
+     * Event handler.
+     *
+     * @param event {@link ChameleonEvent} instance.
+     */
+    @EventHandler
+    public void onEvent(@NotNull ChameleonEvent event) {
+        if (this.type.isInstance(event)) {
+            this.listener.accept(this.type.cast(event));
+        }
+    }
 
 }

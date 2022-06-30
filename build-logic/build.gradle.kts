@@ -29,9 +29,9 @@ repositories {
 }
 
 dependencies {
-    implementation("net.kyori:indra-common:2.1.1")
-    implementation("net.kyori:indra-publishing-gradle-plugin:2.1.1")
-    implementation("com.adarshr:gradle-test-logger-plugin:3.2.0")
+    implementation(libs.build.indra.common)
+    implementation(libs.build.indra.publishing)
+    implementation(libs.build.testLogger)
 }
 
 java {

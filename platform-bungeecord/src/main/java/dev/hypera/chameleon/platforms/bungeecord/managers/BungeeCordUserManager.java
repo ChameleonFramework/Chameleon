@@ -28,39 +28,54 @@ import dev.hypera.chameleon.core.users.User;
 import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordConsoleUser;
 import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUser;
-import net.md_5.bungee.api.ProxyServer;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import net.md_5.bungee.api.ProxyServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord user manager
+ * BungeeCord {@link UserManager} implementation.
  */
+@Internal
 public final class BungeeCordUserManager extends UserManager {
 
-	private final @NotNull BungeeCordChameleon chameleon;
+    private final @NotNull BungeeCordChameleon chameleon;
 
-	public BungeeCordUserManager(@NotNull BungeeCordChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+    /**
+     * {@link BungeeCordUserManager} constructor.
+     *
+     * @param chameleon {@link BungeeCordChameleon} instance.
+     */
+    @Internal
+    public BungeeCordUserManager(@NotNull BungeeCordChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ChatUser getConsole() {
+        return new BungeeCordConsoleUser(this.chameleon);
+    }
 
-	@Override
-	public @NotNull ChatUser getConsole() {
-		return new BungeeCordConsoleUser(chameleon);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<User> getPlayers() {
+        return ProxyServer.getInstance().getPlayers().stream().map(p -> new BungeeCordUser(this.chameleon, p)).collect(Collectors.toSet());
+    }
 
-	@Override
-	public @NotNull Set<User> getPlayers() {
-		return ProxyServer.getInstance().getPlayers().stream().map(p -> new BungeeCordUser(chameleon, p)).collect(Collectors.toSet());
-	}
-
-	@Override
-	public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
-		return Optional.ofNullable(ProxyServer.getInstance().getPlayer(uniqueId)).map(player -> new BungeeCordUser(chameleon, player));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
+        return Optional.ofNullable(ProxyServer.getInstance().getPlayer(uniqueId)).map(player -> new BungeeCordUser(this.chameleon, player));
+    }
 
 }

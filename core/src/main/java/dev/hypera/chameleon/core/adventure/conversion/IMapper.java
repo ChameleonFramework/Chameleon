@@ -24,13 +24,20 @@ package dev.hypera.chameleon.core.adventure.conversion;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Adventure object mapper, used for converting shaded Adventure objects to platform ones.
+ *
+ * @param <I> Object type.
+ */
 public interface IMapper<I> {
 
-	/**
-	 * Map i to the platform version of Adventure
-	 * @param i i to be mapped
-	 * @return Platform i
-	 */
-	@NotNull Object map(@NotNull I i);
+    /**
+     * Map {@link I} to the platform version of Adventure.
+     *
+     * @param i {@link I} to be mapped.
+     *
+     * @return Platform instance of {@link I}.
+     */
+    @NotNull Object map(@NotNull I i);
 
 }

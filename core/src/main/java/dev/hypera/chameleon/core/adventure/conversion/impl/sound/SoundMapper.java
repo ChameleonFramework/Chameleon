@@ -29,44 +29,42 @@ import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform net.kyori.adventure.sound.Sound
+ * Maps shaded to platform {@link Sound}.
  */
-public class SoundMapper implements IMapper<Sound> {
+public final class SoundMapper implements IMapper<Sound> {
 
-	private final @NotNull Method CREATE_METHOD;
-	private final @NotNull Method SOURCE_VALUE_OF;
+    private final @NotNull Method createMethod;
+    private final @NotNull Method sourceValueOf;
 
-	public SoundMapper() {
-		try {
-			Class<?> soundClass = Class.forName(AdventureConverter.PACKAGE + "sound.Sound");
-			Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-			Class<?> sourceClass = Class.forName(soundClass.getCanonicalName() + "$Source");
-			CREATE_METHOD = soundClass.getMethod("sound", keyClass, sourceClass, float.class, float.class);
-			SOURCE_VALUE_OF = sourceClass.getMethod("valueOf", String.class);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
+    /**
+     * {@link SoundMapper} constructor.
+     */
+    public SoundMapper() {
+        try {
+            Class<?> soundClass = Class.forName(AdventureConverter.PACKAGE + "sound.Sound");
+            Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
+            Class<?> sourceClass = Class.forName(soundClass.getCanonicalName() + "$Source");
+            this.createMethod = soundClass.getMethod("sound", keyClass, sourceClass, float.class, float.class);
+            this.sourceValueOf = sourceClass.getMethod("valueOf", String.class);
+        } catch (ReflectiveOperationException ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
 
-	/**
-	 * Map Key to the platform version of Adventure
-	 *
-	 * @param sound Sound to be mapped
-	 * @return Platform Sound
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Sound sound) {
-		try {
-			return CREATE_METHOD.invoke(
-					null,
-					AdventureConverter.convertKey(sound.name()),
-					SOURCE_VALUE_OF.invoke(null, sound.source().name()),
-					sound.volume(),
-					sound.pitch()
-			);
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * Map {@link Sound} to the platform version of Adventure.
+     *
+     * @param sound {@link Sound} to be mapped.
+     *
+     * @return Platform instance of {@link Sound}.
+     */
+    @Override
+    public @NotNull Object map(@NotNull Sound sound) {
+        try {
+            return this.createMethod.invoke(null, AdventureConverter.convertKey(sound.name()), this.sourceValueOf.invoke(null, sound.source().name()), sound.volume(), sound.pitch());
+        } catch (ReflectiveOperationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
 }

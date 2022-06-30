@@ -26,28 +26,39 @@ import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.managers.CommandManager;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.commands.VelocityCommand;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity command manager
+ * Velocity {@link CommandManager} implementation.
  */
+@Internal
 public final class VelocityCommandManager extends CommandManager {
 
-	private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull VelocityChameleon chameleon;
 
-	public VelocityCommandManager(@NotNull VelocityChameleon chameleon) {
-		super(chameleon);
-		this.chameleon = chameleon;
-	}
+    /**
+     * {@link VelocityCommandManager} constructor.
+     *
+     * @param chameleon {@link VelocityChameleon} instance.
+     */
+    @Internal
+    public VelocityCommandManager(@NotNull VelocityChameleon chameleon) {
+        super(chameleon);
+        this.chameleon = chameleon;
+    }
 
-	@Override
-	protected void registerCommand(@NotNull Command command) {
-		chameleon.getVelocityPlugin().getServer().getCommandManager().register(chameleon.getVelocityPlugin().getServer().getCommandManager().metaBuilder(command.getName()).aliases(command.getAliases().toArray(new String[0])).build(), new VelocityCommand(chameleon, command));
-	}
+    @Override
+    protected void registerCommand(@NotNull Command command) {
+        this.chameleon.getVelocityPlugin()
+            .getServer()
+            .getCommandManager()
+            .register(this.chameleon.getVelocityPlugin().getServer().getCommandManager().metaBuilder(command.getName()).aliases(command.getAliases().toArray(new String[0])).build(), new VelocityCommand(this.chameleon, command));
+    }
 
-	@Override
-	protected void unregisterCommand(@NotNull Command command) {
-		chameleon.getVelocityPlugin().getServer().getCommandManager().unregister(command.getName());
-	}
+    @Override
+    protected void unregisterCommand(@NotNull Command command) {
+        this.chameleon.getVelocityPlugin().getServer().getCommandManager().unregister(command.getName());
+    }
 
 }

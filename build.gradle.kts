@@ -24,8 +24,8 @@ plugins {
     id("chameleon.publishing")
 }
 
-group = "dev.hypera.chameleon"
-version = "0.7.0-SNAPSHOT"
+group = "dev.hypera"
+version = "0.8.0-SNAPSHOT"
 description = "Cross-platform Minecraft plugin framework"
 
 subprojects {

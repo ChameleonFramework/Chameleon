@@ -26,14 +26,37 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * In-game player
+ * An in-game player.
  */
 public interface User extends ChatUser {
 
-	@NotNull UUID getUniqueId();
-	int getPing();
+    /**
+     * Get this {@link User}'s unique identifier.
+     *
+     * @return {@link User}'s unique identifier.
+     */
+    @NotNull UUID getUniqueId();
 
-	void chat(@NotNull String message);
-	void sendData(@NotNull String channel, byte[] data);
+    /**
+     * Get this {@link User}'s ping.
+     *
+     * @return {@link User}'s ping.
+     */
+    int getPing();
+
+    /**
+     * Send a chat message as this {@link User}.
+     *
+     * @param message Chat message to be sent.
+     */
+    void chat(@NotNull String message);
+
+    /**
+     * Send a plugin message to this {@link User}.
+     *
+     * @param channel Plugin message channel.
+     * @param data    Data.
+     */
+    void sendData(@NotNull String channel, byte[] data);
 
 }

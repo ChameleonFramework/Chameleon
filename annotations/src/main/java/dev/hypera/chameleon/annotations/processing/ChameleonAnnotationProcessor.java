@@ -35,42 +35,48 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
+/**
+ * Chameleon Annotation Processor.
+ */
 @SupportedAnnotationTypes("dev.hypera.chameleon.annotations.Plugin")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class ChameleonAnnotationProcessor extends AbstractProcessor {
 
-	@Override
-	public synchronized boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-		Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Plugin.class);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Plugin.class);
 
-		if (elements.size() >= 1) {
-			if (elements.size() > 1) {
-				throw new RuntimeException("@Plugin cannot be used more than once");
-			}
+        if (elements.size() >= 1) {
+            if (elements.size() > 1) {
+                throw new RuntimeException("@Plugin cannot be used more than once");
+            }
 
-			Element element = elements.iterator().next();
-			if (element.getKind() != ElementKind.CLASS || element.getModifiers().contains(Modifier.ABSTRACT)) {
-				throw new RuntimeException("@Plugin cannot be used on abstract classes");
-			}
+            Element element = elements.iterator().next();
+            if (element.getKind() != ElementKind.CLASS || element.getModifiers().contains(Modifier.ABSTRACT)) {
+                throw new RuntimeException("@Plugin cannot be used on abstract classes");
+            }
 
-			TypeElement plugin = (TypeElement) element;
+            TypeElement plugin = (TypeElement) element;
 
-			Plugin data = plugin.getAnnotation(Plugin.class);
-			Platform[] platforms = data.platforms();
-			if (platforms.length < 1) {
-				platforms = Platform.values();
-			}
+            Plugin data = plugin.getAnnotation(Plugin.class);
+            Platform[] platforms = data.platforms();
+            if (platforms.length < 1) {
+                platforms = Platform.values();
+            }
 
-			for (Platform platform : platforms) {
-				try {
-					platform.getGenerator().getConstructor().newInstance().generate(data, plugin, processingEnv);
-				} catch (Exception ex) {
-					throw new RuntimeException("Failed to generate platform data", ex);
-				}
-			}
-		}
+            for (Platform platform : platforms) {
+                try {
+                    platform.getGenerator().getConstructor().newInstance().generate(data, plugin, processingEnv);
+                } catch (Exception ex) {
+                    throw new RuntimeException("Failed to generate platform data", ex);
+                }
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
 }

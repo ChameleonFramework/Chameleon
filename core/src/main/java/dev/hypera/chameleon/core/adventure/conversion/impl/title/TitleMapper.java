@@ -30,42 +30,45 @@ import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform net.kyori.adventure.title.Title
+ * Maps shaded to platform {@link Title}.
  */
-public class TitleMapper implements IMapper<Title> {
+public final class TitleMapper implements IMapper<Title> {
 
-	private final @NotNull TimesMapper timesConverter = new TimesMapper();
-	private final @NotNull Method CREATE_METHOD;
+    private final @NotNull TimesMapper timesConverter = new TimesMapper();
+    private final @NotNull Method createMethod;
 
-	public TitleMapper() {
-		try {
-			Class<?> titleClass = Class.forName(AdventureConverter.PACKAGE + "title.Title");
-			Class<?> timesClass = Class.forName(AdventureConverter.PACKAGE + "title.Title$Times");
-			Class<?> componentClass = Class.forName(AdventureConverter.PACKAGE + "text.Component");
-			CREATE_METHOD = titleClass.getMethod("title", componentClass, componentClass, timesClass);
-		} catch (ReflectiveOperationException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
+    /**
+     * {@link TimesMapper} constructor.
+     */
+    public TitleMapper() {
+        try {
+            Class<?> titleClass = Class.forName(AdventureConverter.PACKAGE + "title.Title");
+            Class<?> timesClass = Class.forName(AdventureConverter.PACKAGE + "title.Title$Times");
+            Class<?> componentClass = Class.forName(AdventureConverter.PACKAGE + "text.Component");
+            this.createMethod = titleClass.getMethod("title", componentClass, componentClass, timesClass);
+        } catch (ReflectiveOperationException ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
 
-	/**
-	 * Map Title to the platform version of Adventure
-	 *
-	 * @param title Title to be mapped
-	 * @return Platform Title
-	 */
-	@Override
-	public @NotNull Object map(@NotNull Title title) {
-		try {
-			return CREATE_METHOD.invoke(
-					null,
-					AdventureConverter.convertComponent(title.title()),
-					AdventureConverter.convertComponent(title.subtitle()),
-					timesConverter.map(null == title.times() ? Title.DEFAULT_TIMES : Objects.requireNonNull(title.times()))
-			);
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * Map {@link Title} to the platform version of Adventure.
+     *
+     * @param title {@link Title} to be mapped.
+     *
+     * @return Platform instance of {@link Title}.
+     */
+    @Override
+    public @NotNull Object map(@NotNull Title title) {
+        try {
+            return this.createMethod.invoke(null,
+                AdventureConverter.convertComponent(title.title()),
+                AdventureConverter.convertComponent(title.subtitle()),
+                this.timesConverter.map(null == title.times() ? Title.DEFAULT_TIMES : Objects.requireNonNull(title.times()))
+            );
+        } catch (ReflectiveOperationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
 }

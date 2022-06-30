@@ -29,12 +29,17 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Sub command handler annotation
+ * Sub-command handler annotation.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SubCommandHandler {
 
-	@NotNull String value();
+    /**
+     * Get sub-command names, separated by '|'.
+     *
+     * @return sub-command names.
+     */
+    @NotNull String value();
 
 }

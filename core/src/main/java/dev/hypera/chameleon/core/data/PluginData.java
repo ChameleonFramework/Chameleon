@@ -26,55 +26,95 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Plugin data
+ * Chameleon plugin data.
  */
 public class PluginData {
 
-	private final @NotNull String name;
-	private final @NotNull String version;
-	private final @NotNull String description;
-	private final @NotNull String url;
-	private final @NotNull List<String> authors;
-	private final @NotNull List<Platform> platforms;
+    private final @NotNull String name;
+    private final @NotNull String version;
+    private final @NotNull String description;
+    private final @NotNull String url;
+    private final @NotNull List<String> authors;
+    private final @NotNull List<Platform> platforms;
 
-	public PluginData(@NotNull String name, @NotNull String version, @NotNull String description, @NotNull String url, @NotNull List<String> authors, @NotNull List<Platform> platforms) {
-		this.name = name;
-		this.version = version;
-		this.description = description;
-		this.url = url;
-		this.authors = authors;
-		this.platforms = platforms;
-	}
+    /**
+     * {@link PluginData} constructor.
+     *
+     * @param name        Plugin name.
+     * @param version     Plugin version.
+     * @param description Plugin description.
+     * @param url         Plugin url.
+     * @param authors     Plugin authors.
+     * @param platforms   Plugin {@link Platform}s.
+     */
+    public PluginData(@NotNull String name, @NotNull String version, @NotNull String description, @NotNull String url, @NotNull List<String> authors, @NotNull List<Platform> platforms) {
+        this.name = name;
+        this.version = version;
+        this.description = description;
+        this.url = url;
+        this.authors = authors;
+        this.platforms = platforms;
+    }
 
-	public @NotNull String getName() {
-		return name;
-	}
+    /**
+     * Get plugin name.
+     *
+     * @return plugin name.
+     */
+    public @NotNull String getName() {
+        return this.name;
+    }
 
-	public @NotNull String getVersion() {
-		return version;
-	}
+    /**
+     * Get plugin version.
+     *
+     * @return plugin version.
+     */
+    public @NotNull String getVersion() {
+        return this.version;
+    }
 
-	public @NotNull String getDescription() {
-		return description;
-	}
+    /**
+     * Get plugin description, if provided, otherwise an empty string.
+     *
+     * @return plugin description.
+     */
+    public @NotNull String getDescription() {
+        return this.description;
+    }
 
-	public @NotNull String getUrl() {
-		return url;
-	}
+    /**
+     * Get plugin url, if provided, otherwise an empty string.
+     *
+     * @return plugin url.
+     */
+    public @NotNull String getUrl() {
+        return this.url;
+    }
 
-	public @NotNull List<String> getAuthors() {
-		return authors;
-	}
+    /**
+     * Get plugin authors.
+     *
+     * @return plugin authors.
+     */
+    public @NotNull List<String> getAuthors() {
+        return this.authors;
+    }
 
-	public @NotNull List<Platform> getPlatforms() {
-		return platforms;
-	}
+    /**
+     * Get plugin {@link Platform}s.
+     *
+     * @return plugin {@link Platform}s.
+     */
+    public @NotNull List<Platform> getPlatforms() {
+        return this.platforms;
+    }
 
-	public enum Platform {
-		BUNGEECORD,
-		MINESTOM,
-		SPIGOT,
-		VELOCITY
-	}
+    /**
+     * Platform.
+     */
+    public enum Platform {
+        BUNGEECORD, MINESTOM, BUKKIT, VELOCITY
+    }
 
 }

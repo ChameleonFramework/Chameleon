@@ -29,12 +29,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Event handler annotation
+ * Event handler annotation.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EventHandler {
 
-	ListenerPriority value() default ListenerPriority.NORMAL;
+    /**
+     * Get the handler's {@link ListenerPriority}.
+     * Defaults to {@code ListenerPriority.NORMAL}
+     *
+     * @return the handler's {@link ListenerPriority}.
+     */
+    ListenerPriority value() default ListenerPriority.NORMAL;
 
 }

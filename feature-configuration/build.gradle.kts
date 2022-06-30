@@ -21,25 +21,24 @@
  *  SOFTWARE.
  */
 plugins {
-    id("java-library")
     id("chameleon.api")
 }
 
 dependencies {
-    implementation("org.yaml:snakeyaml:1.30") {
+    implementation(libs.yaml) {
         exclude(group = "joda-time", module = "joda-time")
         exclude(group = "junit", module = "joda-time")
         exclude(group = "org.apache", module = "velocity")
     }
 
-    implementation("com.googlecode.json-simple:json-simple:1.1.1") {
+    implementation(libs.jsonSimple) {
         exclude(group = "junit", module = "junit")
     }
 
-    compileOnlyApi("org.jetbrains:annotations:23.0.0")
+    compileOnlyApi(libs.annotations)
 
-    testImplementation(platform("org.junit:junit-bom:5.8.2"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation(platform(libs.test.junit.bom))
+    testImplementation(libs.test.junit.jupiter)
 }
 
 tasks.test {

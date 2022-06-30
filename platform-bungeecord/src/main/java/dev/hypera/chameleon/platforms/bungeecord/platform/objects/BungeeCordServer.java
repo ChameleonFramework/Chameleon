@@ -34,42 +34,67 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord server implementation
+ * BungeeCord {@link Server} implementation.
  */
+@Internal
 public class BungeeCordServer implements Server {
 
-	private final @NotNull Chameleon chameleon;
-	private final @NotNull ServerInfo server;
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull ServerInfo server;
 
-	public BungeeCordServer(@NotNull Chameleon chameleon, @NotNull ServerInfo server) {
-		this.chameleon = chameleon;
-		this.server = server;
-	}
+    /**
+     * {@link BungeeCordServer} implementation.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     * @param server    {@link ServerInfo} instance.
+     */
+    @Internal
+    public BungeeCordServer(@NotNull Chameleon chameleon, @NotNull ServerInfo server) {
+        this.chameleon = chameleon;
+        this.server = server;
+    }
 
 
-	@Override
-	public @NotNull String getName() {
-		return server.getName();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return this.server.getName();
+    }
 
-	@Override
-	public @NotNull SocketAddress getSocketAddress() {
-		return server.getSocketAddress();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull SocketAddress getSocketAddress() {
+        return this.server.getSocketAddress();
+    }
 
-	@Override
-	public @NotNull Set<ProxyUser> getPlayers() {
-		return server.getPlayers().stream().map(p -> new BungeeCordUser(chameleon, p)).collect(Collectors.toSet());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<ProxyUser> getPlayers() {
+        return this.server.getPlayers().stream().map(p -> new BungeeCordUser(this.chameleon, p)).collect(Collectors.toSet());
+    }
 
-	@Override
-	public void sendData(@NotNull String channel, byte[] data) {
-		server.sendData(channel, data);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendData(@NotNull String channel, byte[] data) {
+        this.server.sendData(channel, data);
+    }
 
-	@Internal
-	public @NotNull ServerInfo getBungeeCord() {
-		return server;
-	}
+    /**
+     * Get stored {@link ServerInfo}.
+     *
+     * @return stored {@link ServerInfo}.
+     */
+    @Internal
+    public @NotNull ServerInfo getBungeeCord() {
+        return this.server;
+    }
 
 }

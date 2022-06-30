@@ -30,38 +30,44 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Platform module loader
+ * {@link PlatformModule} loader.
  */
 public class PlatformModuleLoader {
 
-	private final @NotNull Chameleon chameleon;
+    private final @NotNull Chameleon chameleon;
 
-	@Internal
-	public PlatformModuleLoader(@NotNull Chameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+    /**
+     * {@link PlatformModuleLoader} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     */
+    @Internal
+    public PlatformModuleLoader(@NotNull Chameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
-	/**
-	 * Load platform modules
-	 *
-	 * @param modules Platform modules to be loaded
-	 * @return Loaded module for the current platform
-	 */
-	@SafeVarargs
-	public final @NotNull Optional<PlatformModule<?>> load(@NotNull Class<PlatformModule<?>>... modules) {
-		for (Class<PlatformModule<?>> module : modules) {
-			try {
-				for (Constructor<?> constructor : module.getDeclaredConstructors()) {
-					if (constructor.getParameterCount() == 1 && chameleon.getClass().isAssignableFrom(constructor.getParameterTypes()[0])) {
-						return Optional.of(module.cast(constructor.newInstance(constructor.getParameterTypes()[0].cast(chameleon))));
-					}
-				}
-			} catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-				throw new IllegalStateException(ex);
-			}
-		}
+    /**
+     * Load {@link PlatformModule}s.
+     *
+     * @param modules {@link PlatformModule}s to be loaded.
+     *
+     * @return Loaded {@link PlatformModule} for the current {@link dev.hypera.chameleon.core.platform.Platform}.
+     */
+    @SafeVarargs
+    public final @NotNull Optional<PlatformModule<?>> load(@NotNull Class<PlatformModule<?>>... modules) {
+        for (Class<PlatformModule<?>> module : modules) {
+            try {
+                for (Constructor<?> constructor : module.getDeclaredConstructors()) {
+                    if (constructor.getParameterCount() == 1 && this.chameleon.getClass().isAssignableFrom(constructor.getParameterTypes()[0])) {
+                        return Optional.of(module.cast(constructor.newInstance(constructor.getParameterTypes()[0].cast(this.chameleon))));
+                    }
+                }
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
 
-		return Optional.empty();
-	}
+        return Optional.empty();
+    }
 
 }

@@ -31,37 +31,60 @@ import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * User, can be a player or console
+ * A chat-receiving user, this could either be an actual player or console.
  */
 public interface ChatUser extends Audience, PermissionHolder {
 
-	@NotNull String getName();
+    /**
+     * Get this user's name.
+     *
+     * @return user's name.
+     */
+    @NotNull String getName();
 
 
-	default @NotNull User user() {
-		if (this instanceof User) {
-			return (User) this;
-		} else {
-			throw new IllegalStateException("Cannot cast to User");
-		}
-	}
+    /**
+     * Cast this {@link ChatUser} instance to an {@link User} instance.
+     *
+     * @return {@link User}.
+     * @throws IllegalStateException if this {@link ChatUser} is not an {@link User}.
+     */
+    default @NotNull User user() {
+        if (this instanceof User) {
+            return (User) this;
+        } else {
+            throw new IllegalStateException("Cannot cast to User");
+        }
+    }
 
-	@PlatformSpecific(Type.PROXY)
-	default @NotNull ProxyUser proxy() {
-		if (this instanceof ProxyUser) {
-			return (ProxyUser) this;
-		} else {
-			throw new IllegalStateException("Cannot cast to ProxyUser");
-		}
-	}
+    /**
+     * Cast this {@link ChatUser} instance to an {@link ProxyUser} instance.
+     *
+     * @return {@link ProxyUser}.
+     * @throws IllegalStateException if this {@link ChatUser} is not an {@link ProxyUser}.
+     */
+    @PlatformSpecific(Type.PROXY)
+    default @NotNull ProxyUser proxy() {
+        if (this instanceof ProxyUser) {
+            return (ProxyUser) this;
+        } else {
+            throw new IllegalStateException("Cannot cast to ProxyUser");
+        }
+    }
 
-	@PlatformSpecific(Type.SERVER)
-	default @NotNull ServerUser server() {
-		if (this instanceof ServerUser) {
-			return (ServerUser) this;
-		} else {
-			throw new IllegalStateException("Cannot cast to ServerUser");
-		}
-	}
+    /**
+     * Cast this {@link ChatUser} instance to an {@link ServerUser} instance.
+     *
+     * @return {@link ServerUser}.
+     * @throws IllegalStateException if this {@link ChatUser} is not an {@link ServerUser}.
+     */
+    @PlatformSpecific(Type.SERVER)
+    default @NotNull ServerUser server() {
+        if (this instanceof ServerUser) {
+            return (ServerUser) this;
+        } else {
+            throw new IllegalStateException("Cannot cast to ServerUser");
+        }
+    }
 
 }

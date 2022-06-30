@@ -27,51 +27,93 @@ import java.time.Duration;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * {@link Schedule} implementations.
+ */
 @Internal
-public class ScheduleImpl {
+public final class ScheduleImpl {
 
-	static @NotNull Schedule NEXT_TICK = new TickSchedule(1);
-	static @NotNull Schedule NONE = () -> Type.NONE;
+    static @NotNull Schedule NEXT_TICK = new TickSchedule(1);
+    static @NotNull Schedule NONE = () -> Type.NONE;
 
+    private ScheduleImpl() {
 
-	@Internal
-	public static class DurationSchedule implements Schedule {
+    }
 
-		private final @NotNull Duration duration;
+    /**
+     * {@link Schedule} {@link Duration} implementation.
+     *
+     * @see Schedule#duration(Duration)
+     */
+    @Internal
+    public final static class DurationSchedule implements Schedule {
 
-		public DurationSchedule(@NotNull Duration duration) {
-			this.duration = duration;
-		}
+        private final @NotNull Duration duration;
 
-		@Override
-		public @NotNull Type getType() {
-			return Type.DURATION;
-		}
+        /**
+         * {@link DurationSchedule} constructor.
+         *
+         * @param duration {@link Duration} between runs.
+         */
+        public DurationSchedule(@NotNull Duration duration) {
+            this.duration = duration;
+        }
 
-		public @NotNull Duration getDuration() {
-			return duration;
-		}
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull Type getType() {
+            return Type.DURATION;
+        }
 
-	}
+        /**
+         * Get {@link Duration}.
+         *
+         * @return {@link Duration}.
+         */
+        public @NotNull Duration getDuration() {
+            return this.duration;
+        }
 
-	@Internal
-	public static class TickSchedule implements Schedule {
+    }
 
-		private final int ticks;
+    /**
+     * {@link Schedule} tick implementation.
+     *
+     * @see Schedule#tick(int)
+     */
+    @Internal
+    public final static class TickSchedule implements Schedule {
 
-		public TickSchedule(int ticks) {
-			this.ticks = ticks;
-		}
+        private final int ticks;
 
-		@Override
-		public @NotNull Type getType() {
-			return Type.TICK;
-		}
+        /**
+         * {@link TickSchedule} constructor.
+         *
+         * @param ticks Ticks between runs.
+         */
+        public TickSchedule(int ticks) {
+            this.ticks = ticks;
+        }
 
-		public int getTicks() {
-			return ticks;
-		}
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull Type getType() {
+            return Type.TICK;
+        }
 
-	}
+        /**
+         * Get ticks.
+         *
+         * @return ticks.
+         */
+        public int getTicks() {
+            return this.ticks;
+        }
+
+    }
 
 }

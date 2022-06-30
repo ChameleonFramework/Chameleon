@@ -25,30 +25,49 @@ package dev.hypera.chameleon.core.exceptions.instantiation;
 import dev.hypera.chameleon.core.exceptions.ChameleonException;
 
 /**
- * Chameleon instantiation exception
+ * {@link dev.hypera.chameleon.core.Chameleon} instantiation exception.
  */
 public class ChameleonInstantiationException extends ChameleonException {
 
-	private static final long serialVersionUID = 9018432641876465954L;
+    private static final long serialVersionUID = 9018432641876465954L;
 
-	public ChameleonInstantiationException() {
-		super();
-	}
+    /**
+     * {@link ChameleonInstantiationException} constructor.
+     */
+    public ChameleonInstantiationException() {
+        super();
+    }
 
-	public ChameleonInstantiationException(String message) {
-		super(message);
-	}
+    /**
+     * {@link ChameleonInstantiationException} constructor.
+     *
+     * @param message Exception message.
+     */
+    public ChameleonInstantiationException(String message) {
+        super(message);
+    }
 
-	public ChameleonInstantiationException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * {@link ChameleonInstantiationException} constructor.
+     *
+     * @param message Exception message.
+     * @param cause   Exception cause.
+     */
+    public ChameleonInstantiationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public ChameleonInstantiationException(Throwable cause) {
-		super(cause);
-	}
+    /**
+     * {@link ChameleonInstantiationException} constructor.
+     *
+     * @param cause Exception cause.
+     */
+    public ChameleonInstantiationException(Throwable cause) {
+        super(cause);
+    }
 
-	public ChameleonInstantiationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
+    protected ChameleonInstantiationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 
 }

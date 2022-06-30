@@ -29,49 +29,75 @@ import dev.hypera.chameleon.platforms.velocity.platform.objects.VelocityServer;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity platform
+ * Velocity {@link ProxyPlatform} implementation.
  */
+@Internal
 public final class VelocityPlatform extends ProxyPlatform {
 
-	private final @NotNull VelocityChameleon chameleon;
+    private final @NotNull VelocityChameleon chameleon;
 
-	public VelocityPlatform(@NotNull VelocityChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
-
-
-	@Override
-	public @NotNull String getAPIName() {
-		return "Velocity";
-	}
-
-	@Override
-	public @NotNull String getName() {
-		return chameleon.getVelocityPlugin().getServer().getVersion().getName();
-	}
-
-	@Override
-	public @NotNull String getVersion() {
-		return chameleon.getVelocityPlugin().getServer().getVersion().getVersion();
-	}
-
-	@Override
-	public @NotNull Type getType() {
-		return Type.PROXY;
-	}
+    /**
+     * {@link VelocityPlatform} constructor.
+     *
+     * @param chameleon {@link VelocityChameleon} instance.
+     */
+    @Internal
+    public VelocityPlatform(@NotNull VelocityChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
 
-	@Override
-	public @NotNull Set<Server> getServers() {
-		return chameleon.getVelocityPlugin().getServer().getAllServers().stream().map(s -> new VelocityServer(chameleon, s)).collect(Collectors.toSet());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getAPIName() {
+        return "Velocity";
+    }
 
-	@Override
-	public @NotNull Optional<Server> getServer(@NotNull String name) {
-		return chameleon.getVelocityPlugin().getServer().getServer(name).map(s -> new VelocityServer(chameleon, s));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return this.chameleon.getVelocityPlugin().getServer().getVersion().getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return this.chameleon.getVelocityPlugin().getServer().getVersion().getVersion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Type getType() {
+        return Type.PROXY;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<Server> getServers() {
+        return this.chameleon.getVelocityPlugin().getServer().getAllServers().stream().map(s -> new VelocityServer(this.chameleon, s)).collect(Collectors.toSet());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Optional<Server> getServer(@NotNull String name) {
+        return this.chameleon.getVelocityPlugin().getServer().getServer(name).map(s -> new VelocityServer(this.chameleon, s));
+    }
 
 }

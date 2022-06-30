@@ -27,32 +27,50 @@ import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.core.users.User;
 import dev.hypera.chameleon.platforms.minestom.users.MinestomUser;
 import dev.hypera.chameleon.platforms.minestom.users.MinestomUsers;
-import net.minestom.server.MinecraftServer;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import net.minestom.server.MinecraftServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom user manager
+ * Minestom {@link UserManager} implementation.
  */
+@Internal
 public final class MinestomUserManager extends UserManager {
 
-	@Override
-	public @NotNull ChatUser getConsole() {
-		return MinestomUsers.console();
-	}
+    /**
+     * {@link MinestomUserManager} constructor.
+     */
+    @Internal
+    public MinestomUserManager() {
 
-	@Override
-	public @NotNull Set<User> getPlayers() {
-		return MinecraftServer.getConnectionManager().getOnlinePlayers().stream().map(MinestomUser::new).collect(Collectors.toSet());
-	}
+    }
 
-	@Override
-	public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
-		return Optional.ofNullable(MinecraftServer.getConnectionManager().getPlayer(uniqueId)).map(MinestomUser::new);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ChatUser getConsole() {
+        return MinestomUsers.console();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<User> getPlayers() {
+        return MinecraftServer.getConnectionManager().getOnlinePlayers().stream().map(MinestomUser::new).collect(Collectors.toSet());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
+        return Optional.ofNullable(MinecraftServer.getConnectionManager().getPlayer(uniqueId)).map(MinestomUser::new);
+    }
 
 }

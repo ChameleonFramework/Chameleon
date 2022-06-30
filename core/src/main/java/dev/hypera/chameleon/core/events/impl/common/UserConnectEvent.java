@@ -27,21 +27,29 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Dispatched when a user joins the proxy/server
+ * {@link User} connect event, dispatched when a user joins the proxy/server.
  */
 public class UserConnectEvent implements UserEvent {
 
-	private final @NotNull User user;
+    private final @NotNull User user;
 
-	@Internal
-	public UserConnectEvent(@NotNull User user) {
-		this.user = user;
-	}
+    /**
+     * {@link UserConnectEvent} constructor.
+     *
+     * @param user The {@link User} that triggered this event.
+     */
+    @Internal
+    public UserConnectEvent(@NotNull User user) {
+        this.user = user;
+    }
 
 
-	@Override
-	public @NotNull User getUser() {
-		return user;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull User getUser() {
+        return this.user;
+    }
 
 }

@@ -24,34 +24,57 @@ package dev.hypera.chameleon.core.scheduling;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * {@link Task} implementation.
+ */
 public class TaskImpl implements Task {
 
-	private final @NotNull Runnable runnable;
-	private final @NotNull Type type;
-	private final @NotNull Schedule delay;
-	private final @NotNull Schedule repeat;
+    private final @NotNull Runnable runnable;
+    private final @NotNull Type type;
+    private final @NotNull Schedule delay;
+    private final @NotNull Schedule repeat;
 
-	TaskImpl(@NotNull Runnable runnable, @NotNull Type type, @NotNull Schedule delay, @NotNull Schedule repeat) {
-		this.runnable = runnable;
-		this.type = type;
-		this.delay = delay;
-		this.repeat = repeat;
-	}
+    TaskImpl(@NotNull Runnable runnable, @NotNull Type type, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        this.runnable = runnable;
+        this.type = type;
+        this.delay = delay;
+        this.repeat = repeat;
+    }
 
-	public @NotNull Runnable getRunnable() {
-		return runnable;
-	}
+    /**
+     * Get Task {@link Runnable}.
+     *
+     * @return Task {@link Runnable}.
+     */
+    public @NotNull Runnable getRunnable() {
+        return this.runnable;
+    }
 
-	public @NotNull Type getType() {
-		return type;
-	}
+    /**
+     * Get {@link Task.Type}.
+     *
+     * @return {@link Task.Type}.
+     */
+    public @NotNull Type getType() {
+        return this.type;
+    }
 
-	public @NotNull Schedule getDelay() {
-		return delay;
-	}
+    /**
+     * Get Task delay.
+     *
+     * @return Task delay {@link Schedule}.
+     */
+    public @NotNull Schedule getDelay() {
+        return this.delay;
+    }
 
-	public @NotNull Schedule getRepeat() {
-		return repeat;
-	}
+    /**
+     * Get Task repeat.
+     *
+     * @return Task repeat {@link Schedule}.
+     */
+    public @NotNull Schedule getRepeat() {
+        return this.repeat;
+    }
 
 }

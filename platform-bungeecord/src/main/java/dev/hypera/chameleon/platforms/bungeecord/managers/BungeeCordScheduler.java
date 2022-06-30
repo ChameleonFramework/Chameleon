@@ -31,54 +31,54 @@ import dev.hypera.chameleon.core.scheduling.TaskImpl;
 import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
 import java.util.concurrent.TimeUnit;
 import net.md_5.bungee.api.ProxyServer;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord scheduler
+ * BungeeCord {@link Scheduler} implementation.
  */
+@Internal
 public final class BungeeCordScheduler extends Scheduler {
 
-	private final @NotNull BungeeCordChameleon chameleon;
+    private final @NotNull BungeeCordChameleon chameleon;
 
-	public BungeeCordScheduler(@NotNull BungeeCordChameleon chameleon) {
-		this.chameleon = chameleon;
-	}
+    /**
+     * {@link BungeeCordScheduler} constructor.
+     *
+     * @param chameleon {@link BungeeCordChameleon} instance.
+     */
+    @Internal
+    public BungeeCordScheduler(@NotNull BungeeCordChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
 
-	@Override
-	protected void schedule(@NotNull TaskImpl task) {
-		if (task.getRepeat().getType().equals(Type.NONE)) {
-			if (task.getDelay().getType().equals(Type.NONE)) {
-				ProxyServer.getInstance().getScheduler().runAsync(chameleon.getBungeePlugin(), task.getRunnable());
-			} else {
-				ProxyServer.getInstance().getScheduler().schedule(
-						chameleon.getBungeePlugin(),
-						task.getRunnable(),
-						convert(task.getDelay()),
-						TimeUnit.MILLISECONDS
-				);
-			}
-		} else {
-			ProxyServer.getInstance().getScheduler().schedule(
-					chameleon.getBungeePlugin(),
-					task.getRunnable(),
-					convert(task.getDelay()),
-					convert(task.getRepeat()),
-					TimeUnit.MILLISECONDS
-			);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void schedule(@NotNull TaskImpl task) {
+        if (task.getRepeat().getType().equals(Type.NONE)) {
+            if (task.getDelay().getType().equals(Type.NONE)) {
+                ProxyServer.getInstance().getScheduler().runAsync(this.chameleon.getBungeePlugin(), task.getRunnable());
+            } else {
+                ProxyServer.getInstance().getScheduler().schedule(this.chameleon.getBungeePlugin(), task.getRunnable(), convert(task.getDelay()), TimeUnit.MILLISECONDS);
+            }
+        } else {
+            ProxyServer.getInstance().getScheduler().schedule(this.chameleon.getBungeePlugin(), task.getRunnable(), convert(task.getDelay()), convert(task.getRepeat()), TimeUnit.MILLISECONDS);
+        }
+    }
 
-	private long convert(@NotNull Schedule schedule) {
-		if (schedule.getType().equals(Type.NONE)) {
-			return 0;
-		} else if (schedule.getType().equals(Type.DURATION)) {
-			return ((DurationSchedule) schedule).getDuration().toMillis();
-		} else if (schedule.getType().equals(Type.TICK)) {
-			return (long) ((TickSchedule) schedule).getTicks() * 50;
-		} else {
-			throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
-		}
-	}
+    private long convert(@NotNull Schedule schedule) {
+        if (schedule.getType().equals(Type.NONE)) {
+            return 0;
+        } else if (schedule.getType().equals(Type.DURATION)) {
+            return ((DurationSchedule) schedule).getDuration().toMillis();
+        } else if (schedule.getType().equals(Type.TICK)) {
+            return (long) ((TickSchedule) schedule).getTicks() * 50;
+        } else {
+            throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
+        }
+    }
 
 }

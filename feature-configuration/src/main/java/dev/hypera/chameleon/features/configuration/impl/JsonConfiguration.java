@@ -23,83 +23,102 @@
 package dev.hypera.chameleon.features.configuration.impl;
 
 import dev.hypera.chameleon.features.configuration.Configuration;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
- * JSON configuration implementation
+ * JSON {@link Configuration} implementation.
  */
 public class JsonConfiguration extends Configuration {
 
-	private @Nullable Map<String, Object> config;
+    private @Nullable Map<String, Object> config;
 
-	public JsonConfiguration(@NotNull Path dataFolder, @NotNull String fileName) {
-		super(dataFolder, fileName);
-	}
+    /**
+     * {@link JsonConfiguration} constructor.
+     *
+     * @param dataFolder Folder to store loaded configuration file in.
+     * @param fileName   Configuration file name.
+     */
+    public JsonConfiguration(@NotNull Path dataFolder, @NotNull String fileName) {
+        super(dataFolder, fileName);
+    }
 
-	public JsonConfiguration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
-		super(dataFolder, fileName, copyDefaultFromResources);
-	}
-
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public @NotNull Configuration load() throws IOException {
-		if (!Files.exists(dataFolder)) {
-			Files.createDirectories(dataFolder);
-		}
-
-		if (!Files.exists(path)) {
-			if (copyDefaultFromResources) {
-				try (InputStream defaultResource = JsonConfiguration.class.getResourceAsStream("/" + fileName)) {
-					if (null == defaultResource) {
-						throw new IllegalStateException("Failed to load resource '" + fileName + "'");
-					}
-
-					Files.copy(defaultResource, path);
-				}
-			} else {
-				Files.createFile(path);
-			}
-		}
-
-		try (BufferedReader reader = Files.newBufferedReader(path)) {
-			config = ((Map<String, Object>) new JSONParser().parse(reader));
-			loaded = true;
-		} catch (ParseException ex) {
-			throw new IOException(ex);
-		}
-
-		return this;
-	}
-
-	@Override
-	public @NotNull Configuration unload() {
-		loaded = false;
-		config = null;
-		return this;
-	}
+    /**
+     * {@link JsonConfiguration} constructor.
+     *
+     * @param dataFolder               Folder to store loaded configuration file in.
+     * @param fileName                 Configuration file name.
+     * @param copyDefaultFromResources Whether this file should be copied from resources if not already loaded.
+     */
+    public JsonConfiguration(@NotNull Path dataFolder, @NotNull String fileName, boolean copyDefaultFromResources) {
+        super(dataFolder, fileName, copyDefaultFromResources);
+    }
 
 
-	@Override
-	public @NotNull Optional<Object> get(@NotNull String path) {
-		if (!loaded || null == config) {
-			throw new IllegalStateException("Configuration has not been loaded");
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NotNull Configuration load() throws IOException {
+        if (!Files.exists(dataFolder)) {
+            Files.createDirectories(dataFolder);
+        }
 
-		return getObject(path, config);
-	}
+        if (!Files.exists(path)) {
+            if (copyDefaultFromResources) {
+                try (InputStream defaultResource = JsonConfiguration.class.getResourceAsStream("/" + fileName)) {
+                    if (null == defaultResource) {
+                        throw new IllegalStateException("Failed to load resource '" + fileName + "'");
+                    }
+
+                    Files.copy(defaultResource, path);
+                }
+            } else {
+                Files.createFile(path);
+            }
+        }
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            this.config = ((Map<String, Object>) new JSONParser().parse(reader));
+            this.loaded = true;
+        } catch (ParseException ex) {
+            throw new IOException(ex);
+        }
+
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Configuration unload() {
+        this.loaded = false;
+        this.config = null;
+        return this;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Optional<Object> get(@NotNull String path) {
+        if (!this.loaded || null == this.config) {
+            throw new IllegalStateException("Configuration has not been loaded");
+        }
+
+        return getObject(path, this.config);
+    }
 
 }
