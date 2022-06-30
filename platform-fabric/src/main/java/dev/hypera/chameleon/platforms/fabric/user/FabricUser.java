@@ -25,6 +25,7 @@ package dev.hypera.chameleon.platforms.fabric.user;
 import dev.hypera.chameleon.core.adventure.AbstractAudience;
 import dev.hypera.chameleon.core.platform.server.GameMode;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
+import java.util.UUID;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -32,8 +33,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.UUID;
 
 /**
  * Fabric {@link ServerUser} implementation.

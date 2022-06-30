@@ -35,11 +35,10 @@ import dev.hypera.chameleon.core.managers.UserManager;
 import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.platforms.fabric.adventure.FabricAudienceProvider;
 import dev.hypera.chameleon.platforms.fabric.platform.FabricPlatform;
+import java.nio.file.Path;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
-
-import java.nio.file.Path;
 
 /**
  * Fabric {@link Chameleon} implementation.

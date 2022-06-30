@@ -26,6 +26,8 @@ import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.platforms.fabric.user.FabricUsers;
+import java.util.UUID;
+import java.util.function.Predicate;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
@@ -34,9 +36,6 @@ import net.kyori.adventure.text.flattener.ComponentFlattener;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
-
-import java.util.UUID;
-import java.util.function.Predicate;
 
 /**
  * Fabric {@link ChameleonAudienceProvider} implementation.
