@@ -20,27 +20,20 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-        maven("https://maven.fabricmc.net/")
-    }
+plugins {
+    id("chameleon.api")
+    id("fabric-loom") version "0.12-SNAPSHOT"
 }
 
-rootProject.name = "chameleon-parent"
+repositories {
 
-sequenceOf(
-    "core",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-velocity",
-    "platform-fabric"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+}
+
+dependencies {
+    api(project(":chameleon-core"))
+    minecraft(libs.platform.fabric)
+    mappings(libs.platform.fabric.yarn)
+    modImplementation(libs.platform.fabric.loader)
+    modImplementation(libs.adventure.platform.fabric)
+    compileOnlyApi(libs.annotations)
 }

@@ -20,27 +20,26 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-        maven("https://maven.fabricmc.net/")
-    }
-}
+package dev.hypera.chameleon.platforms.fabric.events.impl;
 
-rootProject.name = "chameleon-parent"
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.server.network.ServerPlayerEntity;
+import org.jetbrains.annotations.NotNull;
 
-sequenceOf(
-    "core",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-velocity",
-    "platform-fabric"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+/**
+ * Callback for when a player joins the server.
+ */
+public interface PlayerJoinCallback {
+
+    Event<PlayerJoinCallback> EVENT = EventFactory.createArrayBacked(PlayerJoinCallback.class, (listeners) -> (player) -> {
+        for (PlayerJoinCallback listener : listeners) listener.onPlayerJoin(player);
+    });
+
+    /**
+     * Called when a player joins the server.
+     * @param player The {@link ServerPlayerEntity} that joined.
+     */
+    void onPlayerJoin(@NotNull ServerPlayerEntity player);
+
 }

@@ -5,6 +5,7 @@ version = "1.0"
 # Kyori
 adventure = "4.11.0"
 adventure-platform = "4.1.1"
+adventure-platform-fabric = "5.3.1"
 indra = "2.1.1"
 
 # Platforms
@@ -12,7 +13,9 @@ platform-spigot = "1.19-R0.1-SNAPSHOT"
 platform-bungeecord = "1.19-R0.1-SNAPSHOT"
 platform-minestom = "1d469ca6a6"
 platform-velocity = "3.1.0"
-
+platform-fabric = "1.18.2"
+platform-fabric-yarn = "1.18.2+build.3"
+platform-fabric-loader = "0.14.8"
 
 [libraries]
 # Adventure
@@ -22,12 +25,16 @@ adventure-textSerializer-gson = { module = "net.kyori:adventure-text-serializer-
 adventure-platform-api = { module = "net.kyori:adventure-platform-api", version.ref = "adventure-platform" }
 adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
 adventure-platform-bungeecord = { module = "net.kyori:adventure-platform-bungeecord", version.ref = "adventure-platform" }
+adventure-platform-fabric = { module = "net.kyori:adventure-platform-fabric", version.ref = "adventure-platform-fabric" }
 
 # Platforms
 platform-bukkit = { module = "org.spigotmc:spigot-api", version.ref = "platform-spigot" }
 platform-bungeecord = { module = "net.md-5:bungeecord-api", version.ref = "platform-bungeecord" }
 platform-minestom = { module = "com.github.Minestom:Minestom", version.ref = "platform-minestom" }
 platform-velocity = { module = "com.velocitypowered:velocity-api", version.ref = "platform-velocity" }
+platform-fabric = { module = "com.mojang:minecraft", version.ref = "platform-fabric" }
+platform-fabric-yarn = { module = "net.fabricmc:yarn", version.ref = "platform-fabric-yarn" }
+platform-fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "platform-fabric-loader" }
 
 # File reading/writing
 gson = "com.google.code.gson:gson:2.9.0"

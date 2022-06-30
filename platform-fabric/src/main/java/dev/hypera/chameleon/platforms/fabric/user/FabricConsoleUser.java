@@ -20,27 +20,46 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-        maven("https://maven.fabricmc.net/")
+package dev.hypera.chameleon.platforms.fabric.user;
+
+import dev.hypera.chameleon.core.adventure.AbstractAudience;
+import dev.hypera.chameleon.core.users.ChatUser;
+import net.minecraft.server.command.ServerCommandSource;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Fabric console {@link ChatUser} implementation.
+ */
+@Internal
+public class FabricConsoleUser extends AbstractAudience implements ChatUser {
+
+    private final @NotNull ServerCommandSource serverCommandSource;
+
+    /**
+     * {@link FabricConsoleUser} constructor.
+     *
+     * @param serverCommandSource Command source.
+     */
+    public FabricConsoleUser(@NotNull ServerCommandSource serverCommandSource) {
+        super(serverCommandSource);
+        this.serverCommandSource = serverCommandSource;
     }
-}
 
-rootProject.name = "chameleon-parent"
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return this.serverCommandSource.getName();
+    }
 
-sequenceOf(
-    "core",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-velocity",
-    "platform-fabric"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return true;
+    }
+
 }

@@ -20,27 +20,57 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-        maven("https://maven.fabricmc.net/")
+package dev.hypera.chameleon.platforms.fabric.platform;
+
+import dev.hypera.chameleon.core.platform.server.ServerPlatform;
+import net.minecraft.SharedConstants;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Fabric {@link ServerPlatform} implementation.
+ */
+@Internal
+public final class FabricPlatform extends ServerPlatform {
+
+    /**
+     * {@link FabricPlatform} constructor.
+     */
+    @Internal
+    public FabricPlatform() {
+
     }
-}
 
-rootProject.name = "chameleon-parent"
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getAPIName() {
+        return "Fabric";
+    }
 
-sequenceOf(
-    "core",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-velocity",
-    "platform-fabric"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return "Fabric";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return SharedConstants.getGameVersion().getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Type getType() {
+        return Type.SERVER;
+    }
+
 }

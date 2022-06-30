@@ -20,27 +20,27 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-        maven("https://maven.fabricmc.net/")
+package dev.hypera.chameleon.platforms.fabric.mixin;
+
+import dev.hypera.chameleon.platforms.fabric.events.impl.PlayerJoinCallback;
+import net.minecraft.network.ClientConnection;
+import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+/**
+ * Mixin for {@link PlayerManager} to listen for player joins.
+ */
+@Mixin(PlayerManager.class)
+public abstract class PlayerManagerMixin {
+
+    @Inject(at = @At("TAIL"), method = "onPlayerConnect")
+    public void onPlayerConnect(@NotNull ClientConnection clientConnection, @NotNull ServerPlayerEntity serverPlayerEntity, @NotNull CallbackInfo ci) {
+        PlayerJoinCallback.EVENT.invoker().onPlayerJoin(serverPlayerEntity);
     }
-}
 
-rootProject.name = "chameleon-parent"
-
-sequenceOf(
-    "core",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-velocity",
-    "platform-fabric"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
 }

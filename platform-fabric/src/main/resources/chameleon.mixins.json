@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.hypera.chameleon.platforms.fabric.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "server": [
+    "PlayerManagerMixin",
+    "ServerPlayNetworkHandlerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
