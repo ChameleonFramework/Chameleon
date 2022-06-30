@@ -21,11 +21,11 @@ Chameleon is a framework created to allow developers to easily create Minecraft 
 Chameleon plans to support every platform in this list. If you have ideas for other platforms that we could support, please suggest them in our [official Discord server][discord].
 - [x] Bukkit
 - [x] BungeeCord
-- [x] Velocity
 - [x] Minestom
+- [x] Nukkit
+- [x] Velocity
 - [ ] Fabric
 - [ ] Sponge
-- [ ] Nukkit
 
 
 ## Getting started
@@ -40,8 +40,9 @@ If you have any questions, feel free to ask in our [official Discord server][dis
  - `chameleon-platform-<name>` - Chameleon implementation for the named platform, supported:
    - `bukkit`
    - `bungeecord`
-   - `velocity`
    - `minestom`
+   - `nukkit`
+   - `velocity`
 
 ### Annotation-based platform class generator
 `chameleon-annotations` can be used to automatically generate the main classes that each platform requires in-order to load the plugin then start Chameleon.  

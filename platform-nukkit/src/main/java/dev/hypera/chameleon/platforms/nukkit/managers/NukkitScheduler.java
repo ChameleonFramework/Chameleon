@@ -44,6 +44,8 @@ public class NukkitScheduler extends Scheduler {
 
     /**
      * {@link NukkitScheduler} constructor.
+     *
+     * @param chameleon {@link NukkitChameleon} instance.
      */
     @Internal
     public NukkitScheduler(@NotNull NukkitChameleon chameleon) {

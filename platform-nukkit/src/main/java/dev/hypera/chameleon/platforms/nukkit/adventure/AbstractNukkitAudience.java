@@ -60,7 +60,7 @@ public abstract class AbstractNukkitAudience implements Audience {
      */
     @Override
     public void sendMessage(@NotNull Identified source, @NotNull Component message, @NotNull MessageType type) {
-        sender.sendMessage(LegacyComponentSerializer.legacySection().serialize(message));
+        this.sender.sendMessage(LegacyComponentSerializer.legacySection().serialize(message));
     }
 
 }

@@ -44,7 +44,10 @@ import java.nio.file.Path;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
-public class NukkitChameleon extends Chameleon {
+/**
+ * Nukkit {@link Chameleon} implementation.
+ */
+public final class NukkitChameleon extends Chameleon {
 
     private final @NotNull PluginBase plugin;
     private final @NotNull NukkitAudienceProvider audienceProvider = new NukkitAudienceProvider();

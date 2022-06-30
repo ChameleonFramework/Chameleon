@@ -40,6 +40,13 @@ public class NukkitCommand extends cn.nukkit.command.Command {
     private final @NotNull Chameleon chameleon;
     private final @NotNull Command command;
 
+    /**
+     * {@link NukkitCommand} constructor.
+     *
+     * @param chameleon {@link Chameleon} instance.
+     * @param command   {@link Command} to wrap.
+     */
+    @Internal
     public NukkitCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
         super(command.getName(), "", null, command.getAliases().toArray(new String[0]));
         this.chameleon = chameleon;
