@@ -47,7 +47,7 @@ public final class ChameleonUtil {
      * @return {@code s} if not null, otherwise {@code defaultValue}.
      */
     public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
-        return Optional.ofNullable(s).orElse(defaultValue);
+        return null == s ? defaultValue : s;
     }
 
 }
