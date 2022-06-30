@@ -22,6 +22,7 @@
  */
 package dev.hypera.chameleon.platforms.nukkit;
 
+import cn.nukkit.Server;
 import cn.nukkit.plugin.PluginBase;
 import dev.hypera.chameleon.core.Chameleon;
 import dev.hypera.chameleon.core.ChameleonPlugin;
@@ -34,6 +35,7 @@ import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.managers.UserManager;
 import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.platforms.nukkit.adventure.NukkitAudienceProvider;
+import dev.hypera.chameleon.platforms.nukkit.listeners.NukkitListener;
 import dev.hypera.chameleon.platforms.nukkit.logging.ChameleonNukkitLogger;
 import dev.hypera.chameleon.platforms.nukkit.managers.NukkitCommandManager;
 import dev.hypera.chameleon.platforms.nukkit.managers.NukkitPluginManager;
@@ -61,6 +63,7 @@ public final class NukkitChameleon extends Chameleon {
     NukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, new ChameleonNukkitLogger(nukkitPlugin.getLogger()));
         this.plugin = nukkitPlugin;
+        Server.getInstance().getPluginManager().registerEvents(new NukkitListener(this), nukkitPlugin);
     }
 
     /**
