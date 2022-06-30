@@ -33,14 +33,23 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * Mixin for {@link ServerPlayNetworkHandler} to listen for player leaves.
+ */
 @Mixin(ServerPlayNetworkHandler.class)
 public abstract class ServerPlayNetworkHandlerMixin {
 
     @Shadow public @NotNull ServerPlayerEntity player;
 
+    /**
+     * Injects the {@link PlayerLeaveCallback} into the {@link ServerPlayNetworkHandler}.
+     *
+     * @param text The {@link Text} to listen for.
+     * @param ci The {@link CallbackInfo} to pass to the callback.
+     */
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;onDisconnect()V"), method = "onDisconnected")
     private void onPlayerLeave(@NotNull Text text, @NotNull CallbackInfo ci) {
-        PlayerLeaveCallback.EVENT.invoker().onPlayerLeave(player);
+        PlayerLeaveCallback.EVENT.invoker().onPlayerLeave(this.player);
     }
 
 }

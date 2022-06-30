@@ -63,7 +63,7 @@ public final class FabricChameleonBootstrap extends ChameleonBootstrap<FabricCha
     @Internal
     @Override
     protected @NotNull ChameleonLogger createLogger() {
-        return new ChameleonSlf4jLogger(LoggerFactory.getLogger(pluginData.getName()));
+        return new ChameleonSlf4jLogger(LoggerFactory.getLogger(this.pluginData.getName()));
     }
 
 }

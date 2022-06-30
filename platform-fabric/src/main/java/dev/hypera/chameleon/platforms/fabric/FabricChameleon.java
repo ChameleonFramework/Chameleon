@@ -41,6 +41,9 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 
+/**
+ * Fabric {@link Chameleon} implementation.
+ */
 public final class FabricChameleon extends Chameleon {
 
     private final @NotNull ChameleonAudienceProvider audienceProvider;
@@ -58,7 +61,7 @@ public final class FabricChameleon extends Chameleon {
      */
     @Override
     public @NotNull ChameleonAudienceProvider getAdventure() {
-        return audienceProvider;
+        return this.audienceProvider;
     }
 
     /**
@@ -66,7 +69,7 @@ public final class FabricChameleon extends Chameleon {
      */
     @Override
     public @NotNull Platform getPlatform() {
-        return platform;
+        return this.platform;
     }
 
     /**

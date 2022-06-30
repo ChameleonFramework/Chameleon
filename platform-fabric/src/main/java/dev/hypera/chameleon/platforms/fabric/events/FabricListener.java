@@ -41,6 +41,7 @@ public class FabricListener {
 
     /**
      * Registers the callbacks for the events.
+     *
      * @param chameleon The {@link FabricChameleon} instance.
      */
     @Internal
@@ -51,6 +52,7 @@ public class FabricListener {
 
     /**
      * Wraps a {@link ServerPlayerEntity} into a {@link ServerUser}.
+     *
      * @param player The {@link ServerPlayerEntity} to wrap.
      * @return The wrapped {@link ServerUser}.
      */

@@ -38,6 +38,7 @@ public interface PlayerLeaveCallback {
 
     /**
      * Called when a player leaves the server.
+     *
      * @param player The {@link ServerPlayerEntity} that left.
      */
     void onPlayerLeave(@NotNull ServerPlayerEntity player);

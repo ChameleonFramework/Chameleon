@@ -88,26 +88,38 @@ public class FabricUser extends AbstractAudience implements ServerUser {
 
     @Override
     public @NotNull GameMode getGameMode() {
-        GameMode gameMode = GameMode.SURVIVAL;
-        switch(this.player.interactionManager.getGameMode()) {
-            case SPECTATOR: gameMode = GameMode.SPECTATOR;
-            case SURVIVAL: gameMode = GameMode.SURVIVAL;
-            case CREATIVE: gameMode = GameMode.CREATIVE;
-            case ADVENTURE: gameMode = GameMode.ADVENTURE;
-        }
-        return gameMode;
+        return convertGameModeToChameleon(this.player.interactionManager.getGameMode());
     }
 
     @Override
     public void setGameMode(@NotNull GameMode gameMode) {
-        net.minecraft.world.GameMode newGameMode = net.minecraft.world.GameMode.SURVIVAL;
-        switch(gameMode) {
-            case SPECTATOR: newGameMode = net.minecraft.world.GameMode.SPECTATOR;
-            case SURVIVAL: newGameMode = net.minecraft.world.GameMode.SURVIVAL;
-            case CREATIVE: newGameMode = net.minecraft.world.GameMode.CREATIVE;
-            case ADVENTURE: newGameMode = net.minecraft.world.GameMode.ADVENTURE;
+        this.player.changeGameMode(convertGameModeToFabric(gameMode));
+    }
+
+    private @NotNull net.minecraft.world.GameMode convertGameModeToFabric(@NotNull GameMode gameMode) {
+        switch (gameMode) {
+            case CREATIVE:
+                return net.minecraft.world.GameMode.CREATIVE;
+            case ADVENTURE:
+                return net.minecraft.world.GameMode.ADVENTURE;
+            case SPECTATOR:
+                return net.minecraft.world.GameMode.SPECTATOR;
+            default:
+                return net.minecraft.world.GameMode.SURVIVAL;
         }
-        this.player.changeGameMode(newGameMode);
+    }
+
+    private @NotNull GameMode convertGameModeToChameleon(@NotNull net.minecraft.world.GameMode gameMode) {
+        switch (gameMode) {
+            case CREATIVE:
+                return GameMode.CREATIVE;
+            case ADVENTURE:
+                return GameMode.ADVENTURE;
+            case SPECTATOR:
+                return GameMode.SPECTATOR;
+            default:
+                return GameMode.SURVIVAL;
+        }
     }
 
 }

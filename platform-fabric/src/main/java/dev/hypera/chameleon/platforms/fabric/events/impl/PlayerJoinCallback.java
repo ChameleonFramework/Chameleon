@@ -38,6 +38,7 @@ public interface PlayerJoinCallback {
 
     /**
      * Called when a player joins the server.
+     *
      * @param player The {@link ServerPlayerEntity} that joined.
      */
     void onPlayerJoin(@NotNull ServerPlayerEntity player);
