@@ -29,7 +29,8 @@ plugins {
 indra {
 
     javaVersions {
-        if (project.name.contains("minestom")) {
+        val projectName = project.name
+        if (projectName.contains("minestom") || projectName.contains("fabric")) {
             target(17)
             testWith(17)
         } else {
@@ -62,6 +63,8 @@ indra {
                 developer {
                     id.set("SLLCoding")
                     name.set("Luis")
+                    timezone.set("Europe/London")
+                    email.set("luisjk266@gmail.com")
                 }
             }
         }
