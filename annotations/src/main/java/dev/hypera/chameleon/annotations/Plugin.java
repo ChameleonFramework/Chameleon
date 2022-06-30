@@ -26,6 +26,7 @@ import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.annotations.processing.generation.impl.bukkit.BukkitGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.impl.bungeecord.BungeeCordGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.impl.minestom.MinestomGenerator;
+import dev.hypera.chameleon.annotations.processing.generation.impl.nukkit.NukkitGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.impl.velocity.VelocityGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -104,7 +105,11 @@ public @interface Plugin {
      */
     enum Platform {
 
-        BUNGEECORD(BungeeCordGenerator.class), MINESTOM(MinestomGenerator.class), BUKKIT(BukkitGenerator.class), VELOCITY(VelocityGenerator.class);
+        BUKKIT(BukkitGenerator.class),
+        BUNGEECORD(BungeeCordGenerator.class),
+        MINESTOM(MinestomGenerator.class),
+        NUKKIT(NukkitGenerator.class),
+        VELOCITY(VelocityGenerator.class);
 
         private final @NotNull Class<? extends Generator> generator;
 

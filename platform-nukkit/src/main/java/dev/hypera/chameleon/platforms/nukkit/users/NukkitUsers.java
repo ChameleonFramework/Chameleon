@@ -20,25 +20,49 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
+package dev.hypera.chameleon.platforms.nukkit.users;
+
+import cn.nukkit.Player;
+import cn.nukkit.command.CommandSender;
+import dev.hypera.chameleon.core.users.ChatUser;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Nukkit {@link dev.hypera.chameleon.core.users.User} utilities.
+ */
+@Internal
+public final class NukkitUsers {
+
+    private static final @NotNull NukkitConsoleUser CONSOLE = new NukkitConsoleUser();
+
+    @Internal
+    private NukkitUsers() {
+
     }
-}
 
-rootProject.name = "chameleon-parent"
+    /**
+     * Wrap provided {@link CommandSender}.
+     *
+     * @param sender {@link CommandSender} to be wrapped.
+     *
+     * @return {@link ChatUser}.
+     */
+    public static @NotNull ChatUser wrap(@NotNull CommandSender sender) {
+        if (sender instanceof Player) {
+            return new NukkitUser((Player) sender);
+        } else {
+            return CONSOLE;
+        }
+    }
 
-sequenceOf(
-    "core",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-velocity"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+    /**
+     * Get console {@link ChatUser}.
+     *
+     * @return console {@link ChatUser}.
+     */
+    public static @NotNull ChatUser console() {
+        return CONSOLE;
+    }
+
 }

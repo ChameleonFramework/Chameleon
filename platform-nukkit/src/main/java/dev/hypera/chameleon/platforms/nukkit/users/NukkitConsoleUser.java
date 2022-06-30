@@ -20,25 +20,42 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
+package dev.hypera.chameleon.platforms.nukkit.users;
+
+import cn.nukkit.Server;
+import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.platforms.nukkit.adventure.AbstractNukkitAudience;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Nukkit console {@link ChatUser} implementation.
+ */
+@Internal
+public class NukkitConsoleUser extends AbstractNukkitAudience implements ChatUser {
+
+    /**
+     * {@link NukkitConsoleUser} constructor.
+     */
+    @Internal
+    NukkitConsoleUser() {
+        super(Server.getInstance().getConsoleSender());
     }
-}
 
-rootProject.name = "chameleon-parent"
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return Server.getInstance().getConsoleSender().getName();
+    }
 
-sequenceOf(
-    "core",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-velocity"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return Server.getInstance().getConsoleSender().hasPermission(permission);
+    }
+
 }

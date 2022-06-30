@@ -20,25 +20,58 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
+package dev.hypera.chameleon.platforms.nukkit.platform;
+
+import cn.nukkit.Nukkit;
+import cn.nukkit.Server;
+import dev.hypera.chameleon.core.platform.server.ServerPlatform;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Nukkit {@link ServerPlatform} implementation.
+ */
+@Internal
+public class NukkitPlatform extends ServerPlatform {
+
+    /**
+     * {@link NukkitPlatform} constructor.
+     */
+    @Internal
+    public NukkitPlatform() {
+
     }
-}
 
-rootProject.name = "chameleon-parent"
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getAPIName() {
+        return "Nukkit";
+    }
 
-sequenceOf(
-    "core",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-velocity"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return Server.getInstance().getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return Nukkit.VERSION + " (" + Server.getInstance().getVersion() + ")";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Type getType() {
+        return Type.SERVER;
+    }
+
 }

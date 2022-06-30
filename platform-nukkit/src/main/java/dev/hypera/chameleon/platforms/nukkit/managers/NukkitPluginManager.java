@@ -20,42 +20,54 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.platforms.minestom.users;
+package dev.hypera.chameleon.platforms.nukkit.managers;
 
-import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
-import dev.hypera.chameleon.core.users.ChatUser;
-import net.minestom.server.MinecraftServer;
+import cn.nukkit.Server;
+import cn.nukkit.plugin.Plugin;
+import dev.hypera.chameleon.core.managers.PluginManager;
+import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.platforms.nukkit.platform.plugin.NukkitPlugin;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom console {@link ChatUser} implementation.
+ * Nukkit {@link PluginManager} implementation.
  */
 @Internal
-public class MinestomConsoleUser extends AbstractReflectedAudience implements ChatUser {
+public class NukkitPluginManager extends PluginManager {
 
     /**
-     * {@link MinestomConsoleUser} constructor.
+     * {@link NukkitPluginManager} constructor.
      */
-    @Internal
-    MinestomConsoleUser() {
-        super(MinecraftServer.getCommandManager().getConsoleSender());
+    public NukkitPluginManager() {
+
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull String getName() {
-        return "Console";
+    public @NotNull Set<PlatformPlugin> getPlugins() {
+        return Server.getInstance().getPluginManager().getPlugins().values().stream().map(NukkitPlugin::new).collect(Collectors.toSet());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean hasPermission(@NotNull String permission) {
-        return true;
+    public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
+        return Optional.ofNullable(Server.getInstance().getPluginManager().getPlugin(name)).map(NukkitPlugin::new);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isPluginEnabled(@NotNull String name) {
+        return Optional.ofNullable(Server.getInstance().getPluginManager().getPlugin(name)).map(Plugin::isEnabled).orElse(false);
     }
 
 }

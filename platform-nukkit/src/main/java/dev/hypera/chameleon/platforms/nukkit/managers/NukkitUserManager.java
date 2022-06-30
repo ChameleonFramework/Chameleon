@@ -20,42 +20,58 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.platforms.minestom.users;
+package dev.hypera.chameleon.platforms.nukkit.managers;
 
-import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
+import cn.nukkit.Server;
+import dev.hypera.chameleon.core.managers.UserManager;
 import dev.hypera.chameleon.core.users.ChatUser;
-import net.minestom.server.MinecraftServer;
+import dev.hypera.chameleon.core.users.User;
+import dev.hypera.chameleon.platforms.nukkit.users.NukkitUser;
+import dev.hypera.chameleon.platforms.nukkit.users.NukkitUsers;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom console {@link ChatUser} implementation.
+ * Nukkit {@link UserManager} implementation.
  */
 @Internal
-public class MinestomConsoleUser extends AbstractReflectedAudience implements ChatUser {
+public class NukkitUserManager extends UserManager {
 
     /**
-     * {@link MinestomConsoleUser} constructor.
+     * {@link NukkitUserManager} constructor.
      */
     @Internal
-    MinestomConsoleUser() {
-        super(MinecraftServer.getCommandManager().getConsoleSender());
+    public NukkitUserManager() {
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ChatUser getConsole() {
+        return NukkitUsers.console();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull String getName() {
-        return "Console";
+    public @NotNull Set<User> getPlayers() {
+        return Server.getInstance().getOnlinePlayers().values().stream().map(NukkitUser::new).collect(Collectors.toSet());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean hasPermission(@NotNull String permission) {
-        return true;
+    public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
+        return Optional.ofNullable(Server.getInstance().getOnlinePlayers().get(uniqueId)).map(NukkitUser::new);
     }
 
 }

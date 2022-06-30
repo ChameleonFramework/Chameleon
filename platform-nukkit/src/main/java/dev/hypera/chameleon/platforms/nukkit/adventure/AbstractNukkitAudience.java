@@ -20,42 +20,47 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.platforms.minestom.users;
+package dev.hypera.chameleon.platforms.nukkit.adventure;
 
-import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
-import dev.hypera.chameleon.core.users.ChatUser;
-import net.minestom.server.MinecraftServer;
+import cn.nukkit.command.CommandSender;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.MessageType;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom console {@link ChatUser} implementation.
+ * Abstract Nukkit {@link Audience} implementation.
  */
 @Internal
-public class MinestomConsoleUser extends AbstractReflectedAudience implements ChatUser {
+public abstract class AbstractNukkitAudience implements Audience {
+
+    private final @NotNull CommandSender sender;
 
     /**
-     * {@link MinestomConsoleUser} constructor.
+     * {@link AbstractNukkitAudience} constructor.
+     *
+     * @param sender {@link CommandSender} to be wrapped.
      */
     @Internal
-    MinestomConsoleUser() {
-        super(MinecraftServer.getCommandManager().getConsoleSender());
+    public AbstractNukkitAudience(@NotNull CommandSender sender) {
+        this.sender = sender;
     }
 
     /**
-     * {@inheritDoc}
+     * Sends a chat message. Falls back to legacy section serialization as Adventure does not support Nukkit yet.
+     *
+     * @param source  the identity of the source of the message
+     * @param message a message
+     * @param type    the type
+     *
+     * @see Component
      */
     @Override
-    public @NotNull String getName() {
-        return "Console";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasPermission(@NotNull String permission) {
-        return true;
+    public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
+        this.sender.sendMessage(LegacyComponentSerializer.legacySection().serialize(message));
     }
 
 }
