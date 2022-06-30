@@ -20,34 +20,49 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.utils;
+package dev.hypera.chameleon.platforms.nukkit.users;
 
-import java.util.Optional;
+import cn.nukkit.Player;
+import cn.nukkit.command.CommandSender;
+import dev.hypera.chameleon.core.users.ChatUser;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * {@link dev.hypera.chameleon.core.Chameleon} utilities.
+ * Nukkit {@link dev.hypera.chameleon.core.users.User} utilities.
  */
 @Internal
-public final class ChameleonUtil {
+public final class NukkitUsers {
 
-    private ChameleonUtil() {
+    private static final @NotNull NukkitConsoleUser CONSOLE = new NukkitConsoleUser();
+
+    @Internal
+    private NukkitUsers() {
 
     }
 
     /**
-     * Check if first argument is null, return it if it isn't, otherwise return the default value.
+     * Wrap provided {@link CommandSender}.
      *
-     * @param s            Object to check if null.
-     * @param defaultValue Default return value.
-     * @param <T>          Type.
+     * @param sender {@link CommandSender} to be wrapped.
      *
-     * @return {@code s} if not null, otherwise {@code defaultValue}.
+     * @return {@link ChatUser}.
      */
-    public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
-        return Optional.ofNullable(s).orElse(defaultValue);
+    public static @NotNull ChatUser wrap(@NotNull CommandSender sender) {
+        if (sender instanceof Player) {
+            return new NukkitUser((Player) sender);
+        } else {
+            return CONSOLE;
+        }
+    }
+
+    /**
+     * Get console {@link ChatUser}.
+     *
+     * @return console {@link ChatUser}.
+     */
+    public static @NotNull ChatUser console() {
+        return CONSOLE;
     }
 
 }

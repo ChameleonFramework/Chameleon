@@ -20,34 +20,15 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.utils;
+plugins {
+    id("chameleon.api")
+}
 
-import java.util.Optional;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+repositories {
+    maven("https://repo.opencollab.dev/main/")
+}
 
-/**
- * {@link dev.hypera.chameleon.core.Chameleon} utilities.
- */
-@Internal
-public final class ChameleonUtil {
-
-    private ChameleonUtil() {
-
-    }
-
-    /**
-     * Check if first argument is null, return it if it isn't, otherwise return the default value.
-     *
-     * @param s            Object to check if null.
-     * @param defaultValue Default return value.
-     * @param <T>          Type.
-     *
-     * @return {@code s} if not null, otherwise {@code defaultValue}.
-     */
-    public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
-        return Optional.ofNullable(s).orElse(defaultValue);
-    }
-
+dependencies {
+    api(project(":chameleon-core"))
+    compileOnlyApi(libs.platform.nukkit)
 }

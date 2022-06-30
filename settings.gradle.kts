@@ -36,6 +36,7 @@ sequenceOf(
     "platform-bukkit",
     "platform-bungeecord",
     "platform-minestom",
+    "platform-nukkit",
     "platform-velocity"
 ).forEach {
     include("chameleon-$it")

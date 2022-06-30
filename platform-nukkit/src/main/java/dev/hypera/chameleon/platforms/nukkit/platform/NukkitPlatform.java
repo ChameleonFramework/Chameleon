@@ -20,34 +20,58 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.utils;
+package dev.hypera.chameleon.platforms.nukkit.platform;
 
-import java.util.Optional;
+import cn.nukkit.Nukkit;
+import cn.nukkit.Server;
+import dev.hypera.chameleon.core.platform.server.ServerPlatform;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * {@link dev.hypera.chameleon.core.Chameleon} utilities.
+ * Nukkit {@link ServerPlatform} implementation.
  */
 @Internal
-public final class ChameleonUtil {
+public class NukkitPlatform extends ServerPlatform {
 
-    private ChameleonUtil() {
+    /**
+     * {@link NukkitPlatform} constructor.
+     */
+    @Internal
+    public NukkitPlatform() {
 
     }
 
     /**
-     * Check if first argument is null, return it if it isn't, otherwise return the default value.
-     *
-     * @param s            Object to check if null.
-     * @param defaultValue Default return value.
-     * @param <T>          Type.
-     *
-     * @return {@code s} if not null, otherwise {@code defaultValue}.
+     * {@inheritDoc}
      */
-    public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
-        return Optional.ofNullable(s).orElse(defaultValue);
+    @Override
+    public @NotNull String getAPIName() {
+        return "Nukkit";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return Server.getInstance().getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return Nukkit.VERSION + " (" + Server.getInstance().getVersion() + ")";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Type getType() {
+        return Type.SERVER;
     }
 
 }

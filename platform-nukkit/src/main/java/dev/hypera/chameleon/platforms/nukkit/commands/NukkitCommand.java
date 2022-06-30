@@ -20,41 +20,45 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.platforms.minestom.users;
+package dev.hypera.chameleon.platforms.nukkit.commands;
 
-import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
-import dev.hypera.chameleon.core.users.ChatUser;
-import net.minestom.server.MinecraftServer;
+import cn.nukkit.command.CommandSender;
+import dev.hypera.chameleon.core.Chameleon;
+import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.commands.context.ContextImpl;
+import dev.hypera.chameleon.platforms.nukkit.users.NukkitUsers;
+import java.util.Arrays;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom console {@link ChatUser} implementation.
+ * Nukkit {@link Command} wrapper.
  */
 @Internal
-public class MinestomConsoleUser extends AbstractReflectedAudience implements ChatUser {
+public class NukkitCommand extends cn.nukkit.command.Command {
 
-    /**
-     * {@link MinestomConsoleUser} constructor.
-     */
-    @Internal
-    MinestomConsoleUser() {
-        super(MinecraftServer.getCommandManager().getConsoleSender());
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull Command command;
+
+    public NukkitCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
+        super(command.getName(), "", null, command.getAliases().toArray(new String[0]));
+        this.chameleon = chameleon;
+        this.command = command;
     }
 
     /**
-     * {@inheritDoc}
+     * Execute the command.
+     *
+     * @param sender       the {@link CommandSender} who issued this command.
+     * @param commandLabel the commandLabel used when issuing this command.
+     * @param args         the command arguments.
      */
     @Override
-    public @NotNull String getName() {
-        return "Console";
-    }
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        if (args.length < 1 || this.command.executeSubCommand(new ContextImpl(NukkitUsers.wrap(sender), this.chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
+            this.command.executeCommand(new ContextImpl(NukkitUsers.wrap(sender), this.chameleon, args));
+        }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasPermission(@NotNull String permission) {
         return true;
     }
 

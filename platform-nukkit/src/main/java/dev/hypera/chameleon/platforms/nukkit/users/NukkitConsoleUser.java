@@ -20,34 +20,42 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.utils;
+package dev.hypera.chameleon.platforms.nukkit.users;
 
-import java.util.Optional;
+import cn.nukkit.Server;
+import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.platforms.nukkit.adventure.AbstractNukkitAudience;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * {@link dev.hypera.chameleon.core.Chameleon} utilities.
+ * Nukkit console {@link ChatUser} implementation.
  */
 @Internal
-public final class ChameleonUtil {
+public class NukkitConsoleUser extends AbstractNukkitAudience implements ChatUser {
 
-    private ChameleonUtil() {
-
+    /**
+     * {@link NukkitConsoleUser} constructor.
+     */
+    @Internal
+    NukkitConsoleUser() {
+        super(Server.getInstance().getConsoleSender());
     }
 
     /**
-     * Check if first argument is null, return it if it isn't, otherwise return the default value.
-     *
-     * @param s            Object to check if null.
-     * @param defaultValue Default return value.
-     * @param <T>          Type.
-     *
-     * @return {@code s} if not null, otherwise {@code defaultValue}.
+     * {@inheritDoc}
      */
-    public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
-        return Optional.ofNullable(s).orElse(defaultValue);
+    @Override
+    public @NotNull String getName() {
+        return Server.getInstance().getConsoleSender().getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return Server.getInstance().getConsoleSender().hasPermission(permission);
     }
 
 }

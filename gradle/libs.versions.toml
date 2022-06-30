@@ -11,6 +11,7 @@ indra = "2.1.1"
 platform-spigot = "1.19-R0.1-SNAPSHOT"
 platform-bungeecord = "1.19-R0.1-SNAPSHOT"
 platform-minestom = "1d469ca6a6"
+platform-nukkit = "1.0-SNAPSHOT"
 platform-velocity = "3.1.0"
 
 
@@ -27,6 +28,7 @@ adventure-platform-bungeecord = { module = "net.kyori:adventure-platform-bungeec
 platform-bukkit = { module = "org.spigotmc:spigot-api", version.ref = "platform-spigot" }
 platform-bungeecord = { module = "net.md-5:bungeecord-api", version.ref = "platform-bungeecord" }
 platform-minestom = { module = "com.github.Minestom:Minestom", version.ref = "platform-minestom" }
+platform-nukkit = { module = "cn.nukkit:nukkit", version.ref = "platform-nukkit" }
 platform-velocity = { module = "com.velocitypowered:velocity-api", version.ref = "platform-velocity" }
 
 # File reading/writing

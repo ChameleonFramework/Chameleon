@@ -20,42 +20,49 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.platforms.minestom.users;
+package dev.hypera.chameleon.platforms.nukkit.managers;
 
-import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
-import dev.hypera.chameleon.core.users.ChatUser;
-import net.minestom.server.MinecraftServer;
+import cn.nukkit.Server;
+import dev.hypera.chameleon.core.commands.Command;
+import dev.hypera.chameleon.core.managers.CommandManager;
+import dev.hypera.chameleon.platforms.nukkit.NukkitChameleon;
+import dev.hypera.chameleon.platforms.nukkit.commands.NukkitCommand;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom console {@link ChatUser} implementation.
+ * Nukkit {@link CommandManager} implementation.
  */
 @Internal
-public class MinestomConsoleUser extends AbstractReflectedAudience implements ChatUser {
+public class NukkitCommandManager extends CommandManager {
+
+    private final @NotNull NukkitChameleon chameleon;
 
     /**
-     * {@link MinestomConsoleUser} constructor.
+     * {@link NukkitCommandManager} constructor.
+     *
+     * @param chameleon {@link NukkitChameleon} instance.
      */
     @Internal
-    MinestomConsoleUser() {
-        super(MinecraftServer.getCommandManager().getConsoleSender());
+    public NukkitCommandManager(@NotNull NukkitChameleon chameleon) {
+        super(chameleon);
+        this.chameleon = chameleon;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
-    public @NotNull String getName() {
-        return "Console";
+    protected void registerCommand(@NotNull Command command) {
+        Server.getInstance().getCommandMap().register(command.getName(), new NukkitCommand(this.chameleon, command));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public boolean hasPermission(@NotNull String permission) {
-        return true;
+    protected void unregisterCommand(@NotNull Command command) {
+        cn.nukkit.command.Command nukkitCommand = Server.getInstance().getCommandMap().getCommand(command.getName());
+        if (null != nukkitCommand) {
+            nukkitCommand.unregister(Server.getInstance().getCommandMap());
+        } else {
+            throw new IllegalStateException("Cannot find command with name '" + command.getName() + "'");
+        }
     }
 
 }

@@ -20,34 +20,47 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.utils;
+package dev.hypera.chameleon.platforms.nukkit.adventure;
 
-import java.util.Optional;
+import cn.nukkit.command.CommandSender;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.MessageType;
+import net.kyori.adventure.identity.Identified;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * {@link dev.hypera.chameleon.core.Chameleon} utilities.
+ * Abstract Nukkit {@link Audience} implementation.
  */
 @Internal
-public final class ChameleonUtil {
+public abstract class AbstractNukkitAudience implements Audience {
 
-    private ChameleonUtil() {
+    private final @NotNull CommandSender sender;
 
+    /**
+     * {@link AbstractNukkitAudience} constructor.
+     *
+     * @param sender {@link CommandSender} to be wrapped.
+     */
+    @Internal
+    public AbstractNukkitAudience(@NotNull CommandSender sender) {
+        this.sender = sender;
     }
 
     /**
-     * Check if first argument is null, return it if it isn't, otherwise return the default value.
+     * Sends a chat message. Falls back to legacy section serialization as Adventure does not support Nukkit yet.
      *
-     * @param s            Object to check if null.
-     * @param defaultValue Default return value.
-     * @param <T>          Type.
+     * @param source  the identity of the source of the message
+     * @param message a message
+     * @param type    the type
      *
-     * @return {@code s} if not null, otherwise {@code defaultValue}.
+     * @see Component
      */
-    public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
-        return Optional.ofNullable(s).orElse(defaultValue);
+    @Override
+    public void sendMessage(@NotNull Identified source, @NotNull Component message, @NotNull MessageType type) {
+        sender.sendMessage(LegacyComponentSerializer.legacySection().serialize(message));
     }
 
 }

@@ -20,34 +20,58 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.core.utils;
+package dev.hypera.chameleon.platforms.nukkit.managers;
 
+import cn.nukkit.Server;
+import dev.hypera.chameleon.core.managers.UserManager;
+import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.core.users.User;
+import dev.hypera.chameleon.platforms.nukkit.users.NukkitUser;
+import dev.hypera.chameleon.platforms.nukkit.users.NukkitUsers;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * {@link dev.hypera.chameleon.core.Chameleon} utilities.
+ * Nukkit {@link UserManager} implementation.
  */
 @Internal
-public final class ChameleonUtil {
+public class NukkitUserManager extends UserManager {
 
-    private ChameleonUtil() {
+    /**
+     * {@link NukkitUserManager} constructor.
+     */
+    @Internal
+    public NukkitUserManager() {
 
     }
 
+
     /**
-     * Check if first argument is null, return it if it isn't, otherwise return the default value.
-     *
-     * @param s            Object to check if null.
-     * @param defaultValue Default return value.
-     * @param <T>          Type.
-     *
-     * @return {@code s} if not null, otherwise {@code defaultValue}.
+     * {@inheritDoc}
      */
-    public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
-        return Optional.ofNullable(s).orElse(defaultValue);
+    @Override
+    public @NotNull ChatUser getConsole() {
+        return NukkitUsers.console();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<User> getPlayers() {
+        return Server.getInstance().getOnlinePlayers().values().stream().map(NukkitUser::new).collect(Collectors.toSet());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
+        return Optional.ofNullable(Server.getInstance().getOnlinePlayers().get(uniqueId)).map(NukkitUser::new);
     }
 
 }
