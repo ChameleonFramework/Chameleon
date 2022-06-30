@@ -25,7 +25,7 @@ package dev.hypera.chameleon.platforms.nukkit.adventure;
 import cn.nukkit.command.CommandSender;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.MessageType;
-import net.kyori.adventure.identity.Identified;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -59,7 +59,7 @@ public abstract class AbstractNukkitAudience implements Audience {
      * @see Component
      */
     @Override
-    public void sendMessage(@NotNull Identified source, @NotNull Component message, @NotNull MessageType type) {
+    public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         this.sender.sendMessage(LegacyComponentSerializer.legacySection().serialize(message));
     }
 
