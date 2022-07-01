@@ -20,35 +20,38 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-import org.apache.tools.ant.filters.ReplaceTokens
+package dev.hypera.chameleon.platforms.sponge.platform;
 
-plugins {
-    id("chameleon.api")
-}
+import dev.hypera.chameleon.core.platform.server.ServerPlatform;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.api.Platform.Component;
+import org.spongepowered.api.Sponge;
 
-val tokens = mapOf(
-    "version" to (parent?.version ?: "unknown")
-)
+/**
+ * Sponge {@link ServerPlatform} implementation.
+ */
+@Internal
+public final class SpongePlatform extends ServerPlatform {
 
-dependencies {
-    api(libs.adventure.api)
-    api(libs.adventure.textSerializer.legacy)
-    api(libs.adventure.textSerializer.gson)
-    api(libs.adventure.platform.api)
+    @Override
+    public @NotNull String getAPIName() {
+        return Sponge.game().platform().container(Component.API).metadata().name().orElse("Sponge");
+    }
 
-    compileOnly(libs.slf4j)
-    compileOnly(libs.log4j) // Scary...
+    @Override
+    public @NotNull String getName() {
+        return Sponge.game().platform().container(Component.IMPLEMENTATION).metadata().name().orElse("Sponge");
+    }
 
-    compileOnlyApi(libs.annotations)
-}
+    @Override
+    public @NotNull String getVersion() {
+        return Sponge.game().platform().container(Component.IMPLEMENTATION).metadata().version().toString() + " (" + Sponge.game().platform().container(Component.API).metadata().version() + ")";
+    }
 
-val sourcesForRelease = task<Copy>("sourcesForRelease") {
-    from("src/main/java")
-    into("build/src/java")
-    filter<ReplaceTokens>(mapOf("tokens" to tokens))
-}
+    @Override
+    public @NotNull Type getType() {
+        return Type.SERVER;
+    }
 
-tasks.compileJava {
-    dependsOn(sourcesForRelease)
-    source = fileTree(sourcesForRelease.destinationDir)
 }

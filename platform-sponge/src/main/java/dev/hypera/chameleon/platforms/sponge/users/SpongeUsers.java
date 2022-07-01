@@ -20,35 +20,49 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-import org.apache.tools.ant.filters.ReplaceTokens
+package dev.hypera.chameleon.platforms.sponge.users;
 
-plugins {
-    id("chameleon.api")
-}
+import dev.hypera.chameleon.core.users.ChatUser;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+import org.spongepowered.api.service.permission.Subject;
 
-val tokens = mapOf(
-    "version" to (parent?.version ?: "unknown")
-)
+/**
+ * Sponge {@link dev.hypera.chameleon.core.users.User} utilities.
+ */
+@Internal
+public final class SpongeUsers {
 
-dependencies {
-    api(libs.adventure.api)
-    api(libs.adventure.textSerializer.legacy)
-    api(libs.adventure.textSerializer.gson)
-    api(libs.adventure.platform.api)
+    private static final @NotNull SpongeConsoleUser CONSOLE = new SpongeConsoleUser();
 
-    compileOnly(libs.slf4j)
-    compileOnly(libs.log4j) // Scary...
+    @Internal
+    private SpongeUsers() {
 
-    compileOnlyApi(libs.annotations)
-}
+    }
 
-val sourcesForRelease = task<Copy>("sourcesForRelease") {
-    from("src/main/java")
-    into("build/src/java")
-    filter<ReplaceTokens>(mapOf("tokens" to tokens))
-}
+    /**
+     * Wrap provided {@link Subject}.
+     *
+     * @param subject {@link Subject} to wrap.
+     *
+     * @return {@link ChatUser}.
+     */
+    public static @NotNull ChatUser wrap(@NotNull Subject subject) {
+        if (subject instanceof ServerPlayer) {
+            return new SpongeUser((ServerPlayer) subject);
+        } else {
+            return CONSOLE;
+        }
+    }
 
-tasks.compileJava {
-    dependsOn(sourcesForRelease)
-    source = fileTree(sourcesForRelease.destinationDir)
+    /**
+     * Get console {@link ChatUser}.
+     *
+     * @return console {@link ChatUser}.
+     */
+    public static @NotNull SpongeConsoleUser console() {
+        return CONSOLE;
+    }
+
 }

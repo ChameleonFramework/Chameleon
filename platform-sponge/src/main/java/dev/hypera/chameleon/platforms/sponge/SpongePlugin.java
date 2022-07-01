@@ -20,35 +20,36 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-import org.apache.tools.ant.filters.ReplaceTokens
+package dev.hypera.chameleon.platforms.sponge;
 
-plugins {
-    id("chameleon.api")
-}
+import java.nio.file.Path;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
-val tokens = mapOf(
-    "version" to (parent?.version ?: "unknown")
-)
+/**
+ * Sponge plugin.
+ */
+public interface SpongePlugin {
 
-dependencies {
-    api(libs.adventure.api)
-    api(libs.adventure.textSerializer.legacy)
-    api(libs.adventure.textSerializer.gson)
-    api(libs.adventure.platform.api)
+    /**
+     * Get plugin identifier.
+     *
+     * @return plugin identifier.
+     */
+    @NotNull String getId();
 
-    compileOnly(libs.slf4j)
-    compileOnly(libs.log4j) // Scary...
+    /**
+     * Get Sponge {@link Logger} instance.
+     *
+     * @return {@link Logger} instance.
+     */
+    @NotNull Logger getLogger();
 
-    compileOnlyApi(libs.annotations)
-}
+    /**
+     * Get plugin data directory.
+     *
+     * @return {@link Path}.
+     */
+    @NotNull Path getDataDirectory();
 
-val sourcesForRelease = task<Copy>("sourcesForRelease") {
-    from("src/main/java")
-    into("build/src/java")
-    filter<ReplaceTokens>(mapOf("tokens" to tokens))
-}
-
-tasks.compileJava {
-    dependsOn(sourcesForRelease)
-    source = fileTree(sourcesForRelease.destinationDir)
 }

@@ -20,35 +20,37 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-import org.apache.tools.ant.filters.ReplaceTokens
+package dev.hypera.chameleon.platforms.sponge.managers;
 
-plugins {
-    id("chameleon.api")
-}
+import dev.hypera.chameleon.core.managers.PluginManager;
+import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.platforms.sponge.platform.plugin.SpongePlugin;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.api.Sponge;
 
-val tokens = mapOf(
-    "version" to (parent?.version ?: "unknown")
-)
+/**
+ * Sponge {@link PluginManager} implementation.
+ */
+@Internal
+public class SpongePluginManager extends PluginManager {
 
-dependencies {
-    api(libs.adventure.api)
-    api(libs.adventure.textSerializer.legacy)
-    api(libs.adventure.textSerializer.gson)
-    api(libs.adventure.platform.api)
+    @Override
+    public @NotNull Set<PlatformPlugin> getPlugins() {
+        return Sponge.pluginManager().plugins().stream().map(SpongePlugin::new).collect(Collectors.toSet());
+    }
 
-    compileOnly(libs.slf4j)
-    compileOnly(libs.log4j) // Scary...
+    @Override
+    public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
+        return Sponge.pluginManager().plugin(name.toLowerCase()).map(SpongePlugin::new);
+    }
 
-    compileOnlyApi(libs.annotations)
-}
+    @Override
+    public boolean isPluginEnabled(@NotNull String name) {
+        return Sponge.pluginManager().plugin(name.toLowerCase()).isPresent();
+    }
 
-val sourcesForRelease = task<Copy>("sourcesForRelease") {
-    from("src/main/java")
-    into("build/src/java")
-    filter<ReplaceTokens>(mapOf("tokens" to tokens))
-}
-
-tasks.compileJava {
-    dependsOn(sourcesForRelease)
-    source = fileTree(sourcesForRelease.destinationDir)
 }

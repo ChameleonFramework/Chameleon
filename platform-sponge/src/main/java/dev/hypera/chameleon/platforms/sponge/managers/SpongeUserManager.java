@@ -20,35 +20,37 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-import org.apache.tools.ant.filters.ReplaceTokens
+package dev.hypera.chameleon.platforms.sponge.managers;
 
-plugins {
-    id("chameleon.api")
-}
+import dev.hypera.chameleon.core.managers.UserManager;
+import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.core.users.User;
+import dev.hypera.chameleon.platforms.sponge.users.SpongeUsers;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.api.Sponge;
 
-val tokens = mapOf(
-    "version" to (parent?.version ?: "unknown")
-)
+/**
+ * Sponge {@link UserManager} implementation.
+ */
+public class SpongeUserManager extends UserManager {
 
-dependencies {
-    api(libs.adventure.api)
-    api(libs.adventure.textSerializer.legacy)
-    api(libs.adventure.textSerializer.gson)
-    api(libs.adventure.platform.api)
+    @Override
+    public @NotNull ChatUser getConsole() {
+        return SpongeUsers.console();
+    }
 
-    compileOnly(libs.slf4j)
-    compileOnly(libs.log4j) // Scary...
+    @Override
+    public @NotNull Set<User> getPlayers() {
+        return Sponge.server().onlinePlayers().stream().map(p -> (User) SpongeUsers.wrap(p)).collect(Collectors.toSet());
+    }
 
-    compileOnlyApi(libs.annotations)
-}
+    @Override
+    public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
+        return Sponge.server().player(uniqueId).map(p -> (User) SpongeUsers.wrap(p));
+    }
 
-val sourcesForRelease = task<Copy>("sourcesForRelease") {
-    from("src/main/java")
-    into("build/src/java")
-    filter<ReplaceTokens>(mapOf("tokens" to tokens))
-}
-
-tasks.compileJava {
-    dependsOn(sourcesForRelease)
-    source = fileTree(sourcesForRelease.destinationDir)
 }

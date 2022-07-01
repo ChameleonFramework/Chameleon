@@ -20,35 +20,42 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-import org.apache.tools.ant.filters.ReplaceTokens
+package dev.hypera.chameleon.platforms.sponge.users;
 
-plugins {
-    id("chameleon.api")
-}
+import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
+import dev.hypera.chameleon.core.users.ChatUser;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.api.Sponge;
 
-val tokens = mapOf(
-    "version" to (parent?.version ?: "unknown")
-)
+/**
+ * Sponge console {@link ChatUser} implementation.
+ */
+@Internal
+public class SpongeConsoleUser extends AbstractReflectedAudience implements ChatUser {
 
-dependencies {
-    api(libs.adventure.api)
-    api(libs.adventure.textSerializer.legacy)
-    api(libs.adventure.textSerializer.gson)
-    api(libs.adventure.platform.api)
+    /**
+     * {@link SpongeConsoleUser} constructor.
+     */
+    @Internal
+    SpongeConsoleUser() {
+        super(Sponge.game().systemSubject());
+    }
 
-    compileOnly(libs.slf4j)
-    compileOnly(libs.log4j) // Scary...
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return Sponge.systemSubject().identifier();
+    }
 
-    compileOnlyApi(libs.annotations)
-}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return Sponge.game().systemSubject().hasPermission(permission);
+    }
 
-val sourcesForRelease = task<Copy>("sourcesForRelease") {
-    from("src/main/java")
-    into("build/src/java")
-    filter<ReplaceTokens>(mapOf("tokens" to tokens))
-}
-
-tasks.compileJava {
-    dependsOn(sourcesForRelease)
-    source = fileTree(sourcesForRelease.destinationDir)
 }

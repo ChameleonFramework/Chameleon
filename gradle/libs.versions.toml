@@ -8,10 +8,11 @@ adventure-platform = "4.1.1"
 indra = "2.1.1"
 
 # Platforms
-platform-spigot = "1.19-R0.1-SNAPSHOT"
+platform-bukkit = "1.19-R0.1-SNAPSHOT"
 platform-bungeecord = "1.19-R0.1-SNAPSHOT"
 platform-minestom = "1d469ca6a6"
 platform-nukkit = "1.0-SNAPSHOT"
+platform-sponge = "8.0.0"
 platform-velocity = "3.1.0"
 
 
@@ -25,10 +26,11 @@ adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", ve
 adventure-platform-bungeecord = { module = "net.kyori:adventure-platform-bungeecord", version.ref = "adventure-platform" }
 
 # Platforms
-platform-bukkit = { module = "org.spigotmc:spigot-api", version.ref = "platform-spigot" }
+platform-bukkit = { module = "org.spigotmc:spigot-api", version.ref = "platform-bukkit" }
 platform-bungeecord = { module = "net.md-5:bungeecord-api", version.ref = "platform-bungeecord" }
 platform-minestom = { module = "com.github.Minestom:Minestom", version.ref = "platform-minestom" }
 platform-nukkit = { module = "cn.nukkit:nukkit", version.ref = "platform-nukkit" }
+platform-sponge = { module = "org.spongepowered:spongeapi", version.ref = "platform-sponge" }
 platform-velocity = { module = "com.velocitypowered:velocity-api", version.ref = "platform-velocity" }
 
 # File reading/writing
@@ -51,6 +53,7 @@ test-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 # Miscellaneous
 annotations = "org.jetbrains:annotations:23.0.0"
 slf4j = "org.slf4j:slf4j-api:1.7.36"
+log4j = "org.apache.logging.log4j:log4j-api:2.8.1"
 
 
 [plugins]

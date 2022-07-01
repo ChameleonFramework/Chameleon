@@ -20,35 +20,17 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-import org.apache.tools.ant.filters.ReplaceTokens
-
 plugins {
     id("chameleon.api")
 }
 
-val tokens = mapOf(
-    "version" to (parent?.version ?: "unknown")
-)
+repositories {
+    maven("https://repo.spongepowered.org/repository/maven-public/")
+}
 
 dependencies {
-    api(libs.adventure.api)
-    api(libs.adventure.textSerializer.legacy)
-    api(libs.adventure.textSerializer.gson)
-    api(libs.adventure.platform.api)
-
-    compileOnly(libs.slf4j)
-    compileOnly(libs.log4j) // Scary...
-
-    compileOnlyApi(libs.annotations)
-}
-
-val sourcesForRelease = task<Copy>("sourcesForRelease") {
-    from("src/main/java")
-    into("build/src/java")
-    filter<ReplaceTokens>(mapOf("tokens" to tokens))
-}
-
-tasks.compileJava {
-    dependsOn(sourcesForRelease)
-    source = fileTree(sourcesForRelease.destinationDir)
+    compileOnlyApi(project(":chameleon-core"))
+    compileOnlyApi(libs.platform.sponge) {
+        exclude(module = "configurate-*")
+    }
 }
