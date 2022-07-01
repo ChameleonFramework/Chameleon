@@ -25,6 +25,7 @@ package dev.hypera.chameleon.platforms.sponge;
 import java.nio.file.Path;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.plugin.PluginContainer;
 
 /**
  * Sponge plugin.
@@ -32,11 +33,11 @@ import org.jetbrains.annotations.NotNull;
 public interface SpongePlugin {
 
     /**
-     * Get plugin identifier.
+     * Get Sponge {@link PluginContainer} instance.
      *
-     * @return plugin identifier.
+     * @return {@link PluginContainer} instance.
      */
-    @NotNull String getId();
+    @NotNull PluginContainer getPluginContainer();
 
     /**
      * Get Sponge {@link Logger} instance.

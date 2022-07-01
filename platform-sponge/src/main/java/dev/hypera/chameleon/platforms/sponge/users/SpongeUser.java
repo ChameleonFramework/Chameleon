@@ -84,7 +84,7 @@ public class SpongeUser extends AbstractReflectedAudience implements ServerUser 
      */
     @Override
     public void chat(@NotNull String message) {
-        this.player.simulateChat(Component.text(message), Cause.builder().append(message).build()); // TODO: figure out what the heck Cause does
+        this.player.simulateChat(Component.text(message), Cause.builder().append(message).build());
     }
 
     /**
@@ -92,9 +92,7 @@ public class SpongeUser extends AbstractReflectedAudience implements ServerUser 
      */
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
-        if (Sponge.game().isServerAvailable()) {
-            Sponge.game().channelManager().ofType(ResourceKey.resolve(channel), RawDataChannel.class).play().sendTo(this.player, channelBuf -> channelBuf.writeBytes(data));
-        }
+        Sponge.game().channelManager().ofType(ResourceKey.resolve(channel), RawDataChannel.class).play().sendTo(this.player, channelBuf -> channelBuf.writeBytes(data));
     }
 
     /**

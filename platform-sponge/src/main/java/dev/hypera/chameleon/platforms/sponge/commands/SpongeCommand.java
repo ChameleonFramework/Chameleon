@@ -27,6 +27,7 @@ import dev.hypera.chameleon.core.commands.Command;
 import dev.hypera.chameleon.core.commands.context.Context;
 import dev.hypera.chameleon.core.commands.context.ContextImpl;
 import dev.hypera.chameleon.platforms.sponge.users.SpongeUsers;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,8 +66,9 @@ public class SpongeCommand implements org.spongepowered.api.command.Command.Raw 
      */
     @Override
     public @NotNull CommandResult process(@NotNull CommandCause cause, @NotNull Mutable arguments) throws CommandException {
-        if (arguments.input().split(" ").length < 1 || this.command.executeSubCommand(createContext(cause, arguments), arguments.input().split(" ")[0])) {
-            this.command.executeCommand(createContext(cause, arguments));
+        String[] args = arguments.input().split(" ");
+        if (args.length < 1 || this.command.executeSubCommand(createContext(cause, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
+            this.command.executeCommand(createContext(cause, args));
         }
 
         return CommandResult.success();
@@ -77,7 +79,7 @@ public class SpongeCommand implements org.spongepowered.api.command.Command.Raw 
      */
     @Override
     public @NotNull List<CommandCompletion> complete(@NotNull CommandCause cause, @NotNull Mutable arguments) throws CommandException {
-        return this.command.tabComplete(createContext(cause, arguments)).stream().map(CommandCompletion::of).collect(Collectors.toList());
+        return this.command.tabComplete(createContext(cause, arguments.input().split(" "))).stream().map(CommandCompletion::of).collect(Collectors.toList());
     }
 
     /**
@@ -113,8 +115,8 @@ public class SpongeCommand implements org.spongepowered.api.command.Command.Raw 
     }
 
 
-    private @NotNull Context createContext(@NotNull CommandCause cause, @NotNull Mutable arguments) {
-        return new ContextImpl(SpongeUsers.wrap(cause), this.chameleon, arguments.input().split(" "));
+    private @NotNull Context createContext(@NotNull CommandCause cause, @NotNull String[] args) {
+        return new ContextImpl(SpongeUsers.wrap(cause), this.chameleon, args);
     }
 
 }

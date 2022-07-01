@@ -92,12 +92,14 @@ public interface PlatformPlugin {
 
     /**
      * Attempt to enable the {@link PlatformPlugin}.
+     * May not work on some platforms.
      */
     @Experimental
     void enable();
 
     /**
      * Attempt to disable the {@link PlatformPlugin}.
+     * May not work on some platforms.
      */
     @Experimental
     void disable();

@@ -144,7 +144,7 @@ public final class SpongeChameleon extends Chameleon {
      */
     @Internal
     public @NotNull PluginContainer getSpongePlugin() {
-        return Sponge.pluginManager().plugin(this.plugin.getId()).orElseThrow(IllegalStateException::new);
+        return this.plugin.getPluginContainer();
     }
 
 }
