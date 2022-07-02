@@ -1,9 +1,13 @@
 name: "Build"
 on:
   push:
-    branches: "**"
+    branches: ["**"]
     tags-ignore: ["**"]
   pull_request:
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.event.number || github.ref }}"
+  cancel-in-progress: true
 
 env:
   JAVA_VERSION: 17
