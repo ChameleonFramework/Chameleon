@@ -3,7 +3,7 @@ name: "Validate Gradle wrapper"
 
 on:
   push:
-    branches: ["**"]
+    branches: "**"
     tags-ignore: ["**"]
   pull_request:
 
