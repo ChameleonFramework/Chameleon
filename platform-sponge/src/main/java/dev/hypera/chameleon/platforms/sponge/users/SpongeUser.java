@@ -23,8 +23,11 @@
 package dev.hypera.chameleon.platforms.sponge.users;
 
 import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
+import dev.hypera.chameleon.core.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.core.platform.server.GameMode;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -41,7 +44,17 @@ import org.spongepowered.api.network.channel.raw.RawDataChannel;
  */
 public class SpongeUser extends AbstractReflectedAudience implements ServerUser {
 
+    private final static @NotNull Method SIMULATE_CHAT_METHOD;
     private final @NotNull ServerPlayer player;
+
+    static {
+        try {
+            SIMULATE_CHAT_METHOD = ServerPlayer.class.getMethod("simulateChat", Class.forName(AdventureConverter.PACKAGE + "text.Component"), Cause.class);
+        } catch (ClassNotFoundException | NoSuchMethodException ex) {
+            throw new IllegalStateException("Failed to initialise SpongeUser");
+        }
+    }
+
 
     /**
      * {@link SpongeUser} constructor.
@@ -84,7 +97,11 @@ public class SpongeUser extends AbstractReflectedAudience implements ServerUser 
      */
     @Override
     public void chat(@NotNull String message) {
-        this.player.simulateChat(Component.text(message), Cause.builder().append(message).build());
+        try {
+            SIMULATE_CHAT_METHOD.invoke(this.player, AdventureConverter.convertComponent(Component.text(message)), Cause.builder().append(message).build());
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**

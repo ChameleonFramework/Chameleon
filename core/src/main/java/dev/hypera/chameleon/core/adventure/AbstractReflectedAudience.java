@@ -61,13 +61,13 @@ public abstract class AbstractReflectedAudience implements Audience {
 
     static {
         try {
-            Class<?> componentClass = Class.forName(new String(AdventureConverter.PACKAGE) + "text.Component");
-            Class<?> titleClass = Class.forName(new String(AdventureConverter.PACKAGE) + "title.Title");
-            Class<?> bossBarClass = Class.forName(new String(AdventureConverter.PACKAGE) + "bossbar.BossBar");
-            Class<?> soundClass = Class.forName(new String(AdventureConverter.PACKAGE) + "sound.Sound");
-            Class<?> soundStopClass = Class.forName(new String(AdventureConverter.PACKAGE) + "sound.SoundStop");
-            Class<?> bookClass = Class.forName(new String(AdventureConverter.PACKAGE) + "inventory.Book");
-            AUDIENCE_CLASS = Class.forName(new String(AdventureConverter.PACKAGE) + "audience.Audience");
+            Class<?> componentClass = Class.forName(AdventureConverter.PACKAGE + "text.Component");
+            Class<?> titleClass = Class.forName(AdventureConverter.PACKAGE + "title.Title");
+            Class<?> bossBarClass = Class.forName(AdventureConverter.PACKAGE + "bossbar.BossBar");
+            Class<?> soundClass = Class.forName(AdventureConverter.PACKAGE + "sound.Sound");
+            Class<?> soundStopClass = Class.forName(AdventureConverter.PACKAGE + "sound.SoundStop");
+            Class<?> bookClass = Class.forName(AdventureConverter.PACKAGE + "inventory.Book");
+            AUDIENCE_CLASS = Class.forName(AdventureConverter.PACKAGE + "audience.Audience");
 
             SEND_MESSAGE = AUDIENCE_CLASS.getMethod("sendMessage", componentClass);
             SEND_ACTION_BAR = AUDIENCE_CLASS.getMethod("sendActionBar", componentClass);
@@ -89,7 +89,7 @@ public abstract class AbstractReflectedAudience implements Audience {
 
             OPEN_BOOK = AUDIENCE_CLASS.getMethod("openBook", bookClass);
         } catch (Exception ex) {
-            throw new IllegalStateException("Failed to initialize AbstractReflectedAudience", ex);
+            throw new IllegalStateException("Failed to initialise AbstractReflectedAudience", ex);
         }
     }
 

@@ -65,7 +65,7 @@ public class SpongeCommand implements org.spongepowered.api.command.Command.Raw 
      * {@inheritDoc}
      */
     @Override
-    public @NotNull CommandResult process(@NotNull CommandCause cause, @NotNull Mutable arguments) throws CommandException {
+    public @NotNull CommandResult process(@NotNull CommandCause cause, @NotNull Mutable arguments) {
         String[] args = arguments.input().split(" ");
         if (args.length < 1 || this.command.executeSubCommand(createContext(cause, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
             this.command.executeCommand(createContext(cause, args));
@@ -78,7 +78,7 @@ public class SpongeCommand implements org.spongepowered.api.command.Command.Raw 
      * {@inheritDoc}
      */
     @Override
-    public @NotNull List<CommandCompletion> complete(@NotNull CommandCause cause, @NotNull Mutable arguments) throws CommandException {
+    public @NotNull List<CommandCompletion> complete(@NotNull CommandCause cause, @NotNull Mutable arguments) {
         return this.command.tabComplete(createContext(cause, arguments.input().split(" "))).stream().map(CommandCompletion::of).collect(Collectors.toList());
     }
 
