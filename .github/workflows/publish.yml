@@ -1,18 +1,18 @@
 name: "Publish"
 on:
   push:
-    branches: [ "main", "development" ]
+    branches: [ "main" ]
 
 env:
   JAVA_VERSION: 17
 
 jobs:
-  build:
+  publish:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v3"
 
-      - name: "Set up JDK ${{ env.JAVA_VERSION }}"
+      - name: "Set up Java ${{ env.JAVA_VERSION }}"
         uses: actions/setup-java@v3
         with:
           java-version: "${{ env.JAVA_VERSION }}"
@@ -23,26 +23,16 @@ jobs:
           echo "VERSION=$(./gradlew properties | awk '/^version:/ { print $2; }')" >> $GITHUB_ENV
 
       - name: "Create release"
-        if: "${{ endsWith(env.VERSION, 'SNAPSHOT') || startsWith(github.ref, 'ref/heads/main/') }}"
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ endsWith(env.VERSION, 'SNAPSHOT') && 'latest' || format('{0}{1}', 'v', env.VERSION) }}"
+          automatic_release_tag: "v${{ env.VERSION }}"
           prerelease: "${{ endsWith(env.VERSION, 'SNAPSHOT') }}"
-          title: "${{ endsWith(env.VERSION, 'SNAPSHOT') && 'Development Build' || format('{0}{1}', 'Chameleon v', env.VERSION) }}"
-          files: |
-            **/build/libs/*.jar
-            !build/libs/*.jar
-            !build-logic/libs/*.jar
-            LICENSE
-            SECURITY.md
-            AUTHORS
+          title: "Chameleon v${{ env.VERSION }}}"
 
       - name: "Publish"
-        if: "${{ endsWith(env.VERSION, 'SNAPSHOT') || startsWith(github.ref, 'ref/heads/main/') }}"
-        uses: "gradle/gradle-build-action@v2"
+        uses: gradle/gradle-build-action@v2
         with:
-          cache-read-only: "${{ github.ref != 'refs/heads/main' }}"
           arguments: "publish"
         env:
           ORG_GRADLE_PROJECT_hyperaReleasesUsername: "${{ secrets.HYPERA_RELEASES_USERNAME }}"
