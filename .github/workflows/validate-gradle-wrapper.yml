@@ -1,11 +1,6 @@
 # GitHub Actions workflow to validate the Gradle wrappers.
 name: "Validate Gradle wrapper"
-
-on:
-  push:
-    branches: "**"
-    tags-ignore: ["**"]
-  pull_request:
+on: [push, pull_request]
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.event.number || github.ref }}"
@@ -14,6 +9,7 @@ concurrency:
 jobs:
   validate:
     name: "Validate"
+    if: "${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}"
     runs-on: "ubuntu-latest"
     steps:
 

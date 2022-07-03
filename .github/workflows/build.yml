@@ -1,9 +1,6 @@
+# GitHub Actions workflow to build the project with Gradle.
 name: "Build"
-on:
-  push:
-    branches: ["**"]
-    tags-ignore: ["**"]
-  pull_request:
+on: [push, pull_request]
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.event.number || github.ref }}"
@@ -15,6 +12,7 @@ env:
 jobs:
   build:
     name: "Build"
+    if: "${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}"
     strategy:
       matrix:
         os:
@@ -37,3 +35,14 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: "build"
+
+      - name: "Upload reports"
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: "${{ runner.os }}-test-reports"
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            **/build/reports/tests/test/
+            **/build/reports/checkstyle/
