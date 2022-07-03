@@ -1,5 +1,5 @@
 # GitHub Actions workflow to build the project with Gradle.
-name: "Build"
+name: "Gradle"
 on: [push, pull_request]
 
 concurrency:
@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    name: "${{ runner.os }}"
+    name: "Build"
     if: "${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}"
     strategy:
       matrix:
