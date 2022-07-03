@@ -23,6 +23,9 @@
 package dev.hypera.chameleon.annotations.processing.generation.impl.minestom;
 
 import dev.hypera.chameleon.annotations.PlatformDependency;
+import dev.hypera.chameleon.annotations.Plugin;
+import dev.hypera.chameleon.annotations.Plugin.Platform;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
@@ -36,12 +39,12 @@ class ExtensionDescription {
     private final @NotNull List<String> authors;
     private final @NotNull List<String> dependencies;
 
-    ExtensionDescription(@NotNull String name, @NotNull String entrypoint, @NotNull String version, @NotNull List<String> authors, @NotNull List<PlatformDependency> dependencies) {
-        this.name = name;
-        this.entrypoint = entrypoint;
-        this.version = version;
-        this.authors = authors;
-        this.dependencies = dependencies.stream().map(PlatformDependency::name).collect(Collectors.toList());
+    ExtensionDescription(@NotNull Plugin plugin, @NotNull String main) {
+        this.name = plugin.name().isEmpty() ? plugin.id() : plugin.name();
+        this.entrypoint = main;
+        this.version = plugin.version();
+        this.authors = Arrays.asList(plugin.authors());
+        this.dependencies = Arrays.stream(plugin.dependencies()).filter(d -> d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.MINESTOM)).map(PlatformDependency::name).collect(Collectors.toList());
     }
 
 }

@@ -20,47 +20,42 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.platforms.sponge.users;
 
-import dev.hypera.chameleon.annotations.Plugin.Platform;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
+import dev.hypera.chameleon.core.users.ChatUser;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.api.Sponge;
 
 /**
- * Platform Dependency.
+ * Sponge console {@link ChatUser} implementation.
  */
-@Retention(RetentionPolicy.SOURCE)
-public @interface PlatformDependency {
+@Internal
+public class SpongeConsoleUser extends AbstractReflectedAudience implements ChatUser {
 
     /**
-     * The ID or name of the dependency.
-     *
-     * @return the dependency's ID or name.
+     * {@link SpongeConsoleUser} constructor.
      */
-    @NotNull String name();
+    @Internal
+    SpongeConsoleUser() {
+        super(Sponge.game().systemSubject());
+    }
 
     /**
-     * The version, or a maven range, that represents the versions of this dependency.
-     * This is required for Sponge support.
-     *
-     * @return the required version of this dependency.
+     * {@inheritDoc}
      */
-    @NotNull String version() default "";
+    @Override
+    public @NotNull String getName() {
+        return Sponge.systemSubject().identifier();
+    }
 
     /**
-     * Whether this dependency is not required to load the dependant.
-     * By default, this is {@code false}, meaning the dependency is required.
-     *
-     * @return {@code true} if the dependency is not required for the dependant to load.
+     * {@inheritDoc}
      */
-    boolean soft() default false;
-
-    /**
-     * The {@link Platform}s this dependency is loaded on.
-     *
-     * @return the {@link Platform}s this dependency should be loaded on.
-     */
-    @NotNull Platform[] platforms() default {};
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return Sponge.game().systemSubject().hasPermission(permission);
+    }
 
 }

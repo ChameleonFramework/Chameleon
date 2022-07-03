@@ -20,7 +20,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations.processing.generation.impl.velocity;
+package dev.hypera.chameleon.annotations.processing.generation.impl.sponge;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,13 +30,14 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeSpec;
-import dev.hypera.chameleon.annotations.PlatformDependency;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
+import dev.hypera.chameleon.annotations.processing.generation.impl.sponge.meta.SerializedPluginMetadata;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
@@ -46,15 +47,15 @@ import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity plugin main class and 'velocity-plugin.json' description file generator.
+ * Sponge plugin main class and 'META-INF/sponge_plugins.json' description file generator.
  */
-public class VelocityGenerator extends Generator {
+public class SpongeGenerator extends Generator {
 
-    private static final @NotNull String DESCRIPTION_FILE = "velocity-plugin.json";
+    private static final @NotNull String DESCRIPTION_FILE = "META-INF/sponge_plugins.json";
     private static final @NotNull Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     /**
-     * Generate Velocity plugin main class and 'velocity-plugin.json' description file.
+     * Generate Sponge plugin main class and 'META-INF/sponge_plugins.json' description file.
      *
      * @param data   {@link Plugin} data
      * @param plugin Chameleon plugin main class
@@ -67,45 +68,43 @@ public class VelocityGenerator extends Generator {
         MethodSpec constructorSpec = MethodSpec.constructorBuilder()
             .addAnnotation(clazz("com.google.inject", "Inject"))
             .addModifiers(Modifier.PUBLIC)
-            .addParameter(ParameterSpec.builder(clazz("org.slf4j", "Logger"), "logger").build())
-            .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.proxy", "ProxyServer"), "server").build())
-            .addParameter(ParameterSpec.builder(clazz("java.nio.file", "Path"), "dataDirectory").addAnnotation(clazz("com.velocitypowered.api.plugin.annotation", "DataDirectory")).build())
-            .addStatement("this.$N = $N", "server", "server")
+            .addParameter(ParameterSpec.builder(clazz("org.spongepowered.plugin", "PluginContainer"), "pluginContainer").build())
+            .addParameter(ParameterSpec.builder(clazz("org.apache.logging.log4j", "Logger"), "logger").build())
+            .addStatement("this.$N = $N", "pluginContainer", "pluginContainer")
             .addStatement("this.$N = $N", "logger", "logger")
-            .addStatement("this.$N = $N", "dataDirectory", "dataDirectory")
             .beginControlFlow("try")
             .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platforms.velocity", "VelocityChameleon"), plugin, "pluginData")
+            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platforms.sponge", "SpongeChameleon"), plugin, "pluginData")
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
             .addStatement("$N.printStackTrace()", "ex")
             .endControlFlow()
             .build();
 
-        MethodSpec initEventSpec = MethodSpec.methodBuilder("onProxyInitialization")
-            .addAnnotation(clazz("com.velocitypowered.api.event", "Subscribe"))
+        MethodSpec startingEngineEventSpec = MethodSpec.methodBuilder("onStartingEngineEvent")
+            .addAnnotation(clazz("org.spongepowered.api.event", "Listener"))
             .addModifiers(Modifier.PUBLIC)
-            .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.event.proxy", "ProxyInitializeEvent"), "event").build())
+            .addParameter(ParameterSpec.builder(generic(clazz("org.spongepowered.api.event.lifecycle", "StartingEngineEvent"), clazz("org.spongepowered.api", "Server")), "event").build())
             .addStatement("this.$N.onEnable()", "chameleon")
             .build();
 
-        MethodSpec shutdownEventSpec = MethodSpec.methodBuilder("onProxyShutdown")
+        MethodSpec stoppingEngineEventSpec = MethodSpec.methodBuilder("onStoppingEngineEvent")
+            .addAnnotation(clazz("org.spongepowered.api.event", "Listener"))
             .addModifiers(Modifier.PUBLIC)
-            .addAnnotation(clazz("com.velocitypowered.api.event", "Subscribe"))
-            .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.event.proxy", "ProxyShutdownEvent"), "event").build())
+            .addParameter(ParameterSpec.builder(generic(clazz("org.spongepowered.api.event.lifecycle", "StoppingEngineEvent"), clazz("org.spongepowered.api", "Server")), "event").build())
             .addStatement("this.$N.onDisable()", "chameleon")
             .build();
 
-        MethodSpec getServerSpec = MethodSpec.methodBuilder("getServer")
+        MethodSpec getPluginContainerSpec = MethodSpec.methodBuilder("getPluginContainer")
             .addAnnotation(Override.class)
             .addModifiers(Modifier.PUBLIC)
-            .returns(clazz("com.velocitypowered.api.proxy", "ProxyServer"))
-            .addStatement("return this.$N", "server")
+            .returns(clazz("org.spongepowered.plugin", "PluginContainer"))
+            .addStatement("return this.$N", "pluginContainer")
             .build();
 
         MethodSpec getLoggerSpec = MethodSpec.methodBuilder("getLogger")
             .addAnnotation(Override.class)
             .addModifiers(Modifier.PUBLIC)
-            .returns(clazz("org.slf4j", "Logger"))
+            .returns(clazz("org.apache.logging.log4j", "Logger"))
             .addStatement("return this.$N", "logger")
             .build();
 
@@ -116,37 +115,22 @@ public class VelocityGenerator extends Generator {
             .addStatement("return this.$N", "dataDirectory")
             .build();
 
-        AnnotationSpec.Builder pluginAnnotationSpecBuilder = AnnotationSpec.builder(clazz("com.velocitypowered.api.plugin", "Plugin"))
-            .addMember("id", "$S", data.id())
-            .addMember("name", "$S", data.name())
-            .addMember("version", "$S", data.version())
-            .addMember("description", "$S", data.description())
-            .addMember("url", "$S", data.url());
-
-        for (String author : data.authors()) {
-            pluginAnnotationSpecBuilder.addMember("authors", "$S", author);
-        }
-
-        for (PlatformDependency dependency : data.dependencies()) {
-            AnnotationSpec dependencyAnnotationSpec = AnnotationSpec.builder(clazz("com.velocitypowered.api.plugin", "Dependency"))
-                .addMember("id", "$S", dependency.name().toLowerCase())
-                .addMember("optional", "$L", dependency.soft()).build();
-
-            pluginAnnotationSpecBuilder.addMember("dependencies", "$L", dependencyAnnotationSpec);
-        }
-
-        TypeSpec velocityMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Velocity")
-            .addAnnotation(pluginAnnotationSpecBuilder.build())
+        TypeSpec spongeMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Sponge")
             .addModifiers(Modifier.PUBLIC)
-            .addSuperinterface(clazz("dev.hypera.chameleon.platforms.velocity", "VelocityPlugin"))
-            .addField(FieldSpec.builder(clazz("com.velocitypowered.api.proxy", "ProxyServer"), "server", Modifier.PRIVATE, Modifier.FINAL).build())
-            .addField(FieldSpec.builder(clazz("org.slf4j", "Logger"), "logger", Modifier.PRIVATE, Modifier.FINAL).build())
-            .addField(FieldSpec.builder(clazz("java.nio.file", "Path"), "dataDirectory", Modifier.PRIVATE, Modifier.FINAL).build())
-            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platforms.velocity", "VelocityChameleon"), "chameleon", Modifier.PRIVATE).build())
+            .addSuperinterface(clazz("dev.hypera.chameleon.platforms.sponge", "SpongePlugin"))
+            .addField(FieldSpec.builder(clazz("org.spongepowered.plugin", "PluginContainer"), "pluginContainer", Modifier.PRIVATE, Modifier.FINAL).build())
+            .addField(FieldSpec.builder(clazz("org.apache.logging.log4j", "Logger"), "logger", Modifier.PRIVATE, Modifier.FINAL).build())
+            .addField(
+                FieldSpec.builder(clazz("java.nio.file", "Path"), "dataDirectory", Modifier.PRIVATE)
+                    .addAnnotation(clazz("com.google.inject", "Inject"))
+                    .addAnnotation(AnnotationSpec.builder(clazz("org.spongepowered.api.config", "DefaultConfig")).addMember("sharedRoot", "false").build())
+                    .build()
+            )
+            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platforms.sponge", "SpongeChameleon"), "chameleon", Modifier.PRIVATE).build())
             .addMethod(constructorSpec)
-            .addMethod(initEventSpec)
-            .addMethod(shutdownEventSpec)
-            .addMethod(getServerSpec)
+            .addMethod(startingEngineEventSpec)
+            .addMethod(stoppingEngineEventSpec)
+            .addMethod(getPluginContainerSpec)
             .addMethod(getLoggerSpec)
             .addMethod(getDataDirectorySpec)
             .build();
@@ -155,15 +139,20 @@ public class VelocityGenerator extends Generator {
         if (packageName.endsWith("core") || packageName.endsWith("common")) {
             packageName = packageName.substring(0, packageName.lastIndexOf("."));
         }
-        packageName = packageName + ".platform.velocity";
+        packageName = packageName + ".platform.sponge";
 
-        JavaFile.builder(packageName, velocityMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
+        JavaFile.builder(packageName, spongeMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
         generateDescriptionFile(data, plugin, env, packageName);
     }
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))) {
-            GSON.toJson(new SerializedPluginDescription(data, packageName + "." + plugin.getSimpleName() + "Velocity"), writer);
+        Path path = Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri());
+        if (!Files.exists(path.getParent())) {
+            Files.createDirectories(path.getParent());
+        }
+
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            GSON.toJson(new SerializedPluginMetadata(data, packageName + "." + plugin.getSimpleName() + "Sponge"), writer);
         }
     }
 

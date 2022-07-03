@@ -20,47 +20,37 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.platforms.sponge;
 
-import dev.hypera.chameleon.annotations.Plugin.Platform;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.nio.file.Path;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.plugin.PluginContainer;
 
 /**
- * Platform Dependency.
+ * Sponge plugin.
  */
-@Retention(RetentionPolicy.SOURCE)
-public @interface PlatformDependency {
+public interface SpongePlugin {
 
     /**
-     * The ID or name of the dependency.
+     * Get Sponge {@link PluginContainer} instance.
      *
-     * @return the dependency's ID or name.
+     * @return {@link PluginContainer} instance.
      */
-    @NotNull String name();
+    @NotNull PluginContainer getPluginContainer();
 
     /**
-     * The version, or a maven range, that represents the versions of this dependency.
-     * This is required for Sponge support.
+     * Get Sponge {@link Logger} instance.
      *
-     * @return the required version of this dependency.
+     * @return {@link Logger} instance.
      */
-    @NotNull String version() default "";
+    @NotNull Logger getLogger();
 
     /**
-     * Whether this dependency is not required to load the dependant.
-     * By default, this is {@code false}, meaning the dependency is required.
+     * Get plugin data directory.
      *
-     * @return {@code true} if the dependency is not required for the dependant to load.
+     * @return {@link Path}.
      */
-    boolean soft() default false;
-
-    /**
-     * The {@link Platform}s this dependency is loaded on.
-     *
-     * @return the {@link Platform}s this dependency should be loaded on.
-     */
-    @NotNull Platform[] platforms() default {};
+    @NotNull Path getDataDirectory();
 
 }

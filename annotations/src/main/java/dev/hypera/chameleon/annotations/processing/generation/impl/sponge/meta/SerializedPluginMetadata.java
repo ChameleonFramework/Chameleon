@@ -20,47 +20,34 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.annotations.processing.generation.impl.sponge.meta;
 
-import dev.hypera.chameleon.annotations.Plugin.Platform;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import dev.hypera.chameleon.annotations.Plugin;
+import java.util.Collections;
+import java.util.List;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Platform Dependency.
+ * Sponge serialized plugin metadata.
  */
-@Retention(RetentionPolicy.SOURCE)
-public @interface PlatformDependency {
+@Internal
+@SuppressWarnings({ "unused", "FieldCanBeLocal" })
+public class SerializedPluginMetadata {
+
+    private final @NotNull Loader loader = Loader.javaPlain();
+    private final @NotNull String license = "Unknown";
+    private final @NotNull List<PluginEntry> plugins;
 
     /**
-     * The ID or name of the dependency.
+     * {@link SerializedPluginMetadata} constructor.
      *
-     * @return the dependency's ID or name.
+     * @param plugin {@link Plugin} to create metadata for.
+     * @param main   Main class to use in the metadata.
      */
-    @NotNull String name();
-
-    /**
-     * The version, or a maven range, that represents the versions of this dependency.
-     * This is required for Sponge support.
-     *
-     * @return the required version of this dependency.
-     */
-    @NotNull String version() default "";
-
-    /**
-     * Whether this dependency is not required to load the dependant.
-     * By default, this is {@code false}, meaning the dependency is required.
-     *
-     * @return {@code true} if the dependency is not required for the dependant to load.
-     */
-    boolean soft() default false;
-
-    /**
-     * The {@link Platform}s this dependency is loaded on.
-     *
-     * @return the {@link Platform}s this dependency should be loaded on.
-     */
-    @NotNull Platform[] platforms() default {};
+    @Internal
+    public SerializedPluginMetadata(@NotNull Plugin plugin, @NotNull String main) {
+        this.plugins = Collections.singletonList(new PluginEntry(plugin, main));
+    }
 
 }

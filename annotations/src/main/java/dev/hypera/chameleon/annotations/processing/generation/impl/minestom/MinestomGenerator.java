@@ -29,14 +29,12 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import dev.hypera.chameleon.annotations.Plugin;
-import dev.hypera.chameleon.annotations.Plugin.Platform;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
@@ -63,14 +61,11 @@ public class MinestomGenerator extends Generator {
      */
     @Override
     public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
-        Platform[] platforms = data.platforms().length > 0 ? data.platforms() : Platform.values();
-
         MethodSpec constructorSpec = MethodSpec.constructorBuilder()
             .addModifiers(Modifier.PUBLIC)
             .beginControlFlow("try")
             .addStatement(createPluginData(data))
             .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platforms.minestom", "MinestomChameleon"), plugin, "pluginData")
-            .addStatement("this.$N.onEnable()", "chameleon")
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
             .addStatement("$N.printStackTrace()", "ex")
             .endControlFlow()
@@ -105,7 +100,7 @@ public class MinestomGenerator extends Generator {
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(env.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", DESCRIPTION_FILE).toUri()))) {
-            GSON.toJson(new ExtensionDescription(data.name().isEmpty() ? data.id() : data.name(), packageName + "." + plugin.getSimpleName() + "Minestom", data.version(), Arrays.asList(data.authors()), Arrays.asList(data.dependencies())), writer);
+            GSON.toJson(new ExtensionDescription(data, packageName + "." + plugin.getSimpleName() + "Minestom"), writer);
         }
     }
 

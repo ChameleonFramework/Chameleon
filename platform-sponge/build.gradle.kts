@@ -20,47 +20,17 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+plugins {
+    id("chameleon.api")
+}
 
-import dev.hypera.chameleon.annotations.Plugin.Platform;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import org.jetbrains.annotations.NotNull;
+repositories {
+    maven("https://repo.spongepowered.org/repository/maven-public/")
+}
 
-/**
- * Platform Dependency.
- */
-@Retention(RetentionPolicy.SOURCE)
-public @interface PlatformDependency {
-
-    /**
-     * The ID or name of the dependency.
-     *
-     * @return the dependency's ID or name.
-     */
-    @NotNull String name();
-
-    /**
-     * The version, or a maven range, that represents the versions of this dependency.
-     * This is required for Sponge support.
-     *
-     * @return the required version of this dependency.
-     */
-    @NotNull String version() default "";
-
-    /**
-     * Whether this dependency is not required to load the dependant.
-     * By default, this is {@code false}, meaning the dependency is required.
-     *
-     * @return {@code true} if the dependency is not required for the dependant to load.
-     */
-    boolean soft() default false;
-
-    /**
-     * The {@link Platform}s this dependency is loaded on.
-     *
-     * @return the {@link Platform}s this dependency should be loaded on.
-     */
-    @NotNull Platform[] platforms() default {};
-
+dependencies {
+    compileOnlyApi(project(":chameleon-core"))
+    compileOnlyApi(libs.platform.sponge) {
+        exclude(module = "configurate-*")
+    }
 }

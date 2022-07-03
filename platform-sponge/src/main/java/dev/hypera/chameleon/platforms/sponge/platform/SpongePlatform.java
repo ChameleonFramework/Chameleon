@@ -20,47 +20,38 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.platforms.sponge.platform;
 
-import dev.hypera.chameleon.annotations.Plugin.Platform;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import dev.hypera.chameleon.core.platform.server.ServerPlatform;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.api.Platform.Component;
+import org.spongepowered.api.Sponge;
 
 /**
- * Platform Dependency.
+ * Sponge {@link ServerPlatform} implementation.
  */
-@Retention(RetentionPolicy.SOURCE)
-public @interface PlatformDependency {
+@Internal
+public final class SpongePlatform extends ServerPlatform {
 
-    /**
-     * The ID or name of the dependency.
-     *
-     * @return the dependency's ID or name.
-     */
-    @NotNull String name();
+    @Override
+    public @NotNull String getAPIName() {
+        return Sponge.game().platform().container(Component.API).metadata().name().orElse("Sponge");
+    }
 
-    /**
-     * The version, or a maven range, that represents the versions of this dependency.
-     * This is required for Sponge support.
-     *
-     * @return the required version of this dependency.
-     */
-    @NotNull String version() default "";
+    @Override
+    public @NotNull String getName() {
+        return Sponge.game().platform().container(Component.IMPLEMENTATION).metadata().name().orElse("Sponge");
+    }
 
-    /**
-     * Whether this dependency is not required to load the dependant.
-     * By default, this is {@code false}, meaning the dependency is required.
-     *
-     * @return {@code true} if the dependency is not required for the dependant to load.
-     */
-    boolean soft() default false;
+    @Override
+    public @NotNull String getVersion() {
+        return Sponge.game().platform().container(Component.IMPLEMENTATION).metadata().version().toString() + " (" + Sponge.game().platform().container(Component.API).metadata().version() + ")";
+    }
 
-    /**
-     * The {@link Platform}s this dependency is loaded on.
-     *
-     * @return the {@link Platform}s this dependency should be loaded on.
-     */
-    @NotNull Platform[] platforms() default {};
+    @Override
+    public @NotNull Type getType() {
+        return Type.SERVER;
+    }
 
 }

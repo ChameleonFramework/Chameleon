@@ -20,47 +20,37 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.platforms.sponge.managers;
 
-import dev.hypera.chameleon.annotations.Plugin.Platform;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import dev.hypera.chameleon.core.managers.PluginManager;
+import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.platforms.sponge.platform.plugin.SpongePlugin;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.api.Sponge;
 
 /**
- * Platform Dependency.
+ * Sponge {@link PluginManager} implementation.
  */
-@Retention(RetentionPolicy.SOURCE)
-public @interface PlatformDependency {
+@Internal
+public class SpongePluginManager extends PluginManager {
 
-    /**
-     * The ID or name of the dependency.
-     *
-     * @return the dependency's ID or name.
-     */
-    @NotNull String name();
+    @Override
+    public @NotNull Set<PlatformPlugin> getPlugins() {
+        return Sponge.pluginManager().plugins().stream().map(SpongePlugin::new).collect(Collectors.toSet());
+    }
 
-    /**
-     * The version, or a maven range, that represents the versions of this dependency.
-     * This is required for Sponge support.
-     *
-     * @return the required version of this dependency.
-     */
-    @NotNull String version() default "";
+    @Override
+    public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
+        return Sponge.pluginManager().plugin(name.toLowerCase()).map(SpongePlugin::new);
+    }
 
-    /**
-     * Whether this dependency is not required to load the dependant.
-     * By default, this is {@code false}, meaning the dependency is required.
-     *
-     * @return {@code true} if the dependency is not required for the dependant to load.
-     */
-    boolean soft() default false;
-
-    /**
-     * The {@link Platform}s this dependency is loaded on.
-     *
-     * @return the {@link Platform}s this dependency should be loaded on.
-     */
-    @NotNull Platform[] platforms() default {};
+    @Override
+    public boolean isPluginEnabled(@NotNull String name) {
+        return Sponge.pluginManager().plugin(name.toLowerCase()).isPresent();
+    }
 
 }

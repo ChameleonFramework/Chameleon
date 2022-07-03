@@ -24,6 +24,8 @@ package dev.hypera.chameleon.annotations.processing.generation;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.Plugin.Platform;
 import dev.hypera.chameleon.core.data.PluginData;
@@ -66,6 +68,10 @@ public abstract class Generator {
             Arrays.class,
             CodeBlock.builder().add(Arrays.stream(data.platforms().length > 0 ? data.platforms() : Platform.values()).map(p -> "$1T." + p.name()).collect(Collectors.joining(", ")), PluginData.Platform.class).build()
         ).build();
+    }
+
+    protected @NotNull ParameterizedTypeName generic(@NotNull ClassName clazz, @NotNull TypeName... arguments) {
+        return ParameterizedTypeName.get(clazz, arguments);
     }
 
     protected @NotNull ClassName clazz(@NotNull String p, @NotNull String n) {

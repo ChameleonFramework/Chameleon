@@ -20,47 +20,49 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.platforms.sponge.users;
 
-import dev.hypera.chameleon.annotations.Plugin.Platform;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import dev.hypera.chameleon.core.users.ChatUser;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+import org.spongepowered.api.service.permission.Subject;
 
 /**
- * Platform Dependency.
+ * Sponge {@link dev.hypera.chameleon.core.users.User} utilities.
  */
-@Retention(RetentionPolicy.SOURCE)
-public @interface PlatformDependency {
+@Internal
+public final class SpongeUsers {
+
+    private static final @NotNull SpongeConsoleUser CONSOLE = new SpongeConsoleUser();
+
+    @Internal
+    private SpongeUsers() {
+
+    }
 
     /**
-     * The ID or name of the dependency.
+     * Wrap provided {@link Subject}.
      *
-     * @return the dependency's ID or name.
+     * @param subject {@link Subject} to wrap.
+     *
+     * @return {@link ChatUser}.
      */
-    @NotNull String name();
+    public static @NotNull ChatUser wrap(@NotNull Subject subject) {
+        if (subject instanceof ServerPlayer) {
+            return new SpongeUser((ServerPlayer) subject);
+        } else {
+            return CONSOLE;
+        }
+    }
 
     /**
-     * The version, or a maven range, that represents the versions of this dependency.
-     * This is required for Sponge support.
+     * Get console {@link ChatUser}.
      *
-     * @return the required version of this dependency.
+     * @return console {@link ChatUser}.
      */
-    @NotNull String version() default "";
-
-    /**
-     * Whether this dependency is not required to load the dependant.
-     * By default, this is {@code false}, meaning the dependency is required.
-     *
-     * @return {@code true} if the dependency is not required for the dependant to load.
-     */
-    boolean soft() default false;
-
-    /**
-     * The {@link Platform}s this dependency is loaded on.
-     *
-     * @return the {@link Platform}s this dependency should be loaded on.
-     */
-    @NotNull Platform[] platforms() default {};
+    public static @NotNull SpongeConsoleUser console() {
+        return CONSOLE;
+    }
 
 }

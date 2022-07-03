@@ -23,8 +23,12 @@
 package dev.hypera.chameleon.annotations.processing.generation.impl.velocity;
 
 import dev.hypera.chameleon.annotations.PlatformDependency;
+import dev.hypera.chameleon.annotations.Plugin;
+import dev.hypera.chameleon.annotations.Plugin.Platform;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({ "unused", "FieldCanBeLocal" })
@@ -39,30 +43,31 @@ class SerializedPluginDescription {
     private final @NotNull List<SerializedDependency> dependencies;
     private final @NotNull String main;
 
-    SerializedPluginDescription(@NotNull String id, @NotNull String name, @NotNull String version, @NotNull String description, @NotNull String url, @NotNull List<String> authors, @NotNull List<PlatformDependency> dependencies, @NotNull String main) {
-        if (!id.matches("[a-z][a-z\\d-_]{0,63}")) {
+    @Internal
+    SerializedPluginDescription(@NotNull Plugin plugin, @NotNull String main) {
+        if (!plugin.id().matches("[a-z][a-z\\d-_]{0,63}")) {
             throw new IllegalArgumentException("Invalid plugin id");
         }
 
-        this.id = id;
-        this.name = name;
-        this.version = version;
-        this.description = description;
-        this.url = url;
-        this.authors = authors;
-        this.dependencies = dependencies.stream().map(d -> new SerializedDependency(d.name(), d.soft())).collect(Collectors.toList());
+        this.id = plugin.id();
+        this.name = plugin.name();
+        this.version = plugin.version();
+        this.description = plugin.description();
+        this.url = plugin.url();
+        this.authors = Arrays.asList(plugin.authors());
+        this.dependencies = Arrays.stream(plugin.dependencies()).filter(d -> d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.VELOCITY)).map(SerializedDependency::new).collect(Collectors.toList());
         this.main = main;
     }
 
-
+    @Internal
     private final static class SerializedDependency {
 
         private final @NotNull String name;
         private final boolean optional;
 
-        private SerializedDependency(@NotNull String name, boolean optional) {
-            this.name = name;
-            this.optional = optional;
+        private SerializedDependency(@NotNull PlatformDependency dependency) {
+            this.name = dependency.name();
+            this.optional = dependency.soft();
         }
 
     }

@@ -29,7 +29,6 @@ repositories {
 }
 
 dependencies {
-    api(project(":chameleon-core"))
+    compileOnlyApi(project(":chameleon-core"))
     compileOnlyApi(libs.platform.velocity)
-    compileOnlyApi(libs.annotations)
 }

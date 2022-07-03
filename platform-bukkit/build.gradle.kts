@@ -30,8 +30,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":chameleon-core"))
+    compileOnlyApi(project(":chameleon-core"))
     compileOnlyApi(libs.platform.bukkit)
     implementation(libs.adventure.platform.bukkit)
-    compileOnlyApi(libs.annotations)
 }
