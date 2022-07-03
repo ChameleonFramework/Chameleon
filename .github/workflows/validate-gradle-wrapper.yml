@@ -1,10 +1,20 @@
+# GitHub Actions workflow to validate the Gradle wrappers.
 name: "Validate Gradle wrapper"
-on: push
+on: [push, pull_request]
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.event.number || github.ref }}"
+  cancel-in-progress: true
 
 jobs:
   validate:
+    name: "Validate"
+    if: "${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}"
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "actions/checkout@v3"
+
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
       - name: "Validate Gradle wrapper"
-        uses: "gradle/wrapper-validation-action@v1"
+        uses: gradle/wrapper-validation-action@v1
