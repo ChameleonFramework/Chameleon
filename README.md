@@ -24,9 +24,10 @@ Chameleon plans to support every platform in this list. If you have ideas for ot
 - [x] BungeeCord
 - [x] Minestom
 - [x] Nukkit
+- [x] Sponge
 - [x] Velocity
 - [ ] Fabric
-- [ ] Sponge
+- [ ] Forge
 
 
 ## Getting started
@@ -43,6 +44,7 @@ If you have any questions, feel free to ask in our [official Discord server][dis
    - `bungeecord`
    - `minestom`
    - `nukkit`
+   - `sponge`
    - `velocity`
 
 ### Annotation-based platform class generator

@@ -25,7 +25,6 @@ package dev.hypera.chameleon.platforms.nukkit.managers;
 import cn.nukkit.Server;
 import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.scheduling.Schedule;
-import dev.hypera.chameleon.core.scheduling.Schedule.Type;
 import dev.hypera.chameleon.core.scheduling.ScheduleImpl.DurationSchedule;
 import dev.hypera.chameleon.core.scheduling.ScheduleImpl.TickSchedule;
 import dev.hypera.chameleon.core.scheduling.Task;
@@ -57,14 +56,14 @@ public class NukkitScheduler extends Scheduler {
      */
     @Override
     protected void schedule(@NotNull TaskImpl task) {
-        if (task.getRepeat().getType().equals(Type.NONE)) {
-            if (task.getDelay().getType().equals(Type.NONE)) {
+        if (task.getRepeat().getType().equals(Schedule.Type.NONE)) {
+            if (task.getDelay().getType().equals(Schedule.Type.NONE)) {
                 Server.getInstance().getScheduler().scheduleTask(this.chameleon.getNukkitPlugin(), task.getRunnable(), task.getType().equals(Task.Type.ASYNC));
             } else {
                 Server.getInstance().getScheduler().scheduleDelayedTask(this.chameleon.getNukkitPlugin(), task.getRunnable(), convert(task.getDelay()), task.getType().equals(Task.Type.ASYNC));
             }
         } else {
-            if (task.getDelay().getType().equals(Type.NONE)) {
+            if (task.getDelay().getType().equals(Schedule.Type.NONE)) {
                 Server.getInstance().getScheduler().scheduleRepeatingTask(this.chameleon.getNukkitPlugin(), task.getRunnable(), convert(task.getRepeat()), task.getType().equals(Task.Type.ASYNC));
             } else {
                 Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(this.chameleon.getNukkitPlugin(), task.getRunnable(), convert(task.getDelay()), convert(task.getRepeat()), task.getType().equals(Task.Type.ASYNC));
@@ -73,11 +72,11 @@ public class NukkitScheduler extends Scheduler {
     }
 
     private int convert(@NotNull Schedule schedule) {
-        if (schedule.getType().equals(Type.NONE)) {
+        if (schedule.getType().equals(Schedule.Type.NONE)) {
             return 0;
-        } else if (schedule.getType().equals(Type.DURATION)) {
+        } else if (schedule.getType().equals(Schedule.Type.DURATION)) {
             return (int) Math.min(((DurationSchedule) schedule).getDuration().toMillis() / 50, Integer.MAX_VALUE);
-        } else if (schedule.getType().equals(Type.TICK)) {
+        } else if (schedule.getType().equals(Schedule.Type.TICK)) {
             return ((TickSchedule) schedule).getTicks();
         } else {
             throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");

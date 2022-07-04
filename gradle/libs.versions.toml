@@ -45,6 +45,7 @@ javapoet = "com.squareup:javapoet:1.13.0"
 build-indra-common = { module = "net.kyori:indra-common", version.ref = "indra" }
 build-indra-publishing = { module = "net.kyori:indra-publishing-gradle-plugin", version.ref = "indra" }
 build-testLogger = "com.adarshr:gradle-test-logger-plugin:3.2.0"
+build-errorpronePlugin = "net.ltgt.gradle:gradle-errorprone-plugin:2.0.2"
 
 # Testing
 test-junit-bom = "org.junit:junit-bom:5.8.2"
@@ -56,4 +57,5 @@ slf4j = "org.slf4j:slf4j-api:1.7.36"
 log4j = "org.apache.logging.log4j:log4j-api:2.8.1"
 
 
-[plugins]
+[bundles]
+adventure = ["adventure-api", "adventure-textSerializer-legacy", "adventure-textSerializer-gson", "adventure-platform-api"]

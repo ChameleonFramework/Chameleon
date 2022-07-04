@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 
 @Internal
 @SuppressWarnings({ "unused", "FieldCanBeLocal" })
@@ -109,7 +108,7 @@ final class PluginEntry {
 
     }
 
-    private @UnknownNullability String nullEmpty(@NotNull String s) {
+    private @Nullable String nullEmpty(@NotNull String s) {
         return s.isEmpty() ? null : s;
     }
 

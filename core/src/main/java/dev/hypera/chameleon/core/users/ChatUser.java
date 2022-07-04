@@ -23,7 +23,7 @@
 package dev.hypera.chameleon.core.users;
 
 import dev.hypera.chameleon.core.annotations.PlatformSpecific;
-import dev.hypera.chameleon.core.platform.Platform.Type;
+import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.core.users.permissions.PermissionHolder;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
@@ -63,7 +63,7 @@ public interface ChatUser extends Audience, PermissionHolder {
      * @return {@link ProxyUser}.
      * @throws IllegalStateException if this {@link ChatUser} is not an {@link ProxyUser}.
      */
-    @PlatformSpecific(Type.PROXY)
+    @PlatformSpecific(Platform.Type.PROXY)
     default @NotNull ProxyUser proxy() {
         if (this instanceof ProxyUser) {
             return (ProxyUser) this;
@@ -78,7 +78,7 @@ public interface ChatUser extends Audience, PermissionHolder {
      * @return {@link ServerUser}.
      * @throws IllegalStateException if this {@link ChatUser} is not an {@link ServerUser}.
      */
-    @PlatformSpecific(Type.SERVER)
+    @PlatformSpecific(Platform.Type.SERVER)
     default @NotNull ServerUser server() {
         if (this instanceof ServerUser) {
             return (ServerUser) this;

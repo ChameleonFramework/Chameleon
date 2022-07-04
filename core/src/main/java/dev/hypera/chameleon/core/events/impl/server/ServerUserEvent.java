@@ -24,14 +24,14 @@ package dev.hypera.chameleon.core.events.impl.server;
 
 import dev.hypera.chameleon.core.annotations.PlatformSpecific;
 import dev.hypera.chameleon.core.events.impl.common.UserEvent;
-import dev.hypera.chameleon.core.platform.Platform.Type;
+import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.core.users.platforms.ServerUser;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Server-only event.
  */
-@PlatformSpecific(Type.SERVER)
+@PlatformSpecific(Platform.Type.SERVER)
 public interface ServerUserEvent extends UserEvent {
 
     /**
@@ -39,6 +39,7 @@ public interface ServerUserEvent extends UserEvent {
      *
      * @return the {@link ServerUser} that triggered this event.
      */
+    @Override
     @NotNull ServerUser getUser();
 
 }

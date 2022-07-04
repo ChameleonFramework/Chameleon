@@ -23,7 +23,7 @@
 package dev.hypera.chameleon.core.users.platforms;
 
 import dev.hypera.chameleon.core.annotations.PlatformSpecific;
-import dev.hypera.chameleon.core.platform.Platform.Type;
+import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.core.platform.server.GameMode;
 import dev.hypera.chameleon.core.users.User;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * In-game {@link User} on a {@link dev.hypera.chameleon.core.platform.server.ServerPlatform}.
  */
-@PlatformSpecific(Type.SERVER)
+@PlatformSpecific(Platform.Type.SERVER)
 public interface ServerUser extends User {
 
     /**

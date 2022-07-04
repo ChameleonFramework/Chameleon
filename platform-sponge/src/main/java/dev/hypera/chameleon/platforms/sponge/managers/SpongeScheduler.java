@@ -24,7 +24,6 @@ package dev.hypera.chameleon.platforms.sponge.managers;
 
 import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.scheduling.Schedule;
-import dev.hypera.chameleon.core.scheduling.Schedule.Type;
 import dev.hypera.chameleon.core.scheduling.ScheduleImpl.DurationSchedule;
 import dev.hypera.chameleon.core.scheduling.ScheduleImpl.TickSchedule;
 import dev.hypera.chameleon.core.scheduling.TaskImpl;
@@ -67,11 +66,11 @@ public class SpongeScheduler extends Scheduler {
     }
 
     private long convert(@NotNull Schedule schedule) {
-        if (schedule.getType().equals(Type.NONE)) {
+        if (schedule.getType().equals(Schedule.Type.NONE)) {
             return 0;
-        } else if (schedule.getType().equals(Type.DURATION)) {
+        } else if (schedule.getType().equals(Schedule.Type.DURATION)) {
             return ((DurationSchedule) schedule).getDuration().toMillis();
-        } else if (schedule.getType().equals(Type.TICK)) {
+        } else if (schedule.getType().equals(Schedule.Type.TICK)) {
             return (long) ((TickSchedule) schedule).getTicks() * 50;
         } else {
             throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");

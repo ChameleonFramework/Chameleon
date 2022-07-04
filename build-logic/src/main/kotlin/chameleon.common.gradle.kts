@@ -1,5 +1,3 @@
-import com.adarshr.gradle.testlogger.theme.ThemeType
-
 /*
  * Chameleon Framework - Cross-platform Minecraft plugin framework
  *  Copyright (c) 2021-present The Chameleon Framework Authors.
@@ -22,13 +20,39 @@ import com.adarshr.gradle.testlogger.theme.ThemeType
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
+import com.adarshr.gradle.testlogger.theme.ThemeType
+import net.ltgt.gradle.errorprone.errorprone
+
 plugins {
     id("chameleon.publishing")
-    id("com.adarshr.test-logger")
     id("net.kyori.indra.checkstyle")
     id("net.kyori.indra.license-header")
+    id("com.adarshr.test-logger")
+    id("net.ltgt.errorprone")
+    id("jacoco")
 }
 
 testlogger {
     theme = ThemeType.MOCHA_PARALLEL
+}
+
+
+dependencies {
+    errorprone("com.google.errorprone:error_prone_core:2.14.0")
+}
+
+tasks {
+    test {
+        finalizedBy(jacocoTestReport)
+    }
+
+    jacocoTestReport {
+        dependsOn(test)
+    }
+
+    compileJava {
+        options.errorprone {
+            disable("AnnotateFormatMethod")
+        }
+    }
 }

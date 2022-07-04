@@ -35,6 +35,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
@@ -88,7 +89,7 @@ public class MinestomGenerator extends Generator {
             .addMethod(terminateSpec)
             .build();
 
-        String packageName = ((PackageElement) plugin.getEnclosingElement()).getQualifiedName().toString();
+        String packageName = Objects.requireNonNull((PackageElement) plugin.getEnclosingElement()).getQualifiedName().toString();
         if (packageName.endsWith("core") || packageName.endsWith("common")) {
             packageName = packageName.substring(0, packageName.lastIndexOf("."));
         }

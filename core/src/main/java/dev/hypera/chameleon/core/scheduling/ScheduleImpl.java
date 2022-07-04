@@ -22,7 +22,6 @@
  */
 package dev.hypera.chameleon.core.scheduling;
 
-import dev.hypera.chameleon.core.scheduling.Schedule.Type;
 import java.time.Duration;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ScheduleImpl {
 
     static @NotNull Schedule NEXT_TICK = new TickSchedule(1);
-    static @NotNull Schedule NONE = () -> Type.NONE;
+    static @NotNull Schedule NONE = () -> Schedule.Type.NONE;
 
     private ScheduleImpl() {
 

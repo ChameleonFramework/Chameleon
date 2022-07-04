@@ -23,7 +23,7 @@
 package dev.hypera.chameleon.core.events.impl.proxy;
 
 import dev.hypera.chameleon.core.annotations.PlatformSpecific;
-import dev.hypera.chameleon.core.platform.Platform.Type;
+import dev.hypera.chameleon.core.platform.Platform;
 import dev.hypera.chameleon.core.platform.proxy.Server;
 import dev.hypera.chameleon.core.users.platforms.ProxyUser;
 import java.util.Optional;
@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * {@link ProxyUser} switch sever event, dispatched whenever a player switches server.
  */
-@PlatformSpecific(Type.PROXY)
+@PlatformSpecific(Platform.Type.PROXY)
 public class ProxyUserSwitchEvent implements ProxyUserEvent {
 
     private final @NotNull ProxyUser user;

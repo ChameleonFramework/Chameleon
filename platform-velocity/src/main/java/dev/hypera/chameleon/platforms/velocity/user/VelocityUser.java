@@ -129,7 +129,7 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
     public void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback) {
         this.player.createConnectionRequest(((VelocityServer) server).getVelocity()).connect().whenComplete((result, ex) -> {
             callback.accept(result.isSuccessful(), ex);
-        });
+        }).join();
     }
 
 }

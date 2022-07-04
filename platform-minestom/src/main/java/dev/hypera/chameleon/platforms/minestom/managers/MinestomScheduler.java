@@ -24,7 +24,6 @@ package dev.hypera.chameleon.platforms.minestom.managers;
 
 import dev.hypera.chameleon.core.managers.Scheduler;
 import dev.hypera.chameleon.core.scheduling.Schedule;
-import dev.hypera.chameleon.core.scheduling.Schedule.Type;
 import dev.hypera.chameleon.core.scheduling.ScheduleImpl.DurationSchedule;
 import dev.hypera.chameleon.core.scheduling.ScheduleImpl.TickSchedule;
 import dev.hypera.chameleon.core.scheduling.TaskImpl;
@@ -57,11 +56,11 @@ public final class MinestomScheduler extends Scheduler {
     }
 
     private @NotNull TaskSchedule convert(@NotNull Schedule schedule, boolean repeat) {
-        if (schedule.getType().equals(Type.NONE)) {
+        if (schedule.getType().equals(Schedule.Type.NONE)) {
             return repeat ? TaskSchedule.stop() : TaskSchedule.immediate();
-        } else if (schedule.getType().equals(Type.DURATION)) {
+        } else if (schedule.getType().equals(Schedule.Type.DURATION)) {
             return TaskSchedule.duration(((DurationSchedule) schedule).getDuration());
-        } else if (schedule.getType().equals(Type.TICK)) {
+        } else if (schedule.getType().equals(Schedule.Type.TICK)) {
             return TaskSchedule.tick(((TickSchedule) schedule).getTicks());
         } else {
             throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
