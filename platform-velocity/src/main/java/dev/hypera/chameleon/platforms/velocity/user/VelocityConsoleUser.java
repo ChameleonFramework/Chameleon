@@ -22,9 +22,9 @@
  */
 package dev.hypera.chameleon.platforms.velocity.user;
 
-import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.adventure.AbstractReflectedAudience;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
+import dev.hypera.chameleon.users.ChatUser;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 

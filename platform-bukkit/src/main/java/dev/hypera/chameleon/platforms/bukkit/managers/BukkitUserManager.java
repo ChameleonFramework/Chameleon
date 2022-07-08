@@ -22,12 +22,12 @@
  */
 package dev.hypera.chameleon.platforms.bukkit.managers;
 
-import dev.hypera.chameleon.core.managers.UserManager;
-import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.users.User;
+import dev.hypera.chameleon.managers.UserManager;
 import dev.hypera.chameleon.platforms.bukkit.BukkitChameleon;
 import dev.hypera.chameleon.platforms.bukkit.user.BukkitConsoleUser;
 import dev.hypera.chameleon.platforms.bukkit.user.BukkitUser;
+import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.users.User;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;

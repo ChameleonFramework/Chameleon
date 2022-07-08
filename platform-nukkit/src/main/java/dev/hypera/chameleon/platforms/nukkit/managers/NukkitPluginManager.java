@@ -24,8 +24,8 @@ package dev.hypera.chameleon.platforms.nukkit.managers;
 
 import cn.nukkit.Server;
 import cn.nukkit.plugin.Plugin;
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.managers.PluginManager;
+import dev.hypera.chameleon.platform.objects.PlatformPlugin;
 import dev.hypera.chameleon.platforms.nukkit.platform.plugin.NukkitPlugin;
 import java.util.Optional;
 import java.util.Set;

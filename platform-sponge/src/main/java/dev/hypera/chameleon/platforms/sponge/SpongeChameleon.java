@@ -22,17 +22,17 @@
  */
 package dev.hypera.chameleon.platforms.sponge;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.ChameleonPlugin;
-import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.core.data.PluginData;
-import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.core.logging.impl.ChameleonLog4jLogger;
-import dev.hypera.chameleon.core.managers.CommandManager;
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.managers.Scheduler;
-import dev.hypera.chameleon.core.managers.UserManager;
-import dev.hypera.chameleon.core.platform.Platform;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
+import dev.hypera.chameleon.data.PluginData;
+import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.logging.impl.ChameleonLog4jLogger;
+import dev.hypera.chameleon.managers.CommandManager;
+import dev.hypera.chameleon.managers.PluginManager;
+import dev.hypera.chameleon.managers.Scheduler;
+import dev.hypera.chameleon.managers.UserManager;
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platforms.sponge.adventure.SpongeAudienceProvider;
 import dev.hypera.chameleon.platforms.sponge.events.SpongeListener;
 import dev.hypera.chameleon.platforms.sponge.managers.SpongeCommandManager;

@@ -24,7 +24,7 @@ package dev.hypera.chameleon.platforms.nukkit.platform;
 
 import cn.nukkit.Nukkit;
 import cn.nukkit.Server;
-import dev.hypera.chameleon.core.platform.server.ServerPlatform;
+import dev.hypera.chameleon.platform.server.ServerPlatform;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 

@@ -31,7 +31,7 @@ import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.Plugin.Platform;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.annotations.utils.MapBuilder;
-import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -70,7 +70,7 @@ public class BukkitGenerator extends Generator {
             .addModifiers(Modifier.PUBLIC)
             .beginControlFlow("try")
             .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platforms.bukkit", "BukkitChameleon"), plugin, "pluginData")
+            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platform.bukkit", "BukkitChameleon"), plugin, "pluginData")
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
             .addStatement("$N.printStackTrace()", "ex")
             .endControlFlow()
@@ -87,7 +87,7 @@ public class BukkitGenerator extends Generator {
         TypeSpec bukkitMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Bukkit")
             .addModifiers(Modifier.PUBLIC)
             .superclass(clazz("org.bukkit.plugin.java", "JavaPlugin"))
-            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platforms.bukkit", "BukkitChameleon"), "chameleon", Modifier.PRIVATE).build())
+            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platform.bukkit", "BukkitChameleon"), "chameleon", Modifier.PRIVATE).build())
             .addMethod(loadSpec)
             .addMethod(enableSpec)
             .addMethod(disableSpec)

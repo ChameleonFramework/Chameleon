@@ -22,7 +22,7 @@
  */
 package dev.hypera.chameleon.platforms.minestom.platform;
 
-import dev.hypera.chameleon.core.platform.server.ServerPlatform;
+import dev.hypera.chameleon.platform.server.ServerPlatform;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;

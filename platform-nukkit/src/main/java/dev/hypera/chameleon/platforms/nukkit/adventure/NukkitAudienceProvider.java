@@ -24,9 +24,9 @@ package dev.hypera.chameleon.platforms.nukkit.adventure;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.platforms.nukkit.users.NukkitUsers;
+import dev.hypera.chameleon.users.ChatUser;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

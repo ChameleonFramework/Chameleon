@@ -22,10 +22,10 @@
  */
 package dev.hypera.chameleon.platforms.sponge.commands;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.core.commands.context.Context;
-import dev.hypera.chameleon.core.commands.context.ContextImpl;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.commands.Command;
+import dev.hypera.chameleon.commands.context.Context;
+import dev.hypera.chameleon.commands.context.ContextImpl;
 import dev.hypera.chameleon.platforms.sponge.users.SpongeUsers;
 import java.util.Arrays;
 import java.util.List;

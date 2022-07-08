@@ -22,11 +22,11 @@
  */
 package dev.hypera.chameleon.platforms.minestom.managers;
 
-import dev.hypera.chameleon.core.managers.UserManager;
-import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.users.User;
+import dev.hypera.chameleon.managers.UserManager;
 import dev.hypera.chameleon.platforms.minestom.users.MinestomUser;
 import dev.hypera.chameleon.platforms.minestom.users.MinestomUsers;
+import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.users.User;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;

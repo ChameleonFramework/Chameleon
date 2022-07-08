@@ -22,12 +22,12 @@
  */
 package dev.hypera.chameleon.platforms.bungeecord;
 
-import dev.hypera.chameleon.core.ChameleonBootstrap;
-import dev.hypera.chameleon.core.ChameleonPlugin;
-import dev.hypera.chameleon.core.data.PluginData;
-import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.core.logging.ChameleonLogger;
-import dev.hypera.chameleon.core.logging.impl.ChameleonJavaLogger;
+import dev.hypera.chameleon.ChameleonBootstrap;
+import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.data.PluginData;
+import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.logging.ChameleonLogger;
+import dev.hypera.chameleon.logging.impl.ChameleonJavaLogger;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;

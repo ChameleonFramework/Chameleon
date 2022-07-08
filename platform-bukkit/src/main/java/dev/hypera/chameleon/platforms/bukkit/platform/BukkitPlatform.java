@@ -22,7 +22,7 @@
  */
 package dev.hypera.chameleon.platforms.bukkit.platform;
 
-import dev.hypera.chameleon.core.platform.server.ServerPlatform;
+import dev.hypera.chameleon.platform.server.ServerPlatform;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;

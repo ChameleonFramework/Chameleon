@@ -22,8 +22,8 @@
  */
 package dev.hypera.chameleon.platforms.sponge.managers;
 
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.core.managers.CommandManager;
+import dev.hypera.chameleon.commands.Command;
+import dev.hypera.chameleon.managers.CommandManager;
 import dev.hypera.chameleon.platforms.sponge.SpongeChameleon;
 import dev.hypera.chameleon.platforms.sponge.commands.SpongeCommand;
 import org.jetbrains.annotations.ApiStatus.Internal;

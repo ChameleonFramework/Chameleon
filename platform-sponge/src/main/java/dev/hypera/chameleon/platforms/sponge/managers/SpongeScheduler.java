@@ -22,12 +22,12 @@
  */
 package dev.hypera.chameleon.platforms.sponge.managers;
 
-import dev.hypera.chameleon.core.managers.Scheduler;
-import dev.hypera.chameleon.core.scheduling.Schedule;
-import dev.hypera.chameleon.core.scheduling.ScheduleImpl.DurationSchedule;
-import dev.hypera.chameleon.core.scheduling.ScheduleImpl.TickSchedule;
-import dev.hypera.chameleon.core.scheduling.TaskImpl;
+import dev.hypera.chameleon.managers.Scheduler;
 import dev.hypera.chameleon.platforms.sponge.SpongeChameleon;
+import dev.hypera.chameleon.scheduling.Schedule;
+import dev.hypera.chameleon.scheduling.ScheduleImpl.DurationSchedule;
+import dev.hypera.chameleon.scheduling.ScheduleImpl.TickSchedule;
+import dev.hypera.chameleon.scheduling.TaskImpl;
 import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;

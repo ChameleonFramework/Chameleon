@@ -22,8 +22,8 @@
  */
 package dev.hypera.chameleon.platforms.bukkit.platform.objects;
 
-import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.core.utils.ChameleonUtil;
+import dev.hypera.chameleon.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.utils.ChameleonUtil;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashSet;

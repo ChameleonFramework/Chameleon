@@ -22,17 +22,17 @@
  */
 package dev.hypera.chameleon.platforms.bukkit;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.ChameleonPlugin;
-import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.core.data.PluginData;
-import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.core.logging.impl.ChameleonJavaLogger;
-import dev.hypera.chameleon.core.managers.CommandManager;
-import dev.hypera.chameleon.core.managers.PluginManager;
-import dev.hypera.chameleon.core.managers.Scheduler;
-import dev.hypera.chameleon.core.managers.UserManager;
-import dev.hypera.chameleon.core.platform.Platform;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
+import dev.hypera.chameleon.data.PluginData;
+import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.logging.impl.ChameleonJavaLogger;
+import dev.hypera.chameleon.managers.CommandManager;
+import dev.hypera.chameleon.managers.PluginManager;
+import dev.hypera.chameleon.managers.Scheduler;
+import dev.hypera.chameleon.managers.UserManager;
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platforms.bukkit.adventure.BukkitAudienceProvider;
 import dev.hypera.chameleon.platforms.bukkit.events.BukkitListener;
 import dev.hypera.chameleon.platforms.bukkit.managers.BukkitCommandManager;

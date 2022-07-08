@@ -22,12 +22,12 @@
  */
 package dev.hypera.chameleon.platforms.sponge.events;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.events.impl.common.UserChatEvent;
-import dev.hypera.chameleon.core.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.core.events.impl.common.UserDisconnectEvent;
-import dev.hypera.chameleon.core.users.platforms.ServerUser;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.events.impl.common.UserChatEvent;
+import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
+import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
 import dev.hypera.chameleon.platforms.sponge.users.SpongeUsers;
+import dev.hypera.chameleon.users.platforms.ServerUser;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;

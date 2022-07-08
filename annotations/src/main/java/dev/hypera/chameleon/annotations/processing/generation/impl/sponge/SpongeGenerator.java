@@ -33,7 +33,7 @@ import com.squareup.javapoet.TypeSpec;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.annotations.processing.generation.impl.sponge.meta.SerializedPluginMetadata;
-import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -75,7 +75,7 @@ public class SpongeGenerator extends Generator {
             .addStatement("this.$N = $N", "logger", "logger")
             .beginControlFlow("try")
             .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platforms.sponge", "SpongeChameleon"), plugin, "pluginData")
+            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platform.sponge", "SpongeChameleon"), plugin, "pluginData")
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
             .addStatement("$N.printStackTrace()", "ex")
             .endControlFlow()
@@ -118,7 +118,7 @@ public class SpongeGenerator extends Generator {
 
         TypeSpec spongeMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Sponge")
             .addModifiers(Modifier.PUBLIC)
-            .addSuperinterface(clazz("dev.hypera.chameleon.platforms.sponge", "SpongePlugin"))
+            .addSuperinterface(clazz("dev.hypera.chameleon.platform.sponge", "SpongePlugin"))
             .addField(FieldSpec.builder(clazz("org.spongepowered.plugin", "PluginContainer"), "pluginContainer", Modifier.PRIVATE, Modifier.FINAL).build())
             .addField(FieldSpec.builder(clazz("org.apache.logging.log4j", "Logger"), "logger", Modifier.PRIVATE, Modifier.FINAL).build())
             .addField(
@@ -127,7 +127,7 @@ public class SpongeGenerator extends Generator {
                     .addAnnotation(AnnotationSpec.builder(clazz("org.spongepowered.api.config", "DefaultConfig")).addMember("sharedRoot", "false").build())
                     .build()
             )
-            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platforms.sponge", "SpongeChameleon"), "chameleon", Modifier.PRIVATE).build())
+            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platform.sponge", "SpongeChameleon"), "chameleon", Modifier.PRIVATE).build())
             .addMethod(constructorSpec)
             .addMethod(startingEngineEventSpec)
             .addMethod(stoppingEngineEventSpec)

@@ -22,9 +22,9 @@
  */
 package dev.hypera.chameleon.platforms.minestom.users;
 
-import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
-import dev.hypera.chameleon.core.platform.server.GameMode;
-import dev.hypera.chameleon.core.users.platforms.ServerUser;
+import dev.hypera.chameleon.adventure.AbstractReflectedAudience;
+import dev.hypera.chameleon.platform.server.GameMode;
+import dev.hypera.chameleon.users.platforms.ServerUser;
 import java.util.UUID;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus.Internal;

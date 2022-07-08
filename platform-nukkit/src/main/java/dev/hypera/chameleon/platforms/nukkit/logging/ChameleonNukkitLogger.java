@@ -23,7 +23,7 @@
 package dev.hypera.chameleon.platforms.nukkit.logging;
 
 import cn.nukkit.utils.Logger;
-import dev.hypera.chameleon.core.logging.ChameleonLogger;
+import dev.hypera.chameleon.logging.ChameleonLogger;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 

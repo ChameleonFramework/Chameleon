@@ -28,12 +28,12 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerChatEvent;
 import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
-import dev.hypera.chameleon.core.events.impl.common.UserChatEvent;
-import dev.hypera.chameleon.core.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.core.events.impl.common.UserDisconnectEvent;
-import dev.hypera.chameleon.core.users.platforms.ServerUser;
+import dev.hypera.chameleon.events.impl.common.UserChatEvent;
+import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
+import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
 import dev.hypera.chameleon.platforms.nukkit.NukkitChameleon;
 import dev.hypera.chameleon.platforms.nukkit.users.NukkitUser;
+import dev.hypera.chameleon.users.platforms.ServerUser;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 

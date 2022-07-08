@@ -22,14 +22,14 @@
  */
 package dev.hypera.chameleon.platforms.velocity.adventure;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityConsoleUser;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUsers;
+import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.users.platforms.ProxyUser;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

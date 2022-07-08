@@ -24,11 +24,11 @@ package dev.hypera.chameleon.platforms.velocity.user;
 
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
-import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
+import dev.hypera.chameleon.adventure.AbstractReflectedAudience;
+import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.platform.objects.VelocityServer;
+import dev.hypera.chameleon.users.platforms.ProxyUser;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;

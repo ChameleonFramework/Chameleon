@@ -23,13 +23,13 @@
 package dev.hypera.chameleon.platforms.nukkit.managers;
 
 import cn.nukkit.Server;
-import dev.hypera.chameleon.core.managers.Scheduler;
-import dev.hypera.chameleon.core.scheduling.Schedule;
-import dev.hypera.chameleon.core.scheduling.ScheduleImpl.DurationSchedule;
-import dev.hypera.chameleon.core.scheduling.ScheduleImpl.TickSchedule;
-import dev.hypera.chameleon.core.scheduling.Task;
-import dev.hypera.chameleon.core.scheduling.TaskImpl;
+import dev.hypera.chameleon.managers.Scheduler;
 import dev.hypera.chameleon.platforms.nukkit.NukkitChameleon;
+import dev.hypera.chameleon.scheduling.Schedule;
+import dev.hypera.chameleon.scheduling.ScheduleImpl.DurationSchedule;
+import dev.hypera.chameleon.scheduling.ScheduleImpl.TickSchedule;
+import dev.hypera.chameleon.scheduling.Task;
+import dev.hypera.chameleon.scheduling.TaskImpl;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 

@@ -24,7 +24,7 @@ package dev.hypera.chameleon.platforms.velocity.platform.objects;
 
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.meta.PluginDependency;
-import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.platform.objects.PlatformPlugin;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;

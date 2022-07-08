@@ -22,9 +22,9 @@
  */
 package dev.hypera.chameleon.platforms.sponge.adventure;
 
-import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.platforms.sponge.users.SpongeUsers;
+import dev.hypera.chameleon.users.ChatUser;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

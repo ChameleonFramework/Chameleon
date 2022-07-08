@@ -22,10 +22,10 @@
  */
 package dev.hypera.chameleon.platforms.bungeecord.adventure;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUsers;
+import dev.hypera.chameleon.users.ChatUser;
 import java.util.UUID;
 import java.util.function.Predicate;
 import net.kyori.adventure.audience.Audience;

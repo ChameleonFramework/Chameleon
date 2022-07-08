@@ -31,7 +31,7 @@ import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.Plugin.Platform;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.annotations.utils.MapBuilder;
-import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -70,7 +70,7 @@ public class BungeeCordGenerator extends Generator {
             .addModifiers(Modifier.PUBLIC)
             .beginControlFlow("try")
             .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platforms.bungeecord", "BungeeCordChameleon"), plugin, "pluginData")
+            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platform.bungeecord", "BungeeCordChameleon"), plugin, "pluginData")
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
             .addStatement("$N.printStackTrace()", "ex")
             .endControlFlow()
@@ -87,7 +87,7 @@ public class BungeeCordGenerator extends Generator {
         TypeSpec bungeeCordMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "BungeeCord")
             .addModifiers(Modifier.PUBLIC)
             .superclass(clazz("net.md_5.bungee.api.plugin", "Plugin"))
-            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platforms.bungeecord", "BungeeCordChameleon"), "chameleon", Modifier.PRIVATE).build())
+            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platform.bungeecord", "BungeeCordChameleon"), "chameleon", Modifier.PRIVATE).build())
             .addMethod(loadSpec)
             .addMethod(enableSpec)
             .addMethod(disableSpec)

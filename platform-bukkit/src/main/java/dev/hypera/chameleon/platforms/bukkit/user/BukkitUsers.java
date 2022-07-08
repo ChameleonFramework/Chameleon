@@ -22,16 +22,17 @@
  */
 package dev.hypera.chameleon.platforms.bukkit.user;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.platforms.bukkit.BukkitChameleon;
+import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.users.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Bukkit {@link dev.hypera.chameleon.core.users.User} utilities.
+ * Bukkit {@link User} utilities.
  */
 @Internal
 public final class BukkitUsers {

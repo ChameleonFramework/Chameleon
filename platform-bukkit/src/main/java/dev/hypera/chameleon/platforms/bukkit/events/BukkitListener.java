@@ -22,12 +22,12 @@
  */
 package dev.hypera.chameleon.platforms.bukkit.events;
 
-import dev.hypera.chameleon.core.events.impl.common.UserChatEvent;
-import dev.hypera.chameleon.core.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.core.events.impl.common.UserDisconnectEvent;
-import dev.hypera.chameleon.core.users.platforms.ServerUser;
+import dev.hypera.chameleon.events.impl.common.UserChatEvent;
+import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
+import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
 import dev.hypera.chameleon.platforms.bukkit.BukkitChameleon;
 import dev.hypera.chameleon.platforms.bukkit.user.BukkitUser;
+import dev.hypera.chameleon.users.platforms.ServerUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

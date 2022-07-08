@@ -22,14 +22,15 @@
  */
 package dev.hypera.chameleon.platforms.sponge.users;
 
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.users.User;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.service.permission.Subject;
 
 /**
- * Sponge {@link dev.hypera.chameleon.core.users.User} utilities.
+ * Sponge {@link User} utilities.
  */
 @Internal
 public final class SpongeUsers {

@@ -24,10 +24,10 @@ package dev.hypera.chameleon.platforms.velocity.platform.objects;
 
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
+import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
+import dev.hypera.chameleon.users.platforms.ProxyUser;
 import java.net.SocketAddress;
 import java.util.Set;
 import java.util.stream.Collectors;

@@ -23,8 +23,8 @@
 package dev.hypera.chameleon.platforms.nukkit.managers;
 
 import cn.nukkit.Server;
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.core.managers.CommandManager;
+import dev.hypera.chameleon.commands.Command;
+import dev.hypera.chameleon.managers.CommandManager;
 import dev.hypera.chameleon.platforms.nukkit.NukkitChameleon;
 import dev.hypera.chameleon.platforms.nukkit.commands.NukkitCommand;
 import org.jetbrains.annotations.ApiStatus.Internal;

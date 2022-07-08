@@ -1,0 +1,124 @@
+/*
+ * Chameleon Framework - Cross-platform Minecraft plugin framework
+ *  Copyright (c) 2021-present The Chameleon Framework Authors.
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  SOFTWARE.
+ */
+package dev.hypera.chameleon.scheduling;
+
+import java.time.Duration;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Schedule.
+ */
+public interface Schedule {
+
+    /**
+     * Get {@link Schedule} {@link Type}.
+     *
+     * @return {@link Schedule} {@link Type}.
+     */
+    @NotNull Type getType();
+
+    /**
+     * Create a new {@link Schedule} that never runs.
+     *
+     * @return new {@link Schedule}.
+     */
+    static @NotNull Schedule none() {
+        return ScheduleImpl.NONE;
+    }
+
+    /**
+     * Create a new {@link Schedule} that runs according to the provided {@link Duration}.
+     *
+     * @param duration {@link Duration}.
+     *
+     * @return new {@link Schedule}.
+     */
+    static @NotNull Schedule duration(@NotNull Duration duration) {
+        return new ScheduleImpl.DurationSchedule(duration);
+    }
+
+    /**
+     * Create a new {@link Schedule} that runs every {@code tick} ticks.
+     *
+     * @param tick Ticks between runs.
+     *
+     * @return new {@link Schedule}.
+     */
+    static @NotNull Schedule tick(int tick) {
+        return new ScheduleImpl.TickSchedule(tick);
+    }
+
+    /**
+     * Create a new {@link Schedule} that runs every {@code hours} hours.
+     *
+     * @param hours Hours between runs.
+     *
+     * @return new {@link Schedule}.
+     */
+    static @NotNull Schedule hours(long hours) {
+        return duration(Duration.ofHours(hours));
+    }
+
+    /**
+     * Create a new {@link Schedule} that runs every {@code minutes} minutes.
+     *
+     * @param minutes Minutes between runs.
+     *
+     * @return new {@link Schedule}.
+     */
+    static @NotNull Schedule minutes(long minutes) {
+        return duration(Duration.ofMinutes(minutes));
+    }
+
+    /**
+     * Create a new {@link Schedule} that runs every {@code seconds} seconds.
+     *
+     * @param seconds Seconds between runs.
+     *
+     * @return new {@link Schedule}.
+     */
+    static @NotNull Schedule seconds(long seconds) {
+        return duration(Duration.ofSeconds(seconds));
+    }
+
+    /**
+     * Create a new {@link Schedule} that runs every {@code millis} milliseconds.
+     *
+     * @param millis Milliseconds between runs.
+     *
+     * @return new {@link Schedule}.
+     */
+    static @NotNull Schedule millis(long millis) {
+        return duration(Duration.ofMillis(millis));
+    }
+
+    /**
+     * {@link Schedule} type.
+     */
+    enum Type {
+
+        DURATION, TICK, NONE
+
+    }
+
+}

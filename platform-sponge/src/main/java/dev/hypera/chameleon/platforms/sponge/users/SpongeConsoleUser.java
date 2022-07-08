@@ -22,8 +22,8 @@
  */
 package dev.hypera.chameleon.platforms.sponge.users;
 
-import dev.hypera.chameleon.core.adventure.AbstractReflectedAudience;
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.adventure.AbstractReflectedAudience;
+import dev.hypera.chameleon.users.ChatUser;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.Sponge;
