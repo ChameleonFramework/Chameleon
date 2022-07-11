@@ -33,7 +33,8 @@ public class MockScheduler extends Scheduler {
 
     @Override
     protected void schedule(@NotNull TaskImpl task) {
-        throw new UnsupportedOperationException(); // TODO
+        // This needs doing
+        throw new UnsupportedOperationException();
     }
 
 }
