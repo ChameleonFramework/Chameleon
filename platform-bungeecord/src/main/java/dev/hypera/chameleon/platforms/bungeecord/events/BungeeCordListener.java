@@ -22,15 +22,15 @@
  */
 package dev.hypera.chameleon.platforms.bungeecord.events;
 
-import dev.hypera.chameleon.core.events.impl.common.UserChatEvent;
-import dev.hypera.chameleon.core.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.core.events.impl.common.UserDisconnectEvent;
-import dev.hypera.chameleon.core.events.impl.proxy.ProxyUserSwitchEvent;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
+import dev.hypera.chameleon.events.impl.common.UserChatEvent;
+import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
+import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.impl.proxy.ProxyUserSwitchEvent;
+import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platforms.bungeecord.platform.objects.BungeeCordServer;
 import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUser;
+import dev.hypera.chameleon.users.platforms.ProxyUser;
 import java.util.Optional;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

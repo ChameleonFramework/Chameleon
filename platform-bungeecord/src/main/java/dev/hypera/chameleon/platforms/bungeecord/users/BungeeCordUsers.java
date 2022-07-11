@@ -22,15 +22,16 @@
  */
 package dev.hypera.chameleon.platforms.bungeecord.users;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.users.User;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord {@link dev.hypera.chameleon.core.users.User} utilities.
+ * BungeeCord {@link User} utilities.
  */
 @Internal
 public final class BungeeCordUsers {

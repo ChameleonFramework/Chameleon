@@ -24,14 +24,15 @@ package dev.hypera.chameleon.platforms.velocity.user;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
+import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.users.User;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity {@link dev.hypera.chameleon.core.users.User} utilities.
+ * Velocity {@link User} utilities.
  */
 @Internal
 public final class VelocityUsers {

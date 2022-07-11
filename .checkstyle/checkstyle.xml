@@ -64,6 +64,22 @@
             <property name="sortImportsInGroupAlphabetically" value="true"/>
         </module>
 
+        <!-- https://checkstyle.org/config_coding.html#DefaultComesLast -->
+        <module name="DefaultComesLast">
+            <property name="skipIfLastAndSharedWithCase" value="true"/>
+        </module>
+
+        <!-- https://checkstyle.org/config_blocks.html#EmptyBlock -->
+        <module name="EmptyBlock">
+            <property name="option" value="TEXT"/>
+            <property name="tokens" value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
+        </module>
+
+        <!-- https://checkstyle.org/config_blocks.html#EmptyCatchBlock -->
+        <module name="EmptyCatchBlock">
+            <property name="exceptionVariableName" value="expected|ignored?"/>
+        </module>
+
         <!-- https://checkstyle.org/config_whitespace.html#EmptyForInitializerPad -->
         <module name="EmptyForInitializerPad"/>
 
@@ -77,6 +93,12 @@
             <property name="allowNoEmptyLineBetweenFields" value="true"/>
             <property name="tokens" value="IMPORT, STATIC_IMPORT, CLASS_DEF, INTERFACE_DEF, ENUM_DEF, STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF, VARIABLE_DEF, RECORD_DEF, COMPACT_CTOR_DEF"/>
         </module>
+
+        <!-- https://checkstyle.org/config_coding.html#EmptyStatement -->
+        <module name="EmptyStatement"/>
+
+        <!-- https://checkstyle.org/config_coding.html#EqualsHashCode -->
+        <module name="EqualsHashCode"/>
 
         <!-- https://checkstyle.org/config_coding.html#FallThrough -->
         <module name="FallThrough">
@@ -155,6 +177,9 @@
         <!-- https://checkstyle.org/config_javadoc.html#MissingJavadocType -->
         <module name="MissingJavadocType"/>
 
+        <!-- https://checkstyle.org/config_coding.html#MissingSwitchDefault -->
+        <module name="MissingSwitchDefault"/>
+
         <!-- https://checkstyle.org/config_coding.html#MultipleVariableDeclarations -->
         <module name="MultipleVariableDeclarations"/>
 
@@ -181,8 +206,14 @@
         <!-- https://checkstyle.org/config_coding.html#OneStatementPerLine -->
         <module name="OneStatementPerLine"/>
 
+        <!-- https://checkstyle.org/config_design.html#OneTopLevelClass -->
+        <module name="OneTopLevelClass"/>
+
         <!-- https://checkstyle.org/config_misc.html#OuterTypeFilename -->
         <module name="OuterTypeFilename"/>
+
+        <!-- https://checkstyle.org/config_coding.html#OverloadMethodsDeclarationOrder -->
+        <module name="OverloadMethodsDeclarationOrder"/>
 
         <!-- https://checkstyle.org/config_imports.html#RedundantImport -->
         <module name="RedundantImport"/>
@@ -246,11 +277,19 @@
         <!-- https://checkstyle.org/config_annotation.html#SuppressWarningsHolder -->
         <module name="SuppressWarningsHolder"/>
 
+        <!-- https://checkstyle.org/config_misc.html#TodoComment -->
+        <module name="TodoComment">
+            <property name="format" value="(TODO)|(FIXME)"/>
+        </module>
+
         <!-- https://checkstyle.org/config_whitespace.html#TypecastParenPad -->
         <module name="TypecastParenPad"/>
 
         <!-- https://checkstyle.org/config_imports.html#UnusedImports -->
         <module name="UnusedImports"/>
+
+        <!-- https://checkstyle.org/config_misc.html#UpperEll -->
+        <module name="UpperEll"/>
 
         <!-- https://checkstyle.org/config_whitespace.html#WhitespaceAfter -->
         <module name="WhitespaceAfter"/>

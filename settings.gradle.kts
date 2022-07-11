@@ -30,7 +30,7 @@ pluginManagement {
 rootProject.name = "chameleon-parent"
 
 sequenceOf(
-    "core",
+    "api",
     "annotations",
     "feature-configuration",
     "platform-bukkit",
@@ -38,7 +38,8 @@ sequenceOf(
     "platform-minestom",
     "platform-nukkit",
     "platform-sponge",
-    "platform-velocity"
+    "platform-velocity",
+    "platform-mock"
 ).forEach {
     include("chameleon-$it")
     project(":chameleon-$it").projectDir = file(it)

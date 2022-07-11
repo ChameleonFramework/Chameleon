@@ -76,7 +76,7 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
             }
         }
 
-        return true;
+        return false;
     }
 
 }

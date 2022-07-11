@@ -23,8 +23,8 @@
 package dev.hypera.chameleon.platforms.nukkit.users;
 
 import cn.nukkit.Server;
-import dev.hypera.chameleon.core.users.ChatUser;
 import dev.hypera.chameleon.platforms.nukkit.adventure.AbstractNukkitAudience;
+import dev.hypera.chameleon.users.ChatUser;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 

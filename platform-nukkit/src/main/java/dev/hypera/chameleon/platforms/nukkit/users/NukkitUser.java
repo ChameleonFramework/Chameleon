@@ -23,9 +23,9 @@
 package dev.hypera.chameleon.platforms.nukkit.users;
 
 import cn.nukkit.Player;
-import dev.hypera.chameleon.core.platform.server.GameMode;
-import dev.hypera.chameleon.core.users.platforms.ServerUser;
+import dev.hypera.chameleon.platform.server.GameMode;
 import dev.hypera.chameleon.platforms.nukkit.adventure.AbstractNukkitAudience;
+import dev.hypera.chameleon.users.platforms.ServerUser;
 import java.util.UUID;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;

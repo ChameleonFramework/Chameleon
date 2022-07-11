@@ -22,14 +22,15 @@
  */
 package dev.hypera.chameleon.platforms.minestom.users;
 
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.users.User;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom {@link dev.hypera.chameleon.core.users.User} utilities.
+ * Minestom {@link User} utilities.
  */
 @Internal
 public final class MinestomUsers {

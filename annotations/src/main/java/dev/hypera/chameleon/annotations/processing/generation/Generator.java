@@ -28,7 +28,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.Plugin.Platform;
-import dev.hypera.chameleon.core.data.PluginData;
+import dev.hypera.chameleon.data.PluginData;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import javax.annotation.processing.ProcessingEnvironment;

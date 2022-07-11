@@ -22,8 +22,8 @@
  */
 package dev.hypera.chameleon.platforms.velocity.platform;
 
-import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
-import dev.hypera.chameleon.core.platform.proxy.Server;
+import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
+import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.platform.objects.VelocityServer;
 import java.util.Optional;

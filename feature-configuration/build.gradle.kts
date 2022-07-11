@@ -21,7 +21,7 @@
  *  SOFTWARE.
  */
 plugins {
-    id("chameleon.api")
+    id("chameleon.common")
 }
 
 dependencies {

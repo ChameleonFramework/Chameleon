@@ -8,7 +8,7 @@
 <div align="center">
   <img alt="Checks" src="https://img.shields.io/github/checks-status/ChameleonFramework/Chameleon/main?color=17aaaa&style=for-the-badge">
   <img alt="Stable version" src="https://img.shields.io/badge/Stable-N/A-%2317aaaa?style=for-the-badge">
-  <img alt="Latest version" src="https://img.shields.io/badge/dynamic/xml?color=%2317aaaa&label=Latest&query=%2F%2Fmetadata%2Fversioning%2Flatest&style=for-the-badge&url=https%3A%2F%2Frepo.hypera.dev%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon-core%2Fmaven-metadata.xml"><br/>
+  <img alt="Latest version" src="https://img.shields.io/badge/dynamic/xml?color=%2317aaaa&label=Latest&query=%2F%2Fmetadata%2Fversioning%2Flatest&style=for-the-badge&url=https%3A%2F%2Frepo.hypera.dev%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon-api%2Fmaven-metadata.xml"><br/>
   <img alt="License" src="https://img.shields.io/badge/License-MIT-%2317aaaa?style=for-the-badge">
   <img alt="Code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/main?style=for-the-badge&color=%2317aaaa">
   <img alt="Code size" src="https://img.shields.io/github/languages/code-size/ChameleonFramework/Chameleon?color=17aaaa&style=for-the-badge">
@@ -24,9 +24,10 @@ Chameleon plans to support every platform in this list. If you have ideas for ot
 - [x] BungeeCord
 - [x] Minestom
 - [x] Nukkit
+- [x] Sponge
 - [x] Velocity
 - [ ] Fabric
-- [ ] Sponge
+- [ ] Forge
 
 
 ## Getting started
@@ -35,7 +36,7 @@ Chameleon plans to support every platform in this list. If you have ideas for ot
 If you have any questions, feel free to ask in our [official Discord server][discord].
 
 ### Project structure
- - `chameleon-core` - Chameleon's core, most things happen here.
+ - `chameleon-api` - Chameleon's core, most things happen here.
  - `chameleon-annotations` - Chameleon annotation-based platform class generator.
  - `chameleon-feature-configuration` - An easy-to-use configuration library, can be used without Chameleon.
  - `chameleon-platform-<name>` - Chameleon implementation for the named platform, supported:
@@ -43,6 +44,7 @@ If you have any questions, feel free to ask in our [official Discord server][dis
    - `bungeecord`
    - `minestom`
    - `nukkit`
+   - `sponge`
    - `velocity`
 
 ### Annotation-based platform class generator
@@ -67,7 +69,7 @@ repositories {
 
 dependencies {
     val chameleonVersion = "<version>"
-    implementation("dev.hypera:chameleon-core:$chameleonVersion")
+    implementation("dev.hypera:chameleon-api:$chameleonVersion")
     // Repeat the line below and replace <module> with the module you wish to use.
     implementation("dev.hypera:chameleon-<module>:$chameleonVersion")
    
@@ -86,7 +88,7 @@ repositories {
 
 dependencies {
     def chameleonVersion = '<version>'
-    implementation 'dev.hypera:chameleon-core:${chameleonVersion}'
+    implementation 'dev.hypera:chameleon-api:${chameleonVersion}'
     // Repeat the line below and replace <module> with the module you wish to use.
     implementation 'dev.hypera:chameleon-<module>:${chameleonVersion}'
 
@@ -113,7 +115,7 @@ dependencies {
 <dependencies>
     <dependency>
         <groupId>dev.hypera</groupId>
-        <artifactId>chameleon-core</artifactId>
+        <artifactId>chameleon-api</artifactId>
         <version>${chameleon.version}</version>
     </dependency>
 
@@ -138,8 +140,18 @@ dependencies {
 
 Please read [CONTRIBUTING][contributing].
 
+### Building
+<!-- TODO -->
+
 ### License
 The contents of this repository is licensed under the [MIT License](LICENSE).
+
+## Thank you
+This project was made possible by the [amazing people who have contributed](https://github.com/ChameleonFramework/Chameleon/graphs/contributors) and the people who have supported us in other ways whether it be providing feedback or donating to the developers.
+
+### Supporters
+People and companies who have donated or provided us with something that helps us to continue the project.  
+[![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_square.svg)](https://jb.gg/OpenSourceSupport)
 
 [example]: https://github.com/ChameleonFramework/Example
 [discord]: https://discord.hypera.dev/

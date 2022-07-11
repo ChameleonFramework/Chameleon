@@ -22,11 +22,11 @@
  */
 package dev.hypera.chameleon.platforms.bungeecord.users;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.adventure.AbstractAudience;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.adventure.AbstractAudience;
+import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platforms.bungeecord.platform.objects.BungeeCordServer;
+import dev.hypera.chameleon.users.platforms.ProxyUser;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;

@@ -35,7 +35,7 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "v${{ env.VERSION }}"
           prerelease: "${{ endsWith(env.VERSION, 'SNAPSHOT') }}"
-          title: "Chameleon v${{ env.VERSION }}}"
+          title: "Chameleon v${{ env.VERSION }}"
 
       - name: "Publish"
         uses: gradle/gradle-build-action@v2

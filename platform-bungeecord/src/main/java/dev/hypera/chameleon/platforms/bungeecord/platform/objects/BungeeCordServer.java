@@ -22,10 +22,10 @@
  */
 package dev.hypera.chameleon.platforms.bungeecord.platform.objects;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.platform.proxy.Server;
-import dev.hypera.chameleon.core.users.platforms.ProxyUser;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUser;
+import dev.hypera.chameleon.users.platforms.ProxyUser;
 import java.net.SocketAddress;
 import java.util.Set;
 import java.util.stream.Collectors;

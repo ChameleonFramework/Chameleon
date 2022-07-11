@@ -24,12 +24,13 @@ package dev.hypera.chameleon.platforms.nukkit.users;
 
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
-import dev.hypera.chameleon.core.users.ChatUser;
+import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.users.User;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Nukkit {@link dev.hypera.chameleon.core.users.User} utilities.
+ * Nukkit {@link User} utilities.
  */
 @Internal
 public final class NukkitUsers {

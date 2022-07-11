@@ -22,7 +22,7 @@
  */
 plugins {
     id("java-library")
-    id("chameleon.api")
+    id("chameleon.common")
 }
 
 repositories {
@@ -31,6 +31,6 @@ repositories {
 }
 
 dependencies {
-    compileOnlyApi(project(":chameleon-core"))
+    compileOnlyApi(project(":chameleon-api"))
     compileOnlyApi(libs.platform.minestom)
 }

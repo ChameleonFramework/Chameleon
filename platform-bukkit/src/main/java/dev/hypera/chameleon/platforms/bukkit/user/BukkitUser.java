@@ -22,10 +22,10 @@
  */
 package dev.hypera.chameleon.platforms.bukkit.user;
 
-import dev.hypera.chameleon.core.adventure.AbstractAudience;
-import dev.hypera.chameleon.core.platform.server.GameMode;
-import dev.hypera.chameleon.core.users.platforms.ServerUser;
+import dev.hypera.chameleon.adventure.AbstractAudience;
+import dev.hypera.chameleon.platform.server.GameMode;
 import dev.hypera.chameleon.platforms.bukkit.BukkitChameleon;
+import dev.hypera.chameleon.users.platforms.ServerUser;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

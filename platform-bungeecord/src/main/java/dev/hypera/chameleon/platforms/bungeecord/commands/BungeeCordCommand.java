@@ -22,9 +22,9 @@
  */
 package dev.hypera.chameleon.platforms.bungeecord.commands;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.core.commands.context.ContextImpl;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.commands.Command;
+import dev.hypera.chameleon.commands.context.ContextImpl;
 import dev.hypera.chameleon.platforms.bungeecord.users.BungeeCordUsers;
 import java.util.Arrays;
 import net.md_5.bungee.api.CommandSender;

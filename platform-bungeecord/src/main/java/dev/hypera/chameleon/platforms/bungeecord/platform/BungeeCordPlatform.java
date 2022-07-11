@@ -22,8 +22,8 @@
  */
 package dev.hypera.chameleon.platforms.bungeecord.platform;
 
-import dev.hypera.chameleon.core.platform.proxy.ProxyPlatform;
-import dev.hypera.chameleon.core.platform.proxy.Server;
+import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
+import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platforms.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platforms.bungeecord.platform.objects.BungeeCordServer;
 import java.util.Optional;

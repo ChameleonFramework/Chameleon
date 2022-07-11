@@ -33,12 +33,13 @@ import com.squareup.javapoet.TypeSpec;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.annotations.processing.generation.impl.sponge.meta.SerializedPluginMetadata;
-import dev.hypera.chameleon.core.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
@@ -135,7 +136,7 @@ public class SpongeGenerator extends Generator {
             .addMethod(getDataDirectorySpec)
             .build();
 
-        String packageName = ((PackageElement) plugin.getEnclosingElement()).getQualifiedName().toString();
+        String packageName = Objects.requireNonNull((PackageElement) plugin.getEnclosingElement()).getQualifiedName().toString();
         if (packageName.endsWith("core") || packageName.endsWith("common")) {
             packageName = packageName.substring(0, packageName.lastIndexOf("."));
         }

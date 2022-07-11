@@ -22,9 +22,9 @@
  */
 package dev.hypera.chameleon.platforms.bukkit.commands;
 
-import dev.hypera.chameleon.core.Chameleon;
-import dev.hypera.chameleon.core.commands.Command;
-import dev.hypera.chameleon.core.commands.context.ContextImpl;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.commands.Command;
+import dev.hypera.chameleon.commands.context.ContextImpl;
 import dev.hypera.chameleon.platforms.bukkit.user.BukkitUsers;
 import java.util.ArrayList;
 import java.util.Arrays;

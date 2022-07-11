@@ -24,8 +24,8 @@ package dev.hypera.chameleon.platforms.nukkit.platform.plugin;
 
 import cn.nukkit.Server;
 import cn.nukkit.plugin.Plugin;
-import dev.hypera.chameleon.core.platform.objects.PlatformPlugin;
-import dev.hypera.chameleon.core.utils.ChameleonUtil;
+import dev.hypera.chameleon.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.utils.ChameleonUtil;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashSet;

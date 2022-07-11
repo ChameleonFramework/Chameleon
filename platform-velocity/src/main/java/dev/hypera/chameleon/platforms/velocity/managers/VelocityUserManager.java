@@ -22,12 +22,12 @@
  */
 package dev.hypera.chameleon.platforms.velocity.managers;
 
-import dev.hypera.chameleon.core.managers.UserManager;
-import dev.hypera.chameleon.core.users.ChatUser;
-import dev.hypera.chameleon.core.users.User;
+import dev.hypera.chameleon.managers.UserManager;
 import dev.hypera.chameleon.platforms.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityConsoleUser;
 import dev.hypera.chameleon.platforms.velocity.user.VelocityUser;
+import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.users.User;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
