@@ -20,27 +20,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
-    }
-}
+package dev.hypera.chameleon.platforms.mock.platform;
 
-rootProject.name = "chameleon-parent"
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
+import org.jetbrains.annotations.NotNull;
 
-sequenceOf(
-    "api",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-sponge",
-    "platform-velocity",
-    "platform-mock"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+/**
+ * Mock platform.
+ */
+@NonExtendable
+public interface MockPlatform {
+
+    @NotNull String API_NAME = "Mock";
+    @NotNull String PROXY_NAME = "Proxy";
+    @NotNull String SERVER_NAME = "Server";
+
 }

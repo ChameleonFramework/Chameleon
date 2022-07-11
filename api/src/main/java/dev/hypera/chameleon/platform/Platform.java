@@ -67,8 +67,8 @@ public abstract class Platform {
      * @return {@link ProxyPlatform}.
      * @throws IllegalStateException if this {@link Platform} is not an {@link ProxyPlatform}.
      */
-    @PlatformSpecific(Type.PROXY)
-    public final @NotNull ProxyPlatform proxy() {
+    @PlatformSpecific(Platform.Type.PROXY)
+    public @NotNull ProxyPlatform proxy() {
         if (this instanceof ProxyPlatform) {
             return (ProxyPlatform) this;
         } else {
@@ -82,8 +82,8 @@ public abstract class Platform {
      * @return {@link ServerPlatform}.
      * @throws IllegalStateException if this {@link Platform} is not an {@link ServerPlatform}.
      */
-    @PlatformSpecific(Type.SERVER)
-    public final @NotNull ServerPlatform server() {
+    @PlatformSpecific(Platform.Type.SERVER)
+    public @NotNull ServerPlatform server() {
         if (this instanceof ServerPlatform) {
             return (ServerPlatform) this;
         } else {

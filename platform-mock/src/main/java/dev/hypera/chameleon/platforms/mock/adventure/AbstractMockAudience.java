@@ -20,27 +20,47 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
+package dev.hypera.chameleon.platforms.mock.adventure;
+
+import java.util.Queue;
+import java.util.concurrent.LinkedTransferQueue;
+import net.kyori.adventure.audience.MessageType;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * Abstract {@link MockAudience} implementation.
+ */
+@NonExtendable
+public abstract class AbstractMockAudience implements MockAudience {
+
+    private final @NotNull Queue<Component> receivedMessages = new LinkedTransferQueue<>();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
+        this.receivedMessages.add(message);
     }
-}
 
-rootProject.name = "chameleon-parent"
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @Nullable Component nextMessage() {
+        return this.receivedMessages.poll();
+    }
 
-sequenceOf(
-    "api",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-sponge",
-    "platform-velocity",
-    "platform-mock"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @Nullable Component peekNextMessage() {
+        return this.receivedMessages.peek();
+    }
+
 }

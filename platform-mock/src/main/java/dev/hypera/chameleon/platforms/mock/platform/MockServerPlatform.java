@@ -20,27 +20,42 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
+package dev.hypera.chameleon.platforms.mock.platform;
+
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.annotations.PlatformSpecific;
+import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.server.ServerPlatform;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Mock {@link ServerPlatform} implementation.
+ */
+@PlatformSpecific(Platform.Type.SERVER)
+public final class MockServerPlatform extends ServerPlatform implements MockPlatform {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getAPIName() {
+        return API_NAME;
     }
-}
 
-rootProject.name = "chameleon-parent"
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return SERVER_NAME;
+    }
 
-sequenceOf(
-    "api",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-sponge",
-    "platform-velocity",
-    "platform-mock"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return Chameleon.getVersion();
+    }
+
 }

@@ -20,22 +20,55 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.platform.server;
+package dev.hypera.chameleon.platforms.mock.user;
 
-import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platforms.mock.MockChameleon;
+import dev.hypera.chameleon.platforms.mock.adventure.AbstractMockAudience;
+import dev.hypera.chameleon.users.ChatUser;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Server {@link Platform}.
+ * Mock console {@link ChatUser} implementation.
  */
-public abstract class ServerPlatform extends Platform {
+public final class MockConsoleUser extends AbstractMockAudience implements ChatUser {
+
+    private final @NotNull MockChameleon chameleon;
+
+    /**
+     * {@link MockConsoleUser} constructor.
+     *
+     * @param chameleon {@link MockChameleon} instance.
+     */
+    @Internal
+    public MockConsoleUser(@NotNull MockChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Type getType() {
-        return Type.SERVER;
+    public @NotNull String getName() {
+        return "Console";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasPermission(@NotNull String permission) {
+        return true;
+    }
+
+    /**
+     * Execute a command.
+     *
+     * @param name Name of the command to be executed.
+     * @param args Command execution arguments.
+     */
+    public void executeCommand(@NotNull String name, @NotNull String... args) {
+        this.chameleon.getCommandManager().executeCommand(this, name, args);
     }
 
 }

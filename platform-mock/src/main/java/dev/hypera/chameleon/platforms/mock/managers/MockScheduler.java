@@ -20,27 +20,20 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
+package dev.hypera.chameleon.platforms.mock.managers;
+
+import dev.hypera.chameleon.managers.Scheduler;
+import dev.hypera.chameleon.scheduling.TaskImpl;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Mock {@link Scheduler} implementation.
+ */
+public class MockScheduler extends Scheduler {
+
+    @Override
+    protected void schedule(@NotNull TaskImpl task) {
+        throw new UnsupportedOperationException(); // TODO
     }
-}
 
-rootProject.name = "chameleon-parent"
-
-sequenceOf(
-    "api",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-sponge",
-    "platform-velocity",
-    "platform-mock"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
 }

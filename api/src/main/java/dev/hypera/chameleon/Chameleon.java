@@ -123,7 +123,7 @@ public abstract class Chameleon {
      *
      * @return the stored {@link ChameleonLogger} instance.
      */
-    public final @NotNull ChameleonLogger getLogger() {
+    public @NotNull ChameleonLogger getLogger() {
         return this.logger;
     }
 

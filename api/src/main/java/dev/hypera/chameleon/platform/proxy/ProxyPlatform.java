@@ -33,6 +33,14 @@ import org.jetbrains.annotations.NotNull;
 public abstract class ProxyPlatform extends Platform {
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Type getType() {
+        return Type.PROXY;
+    }
+
+    /**
      * Get {@link Server}s.
      *
      * @return set of {@link Server}s.

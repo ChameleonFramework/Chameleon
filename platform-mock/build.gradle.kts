@@ -20,27 +20,18 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
-    }
+plugins {
+    id("java-library")
+    id("chameleon.common")
 }
 
-rootProject.name = "chameleon-parent"
+repositories {
 
-sequenceOf(
-    "api",
-    "annotations",
-    "feature-configuration",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-sponge",
-    "platform-velocity",
-    "platform-mock"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+}
+
+dependencies {
+    implementation(project(":chameleon-api"))
+    implementation("com.google.guava:guava:31.1-jre")
+    compileOnly(platform(libs.test.junit.bom))
+    compileOnly(libs.test.junit.jupiter)
 }

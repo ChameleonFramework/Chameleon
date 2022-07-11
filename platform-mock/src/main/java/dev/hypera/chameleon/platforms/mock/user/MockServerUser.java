@@ -20,22 +20,52 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.platform.server;
+package dev.hypera.chameleon.platforms.mock.user;
 
+import dev.hypera.chameleon.annotations.PlatformSpecific;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.server.GameMode;
+import dev.hypera.chameleon.platforms.mock.MockChameleon;
+import dev.hypera.chameleon.users.platforms.ServerUser;
+import java.util.UUID;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Server {@link Platform}.
+ * Mock {@link ServerUser} implementation.
  */
-public abstract class ServerPlatform extends Platform {
+@PlatformSpecific(Platform.Type.SERVER)
+public final class MockServerUser extends MockUser implements ServerUser {
+
+    private @NotNull GameMode gameMode = GameMode.SURVIVAL;
+
+    /**
+     * {@link MockServerUser} constructor.
+     *
+     * @param id        Unique id.
+     * @param name      Name.
+     * @param chameleon {@link MockChameleon} instance.
+     */
+    @Internal
+    public MockServerUser(@NotNull UUID id, @NotNull String name, @NotNull MockChameleon chameleon) {
+        super(id, name, chameleon);
+    }
+
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Type getType() {
-        return Type.SERVER;
+    public @NotNull GameMode getGameMode() {
+        return this.gameMode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setGameMode(@NotNull GameMode gameMode) {
+        this.gameMode = gameMode;
     }
 
 }
