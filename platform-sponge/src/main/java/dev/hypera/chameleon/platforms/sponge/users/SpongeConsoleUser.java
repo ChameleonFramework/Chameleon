@@ -54,6 +54,14 @@ public class SpongeConsoleUser extends AbstractReflectedAudience implements Chat
      * {@inheritDoc}
      */
     @Override
+    public boolean hasInteractiveChat() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean hasPermission(@NotNull String permission) {
         return Sponge.game().systemSubject().hasPermission(permission);
     }

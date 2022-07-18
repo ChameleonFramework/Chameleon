@@ -56,6 +56,14 @@ public class VelocityConsoleUser extends AbstractReflectedAudience implements Ch
      * {@inheritDoc}
      */
     @Override
+    public boolean hasInteractiveChat() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean hasPermission(@NotNull String permission) {
         return true;
     }

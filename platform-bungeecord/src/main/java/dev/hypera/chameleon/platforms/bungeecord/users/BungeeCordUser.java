@@ -69,6 +69,14 @@ public class BungeeCordUser extends AbstractAudience implements ProxyUser {
      * {@inheritDoc}
      */
     @Override
+    public boolean hasInteractiveChat() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public @NotNull UUID getUniqueId() {
         return this.player.getUniqueId();
     }

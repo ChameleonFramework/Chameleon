@@ -60,6 +60,14 @@ public class NukkitUser extends AbstractNukkitAudience implements ServerUser {
      * {@inheritDoc}
      */
     @Override
+    public boolean hasInteractiveChat() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public @NotNull UUID getUniqueId() {
         return this.player.getUniqueId();
     }

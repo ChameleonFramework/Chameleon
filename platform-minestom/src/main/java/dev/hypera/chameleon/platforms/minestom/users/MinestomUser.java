@@ -62,6 +62,14 @@ public class MinestomUser extends AbstractReflectedAudience implements ServerUse
      * {@inheritDoc}
      */
     @Override
+    public boolean hasInteractiveChat() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public @NotNull UUID getUniqueId() {
         return this.player.getUuid();
     }
