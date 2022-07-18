@@ -81,21 +81,21 @@ public abstract class Chameleon {
     /**
      * Called after Chameleon has been loaded.
      */
-    public final void onLoad() {
+    public void onLoad() {
         this.plugin.onLoad();
     }
 
     /**
      * Called when the platform plugin is enabled.
      */
-    public final void onEnable() {
+    public void onEnable() {
         this.plugin.onEnable();
     }
 
     /**
      * Called when the platform plugin is disabled.
      */
-    public final void onDisable() {
+    public void onDisable() {
         this.plugin.onDisable();
     }
 

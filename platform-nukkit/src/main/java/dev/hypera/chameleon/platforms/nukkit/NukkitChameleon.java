@@ -63,7 +63,6 @@ public final class NukkitChameleon extends Chameleon {
     NukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, new ChameleonNukkitLogger(nukkitPlugin.getLogger()));
         this.plugin = nukkitPlugin;
-        Server.getInstance().getPluginManager().registerEvents(new NukkitListener(this), nukkitPlugin);
     }
 
     /**
@@ -79,6 +78,11 @@ public final class NukkitChameleon extends Chameleon {
         return new NukkitChameleonBootstrap(chameleonPlugin, nukkitPlugin, pluginData);
     }
 
+    @Override
+    public void onEnable() {
+        Server.getInstance().getPluginManager().registerEvents(new NukkitListener(this), this.plugin);
+        super.onEnable();
+    }
 
     /**
      * {@inheritDoc}
