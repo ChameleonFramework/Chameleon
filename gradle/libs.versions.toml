@@ -12,7 +12,7 @@ platform-bukkit = "1.19-R0.1-SNAPSHOT"
 platform-bungeecord = "1.19-R0.1-SNAPSHOT"
 platform-minestom = "1d469ca6a6"
 platform-nukkit = "1.0-SNAPSHOT"
-platform-sponge = "8.0.0"
+platform-sponge = "8.1.0"
 platform-velocity = "3.1.0"
 
 
