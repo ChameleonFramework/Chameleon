@@ -243,7 +243,7 @@ public abstract class Configuration {
             Object output = null;
 
             for (int i = 1; i < parts.size(); i++) {
-                if (null == section.get(parts.get(i))) {
+                if (null == section || null == section.get(parts.get(i))) {
                     break;
                 }
 

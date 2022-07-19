@@ -117,7 +117,7 @@ public class SpongeUser extends AbstractReflectedAudience implements ServerUser 
      */
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
-        Sponge.game().channelManager().ofType(ResourceKey.resolve(channel), RawDataChannel.class).play().sendTo(this.player, channelBuf -> channelBuf.writeBytes(data));
+        Sponge.game().channelManager().ofType(ResourceKey.resolve(channel), RawDataChannel.class).play().sendTo(this.player, channelBuf -> channelBuf.writeBytes(data)).join();
     }
 
     /**

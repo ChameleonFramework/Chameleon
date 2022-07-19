@@ -51,6 +51,7 @@ public class UserChatEvent extends AbstractCancellable implements UserEvent {
      *
      * @return {@link User} who attempted to send this message.
      */
+    @Override
     public @NotNull User getUser() {
         return this.user;
     }

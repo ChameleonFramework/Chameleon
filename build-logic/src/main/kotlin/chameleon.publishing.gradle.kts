@@ -38,7 +38,9 @@ indra {
         }
     }
 
-    github("ChameleonFramework", "Chameleon")
+    github("ChameleonFramework", "Chameleon") {
+        ci(true)
+    }
     mitLicense()
 
     publishReleasesTo("hyperaReleases", "https://repo.hypera.dev/releases")

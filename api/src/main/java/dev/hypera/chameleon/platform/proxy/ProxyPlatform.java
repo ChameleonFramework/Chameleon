@@ -22,6 +22,7 @@
  */
 package dev.hypera.chameleon.platform.proxy;
 
+import dev.hypera.chameleon.annotations.PlatformSpecific;
 import dev.hypera.chameleon.platform.Platform;
 import java.util.Optional;
 import java.util.Set;
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Proxy {@link Platform}.
  */
+@PlatformSpecific(Platform.Type.PROXY)
 public abstract class ProxyPlatform extends Platform {
 
     /**

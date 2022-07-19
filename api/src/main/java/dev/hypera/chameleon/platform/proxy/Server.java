@@ -23,7 +23,7 @@
 package dev.hypera.chameleon.platform.proxy;
 
 import dev.hypera.chameleon.annotations.PlatformSpecific;
-import dev.hypera.chameleon.platform.Platform.Type;
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.users.platforms.ProxyUser;
 import java.net.SocketAddress;
 import java.util.Set;
@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * {@link ProxyPlatform} sub-server.
  */
-@PlatformSpecific(Type.PROXY)
+@PlatformSpecific(Platform.Type.PROXY)
 public interface Server {
 
     /**

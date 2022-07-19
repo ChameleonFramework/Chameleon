@@ -47,6 +47,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Chameleon {
 
     private static final @NotNull String VERSION = "@version@";
+    private static final @NotNull String COMMIT = "@commit@";
 
     private final @NotNull ChameleonLogger logger;
     private final @NotNull ChameleonLogger internalLogger;
@@ -214,6 +215,15 @@ public abstract class Chameleon {
      */
     public static @NotNull String getVersion() {
         return VERSION;
+    }
+
+    /**
+     * Get the current Chameleon commit.
+     *
+     * @return the current {@link Chameleon} commit.
+     */
+    public static @NotNull String getCommit() {
+        return COMMIT;
     }
 
 }

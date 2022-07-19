@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
@@ -92,7 +93,7 @@ public class BungeeCordGenerator extends Generator {
             .addMethod(disableSpec)
             .build();
 
-        String packageName = ((PackageElement) plugin.getEnclosingElement()).getQualifiedName().toString();
+        String packageName = Objects.requireNonNull((PackageElement) plugin.getEnclosingElement()).getQualifiedName().toString();
         if (packageName.endsWith("core") || packageName.endsWith("common")) {
             packageName = packageName.substring(0, packageName.lastIndexOf("."));
         }

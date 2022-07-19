@@ -23,7 +23,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id("chameleon.api")
+    id("chameleon.common")
 }
 
 val tokens = mapOf(
@@ -40,15 +40,4 @@ dependencies {
     compileOnly(libs.log4j) // Scary...
 
     compileOnlyApi(libs.annotations)
-}
-
-val sourcesForRelease = task<Copy>("sourcesForRelease") {
-    from("src/main/java")
-    into("build/src/java")
-    filter<ReplaceTokens>(mapOf("tokens" to tokens))
-}
-
-tasks.compileJava {
-    dependsOn(sourcesForRelease)
-    source = fileTree(sourcesForRelease.destinationDir)
 }

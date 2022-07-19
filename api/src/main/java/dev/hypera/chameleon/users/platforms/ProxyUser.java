@@ -23,7 +23,7 @@
 package dev.hypera.chameleon.users.platforms;
 
 import dev.hypera.chameleon.annotations.PlatformSpecific;
-import dev.hypera.chameleon.platform.Platform.Type;
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.users.User;
@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ProxyPlatform
  */
-@PlatformSpecific(Type.PROXY)
+@PlatformSpecific(Platform.Type.PROXY)
 public interface ProxyUser extends User {
 
     /**
