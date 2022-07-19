@@ -70,6 +70,14 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
      * {@inheritDoc}
      */
     @Override
+    public boolean hasInteractiveChat() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public @NotNull UUID getUniqueId() {
         return this.player.getUniqueId();
     }

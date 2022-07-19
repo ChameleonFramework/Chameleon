@@ -58,6 +58,14 @@ public class BungeeCordConsoleUser extends AbstractAudience implements ChatUser 
      * {@inheritDoc}
      */
     @Override
+    public boolean hasInteractiveChat() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean hasPermission(@NotNull String permission) {
         return true;
     }

@@ -54,6 +54,14 @@ public class NukkitConsoleUser extends AbstractNukkitAudience implements ChatUse
      * {@inheritDoc}
      */
     @Override
+    public boolean hasInteractiveChat() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean hasPermission(@NotNull String permission) {
         return Server.getInstance().getConsoleSender().hasPermission(permission);
     }

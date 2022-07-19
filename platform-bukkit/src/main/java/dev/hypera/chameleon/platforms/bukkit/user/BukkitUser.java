@@ -67,6 +67,14 @@ public class BukkitUser extends AbstractAudience implements ServerUser {
      * {@inheritDoc}
      */
     @Override
+    public boolean hasInteractiveChat() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public @NotNull UUID getUniqueId() {
         return this.player.getUniqueId();
     }
