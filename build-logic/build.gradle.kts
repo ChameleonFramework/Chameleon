@@ -31,7 +31,9 @@ repositories {
 dependencies {
     implementation(libs.build.indra.common)
     implementation(libs.build.indra.publishing)
+    implementation(libs.build.blossom)
     implementation(libs.build.testLogger)
+    implementation(libs.build.errorpronePlugin)
 }
 
 java {

@@ -21,11 +21,11 @@
  *  SOFTWARE.
  */
 plugins {
-    id("chameleon.api")
+    id("chameleon.common")
 }
 
 dependencies {
-    implementation(project(":chameleon-core"))
+    implementation(project(":chameleon-api"))
     implementation(libs.javapoet)
 
     implementation(libs.yaml) {

@@ -30,7 +30,7 @@ pluginManagement {
 rootProject.name = "chameleon-parent"
 
 sequenceOf(
-    "core",
+    "api",
     "annotations",
     "feature-configuration",
     "platform-bukkit",

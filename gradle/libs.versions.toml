@@ -44,7 +44,9 @@ javapoet = "com.squareup:javapoet:1.13.0"
 # Build
 build-indra-common = { module = "net.kyori:indra-common", version.ref = "indra" }
 build-indra-publishing = { module = "net.kyori:indra-publishing-gradle-plugin", version.ref = "indra" }
+build-blossom = "net.kyori:blossom:1.3.0"
 build-testLogger = "com.adarshr:gradle-test-logger-plugin:3.2.0"
+build-errorpronePlugin = "net.ltgt.gradle:gradle-errorprone-plugin:2.0.2"
 
 # Testing
 test-junit-bom = "org.junit:junit-bom:5.8.2"
