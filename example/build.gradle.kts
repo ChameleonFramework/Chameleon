@@ -21,21 +21,20 @@
  *  SOFTWARE.
  */
 plugins {
-    id("chameleon.common") // Codestyle checking, not required.
+    id("chameleon.base") // Checkstyle and version injection, not required.
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-val tokens = mapOf(
-    "version" to version
-)
-
+/*
+ * Minestom requires Java 17. If you want your plugin to work on Java 8+ you'll
+ * need to keep your source code compatible with Java 8, and it should work fine.
+ */
 java {
-    targetCompatibility = JavaVersion.VERSION_17 // Required for Minestom support
+    targetCompatibility = JavaVersion.VERSION_17
     sourceCompatibility = JavaVersion.VERSION_1_8
 }
 
 repositories {
-    /* Platforms */
     maven("https://oss.sonatype.org/content/repositories/snapshots/") // Required for BungeeCord support
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // Required for Bukkit support
     maven("https://jitpack.io/") // Required for Minestom support
@@ -54,7 +53,7 @@ dependencies {
     implementation(project(":chameleon-platform-sponge")) // dev.hypera:chameleon-platform-sponge
 
     compileOnly(project(":chameleon-annotations")) // dev.hypera:chameleon-annotations
-    annotationProcessor(project(":chameleon-annotations"))
+    annotationProcessor(project(":chameleon-annotations")) // dev.hypera:chameleon-annotations
 }
 
 tasks {
@@ -69,19 +68,6 @@ tasks {
         relocate("dev.hypera.chameleon", "dev.hypera.example.lib.chameleon")
         relocate("net.kyori", "dev.hypera.example.lib.kyori")
         relocate("com.google.gson", "dev.hypera.example.lib.gson")
-        relocate("org.yaml.snakeyaml", "dev.hypera.example.lib.snakeyaml")
-        relocate("org.json.simple", "dev.hypera.example.lib.jsonsimple")
-    }
-
-    val sourcesForRelease = task<Copy>("sourcesForRelease") {
-        from("src/main/java")
-        into("build/src/java")
-        filter<org.apache.tools.ant.filters.ReplaceTokens>(mapOf("tokens" to tokens))
-    }
-
-    compileJava {
-        dependsOn(sourcesForRelease)
-        source = fileTree(sourcesForRelease.destinationDir)
     }
 
     jar {

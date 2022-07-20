@@ -20,41 +20,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-import com.adarshr.gradle.testlogger.theme.ThemeType
-import net.ltgt.gradle.errorprone.errorprone
-
 plugins {
+    id("chameleon.base")
     id("chameleon.publishing")
-    id("net.kyori.indra.git")
-    id("net.kyori.indra.checkstyle")
-    id("net.kyori.indra.license-header")
-    id("net.kyori.blossom")
-
-    id("com.adarshr.test-logger")
-    id("net.ltgt.errorprone")
-}
-
-testlogger {
-    theme = ThemeType.MOCHA_PARALLEL
-}
-
-blossom {
-    replaceToken("@version@", rootProject.version)
-    replaceToken("@commit@", indraGit.commit()?.name?.substring(0, 7) ?: "unknown")
-}
-
-dependencies {
-    errorprone("com.google.errorprone:error_prone_core:2.14.0")
-    annotationProcessor("com.uber.nullaway:nullaway:0.9.8")
-}
-
-tasks {
-    compileJava {
-        options.errorprone {
-            disable("AnnotateFormatMethod")
-            error("NullAway")
-
-            option("NullAway:AnnotatedPackages", "dev.hypera.chameleon")
-        }
-    }
 }

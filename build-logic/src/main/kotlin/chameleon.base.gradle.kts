@@ -20,44 +20,53 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
+import com.adarshr.gradle.testlogger.theme.ThemeType
+import net.ltgt.gradle.errorprone.errorprone
 
 plugins {
     id("net.kyori.indra")
-    id("net.kyori.indra.publishing")
+    id("net.kyori.indra.git")
+    id("net.kyori.indra.checkstyle")
+    id("net.kyori.indra.license-header")
+    id("net.kyori.blossom")
+
+    id("com.adarshr.test-logger")
+    id("net.ltgt.errorprone")
 }
 
 indra {
-    github("ChameleonFramework", "Chameleon") {
-        ci(true)
-    }
-    mitLicense()
-
-    publishReleasesTo("hyperaReleases", "https://repo.hypera.dev/releases")
-    publishSnapshotsTo("hyperaSnapshots", "https://repo.hypera.dev/snapshots")
-
-    configurePublications {
-        pom {
-            organization {
-                name.set("Hypera Development")
-                url.set("https://hypera.dev/")
-            }
-
-            developers {
-                developer {
-                    id.set("joshuasing")
-                    name.set("Joshua Sing")
-                    timezone.set("Australia/Melbourne")
-                    email.set("joshua@hypera.dev")
-                }
-
-                developer {
-                    id.set("SLLCoding")
-                    name.set("Luis")
-                    timezone.set("Europe/London")
-                    email.set("luisjk266@gmail.com")
-                }
-            }
+    javaVersions {
+        if (project.name.contains("minestom") || project.name.contains("example")) {
+            target(17)
+            testWith(18)
+        } else {
+            target(8)
+            testWith(8, 11, 18)
         }
     }
 }
 
+testlogger {
+    theme = ThemeType.MOCHA_PARALLEL
+}
+
+blossom {
+    replaceToken("@version@", rootProject.version)
+    replaceToken("@commit@", indraGit.commit()?.name?.substring(0, 7) ?: "unknown")
+}
+
+dependencies {
+    errorprone("com.google.errorprone:error_prone_core:2.14.0")
+    annotationProcessor("com.uber.nullaway:nullaway:0.9.8")
+}
+
+tasks {
+    compileJava {
+        options.errorprone {
+            disable("AnnotateFormatMethod")
+            error("NullAway")
+
+            option("NullAway:AnnotatedPackages", "dev.hypera.chameleon")
+        }
+    }
+}
