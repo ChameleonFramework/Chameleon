@@ -36,12 +36,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Exampe Chameleon plugin.
+ * Example {@link Chameleon} plugin.
  */
 @Plugin(
         id = "chameleon-example",
         name = "ChameleonExample",
-        version = "@version@",
+        version = "@version@", // Version is placeholdered by Gradle.
         description = "An example Chameleon plugin",
         url = "https://github.com/ChameleonFramework/Chameleon/example",
         authors = {"Joshua Sing", "SLLCoding"},
@@ -61,7 +61,7 @@ public class ChameleonExample extends ChameleonPlugin {
     private final @NotNull ChameleonLogger logger;
 
     /**
-     * Example Chameleon plugin.
+     * Example {@link Chameleon} plugin.
      *
      * @param chameleon chameleon.
      */
@@ -99,7 +99,7 @@ public class ChameleonExample extends ChameleonPlugin {
     /**
      * Get the instance of this plugin.
      *
-     * @return instance
+     * @return instance.
      */
     public static @NotNull ChameleonExample getInstance() {
         if (instance == null) throw new IllegalStateException("ChameleonExample has not started.");

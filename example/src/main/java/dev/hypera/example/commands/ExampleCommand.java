@@ -37,14 +37,14 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Example command.
+ * Example {@link Command}.
  */
 @Permission("example.command")
 @CommandHandler("example|ex")
 public class ExampleCommand extends Command {
 
     /**
-     * Example command.
+     * Example {@link Command}.
      */
     public ExampleCommand() {
         setPermissionErrorMessage(Component.text("No permission.", NamedTextColor.RED));
@@ -63,7 +63,7 @@ public class ExampleCommand extends Command {
     /**
      * Sub-command test.
      *
-     * @param context context
+     * @param context context.
      */
     @Permission("example.test")
     @SubCommandHandler("sub|test")

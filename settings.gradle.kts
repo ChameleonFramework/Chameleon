@@ -32,13 +32,13 @@ rootProject.name = "chameleon-parent"
 sequenceOf(
     "api",
     "annotations",
+    "example",
     "platform-bukkit",
     "platform-bungeecord",
     "platform-minestom",
     "platform-nukkit",
     "platform-sponge",
-    "platform-velocity",
-    "example"
+    "platform-velocity"
 ).forEach {
     include("chameleon-$it")
     project(":chameleon-$it").projectDir = file(it)
