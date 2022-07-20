@@ -39,7 +39,7 @@ If you have any questions, feel free to ask in our [official Discord server](htt
 ### Project structure
  - `chameleon-api` - Chameleon's API and core, most things happen here.
  - `chameleon-annotations` - Chameleon annotation-based platform class generator.
- - `chameleon-feature-configuration` - An easy-to-use configuration library, can be used without Chameleon.
+ - `chamleleon-example` - An example project for Chameleon.
  - `chameleon-platform-<name>` - Chameleon implementation for the named platform, supported:
    - `bukkit`
    - `bungeecord`
@@ -47,7 +47,6 @@ If you have any questions, feel free to ask in our [official Discord server](htt
    - `nukkit`
    - `sponge`
    - `velocity`
- - `chamleleon-example` - An example project for Chameleon.
 
 ### Annotation-based platform class generator
 `chameleon-annotations` can be used to automatically generate the main classes that each platform requires in-order to load the plugin then start Chameleon.  
