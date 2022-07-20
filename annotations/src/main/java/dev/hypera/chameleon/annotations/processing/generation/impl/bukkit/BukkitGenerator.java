@@ -65,16 +65,15 @@ public class BukkitGenerator extends Generator {
      */
     @Override
     public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
-        MethodSpec loadSpec = MethodSpec.methodBuilder("onLoad")
-            .addAnnotation(Override.class)
-            .addModifiers(Modifier.PUBLIC)
-            .beginControlFlow("try")
-            .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platform.bukkit", "BukkitChameleon"), plugin, "pluginData")
-            .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
-            .addStatement("this.$N.getLogger().error(\"An error occurred while loading Chameleon\", $N)", "chameleon", "ex")
-            .endControlFlow()
-            .build();
+        MethodSpec constructorSpec = MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC)
+                .beginControlFlow("try")
+                .addStatement(createPluginData(data))
+                .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platform.bukkit", "BukkitChameleon"), plugin, "pluginData")
+                .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
+                .addStatement("this.$N.getLogger().error(\"An error occurred while loading Chameleon\", $N)", "chameleon", "ex")
+                .endControlFlow()
+                .build();
 
         MethodSpec enableSpec = MethodSpec.methodBuilder("onEnable")
             .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
@@ -88,7 +87,7 @@ public class BukkitGenerator extends Generator {
             .addModifiers(Modifier.PUBLIC)
             .superclass(clazz("org.bukkit.plugin.java", "JavaPlugin"))
             .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platform.bukkit", "BukkitChameleon"), "chameleon", Modifier.PRIVATE).build())
-            .addMethod(loadSpec)
+            .addMethod(constructorSpec)
             .addMethod(enableSpec)
             .addMethod(disableSpec)
             .build();

@@ -45,6 +45,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Bukkit {@link Chameleon} implementation.
@@ -52,19 +53,18 @@ import org.jetbrains.annotations.NotNull;
 public final class BukkitChameleon extends Chameleon {
 
     private final @NotNull JavaPlugin plugin;
-    private final @NotNull ChameleonAudienceProvider audienceProvider;
     private final @NotNull BukkitPlatform platform = new BukkitPlatform();
     private final @NotNull BukkitCommandManager commandManager = new BukkitCommandManager(this);
     private final @NotNull BukkitPluginManager pluginManager = new BukkitPluginManager();
     private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this);
     private final @NotNull BukkitScheduler scheduler = new BukkitScheduler(this);
 
+    private @Nullable ChameleonAudienceProvider audienceProvider;
+
     @Internal
     BukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, new ChameleonJavaLogger(bukkitPlugin.getLogger()));
         this.plugin = bukkitPlugin;
-        this.audienceProvider = new BukkitAudienceProvider(this, bukkitPlugin);
-        Bukkit.getPluginManager().registerEvents(new BukkitListener(this), this.plugin);
     }
 
     /**
@@ -80,12 +80,22 @@ public final class BukkitChameleon extends Chameleon {
         return new BukkitChameleonBootstrap(chameleonPlugin, bukkitPlugin, pluginData);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onEnable() {
+        this.audienceProvider = new BukkitAudienceProvider(this, this.plugin);
+        Bukkit.getPluginManager().registerEvents(new BukkitListener(this), this.plugin);
+        super.onEnable();
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public @NotNull ChameleonAudienceProvider getAdventure() {
+        if (this.audienceProvider == null) throw new IllegalStateException("Chameleon has not been enabled yet.");
         return this.audienceProvider;
     }
 
