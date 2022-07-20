@@ -47,6 +47,8 @@ jobs:
         with:
           arguments: "publish"
         env:
+          ORG_GRADLE_PROJECT_sonatypeUsername: "${{ secrets.SONATYPE_USERNAME }}"
+          ORG_GRADLE_PROJECT_sonatypePassword: "${{ secrets.SONATYPE_PASSWORD }}"
           ORG_GRADLE_PROJECT_hyperaReleasesUsername: "${{ secrets.HYPERA_RELEASES_USERNAME }}"
           ORG_GRADLE_PROJECT_hyperaReleasesPassword: "${{ secrets.HYPERA_RELEASES_PASSWORD }}"
           ORG_GRADLE_PROJECT_hyperaSnapshotsUsername: "${{ secrets.HYPERA_SNAPSHOTS_USERNAME }}"
