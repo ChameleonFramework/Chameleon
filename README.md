@@ -33,13 +33,13 @@ If there's another platform that you think we should support, please create a fe
 
 ## Getting started
 **Proper documentation is coming soon**.  
-**You can find an Example Chameleon project [here](https://github.com/ChameleonFramework/Example)**.  
+**You can find an Example Chameleon project [here](example)**.  
 If you have any questions, feel free to ask in our [official Discord server](https://discord.hypera.dev/).
 
 ### Project structure
  - `chameleon-api` - Chameleon's API and core, most things happen here.
  - `chameleon-annotations` - Chameleon annotation-based platform class generator.
- - `chameleon-feature-configuration` - An easy-to-use configuration library, can be used without Chameleon.
+ - `chamleleon-example` - An example project for Chameleon.
  - `chameleon-platform-<name>` - Chameleon implementation for the named platform, supported:
    - `bukkit`
    - `bungeecord`

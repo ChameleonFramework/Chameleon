@@ -29,7 +29,7 @@ plugins {
 indra {
 
     javaVersions {
-        if (project.name.contains("minestom")) {
+        if (project.name.contains("minestom") || project.name.contains("example")) {
             target(17)
             testWith(17)
         } else {

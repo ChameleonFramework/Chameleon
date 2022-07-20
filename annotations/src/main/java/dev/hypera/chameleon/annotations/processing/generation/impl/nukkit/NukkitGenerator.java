@@ -73,7 +73,7 @@ public class NukkitGenerator extends Generator {
             .addStatement(createPluginData(data))
             .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platform.nukkit", "NukkitChameleon"), plugin, "pluginData")
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
-            .addStatement("$N.printStackTrace()", "ex")
+            .addStatement("this.$N.getLogger().error(\"An error occurred while loading Chameleon\", $N)", "chameleon", "ex")
             .endControlFlow()
             .build();
 
