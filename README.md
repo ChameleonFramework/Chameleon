@@ -33,7 +33,7 @@ If there's another platform that you think we should support, please create a fe
 
 ## Getting started
 **Proper documentation is coming soon**.  
-**You can find an Example Chameleon project [here](https://github.com/ChameleonFramework/Example)**.  
+**You can find an Example Chameleon project [here](example)**.  
 If you have any questions, feel free to ask in our [official Discord server](https://discord.hypera.dev/).
 
 ### Project structure
@@ -47,6 +47,7 @@ If you have any questions, feel free to ask in our [official Discord server](htt
    - `nukkit`
    - `sponge`
    - `velocity`
+ - `chamleleon-example` - An example project for Chameleon.
 
 ### Annotation-based platform class generator
 `chameleon-annotations` can be used to automatically generate the main classes that each platform requires in-order to load the plugin then start Chameleon.  

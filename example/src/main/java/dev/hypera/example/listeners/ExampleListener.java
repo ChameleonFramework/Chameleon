@@ -20,26 +20,28 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
+package dev.hypera.example.listeners;
+
+import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
+import dev.hypera.chameleon.events.listener.ChameleonListener;
+import dev.hypera.chameleon.events.listener.annotations.EventHandler;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Example listener.
+ */
+public class ExampleListener implements ChameleonListener {
+
+    /**
+     * Listen for user connections.
+     *
+     * @param event The event.
+     */
+    @EventHandler
+    public void onConnectEvent(@NotNull UserConnectEvent event) {
+        event.getUser().sendMessage(Component.text("Welcome to my server!", NamedTextColor.GREEN));
     }
-}
 
-rootProject.name = "chameleon-parent"
-
-sequenceOf(
-    "api",
-    "annotations",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-sponge",
-    "platform-velocity",
-    "example"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
 }
