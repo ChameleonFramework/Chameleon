@@ -1,4 +1,4 @@
-0<div align="center">
+<div align="center">
   <a href="https://github.com/ChameleonFramework/Chameleon">
     <img src="https://i.hypera.dev/assets/chameleon@750x150.png" />
   </a>
@@ -8,31 +8,33 @@
 <div align="center">
   <img alt="Checks" src="https://img.shields.io/github/checks-status/ChameleonFramework/Chameleon/main?color=17aaaa&style=for-the-badge">
   <img alt="Stable version" src="https://img.shields.io/badge/Stable-N/A-%2317aaaa?style=for-the-badge">
-  <img alt="Latest version" src="https://img.shields.io/badge/dynamic/xml?color=%2317aaaa&label=Latest&query=%2F%2Fmetadata%2Fversioning%2Flatest&style=for-the-badge&url=https%3A%2F%2Frepo.hypera.dev%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon-api%2Fmaven-metadata.xml"><br/>
+  <img alt="Latest version" src="https://img.shields.io/badge/dynamic/json?color=17aaaa&label=Latest&prefix=v&query=%24.version&url=https%3A%2F%2Frepo.hypera.dev%2Fapi%2Fmaven%2Flatest%2Fversion%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon-api&style=for-the-badge"><br/>
   <img alt="License" src="https://img.shields.io/badge/License-MIT-%2317aaaa?style=for-the-badge">
   <img alt="Code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/main?style=for-the-badge&color=%2317aaaa">
   <img alt="Code size" src="https://img.shields.io/github/languages/code-size/ChameleonFramework/Chameleon?color=17aaaa&style=for-the-badge">
-  <img alt="Code lines" src="https://img.shields.io/tokei/lines/github/ChameleonFramework/Chameleon?label=Lines%20of%20Code&style=for-the-badge&color=17aaaa">
+  <img alt="Code lines" src="https://img.shields.io/tokei/lines/github/ChameleonFramework/Chameleon?label=Lines%20of%20code&style=for-the-badge&color=17aaaa">
 </div>
 
 ## What is Chameleon?
 Chameleon is a framework created to allow developers to easily create Minecraft plugins that work across multiple platforms.
 
 ### Supported Platforms
-Chameleon plans to support every platform in this list. If you have ideas for other platforms that we could support, please suggest them in our [official Discord server][discord].
+Chameleon plans to eventually support every platform in this list.  
+If there's another platform that you think we should support, please create a feature request using issues.
 - [x] Bukkit
 - [x] BungeeCord
+- [ ] Fabric
+- [ ] Forge
 - [x] Minestom
 - [x] Nukkit
+- [x] Sponge
 - [x] Velocity
-- [ ] Fabric
-- [ ] Sponge
 
 
 ## Getting started
 **Proper documentation is coming soon**.  
-**You can find an Example Chameleon project [here][example]**.  
-If you have any questions, feel free to ask in our [official Discord server][discord].
+**You can find an Example Chameleon project [here](https://github.com/ChameleonFramework/Example)**.  
+If you have any questions, feel free to ask in our [official Discord server](https://discord.hypera.dev/).
 
 ### Project structure
  - `chameleon-api` - Chameleon's API and core, most things happen here.
@@ -43,6 +45,7 @@ If you have any questions, feel free to ask in our [official Discord server][dis
    - `bungeecord`
    - `minestom`
    - `nukkit`
+   - `sponge`
    - `velocity`
 
 ### Annotation-based platform class generator
@@ -136,11 +139,7 @@ dependencies {
 
 ## Contributing
 
-Please read [CONTRIBUTING][contributing].
+Please read [CONTRIBUTING](CONTRIBUTING.md).
 
 ### License
 The contents of this repository is licensed under the [MIT License](LICENSE).
-
-[example]: https://github.com/ChameleonFramework/Example
-[discord]: https://discord.hypera.dev/
-[contributing]: CONTRIBUTING.md

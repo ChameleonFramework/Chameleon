@@ -39,6 +39,7 @@ public interface ServerUserEvent extends UserEvent {
      *
      * @return the {@link ServerUser} that triggered this event.
      */
+    @Override
     @NotNull ServerUser getUser();
 
 }
