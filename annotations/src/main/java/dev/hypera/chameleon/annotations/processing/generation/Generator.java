@@ -33,11 +33,13 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Platform main class generator.
  */
+@NonExtendable
 public abstract class Generator {
 
     public static final @NotNull String INDENT = "    ";

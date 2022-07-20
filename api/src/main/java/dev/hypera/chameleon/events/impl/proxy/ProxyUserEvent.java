@@ -39,6 +39,7 @@ public interface ProxyUserEvent extends UserEvent {
      *
      * @return the {@link ProxyUser} that triggered this event.
      */
+    @Override
     @NotNull ProxyUser getUser();
 
 }
