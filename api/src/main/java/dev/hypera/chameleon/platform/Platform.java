@@ -95,7 +95,7 @@ public abstract class Platform {
      * Platform type.
      */
     public enum Type {
-        SERVER, PROXY
+        PROXY, SERVER
     }
 
 }

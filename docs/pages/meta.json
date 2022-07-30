@@ -1,0 +1,15 @@
+{
+  "*": {
+    "type": "page"
+  },
+  "index": {
+    "title": "Home",
+    "type": "page",
+    "hidden": true,
+    "theme": {
+      "sidebar": false,
+      "toc": true
+    }
+  },
+  "docs": "Docs"
+}

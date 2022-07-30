@@ -20,15 +20,9 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-import org.apache.tools.ant.filters.ReplaceTokens
-
 plugins {
     id("chameleon.common")
 }
-
-val tokens = mapOf(
-    "version" to (parent?.version ?: "unknown")
-)
 
 dependencies {
     api(libs.adventure.api)

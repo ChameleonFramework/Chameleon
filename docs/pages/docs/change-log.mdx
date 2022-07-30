@@ -1,0 +1,29 @@
+import Markdown from 'markdown-to-jsx';
+import { useSSG } from 'nextra/ssg';
+
+export const getStaticProps = () => {
+  return fetch('https://api.github.com/repos/ChameleonFramework/Chameleon/releases')
+  .then(res => res.json())
+  .then(releases => ({
+    props: {
+      ssg: releases.filter(r => !r.prerelease)
+    },
+    revalidate: 60
+  }));
+}
+
+export const Releases = () => {
+  const releases = useSSG();
+  return (
+      <Markdown>
+        {releases.length > 0 ? releases.map(release => [
+          `## <a href="${release.html_url}" target="_blank" rel="noopener">${release.tag_name} </a> <small class="text-base">${new Date(release.published_at).toUTCString()}</small>`,
+          release.body.replace('&#39;', '\'')
+        ].join('\n')).join('\n\n') : 'No releases have been made yet.\nCheck back soon!'}
+      </Markdown>
+  )
+}
+
+# Change Log
+
+<Releases/>

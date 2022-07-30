@@ -1,0 +1,66 @@
+import {Tab, Tabs} from "nextra-theme-docs/tabs";
+
+# Getting Started
+
+## Dependency
+<br/>
+<div className="flex gap-2">
+  <img alt="Stable version"
+       src="https://img.shields.io/badge/Stable-N/A-%2317aaaa?style=for-the-badge"/>
+  <img alt="Latest version"
+       src="https://img.shields.io/badge/dynamic/json?color=17aaaa&label=Latest&prefix=v&query=%24.version&url=https%3A%2F%2Frepo.hypera.dev%2Fapi%2Fmaven%2Flatest%2Fversion%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon-api&style=for-the-badge"/>
+</div>
+
+To use Chameleon in your project, you will need to modify your build script to include the dependency and the Sonatype Snapshot repository (if you're using a snapshot).
+
+<Tabs items={[{label: (<p>Maven</p>)}, {label: (<p>Gradle <small>Kotlin</small></p>)}, {label: (<p>Gradle <small>Groovy</small></p>)}]}>
+  <Tab>
+    ```xml filename="pom.xml"
+    <properties>
+      <chameleon.version>VERSION</chameleon.version>
+    </properties>
+
+    <repositories>
+      <!-- Remove this if you aren't using a snapshot version -->
+      <repository>
+        <id>sonatype-snapshots-s01</id>
+        <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+      </repository>
+    </repositories>
+
+    <dependencies>
+      <dependency>
+        <groupId>dev.hypera</groupId>
+        <artifactId>chameleon-api</artifactId>
+        <version>${chameleon.version}</version>
+      </dependency>
+    </dependencies>
+    ```
+  </Tab>
+  <Tab>
+    ```kotlin filename="build.gradle.kts"
+    repositories {
+        mavenCentral() // Release
+        maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") // Snapshot
+    }
+
+    dependencies {
+        val chameleonVersion = "<version>"
+        implementation("dev.hypera:chameleon-api:$chameleonVersion")
+    }
+    ```
+  </Tab>
+  <Tab>
+    ```groovy filename="build.gradle"
+    repositories {
+        mavenCentral() // Release
+        maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' } // Snapshot
+    }
+
+    dependencies {
+        def chameleonVersion = '<version>'
+        implementation 'dev.hypera:chameleon-api:${chameleonVersion}'
+    }
+    ```
+  </Tab>
+</Tabs>

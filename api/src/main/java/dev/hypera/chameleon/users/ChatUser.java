@@ -43,9 +43,9 @@ public interface ChatUser extends Audience, PermissionHolder {
     @NotNull String getName();
 
     /**
-     * Whether the player can click chat messages.
+     * Whether the player can interact with chat messages.
      *
-     * @return true if the player can click chat messages.
+     * @return {@code true} if the player can interact with chat messages.
      */
     boolean hasInteractiveChat();
 

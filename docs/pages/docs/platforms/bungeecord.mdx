@@ -1,0 +1,57 @@
+# BungeeCord
+Chameleon supports [BungeeCord](https://www.spigotmc.org/wiki/bungeecord/) and the majority of its forks for Minecraft 1.8-1.19.1.
+
+## Dependency
+<div className="flex gap-2 mt-4">
+  <img alt="Stable version" src="https://img.shields.io/badge/Stable-N/A-%2317aaaa?style=for-the-badge"/>
+  <img alt="Latest version" src="https://img.shields.io/badge/dynamic/json?color=17aaaa&label=Latest&prefix=v&query=%24.version&url=https%3A%2F%2Frepo.hypera.dev%2Fapi%2Fmaven%2Flatest%2Fversion%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon-platform-bungeecord&style=for-the-badge"/>
+</div>
+
+### Maven
+```xml filename="pom.xml"
+<properties>
+   <chameleon.version>VERSION</chameleon.version>
+</properties>
+
+<repositories>
+    <!-- Remove this if you aren't using a snapshot version -->
+    <repository>
+       <id>sonatype-snapshots-s01</id>
+       <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>dev.hypera</groupId>
+        <artifactId>chameleon-platform-bungeecord</artifactId>
+        <version>${chameleon.version}</version>
+    </dependency>
+</dependencies>
+```
+
+### Gradle <small>(Kotlin)</small>
+```kotlin filename="build.gradle.kts"
+repositories {
+    mavenCentral() // Release
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") // Snapshot
+}
+
+dependencies {
+    val chameleonVersion = "<version>"
+    implementation("dev.hypera:chameleon-platform-bungeecord:$chameleonVersion")
+}
+```
+
+### Gradle <small>(Groovy)</small>
+```groovy filename="build.gradle"
+repositories {
+    mavenCentral() // Release
+    maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' } // Snapshot
+}
+
+dependencies {
+    def chameleonVersion = '<version>'
+    implementation 'dev.hypera:chameleon-platform-bungeecord:${chameleonVersion}'
+}
+```

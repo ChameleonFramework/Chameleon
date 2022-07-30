@@ -1,0 +1,26 @@
+import Callout from "nextra-theme-docs/callout";
+
+# Users
+Chameleon uses what we call Users, which are entities that can interact with the [Platform](platforms).<br/>
+There are 4 types of Users; [ChatUser](#chat-user), [User](#user), [ProxyUser](#proxy-user), and [ServerUser](#server-user).<br/><br/>
+All Users extend [ChatUser](#chat-user), which extends [Audience](https://docs.adventure.kyori.net/audiences.html) and can receive messages in the form of [Components](https://docs.adventure.kyori.net/text.html).
+
+## Chat User
+A `ChatUser` is something that can receive chat messages, for example a player or the [Platform](platforms) console.<br/>
+*Extends [Permission Holder](#permission-holder)*.
+
+## User
+A `User` is a **Minecraft Client (Player)** entity on the [Platform](platforms) which can do things inside the game.
+
+## Proxy User
+A `ProxyUser` is a [User](#user) on a [Proxy Platform](platform#proxy-platforms).
+
+## Server User
+A `ServerUser` is a [User](#user) on a [Server Platform](platform#server-platforms).
+
+<Callout emoji="" type="warning">
+  Due to the amount of things like Blocks, Items, Entities, and Server-side [Events](event), **ServerUser** is far from complete, please see <a href="https://github.com/ChameleonFramework/Chameleon/issues/4" target="_blank" rel="noopener">GitHub #4</a> for our progress.
+</Callout>
+
+## Permission Holder
+A `PermissionHolder` is something that can be given and checked for permissions.
