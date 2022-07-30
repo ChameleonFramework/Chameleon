@@ -35,7 +35,6 @@ platform-velocity = { module = "com.velocitypowered:velocity-api", version.ref =
 
 # File reading/writing
 gson = "com.google.code.gson:gson:2.9.0"
-jsonSimple = "com.googlecode.json-simple:json-simple:1.1.1"
 yaml = "org.yaml:snakeyaml:1.30"
 
 # Code generation
