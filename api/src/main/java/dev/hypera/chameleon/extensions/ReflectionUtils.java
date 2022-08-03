@@ -20,18 +20,29 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.extensions;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.reflect.ParameterizedType;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * Module injection annotation.
- */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Module {
+@Internal
+final class ReflectionUtils {
+
+    private ReflectionUtils() {
+
+    }
+
+    /**
+     * Get the class of a generic type.
+     *
+     * @param clazz Class to get the generic type on.
+     * @param generic Generic type index.
+     *
+     * @return Generic type as a class.
+     */
+    static @NotNull Class<?> getGenericTypeAsClass(@NotNull Class<?> clazz, int generic) {
+        return (Class<?>) ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[generic];
+    }
 
 }
