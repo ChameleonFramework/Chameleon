@@ -23,8 +23,8 @@
 import net.kyori.indra.repository.sonatypeSnapshots
 
 plugins {
-    id("java-library")
     id("chameleon.common")
+    id("java-library")
 }
 
 repositories {
