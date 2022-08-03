@@ -38,7 +38,7 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots/") // Required for BungeeCord support
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // Required for Bukkit support
     maven("https://jitpack.io/") // Required for Minestom support
-    maven("https://repo.spongepowered.org/maven/") // Required for Minestom support
+    maven("https://repo.spongepowered.org/maven/") // Required for Minestom/Sponge support
     maven("https://repo.opencollab.dev/main/") // Required for Nukkit support
     maven("https://nexus.velocitypowered.com/repository/maven-public/") // Required for Velocity support
 }
