@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,6 +58,7 @@ public abstract class ChameleonBootstrap<T extends Chameleon, E extends Chameleo
      */
     @SafeVarargs
     @SuppressWarnings("varargs")
+    @Contract("_ -> this")
     public final @NotNull ChameleonBootstrap<T, E> withExtensions(@NotNull E... extensions) {
         return withExtensions(Arrays.asList(extensions));
     }
@@ -68,6 +70,7 @@ public abstract class ChameleonBootstrap<T extends Chameleon, E extends Chameleo
      *
      * @return {@code this}.
      */
+    @Contract("_ -> this")
     public final @NotNull ChameleonBootstrap<T, E> withExtensions(@NotNull Collection<E> extensions) {
         this.platformExtensions.addAll(extensions);
         return this;
@@ -81,6 +84,7 @@ public abstract class ChameleonBootstrap<T extends Chameleon, E extends Chameleo
      *
      * @return {@code this}.
      */
+    @Contract("_ -> this")
     public final @NotNull ChameleonBootstrap<T, E> onPreLoad(@NotNull Consumer<ChameleonLogger> preLoad) {
         this.preLoad = preLoad;
         return this;
@@ -92,6 +96,7 @@ public abstract class ChameleonBootstrap<T extends Chameleon, E extends Chameleo
      * @return {@link Chameleon} implementation instance.
      * @throws ChameleonInstantiationException if something goes wrong while loading the {@link Chameleon} implementation.
      */
+    @Contract("-> new")
     public final @NotNull T load() throws ChameleonInstantiationException {
         if (null != this.preLoad) {
             this.preLoad.accept(createLogger());
