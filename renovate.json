@@ -5,5 +5,8 @@
   ],
   "labels": [
     "type: dependencies"
-  ]
+  ],
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps"
 }
