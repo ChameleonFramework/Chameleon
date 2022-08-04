@@ -31,6 +31,7 @@ rootProject.name = "chameleon-parent"
 
 sequenceOf(
     "api",
+    "bom",
     "annotations",
     "example",
     "platform-bukkit",

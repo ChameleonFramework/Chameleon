@@ -21,8 +21,8 @@
  *  SOFTWARE.
  */
 plugins {
-    id("java-library")
     id("chameleon.common")
+    id("java-library")
 }
 
 repositories {

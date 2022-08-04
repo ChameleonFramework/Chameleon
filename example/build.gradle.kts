@@ -21,6 +21,7 @@
  *  SOFTWARE.
  */
 plugins {
+    id("java")
     id("chameleon.base") // Checkstyle and version injection, not required.
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
