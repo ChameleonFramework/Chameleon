@@ -63,7 +63,7 @@ tasks {
     }
 
     shadowJar {
-        archiveFileName.set(String.format("%s-%s.jar", project.name, project.version))
+        archiveFileName.set(String.format("%s-%s.jar", project.name, rootProject.version))
         mergeServiceFiles()
 
         relocate("dev.hypera.chameleon", "dev.hypera.example.lib.chameleon")
