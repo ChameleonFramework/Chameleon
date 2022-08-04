@@ -67,7 +67,7 @@ public final class BukkitCommandManager extends CommandManager {
     @Override
     protected void registerCommand(@NotNull Command command) {
         if (null != this.commandMap) {
-            this.commandMap.register(command.getName(), this.chameleon.getBukkitPlugin().getName(), new BukkitCommand(this.chameleon, command));
+            this.commandMap.register(command.getName(), this.chameleon.getPlatformPlugin().getName(), new BukkitCommand(this.chameleon, command));
         }
     }
 

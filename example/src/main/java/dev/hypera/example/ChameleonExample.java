@@ -41,7 +41,7 @@ import org.jetbrains.annotations.Nullable;
 @Plugin(
         id = "chameleon-example",
         name = "ChameleonExample",
-        version = "@version@", // Version is placeholdered by Gradle.
+        version = "@version@", // @version@ is replaced by Gradle.
         description = "An example Chameleon plugin",
         url = "https://github.com/ChameleonFramework/Chameleon/example",
         authors = {"Joshua Sing", "SLLCoding"},

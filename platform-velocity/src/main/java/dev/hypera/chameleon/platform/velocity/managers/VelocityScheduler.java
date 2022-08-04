@@ -56,7 +56,7 @@ public final class VelocityScheduler extends Scheduler {
      */
     @Override
     protected void schedule(@NotNull TaskImpl task) {
-        this.chameleon.getVelocityPlugin().getServer().getScheduler().buildTask(this.chameleon.getVelocityPlugin(), task.getRunnable()).delay(convert(task.getDelay()), TimeUnit.MILLISECONDS).repeat(convert(task.getRepeat()), TimeUnit.MILLISECONDS).schedule();
+        this.chameleon.getPlatformPlugin().getServer().getScheduler().buildTask(this.chameleon.getPlatformPlugin(), task.getRunnable()).delay(convert(task.getDelay()), TimeUnit.MILLISECONDS).repeat(convert(task.getRepeat()), TimeUnit.MILLISECONDS).schedule();
     }
 
 

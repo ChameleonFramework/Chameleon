@@ -50,15 +50,15 @@ public final class VelocityCommandManager extends CommandManager {
 
     @Override
     protected void registerCommand(@NotNull Command command) {
-        this.chameleon.getVelocityPlugin()
+        this.chameleon.getPlatformPlugin()
             .getServer()
             .getCommandManager()
-            .register(this.chameleon.getVelocityPlugin().getServer().getCommandManager().metaBuilder(command.getName()).aliases(command.getAliases().toArray(new String[0])).build(), new VelocityCommand(this.chameleon, command));
+            .register(this.chameleon.getPlatformPlugin().getServer().getCommandManager().metaBuilder(command.getName()).aliases(command.getAliases().toArray(new String[0])).build(), new VelocityCommand(this.chameleon, command));
     }
 
     @Override
     protected void unregisterCommand(@NotNull Command command) {
-        this.chameleon.getVelocityPlugin().getServer().getCommandManager().unregister(command.getName());
+        this.chameleon.getPlatformPlugin().getServer().getCommandManager().unregister(command.getName());
     }
 
 }

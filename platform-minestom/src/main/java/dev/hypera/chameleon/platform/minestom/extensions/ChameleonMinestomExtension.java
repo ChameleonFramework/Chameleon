@@ -20,14 +20,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.extensions;
+package dev.hypera.chameleon.platform.minestom.extensions;
 
-import org.jetbrains.annotations.ApiStatus.Internal;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
+import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
+import dev.hypera.chameleon.extensions.CustomPlatformExtension;
+import dev.hypera.chameleon.platform.minestom.MinestomChameleon;
 
 /**
- * {@link ChameleonExtension} loader.
+ * Chameleon Minestom extension.
+ *
+ * @param <T> {@link ChameleonExtension} type.
+ * @param <C> {@link CustomPlatformExtension} type.
  */
-@Internal
-public final class ExtensionLoader {
+public abstract class ChameleonMinestomExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, MinestomChameleon> {
 
 }

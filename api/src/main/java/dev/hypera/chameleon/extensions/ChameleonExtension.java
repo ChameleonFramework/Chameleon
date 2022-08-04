@@ -22,6 +22,7 @@
  */
 package dev.hypera.chameleon.extensions;
 
+import dev.hypera.chameleon.Chameleon;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,6 +41,36 @@ public abstract class ChameleonExtension<T extends CustomPlatformExtension> {
      */
     public ChameleonExtension(@NotNull T platform) {
         this.platform = platform;
+    }
+
+    /**
+     * Called before Chameleon is loaded.
+     */
+    public void onPreLoad() {
+
+    }
+
+    /**
+     * Called after Chameleon has loaded.
+     *
+     * @param chameleon Initialised {@link Chameleon} instance.
+     */
+    public void onLoad(@NotNull Chameleon chameleon) {
+
+    }
+
+    /**
+     * Called when the platform plugin is enabled.
+     */
+    public void onEnable() {
+
+    }
+
+    /**
+     * Called when the platform plugin is disabled.
+     */
+    public void onDisable() {
+
     }
 
 }

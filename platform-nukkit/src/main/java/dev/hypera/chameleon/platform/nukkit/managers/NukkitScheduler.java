@@ -58,15 +58,15 @@ public class NukkitScheduler extends Scheduler {
     protected void schedule(@NotNull TaskImpl task) {
         if (task.getRepeat().getType().equals(Schedule.Type.NONE)) {
             if (task.getDelay().getType().equals(Schedule.Type.NONE)) {
-                Server.getInstance().getScheduler().scheduleTask(this.chameleon.getNukkitPlugin(), task.getRunnable(), task.getType().equals(Task.Type.ASYNC));
+                Server.getInstance().getScheduler().scheduleTask(this.chameleon.getPlatformPlugin(), task.getRunnable(), task.getType().equals(Task.Type.ASYNC));
             } else {
-                Server.getInstance().getScheduler().scheduleDelayedTask(this.chameleon.getNukkitPlugin(), task.getRunnable(), convert(task.getDelay()), task.getType().equals(Task.Type.ASYNC));
+                Server.getInstance().getScheduler().scheduleDelayedTask(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()), task.getType().equals(Task.Type.ASYNC));
             }
         } else {
             if (task.getDelay().getType().equals(Schedule.Type.NONE)) {
-                Server.getInstance().getScheduler().scheduleRepeatingTask(this.chameleon.getNukkitPlugin(), task.getRunnable(), convert(task.getRepeat()), task.getType().equals(Task.Type.ASYNC));
+                Server.getInstance().getScheduler().scheduleRepeatingTask(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getRepeat()), task.getType().equals(Task.Type.ASYNC));
             } else {
-                Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(this.chameleon.getNukkitPlugin(), task.getRunnable(), convert(task.getDelay()), convert(task.getRepeat()), task.getType().equals(Task.Type.ASYNC));
+                Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()), convert(task.getRepeat()), task.getType().equals(Task.Type.ASYNC));
             }
         }
     }

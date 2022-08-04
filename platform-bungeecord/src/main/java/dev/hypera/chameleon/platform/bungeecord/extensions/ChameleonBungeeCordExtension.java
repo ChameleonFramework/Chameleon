@@ -20,52 +20,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.platform.velocity.user;
+package dev.hypera.chameleon.platform.bungeecord.extensions;
 
-import dev.hypera.chameleon.adventure.AbstractReflectedAudience;
-import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
-import dev.hypera.chameleon.users.ChatUser;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
+import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
+import dev.hypera.chameleon.extensions.CustomPlatformExtension;
+import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
 
 /**
- * Velocity console {@link ChatUser} implementation.
+ * Chameleon BungeeCord extension.
+ *
+ * @param <T> {@link ChameleonExtension} type.
+ * @param <C> {@link CustomPlatformExtension} type.
  */
-@Internal
-public class VelocityConsoleUser extends AbstractReflectedAudience implements ChatUser {
-
-    /**
-     * {@link VelocityConsoleUser} constructor.
-     *
-     * @param chameleon {@link VelocityChameleon} instance.
-     */
-    @Internal
-    public VelocityConsoleUser(@NotNull VelocityChameleon chameleon) {
-        super(chameleon.getPlatformPlugin().getServer().getConsoleCommandSource());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull String getName() {
-        return "Console";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasInteractiveChat() {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasPermission(@NotNull String permission) {
-        return true;
-    }
+public abstract class ChameleonBungeeCordExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, BungeeCordChameleon> {
 
 }

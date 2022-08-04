@@ -24,8 +24,6 @@ package dev.hypera.chameleon.extensions;
 
 /**
  * Custom platform extension.
- * Allows you to create a fully custom platform extension.
- * TODO: Find better name and word the above better.
  */
 public interface CustomPlatformExtension {
 

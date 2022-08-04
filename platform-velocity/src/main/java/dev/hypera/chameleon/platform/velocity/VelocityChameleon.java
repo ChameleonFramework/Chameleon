@@ -27,6 +27,7 @@ import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.data.PluginData;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.logging.impl.ChameleonSlf4jLogger;
 import dev.hypera.chameleon.managers.CommandManager;
 import dev.hypera.chameleon.managers.PluginManager;
@@ -41,6 +42,7 @@ import dev.hypera.chameleon.platform.velocity.managers.VelocityScheduler;
 import dev.hypera.chameleon.platform.velocity.managers.VelocityUserManager;
 import dev.hypera.chameleon.platform.velocity.platform.VelocityPlatform;
 import java.nio.file.Path;
+import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,8 +60,8 @@ public final class VelocityChameleon extends Chameleon {
     private final @NotNull VelocityScheduler scheduler = new VelocityScheduler(this);
 
     @Internal
-    VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(velocityPlugin.getLogger()));
+    VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+        super(chameleonPlugin, extensions, pluginData, new ChameleonSlf4jLogger(velocityPlugin.getLogger()));
         this.plugin = velocityPlugin;
         this.plugin.getServer().getEventManager().register(this.plugin, new VelocityListener(this));
     }
@@ -140,8 +142,7 @@ public final class VelocityChameleon extends Chameleon {
      *
      * @return stored {@link VelocityPlugin}.
      */
-    @Internal
-    public @NotNull VelocityPlugin getVelocityPlugin() {
+    public @NotNull VelocityPlugin getPlatformPlugin() {
         return this.plugin;
     }
 

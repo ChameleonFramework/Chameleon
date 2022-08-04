@@ -20,29 +20,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.extensions;
+package dev.hypera.chameleon.platform.bukkit.extensions;
 
-import java.lang.reflect.ParameterizedType;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
+import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
+import dev.hypera.chameleon.extensions.CustomPlatformExtension;
+import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
 
-@Internal
-final class ReflectionUtils {
-
-    private ReflectionUtils() {
-
-    }
-
-    /**
-     * Get the class of a generic type.
-     *
-     * @param clazz Class to get the generic type on.
-     * @param generic Generic type index.
-     *
-     * @return Generic type as a class.
-     */
-    static @NotNull Class<?> getGenericTypeAsClass(@NotNull Class<?> clazz, int generic) {
-        return (Class<?>) ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[generic];
-    }
+/**
+ * Chameleon Bukkit extension.
+ *
+ * @param <T> {@link ChameleonExtension} type.
+ * @param <C> {@link CustomPlatformExtension} type.
+ */
+public abstract class ChameleonBukkitExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, BukkitChameleon> {
 
 }

@@ -27,6 +27,7 @@ import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.data.PluginData;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.logging.impl.ChameleonSlf4jLogger;
 import dev.hypera.chameleon.managers.CommandManager;
 import dev.hypera.chameleon.managers.PluginManager;
@@ -41,6 +42,7 @@ import dev.hypera.chameleon.platform.minestom.managers.MinestomScheduler;
 import dev.hypera.chameleon.platform.minestom.managers.MinestomUserManager;
 import dev.hypera.chameleon.platform.minestom.platform.MinestomPlatform;
 import java.nio.file.Path;
+import java.util.Collection;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -59,8 +61,8 @@ public final class MinestomChameleon extends Chameleon {
     private final @NotNull MinestomScheduler scheduler = new MinestomScheduler();
 
     @Internal
-    MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, pluginData, new ChameleonSlf4jLogger(extension.getLogger()));
+    MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull Extension extension, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+        super(chameleonPlugin, extensions, pluginData, new ChameleonSlf4jLogger(extension.getLogger()));
         this.extension = extension;
         new MinestomListener(this);
     }
@@ -135,6 +137,15 @@ public final class MinestomChameleon extends Chameleon {
     @Override
     public @NotNull Path getDataFolder() {
         return this.extension.getDataDirectory();
+    }
+
+    /**
+     * Get stored {@link Extension}.
+     *
+     * @return stored {@link Extension}.
+     */
+    public @NotNull Extension getPlatformPlugin() {
+        return this.extension;
     }
 
 }

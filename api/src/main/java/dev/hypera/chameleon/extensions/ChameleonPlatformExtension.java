@@ -22,6 +22,8 @@
  */
 package dev.hypera.chameleon.extensions;
 
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.utils.ChameleonUtil;
 import java.lang.reflect.InvocationTargetException;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
@@ -30,10 +32,11 @@ import org.jetbrains.annotations.NotNull;
  * Chameleon platform extension.
  *
  * @param <T> {@link ChameleonExtension} type.
- * @param <C> {@link CustomPlatformExtension} type.
+ * @param <E> {@link CustomPlatformExtension} type.
+ * @param <C> {@link Chameleon} implementation type.
  */
 @NonExtendable
-public abstract class ChameleonPlatformExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> {
+public abstract class ChameleonPlatformExtension<T extends ChameleonExtension<E>, E extends CustomPlatformExtension, C extends Chameleon> {
 
     protected final @NotNull T extension;
 
@@ -43,16 +46,26 @@ public abstract class ChameleonPlatformExtension<T extends ChameleonExtension<C>
     @SuppressWarnings("unchecked")
     public ChameleonPlatformExtension() {
         try {
-            if (!ReflectionUtils.getGenericTypeAsClass(getClass(), 1).isAssignableFrom(getClass())) {
-                throw new IllegalStateException("must implement C"); //TODO: better error message
+            Class<E> customExtension = (Class<E>) ChameleonUtil.getGenericTypeAsClass(getClass(), 1);
+            if (!customExtension.isAssignableFrom(getClass())) {
+                throw new IllegalStateException("ChameleonPlatformExtension must implement the used CustomPlatformExtension");
             }
 
-            this.extension = (T) ReflectionUtils.getGenericTypeAsClass(getClass(), 0)
-                .getConstructor(ReflectionUtils.getGenericTypeAsClass(getClass(), 1))
-                .newInstance(this);
+            this.extension = (T) ChameleonUtil.getGenericTypeAsClass(getClass(), 0)
+                .getConstructor(customExtension)
+                .newInstance(customExtension.cast(this));
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    /**
+     * Called after Chameleon has loaded.
+     *
+     * @param chameleon Initialised {@link Chameleon} instance.
+     */
+    public void onLoad(@NotNull C chameleon) {
+
     }
 
 }

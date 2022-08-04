@@ -26,6 +26,7 @@ import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.data.PluginData;
 import dev.hypera.chameleon.events.EventManager;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.logging.ChameleonLogger;
 import dev.hypera.chameleon.logging.impl.InternalChameleonLogger;
 import dev.hypera.chameleon.managers.CommandManager;
@@ -34,6 +35,8 @@ import dev.hypera.chameleon.managers.Scheduler;
 import dev.hypera.chameleon.managers.UserManager;
 import dev.hypera.chameleon.platform.Platform;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Optional;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,16 +53,18 @@ public abstract class Chameleon {
 
     private final @NotNull ChameleonPlugin plugin;
     private final @NotNull PluginData pluginData;
+    private final @NotNull Collection<ChameleonExtension<?>> extensions;
     private final @NotNull EventManager eventMapper = new EventManager(this);
 
     @Internal
-    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull PluginData pluginData, @NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
+    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull PluginData pluginData, @NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
         try {
             this.logger = logger;
             this.internalLogger = new InternalChameleonLogger(logger);
 
             this.plugin = plugin.getConstructor(Chameleon.class).newInstance(this);
             this.pluginData = pluginData;
+            this.extensions = extensions;
         } catch (Exception ex) {
             throw new ChameleonInstantiationException("Failed to initialise instance of " + plugin.getCanonicalName(), ex);
         }
@@ -77,6 +82,7 @@ public abstract class Chameleon {
      * Called when the platform plugin is enabled.
      */
     public void onEnable() {
+        this.extensions.forEach(ChameleonExtension::onEnable);
         this.plugin.onEnable();
     }
 
@@ -84,6 +90,7 @@ public abstract class Chameleon {
      * Called when the platform plugin is disabled.
      */
     public void onDisable() {
+        this.extensions.forEach(ChameleonExtension::onDisable);
         this.plugin.onDisable();
     }
 
@@ -107,6 +114,19 @@ public abstract class Chameleon {
     }
 
     /**
+     * Get a loaded extension.
+     *
+     * @param clazz {@link ChameleonExtension} implementation class.
+     * @param <T> {@link ChameleonExtension} type.
+     *
+     * @return an optional containing the {@link ChameleonExtension} if found, otherwise empty.
+     */
+    @SuppressWarnings("unchecked")
+    public final <T extends ChameleonExtension<?>> @NotNull Optional<T> getExtension(@NotNull Class<T> clazz) {
+        return this.extensions.stream().filter(ext -> ext.getClass().equals(clazz)).findFirst().map(ext -> (T) ext);
+    }
+
+    /**
      * Get {@link ChameleonLogger} instance.
      *
      * @return the stored {@link ChameleonLogger} instance.
@@ -116,8 +136,7 @@ public abstract class Chameleon {
     }
 
     /**
-     * Get internal {@link ChameleonLogger} instance.
-     * This is only to be used internally by Chameleon for debugging and error reporting.
+     * Get internal {@link ChameleonLogger} instance. This is only to be used internally by Chameleon for debugging and error reporting.
      *
      * @return the stored internal {@link ChameleonLogger} instance.
      */

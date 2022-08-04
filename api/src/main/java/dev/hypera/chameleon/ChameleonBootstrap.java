@@ -23,28 +23,65 @@
 package dev.hypera.chameleon;
 
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
+import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
 import dev.hypera.chameleon.logging.ChameleonLogger;
+import dev.hypera.chameleon.utils.ChameleonUtil;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * {@link Chameleon} bootstrap. Allows for runtime dependency loading, etc. before Chameleon is actually loaded.
  *
- * @param <T> {@link Chameleon} implementation
+ * @param <T> {@link Chameleon} implementation type.
+ * @param <E> {@link ChameleonPlatformExtension} implementation type.
  */
-public abstract class ChameleonBootstrap<T extends Chameleon> {
+public abstract class ChameleonBootstrap<T extends Chameleon, E extends ChameleonPlatformExtension<?, ?, T>> {
 
     private @Nullable Consumer<ChameleonLogger> preLoad;
+
+    private final @NotNull Collection<E> platformExtensions = new HashSet<>();
+
+
+    /**
+     * Load with extensions.
+     *
+     * @param extensions {@link ChameleonPlatformExtension}s to be loaded.
+     *
+     * @return {@code this}.
+     */
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public final @NotNull ChameleonBootstrap<T, E> withExtensions(@NotNull E... extensions) {
+        return withExtensions(Arrays.asList(extensions));
+    }
+
+    /**
+     * Load with extensions.
+     *
+     * @param extensions {@link ChameleonPlatformExtension}s to be loaded.
+     *
+     * @return {@code this}.
+     */
+    public final @NotNull ChameleonBootstrap<T, E> withExtensions(@NotNull Collection<E> extensions) {
+        this.platformExtensions.addAll(extensions);
+        return this;
+    }
+
 
     /**
      * Set pre-load handler.
      *
      * @param preLoad Pre-load handler.
      *
-     * @return {@code this}
+     * @return {@code this}.
      */
-    public final @NotNull ChameleonBootstrap<T> onPreLoad(@NotNull Consumer<ChameleonLogger> preLoad) {
+    public final @NotNull ChameleonBootstrap<T, E> onPreLoad(@NotNull Consumer<ChameleonLogger> preLoad) {
         this.preLoad = preLoad;
         return this;
     }
@@ -60,10 +97,17 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
             this.preLoad.accept(createLogger());
         }
 
-        return loadInternal();
+        Collection<ChameleonExtension<?>> extensions = this.platformExtensions.stream().map(ext -> (ChameleonExtension<?>) ChameleonUtil.getField("extension", ext)).collect(Collectors.toSet());
+        extensions.forEach(ChameleonExtension::onPreLoad);
+
+        T chameleon = loadInternal(extensions);
+        chameleon.onLoad();
+        this.platformExtensions.forEach(ext -> ext.onLoad(chameleon));
+        extensions.forEach(ext -> ext.onLoad(chameleon));
+        return chameleon;
     }
 
-    protected abstract @NotNull T loadInternal() throws ChameleonInstantiationException;
+    protected abstract @NotNull T loadInternal(@NotNull Collection<ChameleonExtension<?>> extensions) throws ChameleonInstantiationException;
 
     protected abstract @NotNull ChameleonLogger createLogger();
 

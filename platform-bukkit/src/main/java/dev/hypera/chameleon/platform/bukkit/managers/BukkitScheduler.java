@@ -59,20 +59,20 @@ public final class BukkitScheduler extends Scheduler {
         if (task.getRepeat().getType().equals(Schedule.Type.NONE)) {
             if (task.getDelay().getType().equals(Schedule.Type.NONE)) {
                 if (task.getType().equals(Task.Type.ASYNC)) {
-                    Bukkit.getScheduler().runTaskAsynchronously(this.chameleon.getBukkitPlugin(), task.getRunnable());
+                    Bukkit.getScheduler().runTaskAsynchronously(this.chameleon.getPlatformPlugin(), task.getRunnable());
                 } else {
-                    Bukkit.getScheduler().runTask(this.chameleon.getBukkitPlugin(), task.getRunnable());
+                    Bukkit.getScheduler().runTask(this.chameleon.getPlatformPlugin(), task.getRunnable());
                 }
             } else {
                 if (task.getType().equals(Task.Type.ASYNC)) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(this.chameleon.getBukkitPlugin(), task.getRunnable(), convert(task.getDelay()));
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()));
                 } else {
-                    Bukkit.getScheduler().runTaskLater(this.chameleon.getBukkitPlugin(), task.getRunnable(), convert(task.getDelay()));
+                    Bukkit.getScheduler().runTaskLater(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()));
                 }
             }
         } else {
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(this.chameleon.getBukkitPlugin(),
-                task.getType().equals(Task.Type.ASYNC) ? () -> Bukkit.getScheduler().runTaskAsynchronously(this.chameleon.getBukkitPlugin(), task.getRunnable()) : task.getRunnable(),
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(this.chameleon.getPlatformPlugin(),
+                task.getType().equals(Task.Type.ASYNC) ? () -> Bukkit.getScheduler().runTaskAsynchronously(this.chameleon.getPlatformPlugin(), task.getRunnable()) : task.getRunnable(),
                 convert(task.getDelay()),
                 convert(task.getRepeat())
             );

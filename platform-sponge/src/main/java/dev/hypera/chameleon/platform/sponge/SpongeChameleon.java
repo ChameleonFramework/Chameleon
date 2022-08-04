@@ -27,6 +27,7 @@ import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.data.PluginData;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.logging.impl.ChameleonLog4jLogger;
 import dev.hypera.chameleon.managers.CommandManager;
 import dev.hypera.chameleon.managers.PluginManager;
@@ -41,6 +42,7 @@ import dev.hypera.chameleon.platform.sponge.managers.SpongeScheduler;
 import dev.hypera.chameleon.platform.sponge.managers.SpongeUserManager;
 import dev.hypera.chameleon.platform.sponge.platform.SpongePlatform;
 import java.nio.file.Path;
+import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.Sponge;
@@ -60,10 +62,10 @@ public final class SpongeChameleon extends Chameleon {
     private final @NotNull SpongeScheduler scheduler = new SpongeScheduler(this);
 
     @Internal
-    SpongeChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, pluginData, new ChameleonLog4jLogger(spongePlugin.getLogger()));
+    SpongeChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull SpongePlugin spongePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+        super(chameleonPlugin, extensions, pluginData, new ChameleonLog4jLogger(spongePlugin.getLogger()));
         this.plugin = spongePlugin;
-        Sponge.eventManager().registerListeners(getSpongePlugin(), new SpongeListener(this));
+        Sponge.eventManager().registerListeners(this.plugin.getPluginContainer(), new SpongeListener(this));
     }
 
     /**
@@ -142,9 +144,8 @@ public final class SpongeChameleon extends Chameleon {
      *
      * @return {@link PluginContainer}.
      */
-    @Internal
-    public @NotNull PluginContainer getSpongePlugin() {
-        return this.plugin.getPluginContainer();
+    public @NotNull SpongePlugin getPlatformPlugin() {
+        return this.plugin;
     }
 
 }

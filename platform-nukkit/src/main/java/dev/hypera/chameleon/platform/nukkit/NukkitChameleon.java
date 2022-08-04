@@ -29,6 +29,7 @@ import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.data.PluginData;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.managers.CommandManager;
 import dev.hypera.chameleon.managers.PluginManager;
 import dev.hypera.chameleon.managers.Scheduler;
@@ -43,6 +44,7 @@ import dev.hypera.chameleon.platform.nukkit.managers.NukkitScheduler;
 import dev.hypera.chameleon.platform.nukkit.managers.NukkitUserManager;
 import dev.hypera.chameleon.platform.nukkit.platform.NukkitPlatform;
 import java.nio.file.Path;
+import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,8 +62,8 @@ public final class NukkitChameleon extends Chameleon {
     private final @NotNull NukkitScheduler scheduler = new NukkitScheduler(this);
 
     @Internal
-    NukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, pluginData, new ChameleonNukkitLogger(nukkitPlugin.getLogger()));
+    NukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull PluginBase nukkitPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+        super(chameleonPlugin, extensions, pluginData, new ChameleonNukkitLogger(nukkitPlugin.getLogger()));
         this.plugin = nukkitPlugin;
     }
 
@@ -148,8 +150,7 @@ public final class NukkitChameleon extends Chameleon {
      *
      * @return stored {@link PluginBase}.
      */
-    @Internal
-    public @NotNull PluginBase getNukkitPlugin() {
+    public @NotNull PluginBase getPlatformPlugin() {
         return this.plugin;
     }
 

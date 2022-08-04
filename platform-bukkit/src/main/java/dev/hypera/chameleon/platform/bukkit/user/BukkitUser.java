@@ -100,11 +100,11 @@ public class BukkitUser extends AbstractAudience implements ServerUser {
      */
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
-        if (!Bukkit.getMessenger().isOutgoingChannelRegistered(this.chameleon.getBukkitPlugin(), channel)) {
-            Bukkit.getMessenger().registerOutgoingPluginChannel(this.chameleon.getBukkitPlugin(), channel);
+        if (!Bukkit.getMessenger().isOutgoingChannelRegistered(this.chameleon.getPlatformPlugin(), channel)) {
+            Bukkit.getMessenger().registerOutgoingPluginChannel(this.chameleon.getPlatformPlugin(), channel);
         }
 
-        this.player.sendPluginMessage(this.chameleon.getBukkitPlugin(), channel, data);
+        this.player.sendPluginMessage(this.chameleon.getPlatformPlugin(), channel, data);
     }
 
     /**

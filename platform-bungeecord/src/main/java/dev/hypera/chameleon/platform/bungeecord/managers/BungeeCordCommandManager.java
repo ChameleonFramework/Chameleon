@@ -52,7 +52,7 @@ public final class BungeeCordCommandManager extends CommandManager {
 
     @Override
     protected void registerCommand(@NotNull Command command) {
-        ProxyServer.getInstance().getPluginManager().registerCommand(this.chameleon.getBungeePlugin(), new BungeeCordCommand(this.chameleon, command));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this.chameleon.getPlatformPlugin(), new BungeeCordCommand(this.chameleon, command));
     }
 
     @Override
