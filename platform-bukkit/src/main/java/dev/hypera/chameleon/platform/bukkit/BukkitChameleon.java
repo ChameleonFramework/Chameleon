@@ -27,6 +27,7 @@ import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.data.PluginData;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.logging.impl.ChameleonJavaLogger;
 import dev.hypera.chameleon.managers.CommandManager;
 import dev.hypera.chameleon.managers.PluginManager;
@@ -41,6 +42,7 @@ import dev.hypera.chameleon.platform.bukkit.managers.BukkitScheduler;
 import dev.hypera.chameleon.platform.bukkit.managers.BukkitUserManager;
 import dev.hypera.chameleon.platform.bukkit.platform.BukkitPlatform;
 import java.nio.file.Path;
+import java.util.Collection;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -62,8 +64,8 @@ public final class BukkitChameleon extends Chameleon {
     private @Nullable ChameleonAudienceProvider audienceProvider;
 
     @Internal
-    BukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, pluginData, new ChameleonJavaLogger(bukkitPlugin.getLogger()));
+    BukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull JavaPlugin bukkitPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+        super(chameleonPlugin, extensions, pluginData, new ChameleonJavaLogger(bukkitPlugin.getLogger()));
         this.plugin = bukkitPlugin;
     }
 
@@ -154,8 +156,7 @@ public final class BukkitChameleon extends Chameleon {
      *
      * @return stored {@link JavaPlugin}
      */
-    @Internal
-    public @NotNull JavaPlugin getBukkitPlugin() {
+    public @NotNull JavaPlugin getPlatformPlugin() {
         return this.plugin;
     }
 

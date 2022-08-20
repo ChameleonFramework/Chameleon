@@ -41,7 +41,7 @@ public class VelocityConsoleUser extends AbstractReflectedAudience implements Ch
      */
     @Internal
     public VelocityConsoleUser(@NotNull VelocityChameleon chameleon) {
-        super(chameleon.getVelocityPlugin().getServer().getConsoleCommandSource());
+        super(chameleon.getPlatformPlugin().getServer().getConsoleCommandSource());
     }
 
     /**

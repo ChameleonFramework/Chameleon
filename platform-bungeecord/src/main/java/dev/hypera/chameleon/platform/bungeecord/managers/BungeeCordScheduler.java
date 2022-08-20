@@ -59,12 +59,12 @@ public final class BungeeCordScheduler extends Scheduler {
     protected void schedule(@NotNull TaskImpl task) {
         if (task.getRepeat().getType().equals(Schedule.Type.NONE)) {
             if (task.getDelay().getType().equals(Schedule.Type.NONE)) {
-                ProxyServer.getInstance().getScheduler().runAsync(this.chameleon.getBungeePlugin(), task.getRunnable());
+                ProxyServer.getInstance().getScheduler().runAsync(this.chameleon.getPlatformPlugin(), task.getRunnable());
             } else {
-                ProxyServer.getInstance().getScheduler().schedule(this.chameleon.getBungeePlugin(), task.getRunnable(), convert(task.getDelay()), TimeUnit.MILLISECONDS);
+                ProxyServer.getInstance().getScheduler().schedule(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()), TimeUnit.MILLISECONDS);
             }
         } else {
-            ProxyServer.getInstance().getScheduler().schedule(this.chameleon.getBungeePlugin(), task.getRunnable(), convert(task.getDelay()), convert(task.getRepeat()), TimeUnit.MILLISECONDS);
+            ProxyServer.getInstance().getScheduler().schedule(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()), convert(task.getRepeat()), TimeUnit.MILLISECONDS);
         }
     }
 

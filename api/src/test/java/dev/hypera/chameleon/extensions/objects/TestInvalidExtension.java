@@ -20,18 +20,16 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.extensions.objects;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * Module injection annotation.
- */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Module {
+public class TestInvalidExtension extends ChameleonExtension<TestPlatform> {
+
+    // Invalid constructor
+    public TestInvalidExtension(@NotNull TestPlatform platform, @NotNull String shouldNotBeHere) {
+        super(platform);
+    }
 
 }

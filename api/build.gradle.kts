@@ -22,7 +22,7 @@
  */
 plugins {
     id("chameleon.common")
-    id("java")
+    id("java-library")
 }
 
 dependencies {

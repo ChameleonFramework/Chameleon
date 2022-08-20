@@ -64,6 +64,7 @@ tasks {
     compileJava {
         options.errorprone {
             disable("AnnotateFormatMethod")
+            disable("CanIgnoreReturnValueSuggester")
             error("NullAway")
 
             option("NullAway:AnnotatedPackages", "dev.hypera.chameleon")

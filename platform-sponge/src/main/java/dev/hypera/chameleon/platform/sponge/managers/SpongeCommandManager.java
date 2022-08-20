@@ -52,7 +52,7 @@ public final class SpongeCommandManager extends CommandManager {
     @Override
     protected void registerCommand(@NotNull Command command) {
         Sponge.server().commandManager().registrar(org.spongepowered.api.command.Command.Raw.class).ifPresent(registrar -> {
-            registrar.register(this.chameleon.getSpongePlugin(), new SpongeCommand(this.chameleon, command), command.getName(), command.getAliases().toArray(new String[0]));
+            registrar.register(this.chameleon.getPlatformPlugin().getPluginContainer(), new SpongeCommand(this.chameleon, command), command.getName(), command.getAliases().toArray(new String[0]));
         });
     }
 

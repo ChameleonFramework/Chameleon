@@ -20,27 +20,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.modules.platform;
+package dev.hypera.chameleon.platform.minestom.extensions;
 
-import dev.hypera.chameleon.Chameleon;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
+import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
+import dev.hypera.chameleon.extensions.CustomPlatformExtension;
+import dev.hypera.chameleon.platform.minestom.MinestomChameleon;
 
 /**
- * Platform module.
+ * Chameleon Minestom extension.
  *
- * @param <C> Platform {@link Chameleon}.
+ * @param <T> {@link ChameleonExtension} type.
+ * @param <C> {@link CustomPlatformExtension} type.
  */
-public abstract class PlatformModule<C extends Chameleon> {
-
-    protected final @NotNull C chameleon;
-
-    /**
-     * {@link PlatformModule} constructor.
-     *
-     * @param chameleon {@link Chameleon} instance.
-     */
-    public PlatformModule(@NotNull C chameleon) {
-        this.chameleon = chameleon;
-    }
+public abstract class ChameleonMinestomExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, MinestomChameleon> {
 
 }

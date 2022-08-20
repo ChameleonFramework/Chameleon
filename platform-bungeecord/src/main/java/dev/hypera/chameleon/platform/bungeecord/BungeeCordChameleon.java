@@ -27,6 +27,7 @@ import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.data.PluginData;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.logging.impl.ChameleonJavaLogger;
 import dev.hypera.chameleon.managers.CommandManager;
 import dev.hypera.chameleon.managers.PluginManager;
@@ -41,6 +42,7 @@ import dev.hypera.chameleon.platform.bungeecord.managers.BungeeCordScheduler;
 import dev.hypera.chameleon.platform.bungeecord.managers.BungeeCordUserManager;
 import dev.hypera.chameleon.platform.bungeecord.platform.BungeeCordPlatform;
 import java.nio.file.Path;
+import java.util.Collection;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -60,8 +62,8 @@ public final class BungeeCordChameleon extends Chameleon {
     private final @NotNull BungeeCordScheduler scheduler = new BungeeCordScheduler(this);
 
     @Internal
-    BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, pluginData, new ChameleonJavaLogger(bungeePlugin.getLogger()));
+    BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+        super(chameleonPlugin, extensions, pluginData, new ChameleonJavaLogger(bungeePlugin.getLogger()));
         this.plugin = bungeePlugin;
         this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);
         ProxyServer.getInstance().getPluginManager().registerListener(bungeePlugin, new BungeeCordListener(this));
@@ -142,8 +144,7 @@ public final class BungeeCordChameleon extends Chameleon {
      *
      * @return stored {@link Plugin}.
      */
-    @Internal
-    public @NotNull Plugin getBungeePlugin() {
+    public @NotNull Plugin getPlatformPlugin() {
         return this.plugin;
     }
 

@@ -61,7 +61,7 @@ public class SpongeScheduler extends Scheduler {
             Task.builder().execute(task.getRunnable())
                 .delay(convert(task.getDelay()), TimeUnit.MILLISECONDS)
                 .interval(convert(task.getRepeat()), TimeUnit.MILLISECONDS)
-                .plugin(this.chameleon.getSpongePlugin()).build()
+                .plugin(this.chameleon.getPlatformPlugin().getPluginContainer()).build()
         );
     }
 

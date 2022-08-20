@@ -64,7 +64,7 @@ public final class VelocityPlatform extends ProxyPlatform {
      */
     @Override
     public @NotNull String getName() {
-        return this.chameleon.getVelocityPlugin().getServer().getVersion().getName();
+        return this.chameleon.getPlatformPlugin().getServer().getVersion().getName();
     }
 
     /**
@@ -72,7 +72,7 @@ public final class VelocityPlatform extends ProxyPlatform {
      */
     @Override
     public @NotNull String getVersion() {
-        return this.chameleon.getVelocityPlugin().getServer().getVersion().getVersion();
+        return this.chameleon.getPlatformPlugin().getServer().getVersion().getVersion();
     }
 
     /**
@@ -89,7 +89,7 @@ public final class VelocityPlatform extends ProxyPlatform {
      */
     @Override
     public @NotNull Set<Server> getServers() {
-        return this.chameleon.getVelocityPlugin().getServer().getAllServers().stream().map(s -> new VelocityServer(this.chameleon, s)).collect(Collectors.toSet());
+        return this.chameleon.getPlatformPlugin().getServer().getAllServers().stream().map(s -> new VelocityServer(this.chameleon, s)).collect(Collectors.toSet());
     }
 
     /**
@@ -97,7 +97,7 @@ public final class VelocityPlatform extends ProxyPlatform {
      */
     @Override
     public @NotNull Optional<Server> getServer(@NotNull String name) {
-        return this.chameleon.getVelocityPlugin().getServer().getServer(name).map(s -> new VelocityServer(this.chameleon, s));
+        return this.chameleon.getPlatformPlugin().getServer().getServer(name).map(s -> new VelocityServer(this.chameleon, s));
     }
 
 }

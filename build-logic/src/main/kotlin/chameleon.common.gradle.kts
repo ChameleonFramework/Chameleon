@@ -24,3 +24,16 @@ plugins {
     id("chameleon.base")
     id("chameleon.publishing")
 }
+
+val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+dependencies {
+    testImplementation(platform(libs.findLibrary("test-junit-bom").get()))
+    testImplementation(libs.findLibrary("test-junit-api").get())
+    testImplementation(libs.findLibrary("test-junit-engine").get())
+    testImplementation(libs.findLibrary("test-junit-params").get())
+}
+
+tasks.test {
+    useJUnitPlatform()
+}

@@ -26,15 +26,18 @@ import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.data.PluginData;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.logging.ChameleonLogger;
 import dev.hypera.chameleon.logging.impl.ChameleonLog4jLogger;
+import dev.hypera.chameleon.platform.sponge.extensions.SpongeChameleonExtension;
+import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Sponge {@link ChameleonBootstrap} implementation.
  */
-public final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeChameleon> {
+public final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeChameleon, SpongeChameleonExtension<?, ?>> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull SpongePlugin spongePlugin;
@@ -52,10 +55,8 @@ public final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeCha
      */
     @Internal
     @Override
-    protected @NotNull SpongeChameleon loadInternal() throws ChameleonInstantiationException {
-        SpongeChameleon chameleon = new SpongeChameleon(this.chameleonPlugin, this.spongePlugin, this.pluginData);
-        chameleon.onLoad();
-        return chameleon;
+    protected @NotNull SpongeChameleon loadInternal(@NotNull Collection<ChameleonExtension<?>> extensions) throws ChameleonInstantiationException {
+        return new SpongeChameleon(this.chameleonPlugin, extensions, this.spongePlugin, this.pluginData);
     }
 
     /**

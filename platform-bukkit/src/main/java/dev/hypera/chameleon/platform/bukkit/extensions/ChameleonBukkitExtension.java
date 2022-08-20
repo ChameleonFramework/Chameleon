@@ -20,29 +20,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.modules;
+package dev.hypera.chameleon.platform.bukkit.extensions;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.modules.platform.PlatformModuleLoader;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.extensions.ChameleonExtension;
+import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
+import dev.hypera.chameleon.extensions.CustomPlatformExtension;
+import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
 
 /**
- * Abstract module.
+ * Chameleon Bukkit extension.
+ *
+ * @param <T> {@link ChameleonExtension} type.
+ * @param <C> {@link CustomPlatformExtension} type.
  */
-public abstract class AbstractModule {
-
-    protected final @NotNull Chameleon chameleon;
-    protected final @NotNull PlatformModuleLoader platformModuleLoader;
-
-    /**
-     * {@link AbstractModule} constructor.
-     *
-     * @param chameleon            {@link Chameleon} instance.
-     * @param platformModuleLoader {@link PlatformModuleLoader} instance.
-     */
-    public AbstractModule(@NotNull Chameleon chameleon, @NotNull PlatformModuleLoader platformModuleLoader) {
-        this.chameleon = chameleon;
-        this.platformModuleLoader = platformModuleLoader;
-    }
+public abstract class ChameleonBukkitExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, BukkitChameleon> {
 
 }

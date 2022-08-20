@@ -56,7 +56,7 @@ public final class VelocityPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Set<PlatformPlugin> getPlugins() {
-        return this.chameleon.getVelocityPlugin().getServer().getPluginManager().getPlugins().stream().map(VelocityPlugin::new).collect(Collectors.toSet());
+        return this.chameleon.getPlatformPlugin().getServer().getPluginManager().getPlugins().stream().map(VelocityPlugin::new).collect(Collectors.toSet());
     }
 
     /**
@@ -64,7 +64,7 @@ public final class VelocityPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-        return this.chameleon.getVelocityPlugin().getServer().getPluginManager().getPlugin(name.toLowerCase()).map(VelocityPlugin::new);
+        return this.chameleon.getPlatformPlugin().getServer().getPluginManager().getPlugin(name.toLowerCase()).map(VelocityPlugin::new);
     }
 
     /**
@@ -72,7 +72,7 @@ public final class VelocityPluginManager extends PluginManager {
      */
     @Override
     public boolean isPluginEnabled(@NotNull String name) {
-        return this.chameleon.getVelocityPlugin().getServer().getPluginManager().isLoaded(name.toLowerCase());
+        return this.chameleon.getPlatformPlugin().getServer().getPluginManager().isLoaded(name.toLowerCase());
     }
 
 }

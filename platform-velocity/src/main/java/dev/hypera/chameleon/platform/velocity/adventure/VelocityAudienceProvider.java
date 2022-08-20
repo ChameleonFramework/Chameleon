@@ -78,7 +78,7 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience players() {
-        return Audience.audience(this.chameleon.getVelocityPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(this.chameleon, p)).collect(Collectors.toSet()));
+        return Audience.audience(this.chameleon.getPlatformPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(this.chameleon, p)).collect(Collectors.toSet()));
     }
 
     /**
@@ -86,7 +86,7 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience player(@NotNull UUID playerId) {
-        return VelocityUsers.wrap(this.chameleon, this.chameleon.getVelocityPlugin().getServer().getPlayer(playerId).orElseThrow(() -> new IllegalArgumentException("Cannot find player with id '" + playerId + "'")));
+        return VelocityUsers.wrap(this.chameleon, this.chameleon.getPlatformPlugin().getServer().getPlayer(playerId).orElseThrow(() -> new IllegalArgumentException("Cannot find player with id '" + playerId + "'")));
     }
 
     /**

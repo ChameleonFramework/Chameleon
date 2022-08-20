@@ -67,7 +67,7 @@ public final class VelocityUserManager extends UserManager {
      */
     @Override
     public @NotNull Set<User> getPlayers() {
-        return this.chameleon.getVelocityPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(this.chameleon, p)).collect(Collectors.toSet());
+        return this.chameleon.getPlatformPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(this.chameleon, p)).collect(Collectors.toSet());
     }
 
     /**
@@ -75,7 +75,7 @@ public final class VelocityUserManager extends UserManager {
      */
     @Override
     public @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId) {
-        return this.chameleon.getVelocityPlugin().getServer().getPlayer(uniqueId).map(p -> new VelocityUser(this.chameleon, p));
+        return this.chameleon.getPlatformPlugin().getServer().getPlayer(uniqueId).map(p -> new VelocityUser(this.chameleon, p));
     }
 
 }
