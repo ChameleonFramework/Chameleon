@@ -42,7 +42,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Optional;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -62,6 +61,8 @@ public abstract class Chameleon {
     private final @NotNull PluginData pluginData;
     private final @NotNull Collection<ChameleonExtension<?>> extensions;
     private final @NotNull EventManager eventMapper = new EventManager(this);
+
+    private boolean enabled = false;
 
     @Internal
     protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull PluginData pluginData, @NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
@@ -91,6 +92,7 @@ public abstract class Chameleon {
     public void onEnable() {
         this.extensions.forEach(ChameleonExtension::onEnable);
         this.plugin.onEnable();
+        this.enabled = true;
     }
 
     /**
@@ -99,6 +101,7 @@ public abstract class Chameleon {
     public void onDisable() {
         this.extensions.forEach(ChameleonExtension::onDisable);
         this.plugin.onDisable();
+        this.enabled = false;
     }
 
 
@@ -165,11 +168,14 @@ public abstract class Chameleon {
         try {
             ChameleonPlatformExtension<T, ?, C> platformExtension = (ChameleonPlatformExtension<T, ?, C>) constructor.newInstance();
             platformExtension.onLoad((C) ChameleonUtil.getGenericTypeAsClass(platformExtension.getClass(), 2).cast(this));
+            platformExtension.getExtension().onLoad(this);
 
-            T ext = (T) Objects.requireNonNull(ChameleonUtil.getField("extension", platformExtension));
-            ext.onLoad(this);
-            this.extensions.add(ext);
-            return ext;
+            if (this.enabled) {
+                platformExtension.getExtension().onEnable();
+            }
+
+            this.extensions.add(platformExtension.getExtension());
+            return platformExtension.getExtension();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
             throw new RuntimeException(ex);
         }

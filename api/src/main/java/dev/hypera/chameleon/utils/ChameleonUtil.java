@@ -23,7 +23,6 @@
 package dev.hypera.chameleon.utils;
 
 import dev.hypera.chameleon.Chameleon;
-import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -62,24 +61,6 @@ public final class ChameleonUtil {
      */
     public static @NotNull Class<?> getGenericTypeAsClass(@NotNull Class<?> clazz, int generic) {
         return (Class<?>) ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[generic];
-    }
-
-    /**
-     * Get data from a field.
-     *
-     * @param name Name of field.
-     * @param obj Object from which the field's value should be extracted.
-     *
-     * @return value.
-     */
-    public static @Nullable Object getField(@NotNull String name, @NotNull Object obj) {
-        try {
-            Field field = obj.getClass().getField(name);
-            field.setAccessible(true);
-            return field.get(obj);
-        } catch (IllegalAccessException | NoSuchFieldException | SecurityException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 
 }

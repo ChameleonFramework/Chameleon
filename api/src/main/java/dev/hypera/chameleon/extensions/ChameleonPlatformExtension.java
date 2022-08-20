@@ -55,7 +55,7 @@ public abstract class ChameleonPlatformExtension<T extends ChameleonExtension<E>
                 .getConstructor(customExtension)
                 .newInstance(customExtension.cast(this));
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-            throw new RuntimeException(ex);
+            throw new IllegalStateException(ex);
         }
     }
 
@@ -66,6 +66,15 @@ public abstract class ChameleonPlatformExtension<T extends ChameleonExtension<E>
      */
     public void onLoad(@NotNull C chameleon) {
 
+    }
+
+    /**
+     * Get {@link ChameleonExtension} instance.
+     *
+     * @return {@link ChameleonExtension} instance.
+     */
+    public final @NotNull T getExtension() {
+        return this.extension;
     }
 
 }

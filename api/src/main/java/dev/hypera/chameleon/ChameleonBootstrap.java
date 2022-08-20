@@ -26,7 +26,6 @@ import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationExcep
 import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
 import dev.hypera.chameleon.logging.ChameleonLogger;
-import dev.hypera.chameleon.utils.ChameleonUtil;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -102,7 +101,7 @@ public abstract class ChameleonBootstrap<T extends Chameleon, E extends Chameleo
             this.preLoad.accept(createLogger());
         }
 
-        Collection<ChameleonExtension<?>> extensions = this.platformExtensions.stream().map(ext -> (ChameleonExtension<?>) ChameleonUtil.getField("extension", ext)).collect(Collectors.toSet());
+        Collection<ChameleonExtension<?>> extensions = this.platformExtensions.stream().map(ext -> ext.getExtension()).collect(Collectors.toSet());
         extensions.forEach(ChameleonExtension::onPreLoad);
 
         T chameleon = loadInternal(extensions);

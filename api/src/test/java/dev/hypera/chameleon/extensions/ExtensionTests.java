@@ -20,19 +20,30 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-plugins {
-    id("chameleon.common")
-    id("java-library")
-}
+package dev.hypera.chameleon.extensions;
 
-dependencies {
-    api(libs.adventure.api)
-    api(libs.adventure.textSerializer.legacy)
-    api(libs.adventure.textSerializer.gson)
-    api(libs.adventure.platform.api)
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-    compileOnly(libs.slf4j)
-    compileOnly(libs.log4j) // Scary...
+import dev.hypera.chameleon.extensions.objects.TestInvalidPlatformExtension;
+import dev.hypera.chameleon.extensions.objects.TestPlatformExtension;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-    compileOnlyApi(libs.annotations)
+final class ExtensionTests {
+
+    @Test
+    void invalidCatch() {
+        Assertions.assertDoesNotThrow(TestPlatformExtension::new);
+        assertThrows(IllegalStateException.class, TestInvalidPlatformExtension::new);
+    }
+
+    @Test
+    void loadsParent() {
+        TestPlatformExtension platformExtension = assertDoesNotThrow(TestPlatformExtension::new);
+        assertNotNull(platformExtension.extension);
+        assertNotNull(platformExtension.getExtension());
+    }
+
 }

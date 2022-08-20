@@ -50,7 +50,9 @@ build-errorpronePlugin = "net.ltgt.gradle:gradle-errorprone-plugin:2.0.2"
 
 # Testing
 test-junit-bom = "org.junit:junit-bom:5.9.0"
-test-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+test-junit-api = { module = "org.junit.jupiter:junit-jupiter-api" }
+test-junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+test-junit-params = { module = "org.junit.jupiter:junit-jupiter-params" }
 
 # Miscellaneous
 annotations = "org.jetbrains:annotations:23.0.0"

@@ -20,19 +20,10 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-plugins {
-    id("chameleon.common")
-    id("java-library")
-}
+package dev.hypera.chameleon.extensions.objects;
 
-dependencies {
-    api(libs.adventure.api)
-    api(libs.adventure.textSerializer.legacy)
-    api(libs.adventure.textSerializer.gson)
-    api(libs.adventure.platform.api)
+import dev.hypera.chameleon.extensions.CustomPlatformExtension;
 
-    compileOnly(libs.slf4j)
-    compileOnly(libs.log4j) // Scary...
+public interface TestPlatform extends CustomPlatformExtension {
 
-    compileOnlyApi(libs.annotations)
 }

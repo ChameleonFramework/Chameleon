@@ -20,19 +20,12 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-plugins {
-    id("chameleon.common")
-    id("java-library")
-}
+package dev.hypera.chameleon.extensions.objects;
 
-dependencies {
-    api(libs.adventure.api)
-    api(libs.adventure.textSerializer.legacy)
-    api(libs.adventure.textSerializer.gson)
-    api(libs.adventure.platform.api)
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
 
-    compileOnly(libs.slf4j)
-    compileOnly(libs.log4j) // Scary...
+// Has parent extension with invalid constructor
+public class TestInvalidPlatformExtension extends ChameleonPlatformExtension<TestInvalidExtension, TestPlatform, Chameleon> implements TestPlatform {
 
-    compileOnlyApi(libs.annotations)
 }
