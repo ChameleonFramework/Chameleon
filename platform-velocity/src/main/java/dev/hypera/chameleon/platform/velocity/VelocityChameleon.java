@@ -63,7 +63,6 @@ public final class VelocityChameleon extends Chameleon {
     VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, extensions, pluginData, new ChameleonSlf4jLogger(velocityPlugin.getLogger()));
         this.plugin = velocityPlugin;
-        this.plugin.getServer().getEventManager().register(this.plugin, new VelocityListener(this));
     }
 
     /**
@@ -79,6 +78,14 @@ public final class VelocityChameleon extends Chameleon {
         return new VelocityChameleonBootstrap(chameleonPlugin, velocityPlugin, pluginData);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onEnable() {
+        this.plugin.getServer().getEventManager().register(this.plugin, new VelocityListener(this));
+        super.onEnable();
+    }
 
     /**
      * {@inheritDoc}
