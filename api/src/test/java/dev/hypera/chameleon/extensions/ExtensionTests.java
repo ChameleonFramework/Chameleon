@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import dev.hypera.chameleon.extensions.objects.TestInvalidPlatformExtension;
 import dev.hypera.chameleon.extensions.objects.TestPlatformExtension;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 final class ExtensionTests {
