@@ -35,7 +35,7 @@ final class ExtensionTests {
 
     @Test
     void invalidCatch() {
-        Assertions.assertDoesNotThrow(TestPlatformExtension::new);
+        assertDoesNotThrow(TestPlatformExtension::new);
         assertThrows(IllegalStateException.class, TestInvalidPlatformExtension::new);
     }
 
