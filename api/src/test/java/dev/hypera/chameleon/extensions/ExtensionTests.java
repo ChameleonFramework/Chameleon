@@ -33,13 +33,13 @@ import org.junit.jupiter.api.Test;
 final class ExtensionTests {
 
     @Test
-    void invalidCatch() {
+    void catchesInvalid() {
         assertDoesNotThrow(TestPlatformExtension::new);
         assertThrows(IllegalStateException.class, TestInvalidPlatformExtension::new);
     }
 
     @Test
-    void loadsParent() {
+    void successfullyLoadsParent() {
         TestPlatformExtension platformExtension = assertDoesNotThrow(TestPlatformExtension::new);
         assertNotNull(platformExtension.extension);
         assertNotNull(platformExtension.getExtension());

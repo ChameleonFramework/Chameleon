@@ -23,9 +23,9 @@
 package dev.hypera.chameleon.platform.sponge.events;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.events.impl.common.UserChatEvent;
-import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.common.UserChatEvent;
+import dev.hypera.chameleon.events.common.UserConnectEvent;
+import dev.hypera.chameleon.events.common.UserDisconnectEvent;
 import dev.hypera.chameleon.platform.sponge.users.SpongeUsers;
 import dev.hypera.chameleon.users.platforms.ServerUser;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -64,7 +64,7 @@ public class SpongeListener {
      */
     @Listener
     public void onJoinEvent(@NotNull ServerSideConnectionEvent.Join event) {
-        this.chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.player())));
+        this.chameleon.getEventBus().dispatch(new UserConnectEvent(wrap(event.player())));
     }
 
     /**
@@ -77,7 +77,9 @@ public class SpongeListener {
         ServerPlayer sender = (ServerPlayer) event.cause().first(Player.class).orElse(null);
         if (null != sender) {
             String serialized = LegacyComponentSerializer.legacySection().serialize(event.message());
-            UserChatEvent chameleonEvent = this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap(sender), serialized));
+            UserChatEvent chameleonEvent = new UserChatEvent(wrap(sender), serialized);
+            this.chameleon.getEventBus().dispatch(chameleonEvent);
+
             if (!serialized.equals(chameleonEvent.getMessage())) {
                 event.setMessage(LegacyComponentSerializer.legacySection().deserialize(chameleonEvent.getMessage()));
             }
@@ -95,7 +97,7 @@ public class SpongeListener {
      */
     @Listener
     public void onLoginEvent(@NotNull ServerSideConnectionEvent.Disconnect event) {
-        this.chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.player())));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.player())));
     }
 
     private @NotNull ServerUser wrap(@NotNull Subject subject) {

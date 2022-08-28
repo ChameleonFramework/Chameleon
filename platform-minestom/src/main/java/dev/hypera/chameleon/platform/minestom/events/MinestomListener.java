@@ -23,9 +23,9 @@
 package dev.hypera.chameleon.platform.minestom.events;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.events.impl.common.UserChatEvent;
-import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.common.UserChatEvent;
+import dev.hypera.chameleon.events.common.UserConnectEvent;
+import dev.hypera.chameleon.events.common.UserDisconnectEvent;
 import dev.hypera.chameleon.platform.minestom.users.MinestomUsers;
 import dev.hypera.chameleon.users.platforms.ServerUser;
 import net.minestom.server.MinecraftServer;
@@ -51,9 +51,11 @@ public class MinestomListener {
     @Internal
     public MinestomListener(@NotNull Chameleon chameleon) {
         GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
-        handler.addListener(PlayerLoginEvent.class, event -> chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer()))));
+        handler.addListener(PlayerLoginEvent.class, event -> chameleon.getEventBus().dispatch(new UserConnectEvent(wrap(event.getPlayer()))));
         handler.addListener(PlayerChatEvent.class, event -> {
-            UserChatEvent chameleonEvent = chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+            UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage());
+            chameleon.getEventBus().dispatch(chameleonEvent);
+
             if (!event.getMessage().equals(chameleonEvent.getMessage())) {
                 event.setMessage(chameleonEvent.getMessage());
             }
@@ -62,7 +64,7 @@ public class MinestomListener {
                 event.setCancelled(true);
             }
         });
-        handler.addListener(PlayerDisconnectEvent.class, event -> chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()))));
+        handler.addListener(PlayerDisconnectEvent.class, event -> chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()))));
     }
 
     private @NotNull ServerUser wrap(@NotNull Player player) {

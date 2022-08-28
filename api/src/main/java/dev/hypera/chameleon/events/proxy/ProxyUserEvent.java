@@ -20,33 +20,26 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.listener;
+package dev.hypera.chameleon.events.proxy;
 
-import dev.hypera.chameleon.events.listener.annotations.EventHandler;
+import dev.hypera.chameleon.annotations.PlatformSpecific;
+import dev.hypera.chameleon.events.common.UserEvent;
+import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.users.platforms.ProxyUser;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link ChameleonListener} priority.
- *
- * @see EventHandler
+ * Proxy-only event.
  */
-public enum ListenerPriority {
-
-    HIGH(1), MEDIUM(2), NORMAL(3), LOW(4), MONITOR(100);
-
-    private final int priority;
-
-    ListenerPriority(int priority) {
-        this.priority = priority;
-    }
+@PlatformSpecific(Platform.Type.PROXY)
+public interface ProxyUserEvent extends UserEvent {
 
     /**
-     * Get priority as an integer.
-     * Lower is higher priority.
+     * Get the {@link ProxyUser} that triggered this event.
      *
-     * @return the listener priority as an integer.
+     * @return the {@link ProxyUser} that triggered this event.
      */
-    public int getPriority() {
-        return this.priority;
-    }
+    @Override
+    @NotNull ProxyUser getUser();
 
 }

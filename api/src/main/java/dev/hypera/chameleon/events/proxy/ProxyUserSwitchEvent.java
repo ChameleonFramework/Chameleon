@@ -20,7 +20,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.impl.proxy;
+package dev.hypera.chameleon.events.proxy;
 
 import dev.hypera.chameleon.annotations.PlatformSpecific;
 import dev.hypera.chameleon.platform.Platform;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * {@link ProxyUser} switch sever event, dispatched whenever a player switches server.
  */
 @PlatformSpecific(Platform.Type.PROXY)
-public class ProxyUserSwitchEvent implements ProxyUserEvent {
+public final class ProxyUserSwitchEvent implements ProxyUserEvent {
 
     private final @NotNull ProxyUser user;
     private final @Nullable Server from;

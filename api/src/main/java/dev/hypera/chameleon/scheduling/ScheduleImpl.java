@@ -45,7 +45,7 @@ public final class ScheduleImpl {
      * @see Schedule#duration(Duration)
      */
     @Internal
-    public final static class DurationSchedule implements Schedule {
+    public static final class DurationSchedule implements Schedule {
 
         private final @NotNull Duration duration;
 
@@ -83,7 +83,7 @@ public final class ScheduleImpl {
      * @see Schedule#tick(int)
      */
     @Internal
-    public final static class TickSchedule implements Schedule {
+    public static final class TickSchedule implements Schedule {
 
         private final int ticks;
 

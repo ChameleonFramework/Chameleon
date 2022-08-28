@@ -20,26 +20,36 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.impl.proxy;
+package dev.hypera.chameleon.events.common;
 
-import dev.hypera.chameleon.annotations.PlatformSpecific;
-import dev.hypera.chameleon.events.impl.common.UserEvent;
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.users.platforms.ProxyUser;
+import dev.hypera.chameleon.users.User;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Proxy-only event.
+ * {@link User} connect event, dispatched when a user joins the proxy/server.
  */
-@PlatformSpecific(Platform.Type.PROXY)
-public interface ProxyUserEvent extends UserEvent {
+public final class UserConnectEvent implements UserEvent {
+
+    private final @NotNull User user;
 
     /**
-     * Get the {@link ProxyUser} that triggered this event.
+     * {@link UserConnectEvent} constructor.
      *
-     * @return the {@link ProxyUser} that triggered this event.
+     * @param user The {@link User} that triggered this event.
+     */
+    @Internal
+    public UserConnectEvent(@NotNull User user) {
+        this.user = user;
+    }
+
+
+    /**
+     * {@inheritDoc}
      */
     @Override
-    @NotNull ProxyUser getUser();
+    public @NotNull User getUser() {
+        return this.user;
+    }
 
 }

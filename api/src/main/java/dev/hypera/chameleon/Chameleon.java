@@ -24,7 +24,8 @@ package dev.hypera.chameleon;
 
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.data.PluginData;
-import dev.hypera.chameleon.events.EventManager;
+import dev.hypera.chameleon.events.EventBus;
+import dev.hypera.chameleon.events.EventBusImpl;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
@@ -60,7 +61,7 @@ public abstract class Chameleon {
     private final @NotNull ChameleonPlugin plugin;
     private final @NotNull PluginData pluginData;
     private final @NotNull Collection<ChameleonExtension<?>> extensions;
-    private final @NotNull EventManager eventMapper = new EventManager(this);
+    private final @NotNull EventBus eventBus = new EventBusImpl(getInternalLogger());
 
     private boolean enabled = false;
 
@@ -201,12 +202,12 @@ public abstract class Chameleon {
     }
 
     /**
-     * Get {@link EventManager} instance.
+     * Get {@link EventBus} instance.
      *
-     * @return the stored {@link EventManager} instance.
+     * @return the stored {@link EventBus} instance.
      */
-    public final @NotNull EventManager getEventManager() {
-        return this.eventMapper;
+    public final @NotNull EventBus getEventBus() {
+        return this.eventBus;
     }
 
 

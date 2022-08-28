@@ -20,58 +20,49 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.impl.common;
+package dev.hypera.chameleon.events;
 
-import dev.hypera.chameleon.events.cancellable.AbstractCancellable;
-import dev.hypera.chameleon.users.User;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link User} chat event, dispatched when a player sends a chat message.
+ * Event bus.
+ * <p>Inspired by <a href="https://github.com/KyoriPowered/event">KyoriPowered/event</a></p>
  */
-public class UserChatEvent extends AbstractCancellable implements UserEvent {
-
-    private final @NotNull User user;
-    private @NotNull String message;
+public interface EventBus {
 
     /**
-     * {@link UserChatEvent} constructor.
+     * Dispatch an event to subscribers.
      *
-     * @param user    {@link User} that sent the message.
-     * @param message Message that the user attempted to send.
+     * @param event The event to be dispatched.
      */
-    public UserChatEvent(@NotNull User user, @NotNull String message) {
-        this.user = user;
-        this.message = message;
-    }
-
+    void dispatch(@NotNull ChameleonEvent event);
 
     /**
-     * Get the {@link User} who attempted to send this message.
+     * Register the given subscriber.
      *
-     * @return {@link User} who attempted to send this message.
+     * @param event      The event type.
+     * @param subscriber The event subscriber.
+     * @param <T>        The event type.
+     *
+     * @return an event subscription.
      */
-    @Override
-    public @NotNull User getUser() {
-        return this.user;
-    }
+    <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull Class<T> event, @NotNull EventSubscriber<T> subscriber);
 
     /**
-     * Get the message that the {@link User} attempted to send this message.
+     * Determines whether the given event has been subscribed to.
      *
-     * @return the message that the {@link User} attempted to send.
+     * @param event The event type.
+     *
+     * @return {@code true} if the event has subscribers, otherwise {@code false}.
      */
-    public @NotNull String getMessage() {
-        return this.message;
-    }
+    boolean subscribed(@NotNull Class<? extends ChameleonEvent> event);
 
     /**
-     * Sets the message that the {@link User} will send.
+     * Unregister subscribers matching the given predicate.
      *
-     * @param message New message that will be sent.
+     * @param predicate The predicate to test subscribers against.
      */
-    public void setMessage(@NotNull String message) {
-        this.message = message;
-    }
+    void unsubscribeIf(@NotNull Predicate<EventSubscriber<? super ChameleonEvent>> predicate);
 
 }

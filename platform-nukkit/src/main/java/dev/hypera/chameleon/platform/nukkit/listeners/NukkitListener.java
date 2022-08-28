@@ -28,9 +28,9 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerChatEvent;
 import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
-import dev.hypera.chameleon.events.impl.common.UserChatEvent;
-import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.common.UserChatEvent;
+import dev.hypera.chameleon.events.common.UserConnectEvent;
+import dev.hypera.chameleon.events.common.UserDisconnectEvent;
 import dev.hypera.chameleon.platform.nukkit.NukkitChameleon;
 import dev.hypera.chameleon.platform.nukkit.users.NukkitUser;
 import dev.hypera.chameleon.users.platforms.ServerUser;
@@ -62,7 +62,7 @@ public class NukkitListener implements Listener {
      */
     @EventHandler
     public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
-        this.chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+        this.chameleon.getEventBus().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
     }
 
     /**
@@ -72,7 +72,9 @@ public class NukkitListener implements Listener {
      */
     @EventHandler
     public void onPlayerChatEvent(@NotNull PlayerChatEvent event) {
-        UserChatEvent chameleonEvent = this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+        UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage());
+        this.chameleon.getEventBus().dispatch(chameleonEvent);
+
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {
             event.setMessage(chameleonEvent.getMessage());
         }
@@ -89,7 +91,7 @@ public class NukkitListener implements Listener {
      */
     @EventHandler
     public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
-        this.chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
     }
 
 

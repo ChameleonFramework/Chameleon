@@ -30,10 +30,10 @@ import com.velocitypowered.api.event.player.PlayerChatEvent.ChatResult;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import dev.hypera.chameleon.events.impl.common.UserChatEvent;
-import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
-import dev.hypera.chameleon.events.impl.proxy.ProxyUserSwitchEvent;
+import dev.hypera.chameleon.events.common.UserChatEvent;
+import dev.hypera.chameleon.events.common.UserConnectEvent;
+import dev.hypera.chameleon.events.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.proxy.ProxyUserSwitchEvent;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityServer;
@@ -67,7 +67,7 @@ public class VelocityListener {
      */
     @Subscribe
     public void onPostLoginEvent(@NotNull PostLoginEvent event) {
-        this.chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+        this.chameleon.getEventBus().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
     }
 
     /**
@@ -77,7 +77,9 @@ public class VelocityListener {
      */
     @Subscribe
     public void onChatEvent(@NotNull PlayerChatEvent event) {
-        UserChatEvent chameleonEvent = this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+        UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage());
+        this.chameleon.getEventBus().dispatch(chameleonEvent);
+
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {
             event.setResult(ChatResult.message(chameleonEvent.getMessage()));
         }
@@ -94,7 +96,7 @@ public class VelocityListener {
      */
     @Subscribe
     public void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
-        this.chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
     }
 
     /**
@@ -104,7 +106,7 @@ public class VelocityListener {
      */
     @Subscribe
     public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
-        this.chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), event.getPreviousServer().map(this::wrap).orElse(null), wrap(event.getServer())));
+        this.chameleon.getEventBus().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), event.getPreviousServer().map(this::wrap).orElse(null), wrap(event.getServer())));
     }
 
 

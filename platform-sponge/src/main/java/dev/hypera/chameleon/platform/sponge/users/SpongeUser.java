@@ -44,7 +44,7 @@ import org.spongepowered.api.network.channel.raw.RawDataChannel;
  */
 public class SpongeUser extends AbstractReflectedAudience implements ServerUser {
 
-    private final static @NotNull Method SIMULATE_CHAT_METHOD;
+    private static final @NotNull Method SIMULATE_CHAT_METHOD;
     private final @NotNull ServerPlayer player;
 
     static {

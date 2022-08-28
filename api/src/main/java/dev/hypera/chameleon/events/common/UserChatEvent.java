@@ -20,36 +20,58 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.impl.common;
+package dev.hypera.chameleon.events.common;
 
+import dev.hypera.chameleon.events.cancellable.AbstractCancellable;
 import dev.hypera.chameleon.users.User;
-import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link User} connect event, dispatched when a user joins the proxy/server.
+ * {@link User} chat event, dispatched when a player sends a chat message.
  */
-public class UserConnectEvent implements UserEvent {
+public final class UserChatEvent extends AbstractCancellable implements UserEvent {
 
     private final @NotNull User user;
+    private @NotNull String message;
 
     /**
-     * {@link UserConnectEvent} constructor.
+     * {@link UserChatEvent} constructor.
      *
-     * @param user The {@link User} that triggered this event.
+     * @param user    {@link User} that sent the message.
+     * @param message Message that the user attempted to send.
      */
-    @Internal
-    public UserConnectEvent(@NotNull User user) {
+    public UserChatEvent(@NotNull User user, @NotNull String message) {
         this.user = user;
+        this.message = message;
     }
 
 
     /**
-     * {@inheritDoc}
+     * Get the {@link User} who attempted to send this message.
+     *
+     * @return {@link User} who attempted to send this message.
      */
     @Override
     public @NotNull User getUser() {
         return this.user;
+    }
+
+    /**
+     * Get the message that the {@link User} attempted to send this message.
+     *
+     * @return the message that the {@link User} attempted to send.
+     */
+    public @NotNull String getMessage() {
+        return this.message;
+    }
+
+    /**
+     * Sets the message that the {@link User} will send.
+     *
+     * @param message New message that will be sent.
+     */
+    public void setMessage(@NotNull String message) {
+        this.message = message;
     }
 
 }

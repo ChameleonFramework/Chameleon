@@ -20,36 +20,45 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.impl.common;
+package dev.hypera.chameleon.events;
 
-import dev.hypera.chameleon.users.User;
-import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link User} disconnect event, dispatched when a user leaves the proxy/server.
+ * An event subscriber, used to listen for events.
+ *
+ * @param <T> Event type.
  */
-public class UserDisconnectEvent implements UserEvent {
-
-    private final @NotNull User user;
+@FunctionalInterface
+public interface EventSubscriber<T extends ChameleonEvent> {
 
     /**
-     * {@link UserDisconnectEvent} constructor.
+     * Executed when this event is dispatched.
      *
-     * @param user The {@link User} that triggered this event.
+     * @param event Dispatched event.
+     *
+     * @throws Exception if something goes wrong while handling this event.
      */
-    @Internal
-    public UserDisconnectEvent(@NotNull User user) {
-        this.user = user;
+    void on(@NotNull T event) throws Exception;
+
+    /**
+     * Get the priority of this subscriber.
+     * <p>Defaults to {@code 0} (normal)</p>
+     *
+     * @return subscriber priority.
+     */
+    default int getPriority() {
+        return EventSubscriptionPriority.NORMAL;
     }
 
-
     /**
-     * {@inheritDoc}
+     * Whether this subscriber should be given cancelled events.
+     * <p>Defaults to {@code false}</p>
+     *
+     * @return {@code true} if cancelled events should be handled, otherwise {@code false}.
      */
-    @Override
-    public @NotNull User getUser() {
-        return this.user;
+    default boolean acceptsCancelled() {
+        return false;
     }
 
 }

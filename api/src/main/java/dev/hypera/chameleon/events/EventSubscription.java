@@ -20,13 +20,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.listener;
+package dev.hypera.chameleon.events;
 
-import dev.hypera.chameleon.events.ChameleonEvent;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 
 /**
- * {@link ChameleonEvent} listener.
+ * An event subscription.
  */
-public interface ChameleonListener {
+@NonExtendable
+public interface EventSubscription {
+
+    /**
+     * Unregister this subscription.
+     */
+    void unsubscribe();
 
 }

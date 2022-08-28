@@ -20,10 +20,10 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.impl.server;
+package dev.hypera.chameleon.events.server;
 
 import dev.hypera.chameleon.annotations.PlatformSpecific;
-import dev.hypera.chameleon.events.impl.common.UserEvent;
+import dev.hypera.chameleon.events.common.UserEvent;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.users.platforms.ServerUser;
 import org.jetbrains.annotations.NotNull;
