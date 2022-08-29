@@ -88,7 +88,12 @@ public final class EventBusImpl implements EventBus {
         this.subscriptions.computeIfAbsent(event, key -> Collections.synchronizedSet(new HashSet<>())).add((EventSubscriber<ChameleonEvent>) subscriber);
         this.sortedSubscriptions.clear();
 
-        return () -> unsubscribeIf(sub -> sub.equals(subscriber));
+        EventSubscription subscription = () -> unsubscribeIf(sub -> sub.equals(subscriber));
+        if (subscriber instanceof EventSubscriberImpl) {
+            ((EventSubscriberImpl<T>) subscriber).setSubscription(subscription);
+        }
+
+        return subscription;
     }
 
     /**

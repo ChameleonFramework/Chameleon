@@ -22,6 +22,11 @@
  */
 package dev.hypera.chameleon.events;
 
+import dev.hypera.chameleon.events.EventSubscriberImpl.BuilderImpl;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,6 +36,19 @@ import org.jetbrains.annotations.NotNull;
  */
 @FunctionalInterface
 public interface EventSubscriber<T extends ChameleonEvent> {
+
+    /**
+     * Create a new event subscriber builder.
+     *
+     * @param type Dummy event type class, only used to enforce the type.
+     * @param <T>  Event type.
+     *
+     * @return new builder.
+     */
+    static <T extends ChameleonEvent> @NotNull Builder<T> builder(@NotNull Class<T> type) {
+        return new BuilderImpl<>();
+    }
+
 
     /**
      * Executed when this event is dispatched.
@@ -59,6 +77,95 @@ public interface EventSubscriber<T extends ChameleonEvent> {
      */
     default boolean acceptsCancelled() {
         return false;
+    }
+
+
+    /**
+     * Event subscriber builder.
+     *
+     * @param <T> Event type.
+     */
+    @NonExtendable
+    interface Builder<T extends ChameleonEvent> {
+
+        /**
+         * Set the event handler.
+         *
+         * @param handler Event handler.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        @NotNull Builder<T> handler(@NotNull Consumer<T> handler);
+
+        /**
+         * Set the subscriber priority.
+         *
+         * @param priority Priority.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        @NotNull Builder<T> priority(int priority);
+
+        /**
+         * Accept cancelled events.
+         *
+         * @return {@code this}.
+         */
+        @Contract("-> this")
+        default @NotNull Builder<T> acceptCancelled() {
+            return acceptsCancelled(true);
+        }
+
+        /**
+         * Set whether this subscriber should accept cancelled events.
+         *
+         * @param acceptsCancelled Whether this subscriber should accept cancelled events.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        @NotNull Builder<T> acceptsCancelled(boolean acceptsCancelled);
+
+        /**
+         * Set a filter for this subscriber.
+         *
+         * @param filter Event filter.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        @NotNull Builder<T> filter(Predicate<T> filter);
+
+        /**
+         * Expire when this predicate returns {@code true}.
+         *
+         * @param expireWhen Expire when.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        @NotNull Builder<T> expireWhen(@NotNull Predicate<T> expireWhen);
+
+        /**
+         * Expire after {@code expiresAfter} executions.
+         *
+         * @param expiresAfter Expires after.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        @NotNull Builder<T> expireAfter(int expiresAfter);
+
+        /**
+         * Build.
+         *
+         * @return new {@link EventSubscriber} instance.
+         */
+        @Contract(value = "-> new", pure = true)
+        @NotNull EventSubscriber<T> build();
+
     }
 
 }
