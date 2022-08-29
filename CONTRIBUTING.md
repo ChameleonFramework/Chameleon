@@ -17,7 +17,8 @@ Please don't create an issue to ask a question, instead please contact us on [Di
 
 ### Getting started
 
-**Note**: All code contributions to this repository must be under the [MIT License].  
+All code contributions to this repository must be under the [MIT License].  
+All commits **must** be signed-off (`git commit -s`) to indicate that you agree to the [Developer Certificate of Origin](https://developercertificate.org/).  
 If you contribute a significant amount to the project, please add your name and email address to
 the [AUTHORS] file.
 

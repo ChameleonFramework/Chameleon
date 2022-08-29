@@ -1,0 +1,7 @@
+# Developer Certificate of Origin bot configuration
+
+allowRemediationCommits:
+  individual: true
+
+require:
+  members: false
