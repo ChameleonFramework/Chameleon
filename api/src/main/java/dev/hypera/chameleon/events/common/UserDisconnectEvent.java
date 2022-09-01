@@ -23,7 +23,6 @@
 package dev.hypera.chameleon.events.common;
 
 import dev.hypera.chameleon.users.User;
-import java.util.Optional;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
