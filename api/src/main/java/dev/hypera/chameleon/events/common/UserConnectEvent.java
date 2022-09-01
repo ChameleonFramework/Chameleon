@@ -24,8 +24,6 @@ package dev.hypera.chameleon.events.common;
 
 import dev.hypera.chameleon.events.cancellable.Cancellable;
 import dev.hypera.chameleon.users.User;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
