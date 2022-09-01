@@ -88,21 +88,13 @@ public class VelocityListener {
         this.chameleon.getEventBus().dispatch(chameleonEvent);
 
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {
-            if (event.getPlayer().getProtocolVersion().getProtocol() >= 760) {
-                this.chameleon.getInternalLogger().error("Failed to modify a chat message for a player using 1.19.1, doing so would result in Velocity throwing an exception and the sender being kicked.");
-                this.chameleon.getInternalLogger().error("This IS NOT a bug, but rather an intentional change in Velocity caused by changes in Minecraft 1.19.1.");
-                this.chameleon.getInternalLogger().error("See https://github.com/PaperMC/Velocity/issues/804 for more information.");
-            } else {
+            if (catchChatModification(event.getPlayer(), false)) {
                 event.setResult(ChatResult.message(chameleonEvent.getMessage()));
             }
         }
 
         if (chameleonEvent.isCancelled()) {
-            if (event.getPlayer().getProtocolVersion().getProtocol() >= 760) {
-                this.chameleon.getInternalLogger().error("Failed to cancel a chat message, doing so would result in Velocity throwing an exception and the sender being kicked.");
-                this.chameleon.getInternalLogger().error("This IS NOT a bug, but rather an intentional change in Velocity caused by changes in Minecraft 1.19.1.");
-                this.chameleon.getInternalLogger().error("See https://github.com/PaperMC/Velocity/issues/804 for more information.");
-            } else {
+            if (catchChatModification(event.getPlayer(), true)) {
                 event.setResult(ChatResult.denied());
             }
         }
@@ -126,6 +118,17 @@ public class VelocityListener {
     @Subscribe
     public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
         this.chameleon.getEventBus().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), event.getPreviousServer().map(this::wrap).orElse(null), wrap(event.getServer())));
+    }
+
+    private boolean catchChatModification(@NotNull Player player, boolean cancel) {
+        if (player.getProtocolVersion().getProtocol() >= 760) {
+            this.chameleon.getInternalLogger().error("Failed to %s a chat message for a player using 1.19.1 or above, doing so may result in Velocity throwing an exception and the sender being kicked.", cancel ? "cancel" : "modify");
+            this.chameleon.getInternalLogger().error("This IS NOT a bug, but rather an intentional change in Velocity caused by changes in Minecraft 1.19.1.");
+            this.chameleon.getInternalLogger().error("See https://github.com/PaperMC/Velocity/issues/804 for more information.");
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private @NotNull ProxyUser wrap(@NotNull Player player) {
