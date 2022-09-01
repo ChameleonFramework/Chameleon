@@ -163,6 +163,30 @@ final class EventBusTests {
         assertEquals(1, event.getTouches());
     }
 
+    @Test
+    void filters() {
+        EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
+        eventBus.subscribe(TestEvent.class, EventSubscriber.builder(TestEvent.class)
+            .filter(e -> e.getTouches() == 0 || e.getTouches() == 2)
+            .filter(e -> e.getTouches() < 3).handler(TestEvent::touch)
+            .build()
+        );
+
+        TestEvent event = new TestEvent(false);
+        eventBus.dispatch(event);
+        assertEquals(1, event.getTouches());
+
+        eventBus.dispatch(event);
+        assertEquals(1, event.getTouches());
+        event.touch();
+
+        eventBus.dispatch(event);
+        assertEquals(3, event.getTouches());
+
+        eventBus.dispatch(event);
+        assertEquals(3, event.getTouches());
+    }
+
     static final class TestEvent extends AbstractCancellable implements ChameleonEvent {
 
         private int touches = 0;
