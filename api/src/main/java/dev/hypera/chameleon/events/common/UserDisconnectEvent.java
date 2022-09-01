@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 public final class UserDisconnectEvent implements UserEvent {
 
     private final @NotNull User user;
-    private final @Nullable Component reason;
+    private final @NotNull Component reason;
 
     /**
      * {@link UserDisconnectEvent} constructor.
@@ -46,7 +46,7 @@ public final class UserDisconnectEvent implements UserEvent {
     @Internal
     public UserDisconnectEvent(@NotNull User user, @Nullable Component reason) {
         this.user = user;
-        this.reason = reason;
+        this.reason = null == reason ? Component.text("Disconnected") : reason;
     }
 
 
@@ -61,10 +61,10 @@ public final class UserDisconnectEvent implements UserEvent {
     /**
      * Get the reason for this disconnection.
      *
-     * @return disconnect reason, if available, otherwise empty.
+     * @return disconnect reason, defaults to {@code Disconnected}.
      */
-    public @NotNull Optional<Component> getReason() {
-        return Optional.ofNullable(this.reason);
+    public @NotNull Component getReason() {
+        return this.reason;
     }
 
 }
