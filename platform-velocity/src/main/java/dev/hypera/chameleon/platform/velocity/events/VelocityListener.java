@@ -121,16 +121,6 @@ public class VelocityListener {
     }
 
     /**
-     * Platform {@link UserDisconnectEvent} handler.
-     *
-     * @param event Platform event.
-     */
-    @Subscribe
-    public void onKickedFromServerEvent(@NotNull KickedFromServerEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), event.getServerKickReason().map(AdventureConverter::convertComponentBack).orElse(null)));
-    }
-
-    /**
      * Platform {@link ProxyUserSwitchEvent} handler.
      *
      * @param event Platform event.
