@@ -22,7 +22,10 @@
  */
 package dev.hypera.chameleon.users;
 
+import java.net.SocketAddress;
+import java.util.Optional;
 import java.util.UUID;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,32 +34,57 @@ import org.jetbrains.annotations.NotNull;
 public interface User extends ChatUser {
 
     /**
-     * Get this {@link User}'s unique identifier.
+     * Get this user's unique identifier.
      *
-     * @return {@link User}'s unique identifier.
+     * @return unique identifier.
      */
     @NotNull UUID getUniqueId();
 
     /**
-     * Get this {@link User}'s ping.
+     * Get this user's SocketAddress.
      *
-     * @return {@link User}'s ping.
+     * @return SocketAddress, if available, otherwise empty.
+     */
+    @NotNull Optional<SocketAddress> getAddress();
+
+    /**
+     * Get this user's ping.
+     *
+     * @return ping.
      */
     int getPing();
 
     /**
-     * Send a chat message as this {@link User}.
+     * Send a chat message as this user.
+     *
+     * @param message Chat message to be sent.
+     *
+     * @see #chat(Component)
+     */
+    default void chat(@NotNull String message) {
+        chat(Component.text(message));
+    }
+
+    /**
+     * Spoof a chat message as this user.
      *
      * @param message Chat message to be sent.
      */
-    void chat(@NotNull String message);
+    void chat(@NotNull Component message);
 
     /**
-     * Send a plugin message to this {@link User}.
+     * Send a plugin message to this user.
      *
      * @param channel Plugin message channel.
      * @param data    Data.
      */
     void sendData(@NotNull String channel, byte[] data);
+
+    /**
+     * Disconnect this user from the platform.
+     *
+     * @param reason Disconnect reason.
+     */
+    void disconnect(@NotNull Component reason);
 
 }

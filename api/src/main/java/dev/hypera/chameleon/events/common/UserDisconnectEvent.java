@@ -23,8 +23,11 @@
 package dev.hypera.chameleon.events.common;
 
 import dev.hypera.chameleon.users.User;
+import java.util.Optional;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * {@link User} disconnect event, dispatched when a user leaves the proxy/server.
@@ -32,15 +35,18 @@ import org.jetbrains.annotations.NotNull;
 public final class UserDisconnectEvent implements UserEvent {
 
     private final @NotNull User user;
+    private final @Nullable Component reason;
 
     /**
      * {@link UserDisconnectEvent} constructor.
      *
-     * @param user The {@link User} that triggered this event.
+     * @param user   The {@link User} that triggered this event.
+     * @param reason The reason for this event being triggered.
      */
     @Internal
-    public UserDisconnectEvent(@NotNull User user) {
+    public UserDisconnectEvent(@NotNull User user, @Nullable Component reason) {
         this.user = user;
+        this.reason = reason;
     }
 
 
@@ -50,6 +56,15 @@ public final class UserDisconnectEvent implements UserEvent {
     @Override
     public @NotNull User getUser() {
         return this.user;
+    }
+
+    /**
+     * Get the reason for this disconnection.
+     *
+     * @return disconnect reason, if available, otherwise empty.
+     */
+    public @NotNull Optional<Component> getReason() {
+        return Optional.ofNullable(this.reason);
     }
 
 }

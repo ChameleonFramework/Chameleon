@@ -25,13 +25,19 @@ package dev.hypera.chameleon.platform.velocity.user;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import dev.hypera.chameleon.adventure.AbstractReflectedAudience;
+import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityServer;
 import dev.hypera.chameleon.users.platforms.ProxyUser;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.SocketAddress;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,8 +47,18 @@ import org.jetbrains.annotations.NotNull;
 @Internal
 public class VelocityUser extends AbstractReflectedAudience implements ProxyUser {
 
+    private static final @NotNull Method DISCONNECT_METHOD;
+
     private final @NotNull VelocityChameleon chameleon;
     private final @NotNull Player player;
+
+    static {
+        try {
+            DISCONNECT_METHOD = Player.class.getMethod("disconnect", Class.forName(AdventureConverter.PACKAGE + "text.Component"));
+        } catch (ClassNotFoundException | NoSuchMethodException ex) {
+            throw new IllegalStateException("Failed to initialise VelocityUser");
+        }
+    }
 
     /**
      * {@link VelocityUser} constructor.
@@ -86,6 +102,14 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
      * {@inheritDoc}
      */
     @Override
+    public @NotNull Optional<SocketAddress> getAddress() {
+        return Optional.ofNullable(this.player.getRemoteAddress());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getPing() {
         return this.player.getPing() > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) this.player.getPing();
     }
@@ -94,8 +118,8 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
      * {@inheritDoc}
      */
     @Override
-    public void chat(@NotNull String message) {
-        this.player.spoofChatInput(message);
+    public void chat(@NotNull Component message) {
+        this.player.spoofChatInput(LegacyComponentSerializer.legacyAmpersand().serialize(message));
     }
 
     /**
@@ -104,6 +128,18 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
         this.player.sendPluginMessage(MinecraftChannelIdentifier.from(channel), data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void disconnect(@NotNull Component reason) {
+        try {
+            DISCONNECT_METHOD.invoke(this.player, AdventureConverter.convertComponent(reason));
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**

@@ -27,9 +27,13 @@ import dev.hypera.chameleon.adventure.AbstractAudience;
 import dev.hypera.chameleon.platform.bungeecord.platform.objects.BungeeCordServer;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.users.platforms.ProxyUser;
+import java.net.SocketAddress;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -85,6 +89,14 @@ public class BungeeCordUser extends AbstractAudience implements ProxyUser {
      * {@inheritDoc}
      */
     @Override
+    public @NotNull Optional<SocketAddress> getAddress() {
+        return Optional.ofNullable(this.player.getSocketAddress());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getPing() {
         return this.player.getPing();
     }
@@ -93,8 +105,8 @@ public class BungeeCordUser extends AbstractAudience implements ProxyUser {
      * {@inheritDoc}
      */
     @Override
-    public void chat(@NotNull String message) {
-        this.player.chat(message);
+    public void chat(@NotNull Component message) {
+        this.player.chat(LegacyComponentSerializer.legacySection().serialize(message));
     }
 
     /**
@@ -103,6 +115,14 @@ public class BungeeCordUser extends AbstractAudience implements ProxyUser {
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
         this.player.sendData(channel, data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void disconnect(@NotNull Component reason) {
+        this.player.disconnect(BungeeComponentSerializer.get().serialize(reason));
     }
 
     /**

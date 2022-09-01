@@ -30,13 +30,16 @@ import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platform.bungeecord.platform.objects.BungeeCordServer;
 import dev.hypera.chameleon.platform.bungeecord.users.BungeeCordUser;
 import dev.hypera.chameleon.platform.proxy.Server;
+import dev.hypera.chameleon.users.User;
 import dev.hypera.chameleon.users.platforms.ProxyUser;
 import java.util.Optional;
+import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.ServerKickEvent;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -66,17 +69,23 @@ public class BungeeCordListener implements Listener {
     /**
      * Platform {@link UserConnectEvent} handler.
      *
-     * @param event Platform {@link PostLoginEvent}.
+     * @param event Platform event.
      */
     @EventHandler
     public void onPostLoginEvent(@NotNull PostLoginEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+        User user = wrap(event.getPlayer());
+        UserConnectEvent chameleonEvent = new UserConnectEvent(user);
+
+        this.chameleon.getEventBus().dispatch(chameleonEvent);
+        if (chameleonEvent.isCancelled()) {
+            user.disconnect(chameleonEvent.getCancelReason().orElse(UserConnectEvent.DEFAULT_CANCEL_REASON));
+        }
     }
 
     /**
      * Platform {@link UserChatEvent} handler.
      *
-     * @param event Platform {@link ChatEvent}.
+     * @param event Platform event.
      */
     @EventHandler
     public void onChatEvent(@NotNull ChatEvent event) {
@@ -95,17 +104,27 @@ public class BungeeCordListener implements Listener {
     /**
      * Platform {@link UserDisconnectEvent} handler.
      *
-     * @param event Platform {@link PlayerDisconnectEvent}.
+     * @param event Platform event.
      */
     @EventHandler
     public void onPlayerDisconnectEvent(@NotNull PlayerDisconnectEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), null));
+    }
+
+    /**
+     * Platform {@link UserDisconnectEvent} with reason handler.
+     *
+     * @param event Platform event.
+     */
+    @EventHandler
+    public void onPlayerKickEvent(@NotNull ServerKickEvent event) {
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), BungeeComponentSerializer.get().deserialize(event.getKickReasonComponent())));
     }
 
     /**
      * Platform {@link ProxyUserSwitchEvent} handler.
      *
-     * @param event Platform {@link ServerSwitchEvent}.
+     * @param event Platform event.
      */
     @EventHandler
     public void onServerSwitchEvent(@NotNull ServerSwitchEvent event) {

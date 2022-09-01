@@ -51,7 +51,19 @@ public class MinestomListener {
     @Internal
     public MinestomListener(@NotNull Chameleon chameleon) {
         GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
-        handler.addListener(PlayerLoginEvent.class, event -> chameleon.getEventBus().dispatch(new UserConnectEvent(wrap(event.getPlayer()))));
+
+        // Login
+        handler.addListener(PlayerLoginEvent.class, event -> {
+            ServerUser user = wrap(event.getPlayer());
+            UserConnectEvent chameleonEvent = new UserConnectEvent(user);
+
+            chameleon.getEventBus().dispatch(chameleonEvent);
+            if (chameleonEvent.isCancelled()) {
+                user.disconnect(chameleonEvent.getCancelReason().orElse(UserConnectEvent.DEFAULT_CANCEL_REASON));
+            }
+        });
+
+        // Play
         handler.addListener(PlayerChatEvent.class, event -> {
             UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage());
             chameleon.getEventBus().dispatch(chameleonEvent);
@@ -64,7 +76,9 @@ public class MinestomListener {
                 event.setCancelled(true);
             }
         });
-        handler.addListener(PlayerDisconnectEvent.class, event -> chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()))));
+
+        // Disconnect
+        handler.addListener(PlayerDisconnectEvent.class, event -> chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), null)));
     }
 
     private @NotNull ServerUser wrap(@NotNull Player player) {

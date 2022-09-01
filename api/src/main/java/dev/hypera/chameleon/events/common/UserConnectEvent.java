@@ -22,16 +22,26 @@
  */
 package dev.hypera.chameleon.events.common;
 
+import dev.hypera.chameleon.events.cancellable.Cancellable;
 import dev.hypera.chameleon.users.User;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * {@link User} connect event, dispatched when a user joins the proxy/server.
  */
-public final class UserConnectEvent implements UserEvent {
+public final class UserConnectEvent implements UserEvent, Cancellable {
+
+    public static final @NotNull Component DEFAULT_CANCEL_REASON = Component.text("Disconnected");
 
     private final @NotNull User user;
+    private boolean cancelled = false;
+    private @Nullable Component cancelReason;
 
     /**
      * {@link UserConnectEvent} constructor.
@@ -50,6 +60,51 @@ public final class UserConnectEvent implements UserEvent {
     @Override
     public @NotNull User getUser() {
         return this.user;
+    }
+
+    /**
+     * Cancel the event, with a reason.
+     *
+     * @param reason Disconnect reason.
+     */
+    public void cancel(@NotNull Component reason) {
+        setCancelled(true, reason);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
+
+    /**
+     * Cancel the event, with a reason.
+     *
+     * @param cancelled {@code true} if the event is cancelled, otherwise {@code false}.
+     * @param reason    Disconnect reason.
+     */
+    public void setCancelled(boolean cancelled, @Nullable Component reason) {
+        this.cancelled = cancelled;
+        this.cancelReason = reason;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
+
+    /**
+     * Get the reason used when kicking the player if this event is cancelled.
+     *
+     * @return cancel reason.
+     */
+    public @NotNull Optional<Component> getCancelReason() {
+        return Optional.ofNullable(this.cancelReason);
     }
 
 }

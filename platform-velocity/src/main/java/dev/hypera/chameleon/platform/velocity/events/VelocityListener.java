@@ -25,11 +25,13 @@ package dev.hypera.chameleon.platform.velocity.events;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
+import com.velocitypowered.api.event.player.KickedFromServerEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent.ChatResult;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.events.common.UserChatEvent;
 import dev.hypera.chameleon.events.common.UserConnectEvent;
 import dev.hypera.chameleon.events.common.UserDisconnectEvent;
@@ -38,6 +40,7 @@ import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityServer;
 import dev.hypera.chameleon.platform.velocity.user.VelocityUser;
+import dev.hypera.chameleon.users.User;
 import dev.hypera.chameleon.users.platforms.ProxyUser;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -63,17 +66,23 @@ public class VelocityListener {
     /**
      * Platform {@link UserConnectEvent} handler.
      *
-     * @param event Platform {@link PostLoginEvent}.
+     * @param event Platform event.
      */
     @Subscribe
     public void onPostLoginEvent(@NotNull PostLoginEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+        User user = wrap(event.getPlayer());
+        UserConnectEvent chameleonEvent = new UserConnectEvent(user);
+
+        this.chameleon.getEventBus().dispatch(chameleonEvent);
+        if (chameleonEvent.isCancelled()) {
+            user.disconnect(chameleonEvent.getCancelReason().orElse(UserConnectEvent.DEFAULT_CANCEL_REASON));
+        }
     }
 
     /**
      * Platform {@link UserChatEvent} handler.
      *
-     * @param event Platform {@link PlayerChatEvent}.
+     * @param event Platform event.
      */
     @Subscribe
     public void onChatEvent(@NotNull PlayerChatEvent event) {
@@ -92,23 +101,32 @@ public class VelocityListener {
     /**
      * Platform {@link UserDisconnectEvent} handler.
      *
-     * @param event Platform {@link DisconnectEvent}.
+     * @param event Platform event.
      */
     @Subscribe
     public void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), null));
+    }
+
+    /**
+     * Platform {@link UserDisconnectEvent} handler.
+     *
+     * @param event Platform event.
+     */
+    @Subscribe
+    public void onKickedFromServerEvent(@NotNull KickedFromServerEvent event) {
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), event.getServerKickReason().map(AdventureConverter::convertComponentBack).orElse(null)));
     }
 
     /**
      * Platform {@link ProxyUserSwitchEvent} handler.
      *
-     * @param event Platform {@link ServerConnectedEvent}.
+     * @param event Platform event.
      */
     @Subscribe
     public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
         this.chameleon.getEventBus().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), event.getPreviousServer().map(this::wrap).orElse(null), wrap(event.getServer())));
     }
-
 
     private @NotNull ProxyUser wrap(@NotNull Player player) {
         return new VelocityUser(this.chameleon, player);

@@ -27,12 +27,15 @@ import dev.hypera.chameleon.events.common.UserConnectEvent;
 import dev.hypera.chameleon.events.common.UserDisconnectEvent;
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
 import dev.hypera.chameleon.platform.bukkit.user.BukkitUser;
+import dev.hypera.chameleon.users.User;
 import dev.hypera.chameleon.users.platforms.ServerUser;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -58,17 +61,23 @@ public class BukkitListener implements Listener {
     /**
      * Platform {@link UserConnectEvent} handler.
      *
-     * @param event Platform {@link PlayerJoinEvent}.
+     * @param event Platform event.
      */
     @EventHandler
     public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+        User user = wrap(event.getPlayer());
+        UserConnectEvent chameleonEvent = new UserConnectEvent(user);
+
+        this.chameleon.getEventBus().dispatch(chameleonEvent);
+        if (chameleonEvent.isCancelled()) {
+            user.disconnect(chameleonEvent.getCancelReason().orElse(UserConnectEvent.DEFAULT_CANCEL_REASON));
+        }
     }
 
     /**
      * Platform {@link UserChatEvent} handler.
      *
-     * @param event Platform {@link AsyncPlayerChatEvent}.
+     * @param event Platform event.
      */
     @EventHandler
     public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
@@ -87,11 +96,21 @@ public class BukkitListener implements Listener {
     /**
      * Platform {@link UserDisconnectEvent} handler.
      *
-     * @param event Platform {@link PlayerQuitEvent}.
+     * @param event Platform event.
      */
     @EventHandler
     public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), null));
+    }
+
+    /**
+     * Platform {@link UserDisconnectEvent} with reason handler.
+     *
+     * @param event Platform event.
+     */
+    @EventHandler
+    public void onPlayerKickEvent(@NotNull PlayerKickEvent event) {
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), LegacyComponentSerializer.legacySection().deserialize(event.getReason())));
     }
 
 

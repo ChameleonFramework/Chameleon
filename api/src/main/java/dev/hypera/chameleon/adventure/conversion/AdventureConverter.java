@@ -34,17 +34,17 @@ import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Because Velocity and Minestom provide Adventure, we cannot use the shaded/relocated version of adventure without there being problems.
- * To get around this we convert the shaded Adventure objects to the platform ones using reflection.
+ * Because Velocity and Minestom provide Adventure, we cannot use the shaded/relocated version of adventure without there being problems. To get around this we convert the shaded Adventure objects to the platform ones using reflection.
  *
  * <p>
- *     Adapted from Lucko's AdventureCompat class in LuckPerms for use in Chameleon.
+ * Adapted from Lucko's AdventureCompat class in LuckPerms for use in Chameleon.
  * </p>
  */
 @Internal
@@ -68,6 +68,7 @@ public final class AdventureConverter {
      * Convert {@link Key} to a platform instance.
      *
      * @param key {@link Key} to be converted.
+     *
      * @return Platform instance of {@link Key}.
      */
     public static @NotNull Object convertKey(@NotNull Key key) {
@@ -78,6 +79,7 @@ public final class AdventureConverter {
      * Convert {@link ComponentLike} to a platform instance.
      *
      * @param component {@link ComponentLike} to be converted.
+     *
      * @return Platform instance of {@link ComponentLike}.
      */
     public static @NotNull Object convertComponent(@NotNull ComponentLike component) {
@@ -85,9 +87,21 @@ public final class AdventureConverter {
     }
 
     /**
+     * Convert a platform instance of {@link Component} to a shaded one.
+     *
+     * @param component Platform {@link Component} to be converted.
+     *
+     * @return Shaded instance of {@link Component}.
+     */
+    public static @NotNull Component convertComponentBack(@NotNull Object component) {
+        return COMPONENT_CONVERTER.mapBackwards(component);
+    }
+
+    /**
      * Convert {@link Title} to a platform instance.
      *
      * @param title {@link Title} to be converted.
+     *
      * @return Platform instance of {@link Title}.
      */
     public static @NotNull Object convertTitle(@NotNull Title title) {
@@ -98,6 +112,7 @@ public final class AdventureConverter {
      * Convert {@link BossBar} to a platform instance.
      *
      * @param bossBar {@link BossBar} to be converted.
+     *
      * @return Platform instance of {@link BossBar}.
      */
     public static @NotNull Object convertBossBar(@NotNull BossBar bossBar) {
@@ -108,6 +123,7 @@ public final class AdventureConverter {
      * Convert {@link Sound} to a platform instance.
      *
      * @param sound {@link Sound} to be converted.
+     *
      * @return Platform instance of {@link Sound}.
      */
     public static @NotNull Object convertSound(@NotNull Sound sound) {
@@ -118,6 +134,7 @@ public final class AdventureConverter {
      * Convert {@link SoundStop} to a platform instance.
      *
      * @param soundStop {@link SoundStop} to be converted.
+     *
      * @return Platform instance of {@link SoundStop}.
      */
     public static @NotNull Object convertSoundStop(@NotNull SoundStop soundStop) {
@@ -128,6 +145,7 @@ public final class AdventureConverter {
      * Convert {@link Book} to a platform instance.
      *
      * @param book {@link Book} to be converted.
+     *
      * @return Platform instance of {@link Book}.
      */
     public static @NotNull Object convertBook(@NotNull Book book) {

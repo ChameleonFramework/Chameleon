@@ -23,17 +23,21 @@
 package dev.hypera.chameleon.platform.sponge.events;
 
 import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.events.common.UserChatEvent;
 import dev.hypera.chameleon.events.common.UserConnectEvent;
 import dev.hypera.chameleon.events.common.UserDisconnectEvent;
 import dev.hypera.chameleon.platform.sponge.users.SpongeUsers;
 import dev.hypera.chameleon.users.platforms.ServerUser;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.entity.living.player.KickPlayerEvent;
 import org.spongepowered.api.event.message.PlayerChatEvent;
 import org.spongepowered.api.event.network.ServerSideConnectionEvent;
 import org.spongepowered.api.service.permission.Subject;
@@ -44,7 +48,16 @@ import org.spongepowered.api.service.permission.Subject;
 @Internal
 public class SpongeListener {
 
+    private static final @NotNull Method CHAT_EVENT_SET_MESSAGE_METHOD;
     private final @NotNull Chameleon chameleon;
+
+    static {
+        try {
+            CHAT_EVENT_SET_MESSAGE_METHOD = PlayerChatEvent.class.getMethod("setMessage", Class.forName(AdventureConverter.PACKAGE + "text.Component"));
+        } catch (ClassNotFoundException | NoSuchMethodException ex) {
+            throw new IllegalStateException("Failed to initialise SpongeListener");
+        }
+    }
 
     /**
      * {@link SpongeListener} constructor.
@@ -60,28 +73,38 @@ public class SpongeListener {
     /**
      * Platform {@link UserDisconnectEvent} handler.
      *
-     * @param event Platform {@link ServerSideConnectionEvent.Join}.
+     * @param event Platform event.
      */
     @Listener
     public void onJoinEvent(@NotNull ServerSideConnectionEvent.Join event) {
-        this.chameleon.getEventBus().dispatch(new UserConnectEvent(wrap(event.player())));
+        ServerUser user = wrap(event.player());
+        UserConnectEvent chameleonEvent = new UserConnectEvent(user);
+
+        this.chameleon.getEventBus().dispatch(chameleonEvent);
+        if (chameleonEvent.isCancelled()) {
+            user.disconnect(chameleonEvent.getCancelReason().orElse(UserConnectEvent.DEFAULT_CANCEL_REASON));
+        }
     }
 
     /**
      * Platform {@link UserDisconnectEvent} handler.
      *
-     * @param event Platform {@link PlayerChatEvent}.
+     * @param event Platform event.
      */
     @Listener
     public void onChatEvent(@NotNull PlayerChatEvent event) {
         ServerPlayer sender = (ServerPlayer) event.cause().first(Player.class).orElse(null);
         if (null != sender) {
-            String serialized = LegacyComponentSerializer.legacySection().serialize(event.message());
+            String serialized = LegacyComponentSerializer.legacySection().serialize(AdventureConverter.convertComponentBack(event.message()));
             UserChatEvent chameleonEvent = new UserChatEvent(wrap(sender), serialized);
             this.chameleon.getEventBus().dispatch(chameleonEvent);
 
             if (!serialized.equals(chameleonEvent.getMessage())) {
-                event.setMessage(LegacyComponentSerializer.legacySection().deserialize(chameleonEvent.getMessage()));
+                try {
+                    CHAT_EVENT_SET_MESSAGE_METHOD.invoke(event, AdventureConverter.convertComponent(LegacyComponentSerializer.legacySection().deserialize(chameleonEvent.getMessage())));
+                } catch (IllegalAccessException | InvocationTargetException ex) {
+                    throw new IllegalStateException(ex);
+                }
             }
 
             if (chameleonEvent.isCancelled()) {
@@ -93,11 +116,21 @@ public class SpongeListener {
     /**
      * Platform {@link UserDisconnectEvent} handler.
      *
-     * @param event Platform {@link ServerSideConnectionEvent.Disconnect}.
+     * @param event Platform event.
      */
     @Listener
     public void onLoginEvent(@NotNull ServerSideConnectionEvent.Disconnect event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.player())));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.player()), null));
+    }
+
+    /**
+     * Platform {@link UserDisconnectEvent} with reason handler.
+     *
+     * @param event Platform event.
+     */
+    @Listener
+    public void onKickEvent(@NotNull KickPlayerEvent event) {
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.player()), null == event.message() ? null : AdventureConverter.convertComponentBack(event.message())));
     }
 
     private @NotNull ServerUser wrap(@NotNull Subject subject) {
