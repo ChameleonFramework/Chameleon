@@ -68,7 +68,7 @@ public final class EventBusImpl implements EventBus {
 
         synchronized (subscribers) {
             subscribers.iterator().forEachRemaining(subscriber -> {
-                if ((event instanceof Cancellable && !((Cancellable) event).isCancelled()) || subscriber.acceptsCancelled()) {
+                if (subscriber.acceptsCancelled() || (event instanceof Cancellable && !((Cancellable) event).isCancelled())) {
                     try {
                         subscriber.on(event);
                     } catch (Exception ex) {

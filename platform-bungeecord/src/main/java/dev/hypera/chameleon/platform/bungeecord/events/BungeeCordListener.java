@@ -78,7 +78,7 @@ public class BungeeCordListener implements Listener {
 
         this.chameleon.getEventBus().dispatch(chameleonEvent);
         if (chameleonEvent.isCancelled()) {
-            user.disconnect(chameleonEvent.getCancelReason().orElse(UserConnectEvent.DEFAULT_CANCEL_REASON));
+            user.disconnect(chameleonEvent.getCancelReason());
         }
     }
 
@@ -89,7 +89,7 @@ public class BungeeCordListener implements Listener {
      */
     @EventHandler
     public void onChatEvent(@NotNull ChatEvent event) {
-        UserChatEvent chameleonEvent = new UserChatEvent(wrap((ProxiedPlayer) event.getSender()), event.getMessage());
+        UserChatEvent chameleonEvent = new UserChatEvent(wrap((ProxiedPlayer) event.getSender()), event.getMessage(), event.isCancelled());
         this.chameleon.getEventBus().dispatch(chameleonEvent);
 
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {

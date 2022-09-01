@@ -69,7 +69,7 @@ public class NukkitListener implements Listener {
 
         this.chameleon.getEventBus().dispatch(chameleonEvent);
         if (chameleonEvent.isCancelled()) {
-            user.disconnect(chameleonEvent.getCancelReason().orElse(UserConnectEvent.DEFAULT_CANCEL_REASON));
+            user.disconnect(chameleonEvent.getCancelReason());
         }
     }
 
@@ -80,7 +80,7 @@ public class NukkitListener implements Listener {
      */
     @EventHandler
     public void onPlayerChatEvent(@NotNull PlayerChatEvent event) {
-        UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage());
+        UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage(), event.isCancelled());
         this.chameleon.getEventBus().dispatch(chameleonEvent);
 
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {

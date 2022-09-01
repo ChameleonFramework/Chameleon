@@ -27,7 +27,16 @@ package dev.hypera.chameleon.events.cancellable;
  */
 public abstract class AbstractCancellable implements Cancellable {
 
-    private boolean cancelled = false;
+    private boolean cancelled;
+
+    /**
+     * AbstractCancellable constructor.
+     *
+     * @param cancelled Whether this event is cancelled.
+     */
+    public AbstractCancellable(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 
     /**
      * {@inheritDoc}

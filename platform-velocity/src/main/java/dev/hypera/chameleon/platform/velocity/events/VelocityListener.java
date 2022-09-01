@@ -75,7 +75,7 @@ public class VelocityListener {
 
         this.chameleon.getEventBus().dispatch(chameleonEvent);
         if (chameleonEvent.isCancelled()) {
-            user.disconnect(chameleonEvent.getCancelReason().orElse(UserConnectEvent.DEFAULT_CANCEL_REASON));
+            user.disconnect(chameleonEvent.getCancelReason());
         }
     }
 
@@ -86,15 +86,27 @@ public class VelocityListener {
      */
     @Subscribe
     public void onChatEvent(@NotNull PlayerChatEvent event) {
-        UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage());
+        UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage(), !event.getResult().isAllowed());
         this.chameleon.getEventBus().dispatch(chameleonEvent);
 
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {
-            event.setResult(ChatResult.message(chameleonEvent.getMessage()));
+            if (event.getPlayer().getProtocolVersion().getProtocol() >= 760) {
+                this.chameleon.getInternalLogger().error("Failed to modify a chat message for a player using 1.19.1, doing so would result in Velocity throwing an exception and the sender being kicked.");
+                this.chameleon.getInternalLogger().error("This IS NOT a bug, but rather an intentional change in Velocity caused by changes in Minecraft 1.19.1.");
+                this.chameleon.getInternalLogger().error("See https://github.com/PaperMC/Velocity/issues/804 for more information.");
+            } else {
+                event.setResult(ChatResult.message(chameleonEvent.getMessage()));
+            }
         }
 
         if (chameleonEvent.isCancelled()) {
-            event.setResult(ChatResult.denied());
+            if (event.getPlayer().getProtocolVersion().getProtocol() >= 760) {
+                this.chameleon.getInternalLogger().error("Failed to cancel a chat message, doing so would result in Velocity throwing an exception and the sender being kicked.");
+                this.chameleon.getInternalLogger().error("This IS NOT a bug, but rather an intentional change in Velocity caused by changes in Minecraft 1.19.1.");
+                this.chameleon.getInternalLogger().error("See https://github.com/PaperMC/Velocity/issues/804 for more information.");
+            } else {
+                event.setResult(ChatResult.denied());
+            }
         }
     }
 

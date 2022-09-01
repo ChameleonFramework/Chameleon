@@ -40,7 +40,8 @@ public final class UserChatEvent extends AbstractCancellable implements UserEven
      * @param user    {@link User} that sent the message.
      * @param message Message that the user attempted to send.
      */
-    public UserChatEvent(@NotNull User user, @NotNull String message) {
+    public UserChatEvent(@NotNull User user, @NotNull String message, boolean cancelled) {
+        super(cancelled);
         this.user = user;
         this.message = message;
     }

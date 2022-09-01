@@ -23,12 +23,14 @@
 package dev.hypera.chameleon.events;
 
 import java.util.function.Predicate;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Event bus.
  * <p>Inspired by <a href="https://github.com/KyoriPowered/event">KyoriPowered/event</a></p>
  */
+@NonExtendable
 public interface EventBus {
 
     /**

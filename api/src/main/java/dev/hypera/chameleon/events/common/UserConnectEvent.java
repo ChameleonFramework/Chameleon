@@ -35,11 +35,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class UserConnectEvent implements UserEvent, Cancellable {
 
-    public static final @NotNull Component DEFAULT_CANCEL_REASON = Component.text("Disconnected");
-
     private final @NotNull User user;
     private boolean cancelled = false;
-    private @Nullable Component cancelReason;
+    private @NotNull Component cancelReason = Component.text("Disconnected");
 
     /**
      * {@link UserConnectEvent} constructor.
@@ -85,7 +83,9 @@ public final class UserConnectEvent implements UserEvent, Cancellable {
      */
     public void setCancelled(boolean cancelled, @Nullable Component reason) {
         this.cancelled = cancelled;
-        this.cancelReason = reason;
+        if (null != reason) {
+            this.cancelReason = reason;
+        }
     }
 
     /**
@@ -101,8 +101,8 @@ public final class UserConnectEvent implements UserEvent, Cancellable {
      *
      * @return cancel reason.
      */
-    public @NotNull Optional<Component> getCancelReason() {
-        return Optional.ofNullable(this.cancelReason);
+    public @NotNull Component getCancelReason() {
+        return this.cancelReason;
     }
 
 }

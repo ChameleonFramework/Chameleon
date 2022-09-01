@@ -38,9 +38,11 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.living.player.KickPlayerEvent;
+import org.spongepowered.api.event.filter.IsCancelled;
 import org.spongepowered.api.event.message.PlayerChatEvent;
 import org.spongepowered.api.event.network.ServerSideConnectionEvent;
 import org.spongepowered.api.service.permission.Subject;
+import org.spongepowered.api.util.Tristate;
 
 /**
  * Sponge listener.
@@ -82,7 +84,7 @@ public class SpongeListener {
 
         this.chameleon.getEventBus().dispatch(chameleonEvent);
         if (chameleonEvent.isCancelled()) {
-            user.disconnect(chameleonEvent.getCancelReason().orElse(UserConnectEvent.DEFAULT_CANCEL_REASON));
+            user.disconnect(chameleonEvent.getCancelReason());
         }
     }
 
@@ -92,11 +94,12 @@ public class SpongeListener {
      * @param event Platform event.
      */
     @Listener
+    @IsCancelled(Tristate.UNDEFINED)
     public void onChatEvent(@NotNull PlayerChatEvent event) {
         ServerPlayer sender = (ServerPlayer) event.cause().first(Player.class).orElse(null);
         if (null != sender) {
             String serialized = LegacyComponentSerializer.legacySection().serialize(AdventureConverter.convertComponentBack(event.message()));
-            UserChatEvent chameleonEvent = new UserChatEvent(wrap(sender), serialized);
+            UserChatEvent chameleonEvent = new UserChatEvent(wrap(sender), serialized, event.isCancelled());
             this.chameleon.getEventBus().dispatch(chameleonEvent);
 
             if (!serialized.equals(chameleonEvent.getMessage())) {

@@ -30,6 +30,7 @@ import dev.hypera.chameleon.platform.minestom.users.MinestomUsers;
 import dev.hypera.chameleon.users.platforms.ServerUser;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventListener;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
@@ -53,19 +54,19 @@ public class MinestomListener {
         GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
 
         // Login
-        handler.addListener(PlayerLoginEvent.class, event -> {
+        handler.addListener(EventListener.builder(PlayerLoginEvent.class).handler(event -> {
             ServerUser user = wrap(event.getPlayer());
             UserConnectEvent chameleonEvent = new UserConnectEvent(user);
 
             chameleon.getEventBus().dispatch(chameleonEvent);
             if (chameleonEvent.isCancelled()) {
-                user.disconnect(chameleonEvent.getCancelReason().orElse(UserConnectEvent.DEFAULT_CANCEL_REASON));
+                user.disconnect(chameleonEvent.getCancelReason());
             }
-        });
+        }).ignoreCancelled(false).build());
 
         // Play
-        handler.addListener(PlayerChatEvent.class, event -> {
-            UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage());
+        handler.addListener(EventListener.builder(PlayerChatEvent.class).handler(event -> {
+            UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage(), event.isCancelled());
             chameleon.getEventBus().dispatch(chameleonEvent);
 
             if (!event.getMessage().equals(chameleonEvent.getMessage())) {
@@ -75,10 +76,12 @@ public class MinestomListener {
             if (chameleonEvent.isCancelled()) {
                 event.setCancelled(true);
             }
-        });
+        }).ignoreCancelled(false).build());
 
         // Disconnect
-        handler.addListener(PlayerDisconnectEvent.class, event -> chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), null)));
+        handler.addListener(EventListener.builder(PlayerDisconnectEvent.class).handler(event -> {
+            chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), null));
+        }).ignoreCancelled(false).build());
     }
 
     private @NotNull ServerUser wrap(@NotNull Player player) {
