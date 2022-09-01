@@ -47,7 +47,7 @@ final class EventBusTests {
         EventSubscription subscription = eventBus.subscribe(TestEvent.class, TestEvent::touch);
         assertTrue(eventBus.subscribed(TestEvent.class));
 
-        TestEvent event = new TestEvent();
+        TestEvent event = new TestEvent(false);
 
         eventBus.dispatch(event);
         assertEquals(1, event.getTouches());
@@ -109,7 +109,7 @@ final class EventBusTests {
 
         });
 
-        eventBus.dispatch(new TestEvent());
+        eventBus.dispatch(new TestEvent(false));
 
         for (Throwable throwable : logger.getExceptions()) {
             throw throwable;
@@ -121,14 +121,17 @@ final class EventBusTests {
         EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
         eventBus.subscribe(TestEvent.class, TestEvent::touch);
 
-        TestEvent event = new TestEvent();
-
+        TestEvent event = new TestEvent(false);
         eventBus.dispatch(event);
         assertEquals(1, event.getTouches());
 
         event.cancel();
         eventBus.dispatch(event);
         assertEquals(1, event.getTouches());
+
+        TestEvent cancelledEvent = new TestEvent(true);
+        eventBus.dispatch(cancelledEvent);
+        assertEquals(0, cancelledEvent.getTouches());
     }
 
     @Test
@@ -140,8 +143,7 @@ final class EventBusTests {
             }
         });
 
-        TestEvent event = new TestEvent();
-
+        TestEvent event = new TestEvent(false);
         eventBus.dispatch(event);
         assertEquals(1, event.getTouches());
     }
@@ -151,7 +153,7 @@ final class EventBusTests {
         EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
         eventBus.subscribe(TestEvent.class, EventSubscriber.builder(TestEvent.class).expireAfter(1).handler(TestEvent::touch).build());
 
-        TestEvent event = new TestEvent();
+        TestEvent event = new TestEvent(false);
 
         eventBus.dispatch(event);
         assertEquals(1, event.getTouches());
@@ -164,6 +166,10 @@ final class EventBusTests {
     static final class TestEvent extends AbstractCancellable implements ChameleonEvent {
 
         private int touches = 0;
+
+        private TestEvent(boolean cancelled) {
+            super(cancelled);
+        }
 
         public void touch() {
             this.touches++;
