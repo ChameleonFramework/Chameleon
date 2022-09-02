@@ -30,14 +30,12 @@ import dev.hypera.chameleon.events.EventSubscriber;
 import dev.hypera.chameleon.events.EventSubscriptionPriority;
 import dev.hypera.chameleon.events.common.UserConnectEvent;
 import dev.hypera.chameleon.events.common.UserDisconnectEvent;
-import dev.hypera.chameleon.events.server.ServerUserKickEvent;
 import dev.hypera.chameleon.logging.ChameleonLogger;
 import dev.hypera.example.commands.ExampleCommand;
 import java.time.Duration;
 import java.time.Instant;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
