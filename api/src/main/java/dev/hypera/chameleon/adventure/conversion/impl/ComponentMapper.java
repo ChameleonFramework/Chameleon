@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ComponentMapper implements IMapper<Component> {
 
     private final @NotNull Method gsonSerializerDeserialize;
+    private final @NotNull Method gsonSerializerSerialize;
     private final @NotNull Object gsonSerializerInstance;
 
     /**
@@ -44,6 +45,7 @@ public final class ComponentMapper implements IMapper<Component> {
         try {
             Class<?> serializerClass = Class.forName(AdventureConverter.PACKAGE + "text.serializer.gson.GsonComponentSerializer");
             this.gsonSerializerDeserialize = serializerClass.getMethod("deserialize", Object.class);
+            this.gsonSerializerSerialize = serializerClass.getMethod("serialize", Class.forName(AdventureConverter.PACKAGE + "text.Component"));
             this.gsonSerializerInstance = serializerClass.getMethod("gson").invoke(null);
         } catch (ReflectiveOperationException ex) {
             throw new ExceptionInInitializerError(ex);
@@ -62,6 +64,22 @@ public final class ComponentMapper implements IMapper<Component> {
         String json = GsonComponentSerializer.gson().serialize(component);
         try {
             return this.gsonSerializerDeserialize.invoke(this.gsonSerializerInstance, json);
+        } catch (ReflectiveOperationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * Map platform {@link Component} to shaded instance.
+     *
+     * @param component Platform {@link Component} to be mapped.
+     *
+     * @return Shaded instance of {@link Component}.
+     */
+    public @NotNull Component mapBackwards(@NotNull Object component) {
+        try {
+            Object json = this.gsonSerializerSerialize.invoke(this.gsonSerializerInstance, component);
+            return GsonComponentSerializer.gson().deserialize((String) json);
         } catch (ReflectiveOperationException ex) {
             throw new RuntimeException(ex);
         }

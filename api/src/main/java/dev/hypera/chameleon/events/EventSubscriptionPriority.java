@@ -20,27 +20,46 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.listener.annotations;
-
-import dev.hypera.chameleon.events.listener.ListenerPriority;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package dev.hypera.chameleon.events;
 
 /**
- * Event handler annotation.
+ * {@link EventSubscriber} priority.
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EventHandler {
+public interface EventSubscriptionPriority {
 
     /**
-     * Get the handler's {@link ListenerPriority}.
-     * Defaults to {@code ListenerPriority.NORMAL}
-     *
-     * @return the handler's {@link ListenerPriority}.
+     * First, indicates that the subscriber should be called before all other subscribers.
      */
-    ListenerPriority value() default ListenerPriority.NORMAL;
+    int FIRST = Integer.MIN_VALUE;
+
+    /**
+     * High priority, indicates that the subscriber should be before {@link #MEDIUM} priority subscribers.
+     */
+    int HIGH = -100;
+
+    /**
+     * Medium priority, indicates that the subscriber should be called before {@link #NORMAL} priority subscribers.
+     */
+    int MEDIUM = -50;
+
+    /**
+     * Normal priority.
+     */
+    int NORMAL = 0;
+
+    /**
+     * Low priority, indicates that the subscriber should be called after {@link #NORMAL} priority subscribers.
+     */
+    int LOW = 50;
+
+    /**
+     * Very low priority, indicates that the subscriber should be called after {@link #LOW} priority subscribers.
+     */
+    int VERY_LOW = 100;
+
+    /**
+     * Last, indicates that the subscriber should be called after all other subscribers.
+     */
+    int LAST = Integer.MAX_VALUE;
 
 }

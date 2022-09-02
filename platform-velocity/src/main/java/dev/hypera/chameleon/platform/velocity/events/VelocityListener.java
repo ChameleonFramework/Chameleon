@@ -30,14 +30,15 @@ import com.velocitypowered.api.event.player.PlayerChatEvent.ChatResult;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import dev.hypera.chameleon.events.impl.common.UserChatEvent;
-import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
-import dev.hypera.chameleon.events.impl.proxy.ProxyUserSwitchEvent;
+import dev.hypera.chameleon.events.common.UserChatEvent;
+import dev.hypera.chameleon.events.common.UserConnectEvent;
+import dev.hypera.chameleon.events.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.proxy.ProxyUserSwitchEvent;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityServer;
 import dev.hypera.chameleon.platform.velocity.user.VelocityUser;
+import dev.hypera.chameleon.users.User;
 import dev.hypera.chameleon.users.platforms.ProxyUser;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -63,50 +64,72 @@ public class VelocityListener {
     /**
      * Platform {@link UserConnectEvent} handler.
      *
-     * @param event Platform {@link PostLoginEvent}.
+     * @param event Platform event.
      */
     @Subscribe
     public void onPostLoginEvent(@NotNull PostLoginEvent event) {
-        this.chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+        User user = wrap(event.getPlayer());
+        UserConnectEvent chameleonEvent = new UserConnectEvent(user);
+
+        this.chameleon.getEventBus().dispatch(chameleonEvent);
+        if (chameleonEvent.isCancelled()) {
+            user.disconnect(chameleonEvent.getCancelReason());
+        }
     }
 
     /**
      * Platform {@link UserChatEvent} handler.
      *
-     * @param event Platform {@link PlayerChatEvent}.
+     * @param event Platform event.
      */
     @Subscribe
     public void onChatEvent(@NotNull PlayerChatEvent event) {
-        UserChatEvent chameleonEvent = this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+        UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage(), !event.getResult().isAllowed());
+        this.chameleon.getEventBus().dispatch(chameleonEvent);
+
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {
-            event.setResult(ChatResult.message(chameleonEvent.getMessage()));
+            if (catchChatModification(event.getPlayer(), false)) {
+                event.setResult(ChatResult.message(chameleonEvent.getMessage()));
+            }
         }
 
         if (chameleonEvent.isCancelled()) {
-            event.setResult(ChatResult.denied());
+            if (catchChatModification(event.getPlayer(), true)) {
+                event.setResult(ChatResult.denied());
+            }
         }
     }
 
     /**
      * Platform {@link UserDisconnectEvent} handler.
      *
-     * @param event Platform {@link DisconnectEvent}.
+     * @param event Platform event.
      */
     @Subscribe
     public void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
-        this.chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
     }
 
     /**
      * Platform {@link ProxyUserSwitchEvent} handler.
      *
-     * @param event Platform {@link ServerConnectedEvent}.
+     * @param event Platform event.
      */
     @Subscribe
     public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
-        this.chameleon.getEventManager().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), event.getPreviousServer().map(this::wrap).orElse(null), wrap(event.getServer())));
+        this.chameleon.getEventBus().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), event.getPreviousServer().map(this::wrap).orElse(null), wrap(event.getServer())));
     }
 
+    private boolean catchChatModification(@NotNull Player player, boolean cancel) {
+        if (player.getProtocolVersion().getProtocol() >= 760) {
+            this.chameleon.getInternalLogger().error("Failed to %s a chat message for a player using 1.19.1 or above, doing so may result in Velocity throwing an exception and the sender being disconnected.", cancel ? "cancel" : "modify");
+            this.chameleon.getInternalLogger().error("This IS NOT a bug, but rather an intentional change in Velocity caused by changes in Minecraft 1.19.1.");
+            this.chameleon.getInternalLogger().error("See https://github.com/PaperMC/Velocity/issues/804 for more information.");
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     private @NotNull ProxyUser wrap(@NotNull Player player) {
         return new VelocityUser(this.chameleon, player);

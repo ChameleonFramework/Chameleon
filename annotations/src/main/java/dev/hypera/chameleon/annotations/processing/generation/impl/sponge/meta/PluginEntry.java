@@ -61,7 +61,7 @@ final class PluginEntry {
     }
 
     @Internal
-    private final static class Links {
+    private static final class Links {
 
         private final @Nullable String homepage;
 
@@ -73,7 +73,7 @@ final class PluginEntry {
     }
 
     @Internal
-    private final static class Contributor {
+    private static final class Contributor {
 
         private final @NotNull String name;
 
@@ -85,7 +85,7 @@ final class PluginEntry {
     }
 
     @Internal
-    private final static class Dependency {
+    private static final class Dependency {
 
         private final @NotNull String id;
         private final @NotNull String version;

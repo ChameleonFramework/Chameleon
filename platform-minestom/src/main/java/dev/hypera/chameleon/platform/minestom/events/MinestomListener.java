@@ -23,17 +23,22 @@
 package dev.hypera.chameleon.platform.minestom.events;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.events.impl.common.UserChatEvent;
-import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
+import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
+import dev.hypera.chameleon.events.common.UserChatEvent;
+import dev.hypera.chameleon.events.common.UserConnectEvent;
+import dev.hypera.chameleon.events.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.server.ServerUserKickEvent;
 import dev.hypera.chameleon.platform.minestom.users.MinestomUsers;
 import dev.hypera.chameleon.users.platforms.ServerUser;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventListener;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.PlayerPacketOutEvent;
+import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
  * Minestom listener.
  */
 @Internal
+@SuppressWarnings("UnstableApiUsage")
 public class MinestomListener {
 
     /**
@@ -51,9 +57,23 @@ public class MinestomListener {
     @Internal
     public MinestomListener(@NotNull Chameleon chameleon) {
         GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
-        handler.addListener(PlayerLoginEvent.class, event -> chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer()))));
-        handler.addListener(PlayerChatEvent.class, event -> {
-            UserChatEvent chameleonEvent = chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+
+        // Login
+        handler.addListener(EventListener.builder(PlayerLoginEvent.class).handler(event -> {
+            ServerUser user = wrap(event.getPlayer());
+            UserConnectEvent chameleonEvent = new UserConnectEvent(user);
+
+            chameleon.getEventBus().dispatch(chameleonEvent);
+            if (chameleonEvent.isCancelled()) {
+                user.disconnect(chameleonEvent.getCancelReason());
+            }
+        }).ignoreCancelled(false).build());
+
+        // Play
+        handler.addListener(EventListener.builder(PlayerChatEvent.class).handler(event -> {
+            UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage(), event.isCancelled());
+            chameleon.getEventBus().dispatch(chameleonEvent);
+
             if (!event.getMessage().equals(chameleonEvent.getMessage())) {
                 event.setMessage(chameleonEvent.getMessage());
             }
@@ -61,8 +81,18 @@ public class MinestomListener {
             if (chameleonEvent.isCancelled()) {
                 event.setCancelled(true);
             }
-        });
-        handler.addListener(PlayerDisconnectEvent.class, event -> chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()))));
+        }).ignoreCancelled(false).build());
+
+        // Disconnect
+        handler.addListener(EventListener.builder(PlayerDisconnectEvent.class).handler(event -> {
+            chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+        }).ignoreCancelled(false).build());
+
+        handler.addListener(EventListener.builder(PlayerPacketOutEvent.class).handler(event -> {
+            if (event.getPacket() instanceof DisconnectPacket) {
+                chameleon.getEventBus().dispatch(new ServerUserKickEvent(wrap(event.getPlayer()), AdventureConverter.convertComponentBack(((DisconnectPacket) event.getPacket()).message())));
+            }
+        }).ignoreCancelled(false).build());
     }
 
     private @NotNull ServerUser wrap(@NotNull Player player) {

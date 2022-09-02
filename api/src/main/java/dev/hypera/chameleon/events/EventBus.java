@@ -20,36 +20,51 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.impl.common;
+package dev.hypera.chameleon.events;
 
-import dev.hypera.chameleon.users.User;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import java.util.function.Predicate;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link User} disconnect event, dispatched when a user leaves the proxy/server.
+ * Event bus.
+ * <p>Inspired by <a href="https://github.com/KyoriPowered/event">KyoriPowered/event</a></p>
  */
-public class UserDisconnectEvent implements UserEvent {
-
-    private final @NotNull User user;
+@NonExtendable
+public interface EventBus {
 
     /**
-     * {@link UserDisconnectEvent} constructor.
+     * Dispatch an event to subscribers.
      *
-     * @param user The {@link User} that triggered this event.
+     * @param event The event to be dispatched.
      */
-    @Internal
-    public UserDisconnectEvent(@NotNull User user) {
-        this.user = user;
-    }
-
+    void dispatch(@NotNull ChameleonEvent event);
 
     /**
-     * {@inheritDoc}
+     * Register the given subscriber.
+     *
+     * @param event      The event type.
+     * @param subscriber The event subscriber.
+     * @param <T>        The event type.
+     *
+     * @return an event subscription.
      */
-    @Override
-    public @NotNull User getUser() {
-        return this.user;
-    }
+    <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull Class<T> event, @NotNull EventSubscriber<T> subscriber);
+
+    /**
+     * Determines whether the given event has been subscribed to.
+     *
+     * @param event The event type.
+     *
+     * @return {@code true} if the event has subscribers, otherwise {@code false}.
+     */
+    boolean subscribed(@NotNull Class<? extends ChameleonEvent> event);
+
+    /**
+     * Unregister subscribers matching the given predicate.
+     *
+     * @param predicate The predicate to test subscribers against.
+     */
+    void unsubscribeIf(@NotNull Predicate<EventSubscriber<? super ChameleonEvent>> predicate);
 
 }

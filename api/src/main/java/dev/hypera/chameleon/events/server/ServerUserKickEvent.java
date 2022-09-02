@@ -20,66 +20,52 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.impl.proxy;
+package dev.hypera.chameleon.events.server;
 
 import dev.hypera.chameleon.annotations.PlatformSpecific;
 import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.platform.proxy.Server;
-import dev.hypera.chameleon.users.platforms.ProxyUser;
-import java.util.Optional;
+import dev.hypera.chameleon.users.platforms.ServerUser;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * {@link ProxyUser} switch sever event, dispatched whenever a player switches server.
+ * {@link ServerUser} kick event, dispatched when a user is kicked from the server.
  */
-@PlatformSpecific(Platform.Type.PROXY)
-public class ProxyUserSwitchEvent implements ProxyUserEvent {
+@PlatformSpecific(Platform.Type.SERVER)
+public final class ServerUserKickEvent implements ServerUserEvent {
 
-    private final @NotNull ProxyUser user;
-    private final @Nullable Server from;
-    private final @NotNull Server to;
+    private final @NotNull ServerUser user;
+    private final @NotNull Component reason;
 
     /**
-     * {@link ProxyUserSwitchEvent} constructor.
+     * {@link ServerUserKickEvent} constructor.
      *
-     * @param user The {@link ProxyUser} that triggered this event.
-     * @param from The {@link Server} the user switched from.
-     * @param to   The {@link Server} the user switched to.
+     * @param user   The {@link ServerUser} that triggered this event.
+     * @param reason The reason for this event being triggered.
      */
     @Internal
-    public ProxyUserSwitchEvent(@NotNull ProxyUser user, @Nullable Server from, @NotNull Server to) {
+    public ServerUserKickEvent(@NotNull ServerUser user, @Nullable Component reason) {
         this.user = user;
-        this.from = from;
-        this.to = to;
+        this.reason = null != reason ? reason : Component.text("Disconnected");
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull ProxyUser getUser() {
+    public @NotNull ServerUser getUser() {
         return this.user;
     }
 
     /**
-     * The {@link Server} the user switched from, if available.
+     * Get the reason for this disconnection.
      *
-     * @return optionally the {@link Server} the user switched from.
+     * @return disconnect reason, defaults to {@code Disconnected}.
      */
-    public @NotNull Optional<Server> getFrom() {
-        return Optional.ofNullable(this.from);
-    }
-
-    /**
-     * The {@link Server} the user switched to.
-     *
-     * @return the {@link Server} the user switched to.
-     */
-    public @NotNull Server getTo() {
-        return this.to;
+    public @NotNull Component getReason() {
+        return this.reason;
     }
 
 }

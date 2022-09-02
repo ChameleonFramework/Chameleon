@@ -27,13 +27,16 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerChatEvent;
 import cn.nukkit.event.player.PlayerJoinEvent;
+import cn.nukkit.event.player.PlayerKickEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
-import dev.hypera.chameleon.events.impl.common.UserChatEvent;
-import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.common.UserChatEvent;
+import dev.hypera.chameleon.events.common.UserConnectEvent;
+import dev.hypera.chameleon.events.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.server.ServerUserKickEvent;
 import dev.hypera.chameleon.platform.nukkit.NukkitChameleon;
 import dev.hypera.chameleon.platform.nukkit.users.NukkitUser;
 import dev.hypera.chameleon.users.platforms.ServerUser;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,21 +61,29 @@ public class NukkitListener implements Listener {
     /**
      * Platform {@link UserConnectEvent} handler.
      *
-     * @param event Platform {@link PlayerJoinEvent}.
+     * @param event Platform event.
      */
     @EventHandler
     public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
-        this.chameleon.getEventManager().dispatch(new UserConnectEvent(wrap(event.getPlayer())));
+        ServerUser user = wrap(event.getPlayer());
+        UserConnectEvent chameleonEvent = new UserConnectEvent(user);
+
+        this.chameleon.getEventBus().dispatch(chameleonEvent);
+        if (chameleonEvent.isCancelled()) {
+            user.disconnect(chameleonEvent.getCancelReason());
+        }
     }
 
     /**
      * Platform {@link UserChatEvent} handler.
      *
-     * @param event Platform {@link PlayerChatEvent}.
+     * @param event Platform event.
      */
     @EventHandler
     public void onPlayerChatEvent(@NotNull PlayerChatEvent event) {
-        UserChatEvent chameleonEvent = this.chameleon.getEventManager().dispatch(new UserChatEvent(wrap(event.getPlayer()), event.getMessage()));
+        UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage(), event.isCancelled());
+        this.chameleon.getEventBus().dispatch(chameleonEvent);
+
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {
             event.setMessage(chameleonEvent.getMessage());
         }
@@ -85,11 +96,21 @@ public class NukkitListener implements Listener {
     /**
      * Platform {@link UserDisconnectEvent} handler.
      *
-     * @param event Platform {@link PlayerQuitEvent}.
+     * @param event Platform event.
      */
     @EventHandler
     public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
-        this.chameleon.getEventManager().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+    }
+
+    /**
+     * Platform {@link ServerUserKickEvent} handler.
+     *
+     * @param event Platform event.
+     */
+    @EventHandler
+    public void onPlayerKickEvent(@NotNull PlayerKickEvent event) {
+        this.chameleon.getEventBus().dispatch(new ServerUserKickEvent(wrap(event.getPlayer()), LegacyComponentSerializer.legacySection().deserialize(event.getReason())));
     }
 
 

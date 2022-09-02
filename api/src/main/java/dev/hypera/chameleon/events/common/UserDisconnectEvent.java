@@ -20,47 +20,36 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.listener;
+package dev.hypera.chameleon.events.common;
 
-import dev.hypera.chameleon.events.ChameleonEvent;
-import dev.hypera.chameleon.events.listener.annotations.EventHandler;
-import java.util.function.Consumer;
+import dev.hypera.chameleon.users.User;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Inline {@link ChameleonListener} implementation.
- *
- * @param <T> {@link ChameleonEvent} type.
+ * {@link User} disconnect event, dispatched when a user leaves the proxy/server.
  */
-@Internal
-public class InlineChameleonListener<T extends ChameleonEvent> implements ChameleonListener {
+public final class UserDisconnectEvent implements UserEvent {
 
-    private final @NotNull Class<T> type;
-    private final @NotNull Consumer<T> listener;
+    private final @NotNull User user;
 
     /**
-     * {@link InlineChameleonListener} constructor.
+     * {@link UserDisconnectEvent} constructor.
      *
-     * @param type     The {@link ChameleonEvent} type.
-     * @param listener The {@link ChameleonEvent} consumer.
+     * @param user The {@link User} that triggered this event.
      */
     @Internal
-    public InlineChameleonListener(@NotNull Class<T> type, @NotNull Consumer<T> listener) {
-        this.type = type;
-        this.listener = listener;
+    public UserDisconnectEvent(@NotNull User user) {
+        this.user = user;
     }
 
+
     /**
-     * Event handler.
-     *
-     * @param event {@link ChameleonEvent} instance.
+     * {@inheritDoc}
      */
-    @EventHandler
-    public void onEvent(@NotNull ChameleonEvent event) {
-        if (this.type.isInstance(event)) {
-            this.listener.accept(this.type.cast(event));
-        }
+    @Override
+    public @NotNull User getUser() {
+        return this.user;
     }
 
 }

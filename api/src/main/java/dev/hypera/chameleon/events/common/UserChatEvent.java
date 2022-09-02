@@ -20,7 +20,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.impl.common;
+package dev.hypera.chameleon.events.common;
 
 import dev.hypera.chameleon.events.cancellable.AbstractCancellable;
 import dev.hypera.chameleon.users.User;
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * {@link User} chat event, dispatched when a player sends a chat message.
  */
-public class UserChatEvent extends AbstractCancellable implements UserEvent {
+public final class UserChatEvent extends AbstractCancellable implements UserEvent {
 
     private final @NotNull User user;
     private @NotNull String message;
@@ -37,10 +37,12 @@ public class UserChatEvent extends AbstractCancellable implements UserEvent {
     /**
      * {@link UserChatEvent} constructor.
      *
-     * @param user    {@link User} that sent the message.
-     * @param message Message that the user attempted to send.
+     * @param user      {@link User} that sent the message.
+     * @param message   Message that the user attempted to send.
+     * @param cancelled Whether this event is cancelled.
      */
-    public UserChatEvent(@NotNull User user, @NotNull String message) {
+    public UserChatEvent(@NotNull User user, @NotNull String message, boolean cancelled) {
+        super(cancelled);
         this.user = user;
         this.message = message;
     }

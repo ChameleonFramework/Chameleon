@@ -60,7 +60,7 @@ class SerializedPluginDescription {
     }
 
     @Internal
-    private final static class SerializedDependency {
+    private static final class SerializedDependency {
 
         private final @NotNull String name;
         private final boolean optional;

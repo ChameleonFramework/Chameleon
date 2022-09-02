@@ -26,12 +26,16 @@ import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.annotations.PlatformDependency;
 import dev.hypera.chameleon.annotations.Plugin;
-import dev.hypera.chameleon.events.impl.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.EventSubscriber;
+import dev.hypera.chameleon.events.EventSubscriptionPriority;
+import dev.hypera.chameleon.events.common.UserConnectEvent;
+import dev.hypera.chameleon.events.common.UserDisconnectEvent;
 import dev.hypera.chameleon.logging.ChameleonLogger;
 import dev.hypera.example.commands.ExampleCommand;
-import dev.hypera.example.listeners.ExampleListener;
 import java.time.Duration;
 import java.time.Instant;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -81,8 +85,18 @@ public class ChameleonExample extends ChameleonPlugin {
         instance = this;
 
         chameleon.getCommandManager().register(new ExampleCommand());
-        chameleon.getEventManager().registerListener(new ExampleListener());
-        chameleon.getEventManager().registerListener(UserDisconnectEvent.class, event -> chameleon.getLogger().info("%s left the server!", event.getUser().getName()));
+
+        chameleon.getEventBus().subscribe(UserConnectEvent.class, event -> {
+            event.getUser().sendMessage(Component.text("Welcome to my server!", NamedTextColor.GREEN));
+        });
+
+        chameleon.getEventBus().subscribe(UserConnectEvent.class, EventSubscriber.builder(UserConnectEvent.class).expireAfter(1).handler(event -> {
+            event.getUser().sendMessage(Component.text("Welcome, you're the first person to join since the last restart!", NamedTextColor.GOLD));
+        }).priority(EventSubscriptionPriority.HIGH).build());
+
+        chameleon.getEventBus().subscribe(UserDisconnectEvent.class, event -> {
+            chameleon.getLogger().info("%s left the server", event.getUser().getName());
+        });
 
         this.logger.info("Successfully started, took %s ms.", Duration.between(start, Instant.now()).toMillis());
         this.logger.info("Using Chameleon v%s!", Chameleon.getVersion());

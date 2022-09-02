@@ -20,28 +20,22 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.example.listeners;
+package dev.hypera.chameleon.events.common;
 
-import dev.hypera.chameleon.events.impl.common.UserConnectEvent;
-import dev.hypera.chameleon.events.listener.ChameleonListener;
-import dev.hypera.chameleon.events.listener.annotations.EventHandler;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import dev.hypera.chameleon.events.ChameleonEvent;
+import dev.hypera.chameleon.users.User;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Example listener.
+ * User event.
  */
-public class ExampleListener implements ChameleonListener {
+public interface UserEvent extends ChameleonEvent {
 
     /**
-     * Listen for user connections.
+     * Get the {@link User} that triggered this event.
      *
-     * @param event The event.
+     * @return the {@link User} that triggered this event.
      */
-    @EventHandler
-    public void onConnectEvent(@NotNull UserConnectEvent event) {
-        event.getUser().sendMessage(Component.text("Welcome to my server!", NamedTextColor.GREEN));
-    }
+    @NotNull User getUser();
 
 }

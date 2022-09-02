@@ -64,8 +64,11 @@ You can find the latest versions at the top of this file.
 #### Gradle (Kotlin)
 ```kotlin
 repositories {
-    // Replace 'snapshots' with 'releases' to use a non-snapshot version.
-    maven("https://repo.hypera.dev/snapshots/")
+    // If using a release:
+    mavenCentral()
+   
+    // If using a snapshot:
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
@@ -83,8 +86,11 @@ dependencies {
 #### Gradle (Groovy)
 ```groovy
 repositories {
-    // Replace 'snapshots' with 'releases' to use a non-snapshot version.
-    maven { url 'https://repo.hypera.dev/snapshots/' }
+    // If using a release:
+    mavenCentral()
+ 
+    // If using a snapshot:
+    maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
 }
 
 dependencies {
@@ -106,10 +112,10 @@ dependencies {
 </properties>
 
 <repositories>
-    <!-- Replace 'snapshots' with 'releases' to use a non-snapshot version. -->
+    <!-- If using a snapshot: -->
     <repository>
-        <id>hypera-snapshots</id>
-        <url>https://repo.hypera.dev/snapshots/</url>
+        <id>sonatype-oss-s01</id>
+        <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
     </repository>
 </repositories>
 

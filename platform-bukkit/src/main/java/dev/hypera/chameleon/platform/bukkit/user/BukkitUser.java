@@ -26,7 +26,11 @@ import dev.hypera.chameleon.adventure.AbstractAudience;
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
 import dev.hypera.chameleon.platform.server.GameMode;
 import dev.hypera.chameleon.users.platforms.ServerUser;
+import java.net.SocketAddress;
+import java.util.Optional;
 import java.util.UUID;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -83,6 +87,14 @@ public class BukkitUser extends AbstractAudience implements ServerUser {
      * {@inheritDoc}
      */
     @Override
+    public @NotNull Optional<SocketAddress> getAddress() {
+        return Optional.ofNullable(this.player.getAddress());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getPing() {
         return this.player.getPing();
     }
@@ -91,8 +103,8 @@ public class BukkitUser extends AbstractAudience implements ServerUser {
      * {@inheritDoc}
      */
     @Override
-    public void chat(@NotNull String message) {
-        this.player.chat(message);
+    public void chat(@NotNull Component message) {
+        this.player.chat(LegacyComponentSerializer.legacySection().serialize(message));
     }
 
     /**
@@ -105,6 +117,14 @@ public class BukkitUser extends AbstractAudience implements ServerUser {
         }
 
         this.player.sendPluginMessage(this.chameleon.getPlatformPlugin(), channel, data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void disconnect(@NotNull Component reason) {
+        this.player.kickPlayer(LegacyComponentSerializer.legacySection().serialize(reason));
     }
 
     /**

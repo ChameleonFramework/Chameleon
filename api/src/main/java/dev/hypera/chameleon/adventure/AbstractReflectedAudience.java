@@ -42,21 +42,21 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractReflectedAudience implements Audience {
 
-    private final static @NotNull Class<?> AUDIENCE_CLASS;
-    private final static @NotNull Method SEND_MESSAGE;
-    private final static @NotNull Method SEND_ACTION_BAR;
-    private final static @NotNull Method SEND_PLAYER_LIST_HEADER;
-    private final static @NotNull Method SEND_PLAYER_LIST_FOOTER;
-    private final static @NotNull Method SEND_PLAYER_LIST_HEADER_FOOTER;
-    private final static @NotNull Method SHOW_TITLE;
-    private final static @NotNull Method CLEAR_TITLE;
-    private final static @NotNull Method RESET_TITLE;
-    private final static @NotNull Method SHOW_BOSS_BAR;
-    private final static @NotNull Method HIDE_BOSS_BAR;
-    private final static @NotNull Method PLAY_SOUND;
-    private final static @NotNull Method PLAY_SOUND_LOCATION;
-    private final static @NotNull Method STOP_SOUND;
-    private final static @NotNull Method OPEN_BOOK;
+    private static final @NotNull Class<?> AUDIENCE_CLASS;
+    private static final @NotNull Method SEND_MESSAGE;
+    private static final @NotNull Method SEND_ACTION_BAR;
+    private static final @NotNull Method SEND_PLAYER_LIST_HEADER;
+    private static final @NotNull Method SEND_PLAYER_LIST_FOOTER;
+    private static final @NotNull Method SEND_PLAYER_LIST_HEADER_FOOTER;
+    private static final @NotNull Method SHOW_TITLE;
+    private static final @NotNull Method CLEAR_TITLE;
+    private static final @NotNull Method RESET_TITLE;
+    private static final @NotNull Method SHOW_BOSS_BAR;
+    private static final @NotNull Method HIDE_BOSS_BAR;
+    private static final @NotNull Method PLAY_SOUND;
+    private static final @NotNull Method PLAY_SOUND_LOCATION;
+    private static final @NotNull Method STOP_SOUND;
+    private static final @NotNull Method OPEN_BOOK;
     private final @NotNull Object audience;
 
     static {

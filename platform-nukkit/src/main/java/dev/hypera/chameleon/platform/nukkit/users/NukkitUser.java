@@ -26,7 +26,11 @@ import cn.nukkit.Player;
 import dev.hypera.chameleon.platform.nukkit.adventure.AbstractNukkitAudience;
 import dev.hypera.chameleon.platform.server.GameMode;
 import dev.hypera.chameleon.users.platforms.ServerUser;
+import java.net.SocketAddress;
+import java.util.Optional;
 import java.util.UUID;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,6 +80,14 @@ public class NukkitUser extends AbstractNukkitAudience implements ServerUser {
      * {@inheritDoc}
      */
     @Override
+    public @NotNull Optional<SocketAddress> getAddress() {
+        return Optional.ofNullable(this.player.getSocketAddress());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getPing() {
         return this.player.getPing();
     }
@@ -84,8 +96,8 @@ public class NukkitUser extends AbstractNukkitAudience implements ServerUser {
      * {@inheritDoc}
      */
     @Override
-    public void chat(@NotNull String message) {
-        this.player.chat(message);
+    public void chat(@NotNull Component message) {
+        this.player.chat(LegacyComponentSerializer.legacySection().serialize(message));
     }
 
     /**
@@ -94,6 +106,14 @@ public class NukkitUser extends AbstractNukkitAudience implements ServerUser {
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void disconnect(@NotNull Component reason) {
+        this.player.kick(LegacyComponentSerializer.legacySection().serialize(reason));
     }
 
     /**

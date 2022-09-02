@@ -28,6 +28,8 @@ import dev.hypera.chameleon.platform.server.GameMode;
 import dev.hypera.chameleon.users.platforms.ServerUser;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.SocketAddress;
+import java.util.Optional;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -44,12 +46,14 @@ import org.spongepowered.api.network.channel.raw.RawDataChannel;
  */
 public class SpongeUser extends AbstractReflectedAudience implements ServerUser {
 
-    private final static @NotNull Method SIMULATE_CHAT_METHOD;
+    private static final @NotNull Method SIMULATE_CHAT_METHOD;
+    private static final @NotNull Method DISCONNECT_METHOD;
     private final @NotNull ServerPlayer player;
 
     static {
         try {
             SIMULATE_CHAT_METHOD = ServerPlayer.class.getMethod("simulateChat", Class.forName(AdventureConverter.PACKAGE + "text.Component"), Cause.class);
+            DISCONNECT_METHOD = ServerPlayer.class.getMethod("kick", Class.forName(AdventureConverter.PACKAGE + "text.Component"));
         } catch (ClassNotFoundException | NoSuchMethodException ex) {
             throw new IllegalStateException("Failed to initialise SpongeUser");
         }
@@ -96,6 +100,14 @@ public class SpongeUser extends AbstractReflectedAudience implements ServerUser 
      * {@inheritDoc}
      */
     @Override
+    public @NotNull Optional<SocketAddress> getAddress() {
+        return Optional.ofNullable(this.player.connection().address());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getPing() {
         return this.player.connection().latency();
     }
@@ -104,9 +116,9 @@ public class SpongeUser extends AbstractReflectedAudience implements ServerUser 
      * {@inheritDoc}
      */
     @Override
-    public void chat(@NotNull String message) {
+    public void chat(@NotNull Component message) {
         try {
-            SIMULATE_CHAT_METHOD.invoke(this.player, AdventureConverter.convertComponent(Component.text(message)), Cause.builder().append(message).build());
+            SIMULATE_CHAT_METHOD.invoke(this.player, AdventureConverter.convertComponent(message), Cause.builder().append(message).build());
         } catch (IllegalAccessException | InvocationTargetException ex) {
             throw new IllegalStateException(ex);
         }
@@ -118,6 +130,18 @@ public class SpongeUser extends AbstractReflectedAudience implements ServerUser 
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
         Sponge.game().channelManager().ofType(ResourceKey.resolve(channel), RawDataChannel.class).play().sendTo(this.player, channelBuf -> channelBuf.writeBytes(data)).join();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void disconnect(@NotNull Component reason) {
+        try {
+            DISCONNECT_METHOD.invoke(this.player, AdventureConverter.convertComponent(reason));
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     /**

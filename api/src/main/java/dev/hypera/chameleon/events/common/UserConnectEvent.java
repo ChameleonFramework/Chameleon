@@ -20,18 +20,23 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.impl.common;
+package dev.hypera.chameleon.events.common;
 
+import dev.hypera.chameleon.events.cancellable.Cancellable;
 import dev.hypera.chameleon.users.User;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * {@link User} connect event, dispatched when a user joins the proxy/server.
  */
-public class UserConnectEvent implements UserEvent {
+public final class UserConnectEvent implements UserEvent, Cancellable {
 
     private final @NotNull User user;
+    private boolean cancelled = false;
+    private @NotNull Component cancelReason = Component.text("Disconnected");
 
     /**
      * {@link UserConnectEvent} constructor.
@@ -50,6 +55,53 @@ public class UserConnectEvent implements UserEvent {
     @Override
     public @NotNull User getUser() {
         return this.user;
+    }
+
+    /**
+     * Cancel the event, with a reason.
+     *
+     * @param reason Disconnect reason.
+     */
+    public void cancel(@NotNull Component reason) {
+        setCancelled(true, reason);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
+
+    /**
+     * Cancel the event, with a reason.
+     *
+     * @param cancelled {@code true} if the event is cancelled, otherwise {@code false}.
+     * @param reason    Disconnect reason.
+     */
+    public void setCancelled(boolean cancelled, @Nullable Component reason) {
+        this.cancelled = cancelled;
+        if (null != reason) {
+            this.cancelReason = reason;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
+
+    /**
+     * Get the reason used when kicking the player if this event is cancelled.
+     *
+     * @return cancel reason.
+     */
+    public @NotNull Component getCancelReason() {
+        return this.cancelReason;
     }
 
 }
