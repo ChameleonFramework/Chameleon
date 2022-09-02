@@ -24,7 +24,6 @@ package dev.hypera.chameleon.events.server;
 
 import dev.hypera.chameleon.annotations.PlatformSpecific;
 import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.users.User;
 import dev.hypera.chameleon.users.platforms.ServerUser;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
