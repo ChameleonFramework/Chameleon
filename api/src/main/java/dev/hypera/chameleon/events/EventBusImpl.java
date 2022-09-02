@@ -68,11 +68,11 @@ public final class EventBusImpl implements EventBus {
 
         synchronized (subscribers) {
             subscribers.iterator().forEachRemaining(subscriber -> {
-                if (subscriber.acceptsCancelled() || (event instanceof Cancellable && !((Cancellable) event).isCancelled())) {
+                if (subscriber.acceptsCancelled() || !(event instanceof Cancellable) || !((Cancellable) event).isCancelled()) {
                     try {
                         subscriber.on(event);
                     } catch (Exception ex) {
-                        this.logger.error("An error occurred while dispatching an event to " + subscriber.getClass().getCanonicalName(), ex);
+                        this.logger.error("An error occurred while dispatching an event to %s", ex, subscriber.getClass().getCanonicalName());
                     }
                 }
             });

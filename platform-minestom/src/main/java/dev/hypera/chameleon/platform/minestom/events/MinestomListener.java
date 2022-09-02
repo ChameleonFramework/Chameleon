@@ -80,7 +80,7 @@ public class MinestomListener {
 
         // Disconnect
         handler.addListener(EventListener.builder(PlayerDisconnectEvent.class).handler(event -> {
-            chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), null));
+            chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
         }).ignoreCancelled(false).build());
     }
 

@@ -27,6 +27,7 @@ import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.events.common.UserChatEvent;
 import dev.hypera.chameleon.events.common.UserConnectEvent;
 import dev.hypera.chameleon.events.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.server.ServerUserKickEvent;
 import dev.hypera.chameleon.platform.sponge.users.SpongeUsers;
 import dev.hypera.chameleon.users.platforms.ServerUser;
 import java.lang.reflect.InvocationTargetException;
@@ -123,17 +124,17 @@ public class SpongeListener {
      */
     @Listener
     public void onLoginEvent(@NotNull ServerSideConnectionEvent.Disconnect event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.player()), null));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.player())));
     }
 
     /**
-     * Platform {@link UserDisconnectEvent} with reason handler.
+     * Platform {@link ServerUserKickEvent} handler.
      *
      * @param event Platform event.
      */
     @Listener
     public void onKickEvent(@NotNull KickPlayerEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.player()), null == event.message() ? null : AdventureConverter.convertComponentBack(event.message())));
+        this.chameleon.getEventBus().dispatch(new ServerUserKickEvent(wrap(event.player()), null == event.message() ? null : AdventureConverter.convertComponentBack(event.message())));
     }
 
     private @NotNull ServerUser wrap(@NotNull Subject subject) {

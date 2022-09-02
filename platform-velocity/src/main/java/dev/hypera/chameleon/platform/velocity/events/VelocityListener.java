@@ -107,7 +107,7 @@ public class VelocityListener {
      */
     @Subscribe
     public void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), null));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
     }
 
     /**
@@ -122,7 +122,7 @@ public class VelocityListener {
 
     private boolean catchChatModification(@NotNull Player player, boolean cancel) {
         if (player.getProtocolVersion().getProtocol() >= 760) {
-            this.chameleon.getInternalLogger().error("Failed to %s a chat message for a player using 1.19.1 or above, doing so may result in Velocity throwing an exception and the sender being kicked.", cancel ? "cancel" : "modify");
+            this.chameleon.getInternalLogger().error("Failed to %s a chat message for a player using 1.19.1 or above, doing so may result in Velocity throwing an exception and the sender being disconnected.", cancel ? "cancel" : "modify");
             this.chameleon.getInternalLogger().error("This IS NOT a bug, but rather an intentional change in Velocity caused by changes in Minecraft 1.19.1.");
             this.chameleon.getInternalLogger().error("See https://github.com/PaperMC/Velocity/issues/804 for more information.");
             return false;

@@ -25,6 +25,7 @@ package dev.hypera.chameleon.platform.bukkit.events;
 import dev.hypera.chameleon.events.common.UserChatEvent;
 import dev.hypera.chameleon.events.common.UserConnectEvent;
 import dev.hypera.chameleon.events.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.server.ServerUserKickEvent;
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
 import dev.hypera.chameleon.platform.bukkit.user.BukkitUser;
 import dev.hypera.chameleon.users.User;
@@ -100,17 +101,17 @@ public class BukkitListener implements Listener {
      */
     @EventHandler
     public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), null));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
     }
 
     /**
-     * Platform {@link UserDisconnectEvent} with reason handler.
+     * Platform {@link ServerUserKickEvent} handler.
      *
      * @param event Platform event.
      */
     @EventHandler
     public void onPlayerKickEvent(@NotNull PlayerKickEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), LegacyComponentSerializer.legacySection().deserialize(event.getReason())));
+        this.chameleon.getEventBus().dispatch(new ServerUserKickEvent(wrap(event.getPlayer()), LegacyComponentSerializer.legacySection().deserialize(event.getReason())));
     }
 
 

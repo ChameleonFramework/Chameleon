@@ -33,13 +33,11 @@ import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.users.User;
 import dev.hypera.chameleon.users.platforms.ProxyUser;
 import java.util.Optional;
-import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.event.ServerKickEvent;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -108,17 +106,7 @@ public class BungeeCordListener implements Listener {
      */
     @EventHandler
     public void onPlayerDisconnectEvent(@NotNull PlayerDisconnectEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), null));
-    }
-
-    /**
-     * Platform {@link UserDisconnectEvent} with reason handler.
-     *
-     * @param event Platform event.
-     */
-    @EventHandler
-    public void onPlayerKickEvent(@NotNull ServerKickEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer()), BungeeComponentSerializer.get().deserialize(event.getKickReasonComponent())));
+        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
     }
 
     /**

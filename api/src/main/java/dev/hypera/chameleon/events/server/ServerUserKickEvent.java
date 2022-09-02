@@ -20,36 +20,54 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package dev.hypera.chameleon.events.common;
+package dev.hypera.chameleon.events.server;
 
+import dev.hypera.chameleon.annotations.PlatformSpecific;
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.users.User;
+import dev.hypera.chameleon.users.platforms.ServerUser;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * {@link User} disconnect event, dispatched when a user leaves the proxy/server.
+ * {@link User} kick event, dispatched when a user is kicked from the server.
+ * <p>This isn't currently supported by Minestom due to there not being a kick event.</p>
  */
-public final class UserDisconnectEvent implements UserEvent {
+@PlatformSpecific(Platform.Type.SERVER)
+public final class ServerUserKickEvent implements ServerUserEvent {
 
-    private final @NotNull User user;
+    private final @NotNull ServerUser user;
+    private final @NotNull Component reason;
 
     /**
-     * {@link UserDisconnectEvent} constructor.
+     * {@link ServerUserKickEvent} constructor.
      *
-     * @param user The {@link User} that triggered this event.
+     * @param user   The {@link ServerUser} that triggered this event.
+     * @param reason The reason for this event being triggered.
      */
     @Internal
-    public UserDisconnectEvent(@NotNull User user) {
+    public ServerUserKickEvent(@NotNull ServerUser user, @Nullable Component reason) {
         this.user = user;
+        this.reason = null != reason ? reason : Component.text("Disconnected");
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull User getUser() {
+    public @NotNull ServerUser getUser() {
         return this.user;
+    }
+
+    /**
+     * Get the reason for this disconnection.
+     *
+     * @return disconnect reason, defaults to {@code Disconnected}.
+     */
+    public @NotNull Component getReason() {
+        return this.reason;
     }
 
 }
