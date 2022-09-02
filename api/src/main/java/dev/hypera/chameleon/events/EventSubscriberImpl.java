@@ -61,12 +61,12 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
             throw new IllegalStateException();
         }
 
-        if (this.expireWhen.test(event)) {
-            this.subscription.unsubscribe();
+        if (!this.filters.isEmpty() && !this.filters.stream().allMatch(filter -> filter.test(event))) {
             return;
         }
 
-        if (!this.filters.isEmpty() && !this.filters.stream().allMatch(filter -> filter.test(event))) {
+        if (this.expireWhen.test(event)) {
+            this.subscription.unsubscribe();
             return;
         }
 
