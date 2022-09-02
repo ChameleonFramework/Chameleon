@@ -58,6 +58,7 @@ public class ExampleCommand extends Command {
     @Override
     public void execute(@NotNull Context context) {
         context.getSender().sendMessage(Component.text("Hello, world!"));
+        context.getSender().user().disconnect(Component.text("Goodbye,", NamedTextColor.YELLOW).append(Component.text(" " + context.getSender().getName() + "!", NamedTextColor.GOLD)));
     }
 
     /**

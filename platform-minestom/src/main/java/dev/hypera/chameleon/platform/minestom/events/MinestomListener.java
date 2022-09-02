@@ -23,9 +23,11 @@
 package dev.hypera.chameleon.platform.minestom.events;
 
 import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.events.common.UserChatEvent;
 import dev.hypera.chameleon.events.common.UserConnectEvent;
 import dev.hypera.chameleon.events.common.UserDisconnectEvent;
+import dev.hypera.chameleon.events.server.ServerUserKickEvent;
 import dev.hypera.chameleon.platform.minestom.users.MinestomUsers;
 import dev.hypera.chameleon.users.platforms.ServerUser;
 import net.minestom.server.MinecraftServer;
@@ -35,6 +37,8 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.PlayerPacketOutEvent;
+import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
  * Minestom listener.
  */
 @Internal
+@SuppressWarnings("UnstableApiUsage")
 public class MinestomListener {
 
     /**
@@ -81,6 +86,12 @@ public class MinestomListener {
         // Disconnect
         handler.addListener(EventListener.builder(PlayerDisconnectEvent.class).handler(event -> {
             chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+        }).ignoreCancelled(false).build());
+
+        handler.addListener(EventListener.builder(PlayerPacketOutEvent.class).handler(event -> {
+            if (event.getPacket() instanceof DisconnectPacket) {
+                chameleon.getEventBus().dispatch(new ServerUserKickEvent(wrap(event.getPlayer()), AdventureConverter.convertComponentBack(((DisconnectPacket) event.getPacket()).message())));
+            }
         }).ignoreCancelled(false).build());
     }
 

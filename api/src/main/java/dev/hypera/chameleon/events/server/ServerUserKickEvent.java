@@ -32,8 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * {@link User} kick event, dispatched when a user is kicked from the server.
- * <p>This isn't currently supported by Minestom due to there not being a kick event.</p>
+ * {@link ServerUser} kick event, dispatched when a user is kicked from the server.
  */
 @PlatformSpecific(Platform.Type.SERVER)
 public final class ServerUserKickEvent implements ServerUserEvent {
