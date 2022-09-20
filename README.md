@@ -16,6 +16,9 @@
 </div>
 
 ## What is Chameleon?
+> **Warning** - This framework is currently considered unstable, however the authors use it in production.  
+> Until a stable release is made, the code-base is subject to major/breaking changes without warning.  
+
 Chameleon is a framework created to allow developers to easily create Minecraft plugins that work across multiple platforms.
 
 ### Supported Platforms
@@ -147,5 +150,18 @@ dependencies {
 
 Please read [CONTRIBUTING](CONTRIBUTING.md).
 
+### Building
+
 ### License
 The contents of this repository is licensed under the [MIT License](LICENSE).
+
+## Thank you
+This project was made possible by the [amazing people who have contributed](https://github.com/ChameleonFramework/Chameleon/graphs/contributors) and the people who have supported us in other ways whether it be providing feedback or donating to the developers.
+
+### Supporters
+People and companies who have donated or provided us with something that aids us in continuing this project.  
+[![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_square.svg)](https://jb.gg/OpenSourceSupport)
+
+### Plugins
+Plugins or resources that have been created using Chameleon.  
+ - [UltraStaffChatPro](https://www.spigotmc.org/resources/80461/) v2.0.0+
