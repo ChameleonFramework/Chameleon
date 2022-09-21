@@ -5,7 +5,7 @@ version = "1.0"
 # Kyori
 adventure = "4.11.0"
 adventure-platform = "4.1.2"
-indra = "2.1.1"
+indra = "2.2.0"
 
 # Platforms
 platform-bukkit = "1.19-R0.1-SNAPSHOT"
