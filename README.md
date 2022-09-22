@@ -17,7 +17,7 @@
 
 ## What is Chameleon?
 > **Warning** - This framework is currently considered unstable, however the authors use it in production.  
-> Until a stable release is made, the code-base is subject to major/breaking changes without warning.  
+> Until a stable release is made, the codebase is subject to major/breaking changes without warning.  
 
 Chameleon is a framework created to allow developers to easily create Minecraft plugins that work across multiple platforms.
 
