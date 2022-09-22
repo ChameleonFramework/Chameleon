@@ -147,10 +147,13 @@ dependencies {
 ```
 
 ## Contributing
-
-Please read [CONTRIBUTING](CONTRIBUTING.md).
+Please read [the Contributing guide](CONTRIBUTING.md).
 
 ### Building
+You can build this project by running `./gradlew build` in the project root directory, or if you use Microsoft Windows, you can run `./gradlew.bat build`.
+If you have Gradle 7.0+ installed, you can simply run the `gradle build` command in the project root directory.
+
+While the project can run on Java 8 or above, to build the project you will need Java 17 or above due to several platforms we support requiring modern versions of Java.
 
 ### License
 The contents of this repository is licensed under the [MIT License](LICENSE).
