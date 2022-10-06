@@ -21,15 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import net.kyori.indra.repository.sonatypeSnapshots
-
 plugins {
     id("chameleon.common")
     id("java-library")
 }
 
 repositories {
-    sonatypeSnapshots()
+    sonatype.ossSnapshots()
 }
 
 dependencies {
