@@ -21,37 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.sponge.managers;
+package dev.hypera.chameleon.users;
 
-import dev.hypera.chameleon.managers.PluginManager;
-import dev.hypera.chameleon.platform.PlatformPlugin;
-import dev.hypera.chameleon.platform.sponge.platform.plugin.SpongePlugin;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.api.Sponge;
 
 /**
- * Sponge {@link PluginManager} implementation.
+ * Represents something that can hold permissions.
  */
-@Internal
-public class SpongePluginManager extends PluginManager {
+public interface PermissionHolder {
 
-    @Override
-    public @NotNull Set<PlatformPlugin> getPlugins() {
-        return Sponge.pluginManager().plugins().stream().map(SpongePlugin::new).collect(Collectors.toSet());
-    }
-
-    @Override
-    public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-        return Sponge.pluginManager().plugin(name.toLowerCase()).map(SpongePlugin::new);
-    }
-
-    @Override
-    public boolean isPluginEnabled(@NotNull String name) {
-        return Sponge.pluginManager().plugin(name.toLowerCase()).isPresent();
-    }
+    /**
+     * Checks whether this permission holder has the given permission.
+     *
+     * @param permission Permission.
+     *
+     * @return {@code true} if this permission holder has the given permission, otherwise
+     *     {@code false}.
+     */
+    boolean hasPermission(@NotNull String permission);
 
 }

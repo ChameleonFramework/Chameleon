@@ -29,8 +29,8 @@ import dev.hypera.chameleon.events.common.UserDisconnectEvent;
 import dev.hypera.chameleon.events.server.ServerUserKickEvent;
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
 import dev.hypera.chameleon.platform.bukkit.user.BukkitUser;
+import dev.hypera.chameleon.users.ServerUser;
 import dev.hypera.chameleon.users.User;
-import dev.hypera.chameleon.users.platforms.ServerUser;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -83,7 +83,11 @@ public class BukkitListener implements Listener {
      */
     @EventHandler
     public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
-        UserChatEvent chameleonEvent = new UserChatEvent(wrap(event.getPlayer()), event.getMessage(), event.isCancelled());
+        UserChatEvent chameleonEvent = new UserChatEvent(
+            wrap(event.getPlayer()),
+            event.getMessage(),
+            event.isCancelled()
+        );
         this.chameleon.getEventBus().dispatch(chameleonEvent);
 
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {
@@ -112,7 +116,11 @@ public class BukkitListener implements Listener {
      */
     @EventHandler
     public void onPlayerKickEvent(@NotNull PlayerKickEvent event) {
-        this.chameleon.getEventBus().dispatch(new ServerUserKickEvent(wrap(event.getPlayer()), LegacyComponentSerializer.legacySection().deserialize(event.getReason())));
+        this.chameleon.getEventBus()
+            .dispatch(new ServerUserKickEvent(
+                wrap(event.getPlayer()),
+                LegacyComponentSerializer.legacySection().deserialize(event.getReason())
+            ));
     }
 
 

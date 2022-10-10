@@ -23,76 +23,30 @@
  */
 package dev.hypera.chameleon.users;
 
-import dev.hypera.chameleon.annotations.PlatformSpecific;
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.users.permissions.PermissionHolder;
-import dev.hypera.chameleon.users.platforms.ProxyUser;
-import dev.hypera.chameleon.users.platforms.ServerUser;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A chat-receiving user, this could either be an actual player or console.
+ * Represents something that can receive messages.
+ * <p>This could either be an actual player using the Minecraft client, or the platform
+ * Console.</p>
  */
 public interface ChatUser extends Audience, PermissionHolder {
 
     /**
-     * Get this user's name.
+     * Get the name of this user.
      *
-     * @return user's name.
+     * @return name.
      */
     @NotNull String getName();
 
     /**
-     * Whether the player can click chat messages.
+     * Get whether this user can interact with chat messages.
+     * <p>An example usage of this would be checking if a user can click on a chat message, and if
+     * so use a click event for a link, otherwise just display the link.</p>
      *
-     * @return true if the player can click chat messages.
+     * @return {@code true} if this user can interact with chat, otherwise {@code false}.
      */
     boolean hasInteractiveChat();
-
-
-    /**
-     * Cast this {@link ChatUser} instance to an {@link User} instance.
-     *
-     * @return {@link User}.
-     * @throws IllegalStateException if this {@link ChatUser} is not an {@link User}.
-     */
-    default @NotNull User user() {
-        if (this instanceof User) {
-            return (User) this;
-        } else {
-            throw new IllegalStateException("Cannot cast to User");
-        }
-    }
-
-    /**
-     * Cast this {@link ChatUser} instance to an {@link ProxyUser} instance.
-     *
-     * @return {@link ProxyUser}.
-     * @throws IllegalStateException if this {@link ChatUser} is not an {@link ProxyUser}.
-     */
-    @PlatformSpecific(Platform.Type.PROXY)
-    default @NotNull ProxyUser proxy() {
-        if (this instanceof ProxyUser) {
-            return (ProxyUser) this;
-        } else {
-            throw new IllegalStateException("Cannot cast to ProxyUser");
-        }
-    }
-
-    /**
-     * Cast this {@link ChatUser} instance to an {@link ServerUser} instance.
-     *
-     * @return {@link ServerUser}.
-     * @throws IllegalStateException if this {@link ChatUser} is not an {@link ServerUser}.
-     */
-    @PlatformSpecific(Platform.Type.SERVER)
-    default @NotNull ServerUser server() {
-        if (this instanceof ServerUser) {
-            return (ServerUser) this;
-        } else {
-            throw new IllegalStateException("Cannot cast to ServerUser");
-        }
-    }
 
 }

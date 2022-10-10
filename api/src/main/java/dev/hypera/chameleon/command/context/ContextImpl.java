@@ -21,26 +21,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.commands.annotations;
+package dev.hypera.chameleon.command.context;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.users.ChatUser;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Sub-command handler annotation.
+ * {@link Context} implementation.
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SubCommandHandler {
+public final class ContextImpl implements Context {
+
+    private final @NotNull ChatUser sender;
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull String[] args;
 
     /**
-     * Get sub-command names, separated by '|'.
+     * {@link ContextImpl} constructor.
      *
-     * @return sub-command names.
+     * @param sender Command sender.
+     * @param chameleon {@link Chameleon} instance.
+     * @param args Command arguments.
      */
-    @NotNull String value();
+    @Internal
+    public ContextImpl(@NotNull ChatUser sender, @NotNull Chameleon chameleon, @NotNull String[] args) {
+        this.sender = sender;
+        this.chameleon = chameleon;
+        this.args = args;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ChatUser getSender() {
+        return this.sender;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Chameleon getChameleon() {
+        return this.chameleon;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String[] getArgs() {
+        return this.args;
+    }
 
 }

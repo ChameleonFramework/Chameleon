@@ -24,7 +24,7 @@
 package dev.hypera.chameleon.platform.nukkit.managers;
 
 import cn.nukkit.Server;
-import dev.hypera.chameleon.commands.Command;
+import dev.hypera.chameleon.command.Command;
 import dev.hypera.chameleon.managers.CommandManager;
 import dev.hypera.chameleon.platform.nukkit.NukkitChameleon;
 import dev.hypera.chameleon.platform.nukkit.commands.NukkitCommand;

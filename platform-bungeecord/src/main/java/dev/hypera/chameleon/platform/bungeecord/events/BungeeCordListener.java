@@ -31,8 +31,8 @@ import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platform.bungeecord.platform.objects.BungeeCordServer;
 import dev.hypera.chameleon.platform.bungeecord.users.BungeeCordUser;
 import dev.hypera.chameleon.platform.proxy.Server;
+import dev.hypera.chameleon.users.ProxyUser;
 import dev.hypera.chameleon.users.User;
-import dev.hypera.chameleon.users.platforms.ProxyUser;
 import java.util.Optional;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -88,7 +88,11 @@ public class BungeeCordListener implements Listener {
      */
     @EventHandler
     public void onChatEvent(@NotNull ChatEvent event) {
-        UserChatEvent chameleonEvent = new UserChatEvent(wrap((ProxiedPlayer) event.getSender()), event.getMessage(), event.isCancelled());
+        UserChatEvent chameleonEvent = new UserChatEvent(
+            wrap((ProxiedPlayer) event.getSender()),
+            event.getMessage(),
+            event.isCancelled()
+        );
         this.chameleon.getEventBus().dispatch(chameleonEvent);
 
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {
@@ -117,7 +121,11 @@ public class BungeeCordListener implements Listener {
      */
     @EventHandler
     public void onServerSwitchEvent(@NotNull ServerSwitchEvent event) {
-        this.chameleon.getEventBus().dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()), Optional.ofNullable(event.getFrom()).map(this::wrap).orElse(null), wrap(event.getPlayer().getServer().getInfo())));
+        this.chameleon.getEventBus()
+            .dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()),
+                Optional.ofNullable(event.getFrom()).map(this::wrap).orElse(null),
+                wrap(event.getPlayer().getServer().getInfo())
+            ));
     }
 
 

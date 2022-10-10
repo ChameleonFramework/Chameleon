@@ -23,80 +23,48 @@
  */
 package dev.hypera.chameleon.platform;
 
-import dev.hypera.chameleon.annotations.PlatformSpecific;
-import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
-import dev.hypera.chameleon.platform.server.ServerPlatform;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Platform.
+ * Represents a proxy or server platform.
  */
-public abstract class Platform {
+public interface Platform {
 
     /**
-     * Get API name.
+     * Create a new Platform target.
+     * <p>This allows you to target a certain Platform or restrict a feature to a certain Platform.</p>
      *
-     * @return API name.
-     */
-    public abstract @NotNull String getAPIName();
-
-    /**
-     * Get name.
+     * @param id Target Platform identifier.
      *
-     * @return name.
+     * @return new Platform target.
      */
-    public abstract @NotNull String getName();
-
-    /**
-     * Get version.
-     *
-     * @return version.
-     */
-    public abstract @NotNull String getVersion();
-
-    /**
-     * Get {@link Type}.
-     *
-     * @return {@link Type}.
-     */
-    public abstract @NotNull Type getType();
-
-
-    /**
-     * Cast this {@link Platform} instance to an {@link ProxyPlatform} instance.
-     *
-     * @return {@link ProxyPlatform}.
-     * @throws IllegalStateException if this {@link Platform} is not an {@link ProxyPlatform}.
-     */
-    @PlatformSpecific(Type.PROXY)
-    public final @NotNull ProxyPlatform proxy() {
-        if (this instanceof ProxyPlatform) {
-            return (ProxyPlatform) this;
-        } else {
-            throw new IllegalStateException("Cannot cast to ProxyPlatform");
-        }
+    static @NotNull PlatformTarget target(@NotNull String id) {
+        return PlatformTarget.id(id);
     }
 
-    /**
-     * Cast this {@link Platform} instance to an {@link ServerPlatform} instance.
-     *
-     * @return {@link ServerPlatform}.
-     * @throws IllegalStateException if this {@link Platform} is not an {@link ServerPlatform}.
-     */
-    @PlatformSpecific(Type.SERVER)
-    public final @NotNull ServerPlatform server() {
-        if (this instanceof ServerPlatform) {
-            return (ServerPlatform) this;
-        } else {
-            throw new IllegalStateException("Cannot cast to ServerPlatform");
-        }
-    }
 
     /**
-     * Platform type.
+     * Get a unique identifier for this Platform.
+     * <p>This will return the common name of the API that is in use, e.g. "BungeeCord" or "Velocity".</p>
+     *
+     * @return Platform identifier.
      */
-    public enum Type {
-        SERVER, PROXY
-    }
+    @NotNull String getId();
+
+    /**
+     * Get the friendly name of this Platform.
+     * <p>This will return the name provided by the Platform, which may not match the name of the API that is in use.</p>
+     *
+     * @return Platform friendly name.
+     */
+    @NotNull String getName();
+
+    /**
+     * Get the version of this Platform.
+     * <p>This will return the version provided by the Platform.</p>
+     *
+     * @return Platform version.
+     */
+    @NotNull String getVersion();
 
 }

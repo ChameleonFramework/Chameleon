@@ -21,22 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.users.permissions;
+package dev.hypera.chameleon.command.annotations;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Permission holder.
+ * Sub-command handler annotation.
  */
-public interface PermissionHolder {
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SubCommandHandler {
 
     /**
-     * Checks whether this {@link PermissionHolder} has the given permission.
+     * Get sub-command names, separated by '|'.
      *
-     * @param permission Permission to check for.
-     *
-     * @return {@code true} if the {@link PermissionHolder} has the given permission, otherwise {@code false}.
+     * @return sub-command names.
      */
-    boolean hasPermission(@NotNull String permission);
+    @NotNull String value();
 
 }

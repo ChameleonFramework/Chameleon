@@ -27,7 +27,7 @@ import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.adventure.AbstractAudience;
 import dev.hypera.chameleon.platform.bungeecord.platform.objects.BungeeCordServer;
 import dev.hypera.chameleon.platform.proxy.Server;
-import dev.hypera.chameleon.users.platforms.ProxyUser;
+import dev.hypera.chameleon.users.ProxyUser;
 import java.net.SocketAddress;
 import java.util.Optional;
 import java.util.UUID;
@@ -82,7 +82,7 @@ public class BungeeCordUser extends AbstractAudience implements ProxyUser {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull UUID getUniqueId() {
+    public @NotNull UUID getId() {
         return this.player.getUniqueId();
     }
 
@@ -98,7 +98,7 @@ public class BungeeCordUser extends AbstractAudience implements ProxyUser {
      * {@inheritDoc}
      */
     @Override
-    public int getPing() {
+    public int getLatency() {
         return this.player.getPing();
     }
 

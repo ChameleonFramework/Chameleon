@@ -30,30 +30,31 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * An in-game player.
+ * Represents an in-game player, e.g. a person connected with the Minecraft client.
  */
 public interface User extends ChatUser {
 
     /**
-     * Get this user's unique identifier.
+     * Get the unique identifier of this user.
      *
      * @return unique identifier.
      */
-    @NotNull UUID getUniqueId();
+    @NotNull UUID getId();
 
     /**
-     * Get this user's SocketAddress.
+     * Get the address of this user.
      *
-     * @return SocketAddress, if available, otherwise empty.
+     * @return an {@code Optional} containing the address of this user, if available, otherwise an
+     *     empty optional.
      */
     @NotNull Optional<SocketAddress> getAddress();
 
     /**
-     * Get this user's ping.
+     * Get the latency in milliseconds between this user and the platform.
      *
-     * @return ping.
+     * @return latency between this user and the platform.
      */
-    int getPing();
+    int getLatency();
 
     /**
      * Send a chat message as this user.

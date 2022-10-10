@@ -24,8 +24,8 @@
 package dev.hypera.chameleon.platform.bukkit.commands;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.commands.Command;
-import dev.hypera.chameleon.commands.context.ContextImpl;
+import dev.hypera.chameleon.command.Command;
+import dev.hypera.chameleon.command.context.ContextImpl;
 import dev.hypera.chameleon.platform.bukkit.user.BukkitUsers;
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -21,13 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.commands.objects;
+package dev.hypera.chameleon.platform.objects;
 
-/**
- * Command platform.
- */
-public enum Platform {
+import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
+import dev.hypera.chameleon.platform.proxy.Server;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
-    ALL, PROXY, SERVER
+public class TestProxyPlatform implements ProxyPlatform {
+
+    @Override
+    public @NotNull String getId() {
+        return "TestProxy";
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return "TestProxy";
+    }
+
+    @Override
+    public @NotNull String getVersion() {
+        return "@version@";
+    }
+
+    @Override
+    public @NotNull Set<Server> getServers() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public @NotNull Optional<Server> getServer(@NotNull String name) {
+        return Optional.empty();
+    }
 
 }

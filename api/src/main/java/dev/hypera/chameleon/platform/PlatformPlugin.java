@@ -21,9 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.objects;
+package dev.hypera.chameleon.platform;
 
-import dev.hypera.chameleon.platform.Platform;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -32,76 +31,77 @@ import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Platform} plugin.
+ * Represents a plugin running on the platform.
  */
 public interface PlatformPlugin {
 
     /**
-     * Get {@link PlatformPlugin} name.
+     * Get the name of this plugin.
      *
-     * @return {@link PlatformPlugin} name.
+     * @return name.
      */
     @NotNull String getName();
 
     /**
-     * Get {@link PlatformPlugin} version.
+     * Get the version of this plugin.
      *
-     * @return {@link PlatformPlugin} version.
+     * @return version.
      */
     @NotNull String getVersion();
 
     /**
-     * Get {@link PlatformPlugin} description.
+     * Get the description of this plugin.
      *
-     * @return optionally {@link PlatformPlugin} description.
+     * @return an {@code Optional} containing the plugin description, if available, otherwise an
+     *     empty optional.
      */
     @NotNull Optional<String> getDescription();
 
     /**
-     * Get {@link PlatformPlugin} main class.
+     * Get the main class of this plugin.
      *
-     * @return {@link PlatformPlugin} main class.
+     * @return main class.
      */
     @NotNull Class<?> getMainClass();
 
     /**
-     * Get {@link PlatformPlugin} authors.
+     * Get the authors of this plugin.
      *
-     * @return {@link PlatformPlugin} authors.
+     * @return authors.
      */
     @NotNull List<String> getAuthors();
 
     /**
-     * Get {@link PlatformPlugin} required dependencies.
+     * Get the required dependencies of this plugin.
      *
-     * @return {@link PlatformPlugin} required dependencies.
+     * @return required dependencies.
      */
     @NotNull Set<String> getDependencies();
 
     /**
-     * Get {@link PlatformPlugin} optional dependencies.
+     * Get the optional dependencies of this plugin.
      *
-     * @return {@link PlatformPlugin} optional dependencies.
+     * @return optional dependencies.
      */
     @NotNull Set<String> getSoftDependencies();
 
     /**
-     * Get {@link PlatformPlugin} data folder.
+     * Get the data folder of this plugin.
      *
-     * @return {@link PlatformPlugin} data folder.
+     * @return data folder.
      */
     @NotNull Path getDataFolder();
 
     /**
-     * Attempt to enable the {@link PlatformPlugin}.
-     * May not work on some platforms.
+     * Attempt to enable this plugin.
+     * <p>This is not guaranteed to work and is currently experimental. Use at your own risk!</p>
      */
     @Experimental
     void enable();
 
     /**
-     * Attempt to disable the {@link PlatformPlugin}.
-     * May not work on some platforms.
+     * Attempt to disable this plugin.
+     * <p>This is not guaranteed to work and is currently experimental. Use at your own risk!</p>
      */
     @Experimental
     void disable();

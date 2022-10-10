@@ -23,16 +23,13 @@
  */
 package dev.hypera.chameleon.events.proxy;
 
-import dev.hypera.chameleon.annotations.PlatformSpecific;
 import dev.hypera.chameleon.events.common.UserEvent;
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.users.platforms.ProxyUser;
+import dev.hypera.chameleon.users.ProxyUser;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Proxy-only event.
  */
-@PlatformSpecific(Platform.Type.PROXY)
 public interface ProxyUserEvent extends UserEvent {
 
     /**

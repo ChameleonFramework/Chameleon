@@ -24,8 +24,8 @@
 package dev.hypera.chameleon.platform.bungeecord.managers;
 
 import dev.hypera.chameleon.managers.PluginManager;
+import dev.hypera.chameleon.platform.PlatformPlugin;
 import dev.hypera.chameleon.platform.bungeecord.platform.objects.BungeeCordPlugin;
-import dev.hypera.chameleon.platform.objects.PlatformPlugin;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,7 +52,12 @@ public final class BungeeCordPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Set<PlatformPlugin> getPlugins() {
-        return ProxyServer.getInstance().getPluginManager().getPlugins().stream().map(BungeeCordPlugin::new).collect(Collectors.toSet());
+        return ProxyServer.getInstance()
+            .getPluginManager()
+            .getPlugins()
+            .stream()
+            .map(BungeeCordPlugin::new)
+            .collect(Collectors.toSet());
     }
 
     /**
@@ -60,7 +65,8 @@ public final class BungeeCordPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-        return Optional.ofNullable(ProxyServer.getInstance().getPluginManager().getPlugin(name)).map(BungeeCordPlugin::new);
+        return Optional.ofNullable(ProxyServer.getInstance().getPluginManager().getPlugin(name))
+            .map(BungeeCordPlugin::new);
     }
 
     /**

@@ -24,8 +24,8 @@
 package dev.hypera.chameleon.platform.bungeecord.commands;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.commands.Command;
-import dev.hypera.chameleon.commands.context.ContextImpl;
+import dev.hypera.chameleon.command.Command;
+import dev.hypera.chameleon.command.context.ContextImpl;
 import dev.hypera.chameleon.platform.bungeecord.users.BungeeCordUsers;
 import java.util.Arrays;
 import net.md_5.bungee.api.CommandSender;

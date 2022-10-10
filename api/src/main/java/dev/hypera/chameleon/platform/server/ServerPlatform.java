@@ -23,13 +23,11 @@
  */
 package dev.hypera.chameleon.platform.server;
 
-import dev.hypera.chameleon.annotations.PlatformSpecific;
 import dev.hypera.chameleon.platform.Platform;
 
 /**
- * Server {@link Platform}.
+ * Represents a server platform.
  */
-@PlatformSpecific(Platform.Type.SERVER)
-public abstract class ServerPlatform extends Platform {
+public interface ServerPlatform extends Platform {
 
 }

@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
  * Velocity {@link ProxyPlatform} implementation.
  */
 @Internal
-public final class VelocityPlatform extends ProxyPlatform {
+public final class VelocityPlatform implements ProxyPlatform {
 
     private final @NotNull VelocityChameleon chameleon;
 
@@ -56,7 +56,7 @@ public final class VelocityPlatform extends ProxyPlatform {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull String getAPIName() {
+    public @NotNull String getId() {
         return "Velocity";
     }
 
@@ -75,15 +75,6 @@ public final class VelocityPlatform extends ProxyPlatform {
     public @NotNull String getVersion() {
         return this.chameleon.getPlatformPlugin().getServer().getVersion().getVersion();
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Type getType() {
-        return Type.PROXY;
-    }
-
 
     /**
      * {@inheritDoc}

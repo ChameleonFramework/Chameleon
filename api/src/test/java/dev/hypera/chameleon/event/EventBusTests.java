@@ -35,7 +35,6 @@ import dev.hypera.chameleon.events.EventSubscription;
 import dev.hypera.chameleon.events.EventSubscriptionPriority;
 import dev.hypera.chameleon.events.cancellable.AbstractCancellable;
 import dev.hypera.chameleon.logging.DummyChameleonLogger;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 final class EventBusTests {
@@ -65,50 +64,35 @@ final class EventBusTests {
         DummyChameleonLogger logger = new DummyChameleonLogger();
         EventBus eventBus = new EventBusImpl(logger);
 
-        eventBus.subscribe(TestEvent.class, new EventSubscriber<TestEvent>() {
+        eventBus.subscribe(TestEvent.class,
+            EventSubscriber.builder(TestEvent.class)
+                .priority(EventSubscriptionPriority.MEDIUM)
+                .handler(event -> {
+                    assertEquals(1, event.getTouches());
+                    event.touch();
+                })
+                .build()
+        );
 
-            @Override
-            public void on(@NotNull TestEvent event) {
-                assertEquals(1, event.getTouches());
-                event.touch();
-            }
+        eventBus.subscribe(TestEvent.class,
+            EventSubscriber.builder(TestEvent.class)
+                .priority(EventSubscriptionPriority.LOW)
+                .handler(event -> {
+                    assertEquals(2, event.getTouches());
+                    event.touch();
+                })
+                .build()
+        );
 
-            @Override
-            public int getPriority() {
-                return EventSubscriptionPriority.MEDIUM;
-            }
-
-        });
-
-        eventBus.subscribe(TestEvent.class, new EventSubscriber<TestEvent>() {
-
-            @Override
-            public void on(@NotNull TestEvent event) {
-                assertEquals(2, event.getTouches());
-                event.touch();
-            }
-
-            @Override
-            public int getPriority() {
-                return EventSubscriptionPriority.LOW;
-            }
-
-        });
-
-        eventBus.subscribe(TestEvent.class, new EventSubscriber<TestEvent>() {
-
-            @Override
-            public void on(@NotNull TestEvent event) {
-                assertEquals(0, event.getTouches());
-                event.touch();
-            }
-
-            @Override
-            public int getPriority() {
-                return EventSubscriptionPriority.HIGH;
-            }
-
-        });
+        eventBus.subscribe(TestEvent.class,
+            EventSubscriber.builder(TestEvent.class)
+                .priority(EventSubscriptionPriority.HIGH)
+                .handler(event -> {
+                    assertEquals(0, event.getTouches());
+                    event.touch();
+                })
+                .build()
+        );
 
         eventBus.dispatch(new TestEvent(false));
 
@@ -133,6 +117,19 @@ final class EventBusTests {
         TestEvent cancelledEvent = new TestEvent(true);
         eventBus.dispatch(cancelledEvent);
         assertEquals(0, cancelledEvent.getTouches());
+
+        eventBus.subscribe(TestEvent.class,
+            EventSubscriber.builder(TestEvent.class)
+                .acceptCancelled()
+                .handler(TestEvent::touch)
+                .build()
+        );
+        eventBus.dispatch(cancelledEvent);
+        assertEquals(1, cancelledEvent.getTouches());
+
+        cancelledEvent.uncancel();
+        eventBus.dispatch(cancelledEvent);
+        assertEquals(3, cancelledEvent.getTouches());
     }
 
     @Test
@@ -152,7 +149,32 @@ final class EventBusTests {
     @Test
     void expiresAfter() {
         EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
-        eventBus.subscribe(TestEvent.class, EventSubscriber.builder(TestEvent.class).expireAfter(1).handler(TestEvent::touch).build());
+        eventBus.subscribe(TestEvent.class,
+            EventSubscriber.builder(TestEvent.class)
+                .expireAfter(1)
+                .handler(TestEvent::touch)
+                .build()
+        );
+
+        TestEvent event = new TestEvent(false);
+
+        eventBus.dispatch(event);
+        assertEquals(1, event.getTouches());
+
+        eventBus.dispatch(event);
+        assertFalse(eventBus.subscribed(TestEvent.class));
+        assertEquals(1, event.getTouches());
+    }
+
+    @Test
+    void expiresWhen() {
+        EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
+        eventBus.subscribe(TestEvent.class,
+            EventSubscriber.builder(TestEvent.class)
+                .expireWhen(e -> e.getTouches() == 1)
+                .handler(TestEvent::touch)
+                .build()
+        );
 
         TestEvent event = new TestEvent(false);
 
@@ -167,10 +189,12 @@ final class EventBusTests {
     @Test
     void filters() {
         EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
-        eventBus.subscribe(TestEvent.class, EventSubscriber.builder(TestEvent.class)
-            .filter(e -> e.getTouches() == 0 || e.getTouches() == 2)
-            .filter(e -> e.getTouches() < 3).handler(TestEvent::touch)
-            .build()
+        eventBus.subscribe(TestEvent.class,
+            EventSubscriber.builder(TestEvent.class)
+                .filter(e -> e.getTouches() == 0 || e.getTouches() == 2)
+                .filter(e -> e.getTouches() < 3)
+                .handler(TestEvent::touch)
+                .build()
         );
 
         TestEvent event = new TestEvent(false);

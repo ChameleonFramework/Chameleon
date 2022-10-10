@@ -36,7 +36,6 @@ public class PluginData {
     private final @NotNull String description;
     private final @NotNull String url;
     private final @NotNull List<String> authors;
-    private final @NotNull List<Platform> platforms;
 
     /**
      * {@link PluginData} constructor.
@@ -46,15 +45,13 @@ public class PluginData {
      * @param description Plugin description.
      * @param url         Plugin url.
      * @param authors     Plugin authors.
-     * @param platforms   Plugin {@link Platform}s.
      */
-    public PluginData(@NotNull String name, @NotNull String version, @NotNull String description, @NotNull String url, @NotNull List<String> authors, @NotNull List<Platform> platforms) {
+    public PluginData(@NotNull String name, @NotNull String version, @NotNull String description, @NotNull String url, @NotNull List<String> authors) {
         this.name = name;
         this.version = version;
         this.description = description;
         this.url = url;
         this.authors = authors;
-        this.platforms = platforms;
     }
 
     /**
@@ -100,22 +97,6 @@ public class PluginData {
      */
     public @NotNull List<String> getAuthors() {
         return this.authors;
-    }
-
-    /**
-     * Get plugin {@link Platform}s.
-     *
-     * @return plugin {@link Platform}s.
-     */
-    public @NotNull List<Platform> getPlatforms() {
-        return this.platforms;
-    }
-
-    /**
-     * Platform.
-     */
-    public enum Platform {
-        BUKKIT, BUNGEECORD, MINESTOM, NUKKIT, SPONGE, VELOCITY
     }
 
 }

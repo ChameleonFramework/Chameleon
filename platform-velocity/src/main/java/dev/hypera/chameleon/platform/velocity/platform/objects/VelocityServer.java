@@ -28,7 +28,7 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.user.VelocityUser;
-import dev.hypera.chameleon.users.platforms.ProxyUser;
+import dev.hypera.chameleon.users.ProxyUser;
 import java.net.SocketAddress;
 import java.util.Set;
 import java.util.stream.Collectors;

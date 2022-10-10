@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  * Nukkit {@link ServerPlatform} implementation.
  */
 @Internal
-public class NukkitPlatform extends ServerPlatform {
+public class NukkitPlatform implements ServerPlatform {
 
     /**
      * {@link NukkitPlatform} constructor.
@@ -47,7 +47,7 @@ public class NukkitPlatform extends ServerPlatform {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull String getAPIName() {
+    public @NotNull String getId() {
         return "Nukkit";
     }
 
@@ -65,14 +65,6 @@ public class NukkitPlatform extends ServerPlatform {
     @Override
     public @NotNull String getVersion() {
         return Nukkit.VERSION + " (" + Server.getInstance().getVersion() + ")";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Type getType() {
-        return Type.SERVER;
     }
 
 }

@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
  * BungeeCord {@link ProxyPlatform} implementation.
  */
 @Internal
-public final class BungeeCordPlatform extends ProxyPlatform {
+public final class BungeeCordPlatform implements ProxyPlatform {
 
     private final @NotNull BungeeCordChameleon chameleon;
 
@@ -57,7 +57,7 @@ public final class BungeeCordPlatform extends ProxyPlatform {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull String getAPIName() {
+    public @NotNull String getId() {
         return "BungeeCord";
     }
 
@@ -76,15 +76,6 @@ public final class BungeeCordPlatform extends ProxyPlatform {
     public @NotNull String getVersion() {
         return ProxyServer.getInstance().getVersion();
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Type getType() {
-        return Type.PROXY;
-    }
-
 
     /**
      * {@inheritDoc}

@@ -23,7 +23,7 @@
  */
 package dev.hypera.chameleon.platform.sponge.managers;
 
-import dev.hypera.chameleon.commands.Command;
+import dev.hypera.chameleon.command.Command;
 import dev.hypera.chameleon.managers.CommandManager;
 import dev.hypera.chameleon.platform.sponge.SpongeChameleon;
 import dev.hypera.chameleon.platform.sponge.commands.SpongeCommand;

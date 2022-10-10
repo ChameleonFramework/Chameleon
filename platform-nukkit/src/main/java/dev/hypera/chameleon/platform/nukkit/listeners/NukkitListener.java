@@ -36,7 +36,7 @@ import dev.hypera.chameleon.events.common.UserDisconnectEvent;
 import dev.hypera.chameleon.events.server.ServerUserKickEvent;
 import dev.hypera.chameleon.platform.nukkit.NukkitChameleon;
 import dev.hypera.chameleon.platform.nukkit.users.NukkitUser;
-import dev.hypera.chameleon.users.platforms.ServerUser;
+import dev.hypera.chameleon.users.ServerUser;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;

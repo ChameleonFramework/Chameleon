@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.commands.objects;
+package dev.hypera.chameleon.command.objects;
 
-import dev.hypera.chameleon.commands.Command;
-import dev.hypera.chameleon.commands.context.Context;
+import dev.hypera.chameleon.command.Command;
+import dev.hypera.chameleon.command.context.Context;
 import java.util.Optional;
 import java.util.function.Function;
 import net.kyori.adventure.text.Component;

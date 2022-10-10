@@ -21,45 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.users.platforms;
+package dev.hypera.chameleon.command.annotations;
 
-import dev.hypera.chameleon.annotations.PlatformSpecific;
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
-import dev.hypera.chameleon.platform.proxy.Server;
-import dev.hypera.chameleon.users.User;
-import java.util.Optional;
-import java.util.function.BiConsumer;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * In-game {@link User} on a {@link ProxyPlatform}.
- *
- * @see ProxyPlatform
+ * Permission.
  */
-@PlatformSpecific(Platform.Type.PROXY)
-public interface ProxyUser extends User {
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Permission {
 
     /**
-     * Get the {@link Server} this user is currently on.
+     * Get permission string.
      *
-     * @return optionally the {@link Server} this user is currently on, if available, otherwise empty.
+     * @return permission string.
      */
-    @NotNull Optional<Server> getServer();
-
-    /**
-     * Attempt to switch this user to the given {@link Server}.
-     *
-     * @param server {@link Server} to switch this user to.
-     */
-    void connect(@NotNull Server server);
-
-    /**
-     * Attempt to switch this user to the given {@link Server} and then run the given callback.
-     *
-     * @param server   {@link Server} to switch this user to.
-     * @param callback Callback to run afterwards.
-     */
-    void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback);
+    @NotNull String value();
 
 }

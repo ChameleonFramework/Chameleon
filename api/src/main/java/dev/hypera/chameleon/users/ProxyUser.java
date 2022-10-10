@@ -21,58 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.commands.context;
+package dev.hypera.chameleon.users;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.users.ChatUser;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
+import dev.hypera.chameleon.platform.proxy.Server;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Context} implementation.
+ * Represents an in-game {@link User} on a {@link ProxyPlatform}.
  */
-public final class ContextImpl implements Context {
-
-    private final @NotNull ChatUser sender;
-    private final @NotNull Chameleon chameleon;
-    private final @NotNull String[] args;
+public interface ProxyUser extends User {
 
     /**
-     * {@link ContextImpl} constructor.
+     * Get the "sub-server" this user is currently connected to.
      *
-     * @param sender Command sender.
-     * @param chameleon {@link Chameleon} instance.
-     * @param args Command arguments.
+     * @return an {@code Optional} containing the {@link Server} the user is currently connected to,
+     *     or an empty optional if the user is not connected to a server.
      */
-    @Internal
-    public ContextImpl(@NotNull ChatUser sender, @NotNull Chameleon chameleon, @NotNull String[] args) {
-        this.sender = sender;
-        this.chameleon = chameleon;
-        this.args = args;
-    }
+    @NotNull Optional<Server> getServer();
 
     /**
-     * {@inheritDoc}
+     * Attempt to switch this user to the given {@link Server}.
+     *
+     * @param server {@link Server} to switch this user to.
      */
-    @Override
-    public @NotNull ChatUser getSender() {
-        return this.sender;
-    }
+    void connect(@NotNull Server server);
 
     /**
-     * {@inheritDoc}
+     * Attempt to switch this user to the given {@link Server} and then run the given callback.
+     *
+     * @param server   {@link Server} to switch this user to.
+     * @param callback Callback to run afterwards.
      */
-    @Override
-    public @NotNull Chameleon getChameleon() {
-        return this.chameleon;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull String[] getArgs() {
-        return this.args;
-    }
+    void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback);
 
 }

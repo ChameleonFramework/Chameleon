@@ -21,30 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.users.platforms;
+package dev.hypera.chameleon.users;
 
-import dev.hypera.chameleon.annotations.PlatformSpecific;
-import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.server.GameMode;
 import dev.hypera.chameleon.platform.server.ServerPlatform;
-import dev.hypera.chameleon.users.User;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * In-game {@link User} on a {@link ServerPlatform}.
+ * Represents an in-game {@link User} on a {@link ServerPlatform}.
  */
-@PlatformSpecific(Platform.Type.SERVER)
 public interface ServerUser extends User {
 
     /**
-     * Get the current {@link GameMode} of this user.
+     * Get the current game mode of this user.
      *
-     * @return current {@link GameMode}.
+     * @return game mode.
      */
     @NotNull GameMode getGameMode();
 
     /**
-     * Set the {@link GameMode} of this user.
+     * Change the game mode of this user.
      *
      * @param gameMode New {@link GameMode}.
      */

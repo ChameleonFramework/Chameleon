@@ -23,9 +23,7 @@
  */
 package dev.hypera.chameleon.events.server;
 
-import dev.hypera.chameleon.annotations.PlatformSpecific;
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.users.platforms.ServerUser;
+import dev.hypera.chameleon.users.ServerUser;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 /**
  * {@link ServerUser} kick event, dispatched when a user is kicked from the server.
  */
-@PlatformSpecific(Platform.Type.SERVER)
 public final class ServerUserKickEvent implements ServerUserEvent {
 
     private final @NotNull ServerUser user;
