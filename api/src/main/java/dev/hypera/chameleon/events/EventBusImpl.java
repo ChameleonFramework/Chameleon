@@ -25,7 +25,6 @@ package dev.hypera.chameleon.events;
 
 import dev.hypera.chameleon.events.cancellable.Cancellable;
 import dev.hypera.chameleon.logging.ChameleonLogger;
-import dev.hypera.chameleon.utils.ChameleonUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
