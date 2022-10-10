@@ -25,8 +25,6 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix:
-        language: [ "java" ]
 
     steps:
       - name: "Checkout repository"
@@ -35,7 +33,7 @@ jobs:
       - name: "Initialize CodeQL"
         uses: github/codeql-action/init@v2
         with:
-          languages: "${{ matrix.language }}"
+          languages: "java"
 
       - name: "Set up JDK ${{ env.JAVA_VERSION }}"
         uses: actions/setup-java@v3
