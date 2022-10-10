@@ -1,7 +1,9 @@
 # GitHub Action workflow to run CodeQL.
-name: "CodeQL"
+name: "Gradle"
 on:
   push:
+    branches: [ "main" ]
+  pull_request:
   schedule:
     - cron: '25 6 * * 5'
 
@@ -13,8 +15,8 @@ env:
   JAVA_VERSION: 18
 
 jobs:
-  analyze:
-    name: "Analyze"
+  build:
+    name: "Build"
     if: "${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}"
     runs-on: "ubuntu-latest"
     permissions:
