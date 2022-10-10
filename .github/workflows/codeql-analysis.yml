@@ -57,6 +57,7 @@ jobs:
           path: |
             **/build/reports/tests/test/
             **/build/reports/checkstyle/
+            **/build/reports/jacoco/
 
       - name: "Perform CodeQL Analysis"
         uses: github/codeql-action/analyze@v2
