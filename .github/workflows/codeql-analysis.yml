@@ -2,7 +2,6 @@
 name: "CodeQL"
 on:
   push:
-  pull_request:
   schedule:
     - cron: '25 6 * * 5'
 
@@ -47,6 +46,18 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: "build"
+
+      - name: "Upload reports"
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: "${{ runner.os }}-test-reports"
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            **/build/reports/tests/test/
+            **/build/reports/checkstyle/
+            **/build/reports/jacoco/
 
       - name: "Perform CodeQL Analysis"
         uses: github/codeql-action/analyze@v2
