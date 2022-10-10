@@ -52,12 +52,8 @@ public final class BungeeCordPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Set<PlatformPlugin> getPlugins() {
-        return ProxyServer.getInstance()
-            .getPluginManager()
-            .getPlugins()
-            .stream()
-            .map(BungeeCordPlugin::new)
-            .collect(Collectors.toSet());
+        return ProxyServer.getInstance().getPluginManager().getPlugins().stream()
+            .map(BungeeCordPlugin::new).collect(Collectors.toSet());
     }
 
     /**

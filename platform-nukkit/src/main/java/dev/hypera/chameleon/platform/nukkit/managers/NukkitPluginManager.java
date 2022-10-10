@@ -52,13 +52,8 @@ public class NukkitPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Set<PlatformPlugin> getPlugins() {
-        return Server.getInstance()
-            .getPluginManager()
-            .getPlugins()
-            .values()
-            .stream()
-            .map(NukkitPlugin::new)
-            .collect(Collectors.toSet());
+        return Server.getInstance().getPluginManager().getPlugins().values().stream()
+            .map(NukkitPlugin::new).collect(Collectors.toSet());
     }
 
     /**

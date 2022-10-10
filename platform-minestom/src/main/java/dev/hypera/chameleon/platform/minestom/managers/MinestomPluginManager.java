@@ -52,11 +52,8 @@ public final class MinestomPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Set<PlatformPlugin> getPlugins() {
-        return MinecraftServer.getExtensionManager()
-            .getExtensions()
-            .stream()
-            .map(MinestomPlugin::new)
-            .collect(Collectors.toSet());
+        return MinecraftServer.getExtensionManager().getExtensions().stream()
+            .map(MinestomPlugin::new).collect(Collectors.toSet());
     }
 
     /**

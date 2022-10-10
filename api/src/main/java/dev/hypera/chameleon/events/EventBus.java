@@ -53,6 +53,17 @@ public interface EventBus {
     <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull Class<T> event, @NotNull EventSubscriber<T> subscriber);
 
     /**
+     * Register the given subscriber.
+     *
+     * @param subscriber The event subscriber.
+     * @param <T>        The event type.
+     *
+     * @return an event subscription.
+     * @throws IllegalArgumentException if the given {@code subscriber} does not have a set type.
+     */
+    <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull EventSubscriber<T> subscriber);
+
+    /**
      * Determines whether the given event has been subscribed to.
      *
      * @param event The event type.

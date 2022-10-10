@@ -29,6 +29,7 @@ import java.util.function.Predicate;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An event subscriber, used to listen for events.
@@ -47,7 +48,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
      * @return new builder.
      */
     static <T extends ChameleonEvent> @NotNull Builder<T> builder(@NotNull Class<T> type) {
-        return new BuilderImpl<>();
+        return new BuilderImpl<>(type);
     }
 
 
@@ -78,6 +79,17 @@ public interface EventSubscriber<T extends ChameleonEvent> {
      */
     default boolean acceptsCancelled() {
         return false;
+    }
+
+    /**
+     * Get the type of event this subscriber.
+     * <p>If this returns a non-null value then the subscriber can be registered without providing
+     * the type again.</p>
+     *
+     * @return event type.
+     */
+    default @Nullable Class<T> getType() {
+        return null;
     }
 
 

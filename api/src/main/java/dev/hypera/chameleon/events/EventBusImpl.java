@@ -25,6 +25,7 @@ package dev.hypera.chameleon.events;
 
 import dev.hypera.chameleon.events.cancellable.Cancellable;
 import dev.hypera.chameleon.logging.ChameleonLogger;
+import dev.hypera.chameleon.utils.ChameleonUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -78,6 +79,27 @@ public final class EventBusImpl implements EventBus {
                 }
             });
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull EventSubscriber<T> subscriber) {
+        if (null == subscriber.getType()) {
+            throw new IllegalArgumentException("subscriber does not have a set type, use #subscribe(Class, EventSubscriber) or EventSubscriber#builder instead");
+        }
+
+        this.subscriptions.computeIfAbsent(subscriber.getType(), key -> Collections.synchronizedSet(new HashSet<>())).add((EventSubscriber<ChameleonEvent>) subscriber);
+        this.sortedSubscriptions.clear();
+
+        EventSubscription subscription = () -> unsubscribeIf(sub -> sub.equals(subscriber));
+        if (subscriber instanceof EventSubscriberImpl) {
+            ((EventSubscriberImpl<T>) subscriber).setSubscription(subscription);
+        }
+
+        return subscription;
     }
 
     /**
