@@ -26,8 +26,8 @@ package dev.hypera.chameleon.platform.nukkit.managers;
 import cn.nukkit.Server;
 import cn.nukkit.plugin.Plugin;
 import dev.hypera.chameleon.managers.PluginManager;
+import dev.hypera.chameleon.platform.PlatformPlugin;
 import dev.hypera.chameleon.platform.nukkit.platform.plugin.NukkitPlugin;
-import dev.hypera.chameleon.platform.objects.PlatformPlugin;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,7 +52,8 @@ public class NukkitPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Set<PlatformPlugin> getPlugins() {
-        return Server.getInstance().getPluginManager().getPlugins().values().stream().map(NukkitPlugin::new).collect(Collectors.toSet());
+        return Server.getInstance().getPluginManager().getPlugins().values().stream()
+            .map(NukkitPlugin::new).collect(Collectors.toSet());
     }
 
     /**
@@ -60,7 +61,8 @@ public class NukkitPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-        return Optional.ofNullable(Server.getInstance().getPluginManager().getPlugin(name)).map(NukkitPlugin::new);
+        return Optional.ofNullable(Server.getInstance().getPluginManager().getPlugin(name))
+            .map(NukkitPlugin::new);
     }
 
     /**
@@ -68,7 +70,9 @@ public class NukkitPluginManager extends PluginManager {
      */
     @Override
     public boolean isPluginEnabled(@NotNull String name) {
-        return Optional.ofNullable(Server.getInstance().getPluginManager().getPlugin(name)).map(Plugin::isEnabled).orElse(false);
+        return Optional.ofNullable(Server.getInstance().getPluginManager().getPlugin(name))
+            .map(Plugin::isEnabled)
+            .orElse(false);
     }
 
 }

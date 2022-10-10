@@ -24,8 +24,8 @@
 package dev.hypera.chameleon.platform.minestom.managers;
 
 import dev.hypera.chameleon.managers.PluginManager;
+import dev.hypera.chameleon.platform.PlatformPlugin;
 import dev.hypera.chameleon.platform.minestom.platform.objects.MinestomPlugin;
-import dev.hypera.chameleon.platform.objects.PlatformPlugin;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,7 +52,8 @@ public final class MinestomPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Set<PlatformPlugin> getPlugins() {
-        return MinecraftServer.getExtensionManager().getExtensions().stream().map(MinestomPlugin::new).collect(Collectors.toSet());
+        return MinecraftServer.getExtensionManager().getExtensions().stream()
+            .map(MinestomPlugin::new).collect(Collectors.toSet());
     }
 
     /**
@@ -60,7 +61,8 @@ public final class MinestomPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-        return Optional.ofNullable(MinecraftServer.getExtensionManager().getExtension(name)).map(MinestomPlugin::new);
+        return Optional.ofNullable(MinecraftServer.getExtensionManager().getExtension(name))
+            .map(MinestomPlugin::new);
     }
 
     /**

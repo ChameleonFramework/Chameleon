@@ -24,8 +24,7 @@
 package dev.hypera.chameleon.managers;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.commands.Command;
-import dev.hypera.chameleon.commands.objects.Platform;
+import dev.hypera.chameleon.command.Command;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,7 +51,7 @@ public abstract class CommandManager {
      * @param command {@link Command} to be registered.
      */
     public void register(@NotNull Command command) {
-        if (command.getPlatform().equals(Platform.ALL) || command.getPlatform().name().equals(this.chameleon.getPlatform().getType().name())) {
+        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
             registerCommand(command);
         }
     }
@@ -63,7 +62,7 @@ public abstract class CommandManager {
      * @param command {@link Command} to be unregistered.
      */
     public void unregister(@NotNull Command command) {
-        if (command.getPlatform().equals(Platform.ALL) || command.getPlatform().name().equals(this.chameleon.getPlatform().getType().name())) {
+        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
             unregisterCommand(command);
         }
     }

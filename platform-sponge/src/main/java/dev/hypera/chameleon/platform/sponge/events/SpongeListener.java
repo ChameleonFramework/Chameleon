@@ -30,7 +30,7 @@ import dev.hypera.chameleon.events.common.UserConnectEvent;
 import dev.hypera.chameleon.events.common.UserDisconnectEvent;
 import dev.hypera.chameleon.events.server.ServerUserKickEvent;
 import dev.hypera.chameleon.platform.sponge.users.SpongeUsers;
-import dev.hypera.chameleon.users.platforms.ServerUser;
+import dev.hypera.chameleon.users.ServerUser;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;

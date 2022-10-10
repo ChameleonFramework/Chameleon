@@ -25,8 +25,8 @@ package dev.hypera.chameleon.platform.velocity.commands;
 
 import com.velocitypowered.api.command.SimpleCommand;
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.commands.Command;
-import dev.hypera.chameleon.commands.context.ContextImpl;
+import dev.hypera.chameleon.command.Command;
+import dev.hypera.chameleon.command.context.ContextImpl;
 import dev.hypera.chameleon.platform.velocity.user.VelocityUsers;
 import java.util.Arrays;
 import java.util.List;

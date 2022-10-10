@@ -21,15 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.commands;
+package dev.hypera.chameleon.command;
 
-import dev.hypera.chameleon.commands.annotations.CommandHandler;
-import dev.hypera.chameleon.commands.annotations.Permission;
-import dev.hypera.chameleon.commands.annotations.SubCommandHandler;
-import dev.hypera.chameleon.commands.context.Context;
-import dev.hypera.chameleon.commands.objects.Condition;
-import dev.hypera.chameleon.commands.objects.Platform;
+import dev.hypera.chameleon.command.annotations.CommandHandler;
+import dev.hypera.chameleon.command.annotations.Permission;
+import dev.hypera.chameleon.command.annotations.SubCommandHandler;
+import dev.hypera.chameleon.command.context.Context;
+import dev.hypera.chameleon.command.objects.Condition;
 import dev.hypera.chameleon.exceptions.command.ChameleonCommandException;
+import dev.hypera.chameleon.platform.PlatformTarget;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +55,7 @@ public abstract class Command {
     private final @NotNull Set<SubCommand> subCommands = new HashSet<>();
     private final @Nullable Permission permission;
 
-    private @NotNull Platform platform = Platform.ALL;
+    private @NotNull PlatformTarget platform = PlatformTarget.all();
     private @NotNull List<Condition> conditions = new ArrayList<>();
     private @Nullable Component permissionErrorMessage;
 
@@ -199,20 +199,20 @@ public abstract class Command {
     }
 
     /**
-     * Get command {@link Platform}.
+     * Get the platform target of this command.
      *
-     * @return command {@link Platform}.
+     * @return platform target.
      */
-    public final @NotNull Platform getPlatform() {
+    public final @NotNull PlatformTarget getPlatform() {
         return this.platform;
     }
 
     /**
-     * Set command {@link Platform}.
+     * Set the platform target of this command.
      *
-     * @param platform Command {@link Platform}.
+     * @param platform platform target.
      */
-    protected final void setPlatform(@NotNull Platform platform) {
+    protected final void setPlatform(@NotNull PlatformTarget platform) {
         this.platform = platform;
     }
 

@@ -30,7 +30,7 @@ import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityServer;
-import dev.hypera.chameleon.users.platforms.ProxyUser;
+import dev.hypera.chameleon.users.ProxyUser;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.SocketAddress;
@@ -95,7 +95,7 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
      * {@inheritDoc}
      */
     @Override
-    public @NotNull UUID getUniqueId() {
+    public @NotNull UUID getId() {
         return this.player.getUniqueId();
     }
 
@@ -111,7 +111,7 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
      * {@inheritDoc}
      */
     @Override
-    public int getPing() {
+    public int getLatency() {
         return this.player.getPing() > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) this.player.getPing();
     }
 

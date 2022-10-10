@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  * Bukkit {@link ServerPlatform} implementation.
  */
 @Internal
-public final class BukkitPlatform extends ServerPlatform {
+public final class BukkitPlatform implements ServerPlatform {
 
     /**
      * {@link BukkitPlatform} constructor.
@@ -46,7 +46,7 @@ public final class BukkitPlatform extends ServerPlatform {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull String getAPIName() {
+    public @NotNull String getId() {
         return "Bukkit";
     }
 
@@ -64,14 +64,6 @@ public final class BukkitPlatform extends ServerPlatform {
     @Override
     public @NotNull String getVersion() {
         return Bukkit.getVersion();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Type getType() {
-        return Type.SERVER;
     }
 
 }

@@ -24,7 +24,7 @@
 package dev.hypera.chameleon.platform.velocity.managers;
 
 import dev.hypera.chameleon.managers.PluginManager;
-import dev.hypera.chameleon.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.platform.PlatformPlugin;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityPlugin;
 import java.util.Optional;

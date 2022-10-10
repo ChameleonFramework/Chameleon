@@ -23,42 +23,39 @@
  */
 package dev.hypera.chameleon.platform.proxy;
 
-import dev.hypera.chameleon.annotations.PlatformSpecific;
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.users.platforms.ProxyUser;
+import dev.hypera.chameleon.users.ProxyUser;
 import java.net.SocketAddress;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link ProxyPlatform} sub-server.
+ * Represents a "sub-server" behind a proxy platform.
  */
-@PlatformSpecific(Platform.Type.PROXY)
 public interface Server {
 
     /**
-     * Get {@link Server} name.
+     * Get the name of this server.
      *
-     * @return {@link Server} name.
+     * @return  name.
      */
     @NotNull String getName();
 
     /**
-     * Get {@link Server} socket address.
+     * Get the socket address of this server.
      *
-     * @return {@link Server} socket address.
+     * @return socket address.
      */
     @NotNull SocketAddress getSocketAddress();
 
     /**
-     * Get all {@link ProxyUser}s on this {@link Server}.
+     * Get all proxy users currently connected to this server.
      *
-     * @return set of {@link ProxyUser} currently on this {@link Server}.
+     * @return players connected to this server.
      */
     @NotNull Set<ProxyUser> getPlayers();
 
     /**
-     * Send a plugin message to this {@link Server}.
+     * Send a plugin message to this server.
      *
      * @param channel Plugin message channel.
      * @param data    Data.

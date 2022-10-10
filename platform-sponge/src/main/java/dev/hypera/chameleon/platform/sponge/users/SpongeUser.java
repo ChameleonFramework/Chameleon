@@ -26,7 +26,7 @@ package dev.hypera.chameleon.platform.sponge.users;
 import dev.hypera.chameleon.adventure.AbstractReflectedAudience;
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.platform.server.GameMode;
-import dev.hypera.chameleon.users.platforms.ServerUser;
+import dev.hypera.chameleon.users.ServerUser;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.SocketAddress;
@@ -93,7 +93,7 @@ public class SpongeUser extends AbstractReflectedAudience implements ServerUser 
      * {@inheritDoc}
      */
     @Override
-    public @NotNull UUID getUniqueId() {
+    public @NotNull UUID getId() {
         return this.player.uniqueId();
     }
 
@@ -109,7 +109,7 @@ public class SpongeUser extends AbstractReflectedAudience implements ServerUser 
      * {@inheritDoc}
      */
     @Override
-    public int getPing() {
+    public int getLatency() {
         return this.player.connection().latency();
     }
 

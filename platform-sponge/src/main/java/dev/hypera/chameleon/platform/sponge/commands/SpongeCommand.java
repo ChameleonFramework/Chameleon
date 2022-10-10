@@ -24,9 +24,9 @@
 package dev.hypera.chameleon.platform.sponge.commands;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.commands.Command;
-import dev.hypera.chameleon.commands.context.Context;
-import dev.hypera.chameleon.commands.context.ContextImpl;
+import dev.hypera.chameleon.command.Command;
+import dev.hypera.chameleon.command.context.Context;
+import dev.hypera.chameleon.command.context.ContextImpl;
 import dev.hypera.chameleon.platform.sponge.users.SpongeUsers;
 import java.util.Arrays;
 import java.util.List;

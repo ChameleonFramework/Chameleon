@@ -21,27 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.platform.objects;
 
-import dev.hypera.chameleon.platform.Platform;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import dev.hypera.chameleon.platform.server.ServerPlatform;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Marks a method or class as only working on a particular {@link Platform.Type}.
- */
-@Target({ ElementType.TYPE, ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PlatformSpecific {
+public class TestServerPlatform implements ServerPlatform {
 
-    /**
-     * Get {@link Platform.Type}.
-     *
-     * @return the {@link Platform.Type} this method or class works on.
-     */
-    @NotNull Platform.Type value();
+    @Override
+    public @NotNull String getId() {
+        return "TestServer";
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return "TestServer";
+    }
+
+    @Override
+    public @NotNull String getVersion() {
+        return "@version@";
+    }
 
 }

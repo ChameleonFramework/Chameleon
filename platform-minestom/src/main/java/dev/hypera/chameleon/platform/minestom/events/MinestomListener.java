@@ -30,7 +30,7 @@ import dev.hypera.chameleon.events.common.UserConnectEvent;
 import dev.hypera.chameleon.events.common.UserDisconnectEvent;
 import dev.hypera.chameleon.events.server.ServerUserKickEvent;
 import dev.hypera.chameleon.platform.minestom.users.MinestomUsers;
-import dev.hypera.chameleon.users.platforms.ServerUser;
+import dev.hypera.chameleon.users.ServerUser;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventListener;

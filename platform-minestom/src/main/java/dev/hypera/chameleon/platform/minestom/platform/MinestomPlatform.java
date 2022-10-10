@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  * Minestom {@link ServerPlatform} implementation.
  */
 @Internal
-public final class MinestomPlatform extends ServerPlatform {
+public final class MinestomPlatform implements ServerPlatform {
 
     /**
      * {@link MinestomPlatform} constructor.
@@ -46,7 +46,7 @@ public final class MinestomPlatform extends ServerPlatform {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull String getAPIName() {
+    public @NotNull String getId() {
         return "Minestom";
     }
 
@@ -64,14 +64,6 @@ public final class MinestomPlatform extends ServerPlatform {
     @Override
     public @NotNull String getVersion() {
         return MinecraftServer.VERSION_NAME;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Type getType() {
-        return Type.SERVER;
     }
 
 }

@@ -23,7 +23,7 @@
  */
 package dev.hypera.chameleon.platform.minestom.platform.objects;
 
-import dev.hypera.chameleon.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.platform.PlatformPlugin;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;

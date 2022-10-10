@@ -23,13 +23,13 @@
  */
 package dev.hypera.example.commands;
 
-import dev.hypera.chameleon.commands.Command;
-import dev.hypera.chameleon.commands.annotations.CommandHandler;
-import dev.hypera.chameleon.commands.annotations.Permission;
-import dev.hypera.chameleon.commands.annotations.SubCommandHandler;
-import dev.hypera.chameleon.commands.context.Context;
-import dev.hypera.chameleon.commands.objects.Condition;
-import dev.hypera.chameleon.commands.objects.Platform;
+import dev.hypera.chameleon.command.Command;
+import dev.hypera.chameleon.command.annotations.CommandHandler;
+import dev.hypera.chameleon.command.annotations.Permission;
+import dev.hypera.chameleon.command.annotations.SubCommandHandler;
+import dev.hypera.chameleon.command.context.Context;
+import dev.hypera.chameleon.command.objects.Condition;
+import dev.hypera.chameleon.platform.PlatformTarget;
 import dev.hypera.chameleon.users.User;
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +50,7 @@ public class ExampleCommand extends Command {
     public ExampleCommand() {
         setPermissionErrorMessage(Component.text("No permission.", NamedTextColor.RED));
         setConditions(Condition.of(c -> c.getSender() instanceof User, Component.text("This command can only be used in-game.", NamedTextColor.RED)));
-        setPlatform(Platform.ALL);
+        setPlatform(PlatformTarget.all());
     }
 
     /**

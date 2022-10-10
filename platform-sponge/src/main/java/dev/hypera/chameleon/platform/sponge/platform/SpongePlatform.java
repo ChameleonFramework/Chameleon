@@ -33,26 +33,30 @@ import org.spongepowered.api.Sponge;
  * Sponge {@link ServerPlatform} implementation.
  */
 @Internal
-public final class SpongePlatform extends ServerPlatform {
+public final class SpongePlatform implements ServerPlatform {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public @NotNull String getAPIName() {
+    public @NotNull String getId() {
         return Sponge.game().platform().container(Component.API).metadata().name().orElse("Sponge");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getName() {
         return Sponge.game().platform().container(Component.IMPLEMENTATION).metadata().name().orElse("Sponge");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String getVersion() {
         return Sponge.game().platform().container(Component.IMPLEMENTATION).metadata().version().toString() + " (" + Sponge.game().platform().container(Component.API).metadata().version() + ")";
-    }
-
-    @Override
-    public @NotNull Type getType() {
-        return Type.SERVER;
     }
 
 }

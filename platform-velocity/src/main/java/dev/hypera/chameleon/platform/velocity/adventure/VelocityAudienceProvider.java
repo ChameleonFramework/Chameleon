@@ -30,7 +30,7 @@ import dev.hypera.chameleon.platform.velocity.user.VelocityConsoleUser;
 import dev.hypera.chameleon.platform.velocity.user.VelocityUser;
 import dev.hypera.chameleon.platform.velocity.user.VelocityUsers;
 import dev.hypera.chameleon.users.ChatUser;
-import dev.hypera.chameleon.users.platforms.ProxyUser;
+import dev.hypera.chameleon.users.ProxyUser;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

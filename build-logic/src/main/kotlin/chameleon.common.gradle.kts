@@ -24,6 +24,7 @@
 plugins {
     id("chameleon.base")
     id("chameleon.publishing")
+    jacoco
 }
 
 /* Apply JUnit and setup */
@@ -36,6 +37,13 @@ dependencies {
     testImplementation(libs.findLibrary("test-junit-params").get())
 }
 
-tasks.test {
-    useJUnitPlatform()
+tasks {
+    test {
+        useJUnitPlatform()
+        finalizedBy(jacocoTestReport)
+    }
+
+    jacocoTestReport {
+        dependsOn(test)
+    }
 }

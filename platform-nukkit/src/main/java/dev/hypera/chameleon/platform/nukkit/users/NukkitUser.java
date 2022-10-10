@@ -26,7 +26,7 @@ package dev.hypera.chameleon.platform.nukkit.users;
 import cn.nukkit.Player;
 import dev.hypera.chameleon.platform.nukkit.adventure.AbstractNukkitAudience;
 import dev.hypera.chameleon.platform.server.GameMode;
-import dev.hypera.chameleon.users.platforms.ServerUser;
+import dev.hypera.chameleon.users.ServerUser;
 import java.net.SocketAddress;
 import java.util.Optional;
 import java.util.UUID;
@@ -73,7 +73,7 @@ public class NukkitUser extends AbstractNukkitAudience implements ServerUser {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull UUID getUniqueId() {
+    public @NotNull UUID getId() {
         return this.player.getUniqueId();
     }
 
@@ -89,7 +89,7 @@ public class NukkitUser extends AbstractNukkitAudience implements ServerUser {
      * {@inheritDoc}
      */
     @Override
-    public int getPing() {
+    public int getLatency() {
         return this.player.getPing();
     }
 

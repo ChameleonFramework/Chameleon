@@ -23,32 +23,30 @@
  */
 package dev.hypera.chameleon.platform.proxy;
 
-import dev.hypera.chameleon.annotations.PlatformSpecific;
 import dev.hypera.chameleon.platform.Platform;
 import java.util.Optional;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Proxy {@link Platform}.
+ * Represents a proxy platform.
  */
-@PlatformSpecific(Platform.Type.PROXY)
-public abstract class ProxyPlatform extends Platform {
+public interface ProxyPlatform extends Platform {
 
     /**
-     * Get {@link Server}s.
+     * Get the "sub-servers" configured in this Proxy.
      *
-     * @return set of {@link Server}s.
+     * @return all "sub-servers".
      */
-    public abstract @NotNull Set<Server> getServers();
+    @NotNull Set<Server> getServers();
 
     /**
-     * Attempt to find {@link Server} by name.
+     * Attempt to find a "sub-server" by the name or identifier it has.
      *
      * @param name The name to search for.
      *
-     * @return {@link Optional} containing the {@link Server} if found, otherwise empty.
+     * @return an {@code Optional} containing the server, if found, otherwise an empty optional.
      */
-    public abstract @NotNull Optional<Server> getServer(@NotNull String name);
+    @NotNull Optional<Server> getServer(@NotNull String name);
 
 }

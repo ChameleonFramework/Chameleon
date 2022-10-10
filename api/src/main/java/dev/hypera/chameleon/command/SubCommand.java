@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.commands;
+package dev.hypera.chameleon.command;
 
-import dev.hypera.chameleon.commands.annotations.Permission;
-import dev.hypera.chameleon.commands.context.Context;
+import dev.hypera.chameleon.command.annotations.Permission;
+import dev.hypera.chameleon.command.context.Context;
 import dev.hypera.chameleon.exceptions.command.ChameleonCommandException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -85,6 +85,27 @@ public final class EventBusImpl implements EventBus {
      */
     @Override
     @SuppressWarnings("unchecked")
+    public <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull EventSubscriber<T> subscriber) {
+        if (null == subscriber.getType()) {
+            throw new IllegalArgumentException("subscriber does not have a set type, use #subscribe(Class, EventSubscriber) or EventSubscriber#builder instead");
+        }
+
+        this.subscriptions.computeIfAbsent(subscriber.getType(), key -> Collections.synchronizedSet(new HashSet<>())).add((EventSubscriber<ChameleonEvent>) subscriber);
+        this.sortedSubscriptions.clear();
+
+        EventSubscription subscription = () -> unsubscribeIf(sub -> sub.equals(subscriber));
+        if (subscriber instanceof EventSubscriberImpl) {
+            ((EventSubscriberImpl<T>) subscriber).setSubscription(subscription);
+        }
+
+        return subscription;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
     public <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull Class<T> event, @NotNull EventSubscriber<T> subscriber) {
         this.subscriptions.computeIfAbsent(event, key -> Collections.synchronizedSet(new HashSet<>())).add((EventSubscriber<ChameleonEvent>) subscriber);
         this.sortedSubscriptions.clear();

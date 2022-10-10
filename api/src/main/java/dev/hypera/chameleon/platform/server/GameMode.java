@@ -23,14 +23,9 @@
  */
 package dev.hypera.chameleon.platform.server;
 
-import dev.hypera.chameleon.annotations.PlatformSpecific;
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.users.platforms.ServerUser;
-
 /**
- * {@link ServerUser} Game mode.
+ * {@link dev.hypera.chameleon.users.ServerUser} Game mode.
  */
-@PlatformSpecific(Platform.Type.SERVER)
 public enum GameMode {
 
     SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR

@@ -23,7 +23,7 @@
  */
 package dev.hypera.chameleon.platform.sponge.platform.plugin;
 
-import dev.hypera.chameleon.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.platform.PlatformPlugin;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;

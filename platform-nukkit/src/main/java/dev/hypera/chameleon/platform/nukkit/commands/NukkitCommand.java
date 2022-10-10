@@ -25,8 +25,8 @@ package dev.hypera.chameleon.platform.nukkit.commands;
 
 import cn.nukkit.command.CommandSender;
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.commands.Command;
-import dev.hypera.chameleon.commands.context.ContextImpl;
+import dev.hypera.chameleon.command.Command;
+import dev.hypera.chameleon.command.context.ContextImpl;
 import dev.hypera.chameleon.platform.nukkit.users.NukkitUsers;
 import java.util.Arrays;
 import org.jetbrains.annotations.ApiStatus.Internal;

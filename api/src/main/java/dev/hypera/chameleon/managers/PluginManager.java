@@ -24,7 +24,7 @@
 package dev.hypera.chameleon.managers;
 
 import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.platform.objects.PlatformPlugin;
+import dev.hypera.chameleon.platform.PlatformPlugin;
 import java.util.Optional;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;

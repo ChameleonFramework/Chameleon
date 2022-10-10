@@ -24,8 +24,8 @@
 package dev.hypera.chameleon.platform.bukkit.managers;
 
 import dev.hypera.chameleon.managers.PluginManager;
+import dev.hypera.chameleon.platform.PlatformPlugin;
 import dev.hypera.chameleon.platform.bukkit.platform.objects.BukkitPlugin;
-import dev.hypera.chameleon.platform.objects.PlatformPlugin;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
@@ -53,7 +53,9 @@ public final class BukkitPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Set<PlatformPlugin> getPlugins() {
-        return Arrays.stream(Bukkit.getPluginManager().getPlugins()).map(BukkitPlugin::new).collect(Collectors.toSet());
+        return Arrays.stream(Bukkit.getPluginManager().getPlugins())
+            .map(BukkitPlugin::new)
+            .collect(Collectors.toSet());
     }
 
     /**
@@ -61,7 +63,8 @@ public final class BukkitPluginManager extends PluginManager {
      */
     @Override
     public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-        return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name)).map(BukkitPlugin::new);
+        return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name))
+            .map(BukkitPlugin::new);
     }
 
     /**

@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.commands.context;
+package dev.hypera.chameleon.command.context;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.commands.Command;
+import dev.hypera.chameleon.command.Command;
 import dev.hypera.chameleon.users.ChatUser;
 import org.jetbrains.annotations.NotNull;
 

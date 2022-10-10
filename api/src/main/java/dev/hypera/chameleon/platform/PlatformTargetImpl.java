@@ -21,26 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.commands.annotations;
+package dev.hypera.chameleon.platform;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.Objects;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Permission.
+ * {@link PlatformTarget} implementation.
  */
-@Target({ ElementType.TYPE, ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Permission {
+final class PlatformTargetImpl implements PlatformTarget {
+
+    private final @NotNull String id;
+    private final @NotNull Predicate<Platform> matcher;
+
+    PlatformTargetImpl(@NotNull String id, @NotNull Predicate<Platform> matcher) {
+        this.id = id;
+        this.matcher = matcher;
+    }
 
     /**
-     * Get permission string.
-     *
-     * @return permission string.
+     * {@inheritDoc}
      */
-    @NotNull String value();
+    @Override
+    public @NotNull String getId() {
+        return this.id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean matches(@NotNull Platform platform) {
+        return this.matcher.test(platform);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (null == obj || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        return this.id.equals(((PlatformTargetImpl) obj).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 
 }

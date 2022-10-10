@@ -24,8 +24,8 @@
 package dev.hypera.chameleon.platform.minestom.command;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.commands.Command;
-import dev.hypera.chameleon.commands.context.ContextImpl;
+import dev.hypera.chameleon.command.Command;
+import dev.hypera.chameleon.command.context.ContextImpl;
 import dev.hypera.chameleon.platform.minestom.users.MinestomUsers;
 import java.util.Arrays;
 import org.jetbrains.annotations.ApiStatus.Internal;
