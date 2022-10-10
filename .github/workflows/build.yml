@@ -1,6 +1,11 @@
-# GitHub Actions workflow to build the project with Gradle.
+# GitHub Action workflow to run CodeQL.
 name: "Gradle"
-on: [push, pull_request]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+  schedule:
+    - cron: '25 6 * * 5'
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.event.number || github.ref }}"
@@ -12,26 +17,31 @@ env:
 jobs:
   build:
     name: "Build"
-    if: "${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}"
-    strategy:
-      matrix:
-        os:
-          - "ubuntu-latest"
-          - "windows-latest"
-          - "macos-latest"
+    runs-on: "ubuntu-latest"
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
 
-    runs-on: "${{ matrix.os }}"
+    strategy:
+      fail-fast: false
+
     steps:
       - name: "Checkout repository"
         uses: actions/checkout@v3
 
-      - name: "Set up Java ${{ env.JAVA_VERSION }}"
+      - name: "Initialize CodeQL"
+        uses: github/codeql-action/init@v2
+        with:
+          languages: "java"
+
+      - name: "Set up JDK ${{ env.JAVA_VERSION }}"
         uses: actions/setup-java@v3
         with:
           java-version: "${{ env.JAVA_VERSION }}"
           distribution: "adopt"
 
-      - name: "Gradle build"
+      - name: "Build"
         uses: gradle/gradle-build-action@v2
         with:
           arguments: "build"
@@ -46,3 +56,7 @@ jobs:
           path: |
             **/build/reports/tests/test/
             **/build/reports/checkstyle/
+            **/build/reports/jacoco/
+
+      - name: "Perform CodeQL Analysis"
+        uses: github/codeql-action/analyze@v2
