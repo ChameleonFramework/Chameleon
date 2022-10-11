@@ -21,56 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.managers;
+package dev.hypera.chameleon.exceptions.reflection;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.command.Command;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 
 /**
- * {@link Chameleon} command manager.
+ * {@link Chameleon} reflective exception.
  */
-public abstract class CommandManager {
+public class ChameleonReflectiveException extends ChameleonRuntimeException {
 
-    private final @NotNull Chameleon chameleon;
+    private static final long serialVersionUID = 6727730791800930118L;
 
     /**
-     * {@link CommandManager} constructor.
-     *
-     * @param chameleon {@link Chameleon} instance.
+     * {@link ChameleonReflectiveException} constructor.
      */
-    @Internal
-    protected CommandManager(@NotNull Chameleon chameleon) {
-        this.chameleon = chameleon;
+    public ChameleonReflectiveException() {
+        super();
     }
 
     /**
-     * Register {@link Command}.
+     * {@link ChameleonReflectiveException} constructor.
      *
-     * @param command {@link Command} to be registered.
+     * @param message Exception message.
      */
-    public void register(@NotNull Command command) {
-        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
-            registerCommand(command);
-        }
+    public ChameleonReflectiveException(String message) {
+        super(message);
     }
 
     /**
-     * Unregister {@link Command}.
+     * {@link ChameleonReflectiveException} constructor.
      *
-     * @param command {@link Command} to be unregistered.
+     * @param message Exception message.
+     * @param cause   Exception cause.
      */
-    public void unregister(@NotNull Command command) {
-        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
-            unregisterCommand(command);
-        }
+    public ChameleonReflectiveException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    @Internal
-    protected abstract void registerCommand(@NotNull Command command);
+    /**
+     * {@link ChameleonReflectiveException} constructor.
+     *
+     * @param cause Exception cause.
+     */
+    public ChameleonReflectiveException(Throwable cause) {
+        super(cause);
+    }
 
-    @Internal
-    protected abstract void unregisterCommand(@NotNull Command command);
+    protected ChameleonReflectiveException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 
 }

@@ -21,56 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.managers;
+package dev.hypera.chameleon.annotations.exception;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.command.Command;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 
 /**
- * {@link Chameleon} command manager.
+ * {@link Chameleon} extension exception.
  */
-public abstract class CommandManager {
+public class ChameleonAnnotationException extends ChameleonRuntimeException {
 
-    private final @NotNull Chameleon chameleon;
+    private static final long serialVersionUID = 3638644893311787308L;
 
     /**
-     * {@link CommandManager} constructor.
-     *
-     * @param chameleon {@link Chameleon} instance.
+     * {@link ChameleonAnnotationException} constructor.
      */
-    @Internal
-    protected CommandManager(@NotNull Chameleon chameleon) {
-        this.chameleon = chameleon;
+    public ChameleonAnnotationException() {
+        super();
     }
 
     /**
-     * Register {@link Command}.
+     * {@link ChameleonAnnotationException} constructor.
      *
-     * @param command {@link Command} to be registered.
+     * @param message Exception message.
      */
-    public void register(@NotNull Command command) {
-        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
-            registerCommand(command);
-        }
+    public ChameleonAnnotationException(String message) {
+        super(message);
     }
 
     /**
-     * Unregister {@link Command}.
+     * {@link ChameleonAnnotationException} constructor.
      *
-     * @param command {@link Command} to be unregistered.
+     * @param message Exception message.
+     * @param cause   Exception cause.
      */
-    public void unregister(@NotNull Command command) {
-        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
-            unregisterCommand(command);
-        }
+    public ChameleonAnnotationException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    @Internal
-    protected abstract void registerCommand(@NotNull Command command);
+    /**
+     * {@link ChameleonAnnotationException} constructor.
+     *
+     * @param cause Exception cause.
+     */
+    public ChameleonAnnotationException(Throwable cause) {
+        super(cause);
+    }
 
-    @Internal
-    protected abstract void unregisterCommand(@NotNull Command command);
+    protected ChameleonAnnotationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 
 }

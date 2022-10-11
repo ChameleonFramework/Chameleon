@@ -48,7 +48,7 @@ public abstract class AbstractAudience implements Audience {
      *
      * @param audience Adventure {@link Audience}.
      */
-    public AbstractAudience(@NotNull Audience audience) {
+    protected AbstractAudience(@NotNull Audience audience) {
         this.audience = audience;
     }
 

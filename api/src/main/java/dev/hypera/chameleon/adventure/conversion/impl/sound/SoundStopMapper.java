@@ -25,6 +25,7 @@ package dev.hypera.chameleon.adventure.conversion.impl.sound;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.adventure.conversion.IMapper;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 import net.kyori.adventure.sound.SoundStop;
@@ -64,7 +65,7 @@ public final class SoundStopMapper implements IMapper<SoundStop> {
         try {
             return null == soundStop.sound() ? this.allMethod.invoke(null) : this.createMethod.invoke(null, AdventureConverter.convertKey(Objects.requireNonNull(soundStop.sound())));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonRuntimeException(ex);
         }
     }
 

@@ -25,6 +25,7 @@ package dev.hypera.chameleon.annotations.processing;
 
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.Plugin.Platform;
+import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -50,14 +51,14 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
     public synchronized boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Plugin.class);
 
-        if (elements.size() >= 1) {
+        if (!elements.isEmpty()) {
             if (elements.size() > 1) {
-                throw new RuntimeException("@Plugin cannot be used more than once");
+                throw new ChameleonAnnotationException("@Plugin cannot be used more than once");
             }
 
             Element element = elements.iterator().next();
             if (element.getKind() != ElementKind.CLASS || element.getModifiers().contains(Modifier.ABSTRACT)) {
-                throw new RuntimeException("@Plugin cannot be used on abstract classes");
+                throw new ChameleonAnnotationException("@Plugin cannot be used on abstract classes");
             }
 
             TypeElement plugin = (TypeElement) element;
@@ -71,8 +72,8 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
             for (Platform platform : platforms) {
                 try {
                     platform.getGenerator().getConstructor().newInstance().generate(data, plugin, processingEnv);
-                } catch (Exception ex) {
-                    throw new RuntimeException("Failed to generate platform data", ex);
+                } catch (ReflectiveOperationException ex) {
+                    throw new ChameleonAnnotationException("Failed to construct generator", ex);
                 }
             }
         }

@@ -25,6 +25,7 @@ package dev.hypera.chameleon.adventure.conversion.impl.sound;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.adventure.conversion.IMapper;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 import java.lang.reflect.Method;
 import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +65,7 @@ public final class SoundMapper implements IMapper<Sound> {
         try {
             return this.createMethod.invoke(null, AdventureConverter.convertKey(sound.name()), this.sourceValueOf.invoke(null, sound.source().name()), sound.volume(), sound.pitch());
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonRuntimeException(ex);
         }
     }
 

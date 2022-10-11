@@ -35,7 +35,7 @@ public abstract class AbstractCancellable implements Cancellable {
      *
      * @param cancelled Whether this event is cancelled.
      */
-    public AbstractCancellable(boolean cancelled) {
+    protected AbstractCancellable(boolean cancelled) {
         this.cancelled = cancelled;
     }
 

@@ -25,6 +25,7 @@ package dev.hypera.chameleon.adventure.conversion.impl.title;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.adventure.conversion.IMapper;
+import dev.hypera.chameleon.exceptions.reflection.ChameleonReflectiveException;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.Arrays;
@@ -66,7 +67,7 @@ public final class TimesMapper implements IMapper<Times> {
         try {
             return this.createMethod.invoke(null, times.fadeIn(), times.stay(), times.fadeOut());
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to map Times object to platform object", ex);
         }
     }
 

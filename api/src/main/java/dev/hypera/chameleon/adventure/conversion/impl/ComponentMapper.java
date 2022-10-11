@@ -25,6 +25,7 @@ package dev.hypera.chameleon.adventure.conversion.impl;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.adventure.conversion.IMapper;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 import java.lang.reflect.Method;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -66,7 +67,7 @@ public final class ComponentMapper implements IMapper<Component> {
         try {
             return this.gsonSerializerDeserialize.invoke(this.gsonSerializerInstance, json);
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonRuntimeException(ex);
         }
     }
 
@@ -82,7 +83,7 @@ public final class ComponentMapper implements IMapper<Component> {
             Object json = this.gsonSerializerSerialize.invoke(this.gsonSerializerInstance, component);
             return GsonComponentSerializer.gson().deserialize((String) json);
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonRuntimeException(ex);
         }
     }
 

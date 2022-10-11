@@ -27,6 +27,7 @@ import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.data.PluginData;
 import dev.hypera.chameleon.events.EventBus;
 import dev.hypera.chameleon.events.EventBusImpl;
+import dev.hypera.chameleon.exceptions.extension.ChameleonExtensionException;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
@@ -179,7 +180,7 @@ public abstract class Chameleon {
             this.extensions.add(platformExtension.getExtension());
             return platformExtension.getExtension();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonExtensionException(ex);
         }
     }
 

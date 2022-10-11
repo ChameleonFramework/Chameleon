@@ -36,7 +36,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
     private final @NotNull Class<T> type;
 
     private final @NotNull EventSubscriber<T> handler;
-    private final int priority;
+    private final @NotNull EventSubscriptionPriority priority;
     private final boolean acceptsCancelled;
 
     private final @NotNull List<Predicate<T>> filters;
@@ -45,7 +45,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
 
     private @Nullable EventSubscription subscription;
 
-    EventSubscriberImpl(@NotNull Class<T> type, @NotNull EventSubscriber<T> handler, int priority, boolean acceptsCancelled, @NotNull List<Predicate<T>> filters, @NotNull Predicate<T> expireWhen, int expiresAfter) {
+    EventSubscriberImpl(@NotNull Class<T> type, @NotNull EventSubscriber<T> handler, @NotNull EventSubscriptionPriority priority, boolean acceptsCancelled, @NotNull List<Predicate<T>> filters, @NotNull Predicate<T> expireWhen, int expiresAfter) {
         this.type = type;
         this.handler = handler;
         this.priority = priority;
@@ -85,7 +85,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
      * {@inheritDoc}
      */
     @Override
-    public int getPriority() {
+    public @NotNull EventSubscriptionPriority getPriority() {
         return this.priority;
     }
 
@@ -114,11 +114,11 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
         this.subscription = subscription;
     }
 
-    final static class BuilderImpl<T extends ChameleonEvent> implements Builder<T> {
+    static final class BuilderImpl<T extends ChameleonEvent> implements Builder<T> {
 
         private final @NotNull Class<T> type;
         private @Nullable EventSubscriber<T> handler;
-        private int priority = EventSubscriptionPriority.NORMAL;
+        private @NotNull EventSubscriptionPriority priority = EventSubscriptionPriority.NORMAL;
         private boolean acceptsCancelled = false;
 
         private final @NotNull List<Predicate<T>> filters = new ArrayList<>();
@@ -136,7 +136,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
         }
 
         @Override
-        public @NotNull Builder<T> priority(int priority) {
+        public @NotNull Builder<T> priority(@NotNull EventSubscriptionPriority priority) {
             this.priority = priority;
             return this;
         }

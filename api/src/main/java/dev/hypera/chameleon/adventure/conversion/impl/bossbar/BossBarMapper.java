@@ -25,6 +25,7 @@ package dev.hypera.chameleon.adventure.conversion.impl.bossbar;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.adventure.conversion.IMapper;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,6 +36,8 @@ import org.jetbrains.annotations.NotNull;
  * Maps shaded to platform {@link BossBar}.
  */
 public final class BossBarMapper implements IMapper<BossBar> {
+
+    private static final @NotNull String VALUE_OF = "valueOf";
 
     private final @NotNull Method createMethod;
     private final @NotNull Method colorValueOf;
@@ -54,9 +57,9 @@ public final class BossBarMapper implements IMapper<BossBar> {
             Class<?> flagEnum = Class.forName(bossBarClass.getCanonicalName() + "$Flag");
 
             this.createMethod = bossBarClass.getMethod("bossBar", componentLikeClass, float.class, colorEnum, overlayEnum, Set.class);
-            this.colorValueOf = colorEnum.getMethod("valueOf", String.class);
-            this.overlayValueOf = overlayEnum.getMethod("valueOf", String.class);
-            this.flagValueOf = flagEnum.getMethod("valueOf", String.class);
+            this.colorValueOf = colorEnum.getMethod(VALUE_OF, String.class);
+            this.overlayValueOf = overlayEnum.getMethod(VALUE_OF, String.class);
+            this.flagValueOf = flagEnum.getMethod(VALUE_OF, String.class);
         } catch (ReflectiveOperationException ex) {
             throw new ExceptionInInitializerError(ex);
         }
@@ -81,12 +84,12 @@ public final class BossBarMapper implements IMapper<BossBar> {
                     try {
                         return this.flagValueOf.invoke(null, f.name());
                     } catch (ReflectiveOperationException ex) {
-                        throw new RuntimeException(ex);
+                        throw new ChameleonRuntimeException(ex);
                     }
                 }).collect(Collectors.toSet())
             );
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonRuntimeException(ex);
         }
     }
 

@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.adventure;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
+import dev.hypera.chameleon.exceptions.reflection.ChameleonReflectiveException;
 import java.lang.reflect.Method;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.MessageType;
@@ -99,7 +100,7 @@ public abstract class AbstractReflectedAudience implements Audience {
      *
      * @param audience Adventure platform {@link Audience}.
      */
-    public AbstractReflectedAudience(@NotNull Object audience) {
+    protected AbstractReflectedAudience(@NotNull Object audience) {
         if (!AUDIENCE_CLASS.isInstance(audience)) {
             throw new IllegalArgumentException("'audience' is not instance of " + AdventureConverter.PACKAGE + "audience.Audience");
         }
@@ -116,7 +117,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SEND_MESSAGE.invoke(this.audience, AdventureConverter.convertComponent(message));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to send mapped ComponentLike message", ex);
         }
     }
 
@@ -144,7 +145,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SEND_MESSAGE.invoke(this.audience, AdventureConverter.convertComponent(message));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to send mapped Component message", ex);
         }
     }
 
@@ -220,7 +221,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SEND_ACTION_BAR.invoke(this.audience, AdventureConverter.convertComponent(message));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to send mapped ComponentLike action bar message", ex);
         }
     }
 
@@ -232,7 +233,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SEND_ACTION_BAR.invoke(this.audience, AdventureConverter.convertComponent(message));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to send mapped Component action bar message", ex);
         }
     }
 
@@ -244,7 +245,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SEND_PLAYER_LIST_HEADER.invoke(this.audience, AdventureConverter.convertComponent(header));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to send mapped ComponentLike player list header", ex);
         }
     }
 
@@ -256,7 +257,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SEND_PLAYER_LIST_HEADER.invoke(this.audience, AdventureConverter.convertComponent(header));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to send mapped Component player list header", ex);
         }
     }
 
@@ -268,7 +269,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SEND_PLAYER_LIST_FOOTER.invoke(this.audience, AdventureConverter.convertComponent(footer));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to send mapped ComponentLike player list footer", ex);
         }
     }
 
@@ -280,7 +281,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SEND_PLAYER_LIST_FOOTER.invoke(this.audience, AdventureConverter.convertComponent(footer));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to send mapped Component player list footer", ex);
         }
     }
 
@@ -292,7 +293,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SEND_PLAYER_LIST_HEADER_FOOTER.invoke(this.audience, AdventureConverter.convertComponent(header), AdventureConverter.convertComponent(footer));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to send mapped ComponentLike player list header and footer", ex);
         }
     }
 
@@ -304,7 +305,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SEND_PLAYER_LIST_HEADER_FOOTER.invoke(this.audience, AdventureConverter.convertComponent(header), AdventureConverter.convertComponent(footer));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to send mapped Component player list header and footer", ex);
         }
     }
 
@@ -316,7 +317,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SHOW_TITLE.invoke(this.audience, AdventureConverter.convertTitle(title));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to send mapped Title", ex);
         }
     }
 
@@ -328,7 +329,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             CLEAR_TITLE.invoke(this.audience);
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to clear title", ex);
         }
     }
 
@@ -340,7 +341,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             RESET_TITLE.invoke(this.audience);
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to reset title", ex);
         }
     }
 
@@ -352,7 +353,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             SHOW_BOSS_BAR.invoke(this.audience, AdventureConverter.convertBossBar(bar));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to show mapped BossBar", ex);
         }
     }
 
@@ -364,7 +365,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             HIDE_BOSS_BAR.invoke(this.audience, AdventureConverter.convertBossBar(bar));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to hide mapped BossBar", ex);
         }
     }
 
@@ -376,7 +377,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             PLAY_SOUND.invoke(this.audience, AdventureConverter.convertSound(sound));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to play mapped Sound", ex);
         }
     }
 
@@ -388,7 +389,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             PLAY_SOUND_LOCATION.invoke(this.audience, AdventureConverter.convertSound(sound), x, y, z);
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException(ex);
         }
     }
 
@@ -400,7 +401,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             STOP_SOUND.invoke(this.audience, AdventureConverter.convertSoundStop(stop));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException(ex);
         }
     }
 
@@ -412,7 +413,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             OPEN_BOOK.invoke(this.audience, AdventureConverter.convertBook(book.build()));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException(ex);
         }
     }
 
@@ -424,7 +425,7 @@ public abstract class AbstractReflectedAudience implements Audience {
         try {
             OPEN_BOOK.invoke(this.audience, AdventureConverter.convertBook(book));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException(ex);
         }
     }
 

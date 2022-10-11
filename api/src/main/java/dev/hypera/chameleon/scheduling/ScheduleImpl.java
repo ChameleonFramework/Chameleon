@@ -33,8 +33,7 @@ import org.jetbrains.annotations.NotNull;
 @Internal
 public final class ScheduleImpl {
 
-    static @NotNull Schedule NEXT_TICK = new TickSchedule(1);
-    static @NotNull Schedule NONE = () -> Schedule.Type.NONE;
+    static final @NotNull Schedule NONE = () -> Schedule.Type.NONE;
 
     private ScheduleImpl() {
 

@@ -30,6 +30,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import dev.hypera.chameleon.annotations.Plugin;
+import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
@@ -59,32 +60,32 @@ public class MinestomGenerator extends Generator {
      * @param plugin Chameleon plugin main class
      * @param env    Processing environment
      *
-     * @throws Exception if something goes wrong while creating the files.
+     * @throws ChameleonAnnotationException if something goes wrong while creating the files.
      */
     @Override
-    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
+    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
         MethodSpec constructorSpec = MethodSpec.constructorBuilder()
             .addModifiers(Modifier.PUBLIC)
             .beginControlFlow("try")
             .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platform.minestom", "MinestomChameleon"), plugin, "pluginData")
+            .addStatement("this.$N = $T.create($T.class, this, $N).load()", CHAMELEON_VAR, clazz("dev.hypera.chameleon.platform.minestom", "MinestomChameleon"), plugin, "pluginData")
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
-            .addStatement("this.$N.getLogger().error(\"An error occurred while loading Chameleon\", $N)", "chameleon", "ex")
+            .addStatement("this.$N.getLogger().error(\"An error occurred while loading Chameleon\", $N)", CHAMELEON_VAR, "ex")
             .endControlFlow()
             .build();
 
         MethodSpec initializeSpec = MethodSpec.methodBuilder("initialize")
             .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
-            .addStatement("this.$N.onEnable()", "chameleon").build();
+            .addStatement("this.$N.onEnable()", CHAMELEON_VAR).build();
 
         MethodSpec terminateSpec = MethodSpec.methodBuilder("terminate")
             .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
-            .addStatement("this.$N.onDisable()", "chameleon").build();
+            .addStatement("this.$N.onDisable()", CHAMELEON_VAR).build();
 
         TypeSpec minestomMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Minestom")
             .addModifiers(Modifier.PUBLIC)
             .superclass(clazz("net.minestom.server.extensions", "Extension"))
-            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platform.minestom", "MinestomChameleon"), "chameleon", Modifier.PRIVATE).build())
+            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platform.minestom", "MinestomChameleon"), CHAMELEON_VAR, Modifier.PRIVATE).build())
             .addMethod(constructorSpec)
             .addMethod(initializeSpec)
             .addMethod(terminateSpec)
@@ -96,8 +97,12 @@ public class MinestomGenerator extends Generator {
         }
         packageName = packageName + ".platform.minestom";
 
-        JavaFile.builder(packageName, minestomMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
-        generateDescriptionFile(data, plugin, env, packageName);
+        try {
+            JavaFile.builder(packageName, minestomMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
+            generateDescriptionFile(data, plugin, env, packageName);
+        } catch (IOException ex) {
+            throw new ChameleonAnnotationException("Failed to write main class or description file", ex);
+        }
     }
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {

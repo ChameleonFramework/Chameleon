@@ -25,6 +25,7 @@ package dev.hypera.chameleon.adventure.conversion.impl.title;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
 import dev.hypera.chameleon.adventure.conversion.IMapper;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 import net.kyori.adventure.title.Title;
@@ -68,7 +69,7 @@ public final class TitleMapper implements IMapper<Title> {
                 this.timesConverter.map(null == title.times() ? Title.DEFAULT_TIMES : Objects.requireNonNull(title.times()))
             );
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonRuntimeException(ex);
         }
     }
 

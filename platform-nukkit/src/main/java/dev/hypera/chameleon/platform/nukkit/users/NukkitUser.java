@@ -106,7 +106,7 @@ public class NukkitUser extends AbstractNukkitAudience implements ServerUser {
      */
     @Override
     public void sendData(@NotNull String channel, byte[] data) {
-
+        // Minecraft Bedrock does not support plugin messages.
     }
 
     /**

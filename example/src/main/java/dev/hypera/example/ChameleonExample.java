@@ -108,7 +108,7 @@ public class ChameleonExample extends ChameleonPlugin {
      */
     @Override
     public void onDisable() {
-
+        // Disable logic goes here
     }
 
     /**

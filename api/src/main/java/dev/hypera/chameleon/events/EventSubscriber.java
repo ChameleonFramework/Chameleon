@@ -67,7 +67,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
      *
      * @return subscriber priority.
      */
-    default int getPriority() {
+    default @NotNull EventSubscriptionPriority getPriority() {
         return EventSubscriptionPriority.NORMAL;
     }
 
@@ -119,7 +119,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
          * @return {@code this}.
          */
         @Contract("_ -> this")
-        @NotNull Builder<T> priority(int priority);
+        @NotNull Builder<T> priority(@NotNull EventSubscriptionPriority priority);
 
         /**
          * Accept cancelled events.

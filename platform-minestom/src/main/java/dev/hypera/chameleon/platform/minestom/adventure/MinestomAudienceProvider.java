@@ -126,7 +126,7 @@ public class MinestomAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public void close() {
-
+        // We cannot close the audience provider on Minestom.
     }
 
 }

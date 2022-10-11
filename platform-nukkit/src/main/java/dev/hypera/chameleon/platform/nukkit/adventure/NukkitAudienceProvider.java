@@ -126,7 +126,7 @@ public class NukkitAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public void close() {
-
+        // We cannot close the audience provider on Nukkit.
     }
 
 }
