@@ -21,46 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.conversion.impl.key;
+package dev.hypera.chameleon.adventure.conversion.mapping;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.adventure.conversion.IMapper;
+import dev.hypera.chameleon.exceptions.reflection.ChameleonReflectiveException;
 import java.lang.reflect.Method;
-import net.kyori.adventure.key.Key;
+import java.time.Duration;
+import java.util.Arrays;
+import net.kyori.adventure.title.Title.Times;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform {@link Key}.
+ * Maps shaded to platform {@link Times}.
  */
-public final class KeyMapper implements IMapper<Key> {
+public final class TimesMapper implements Mapper<Times> {
 
     private final @NotNull Method createMethod;
 
     /**
-     * {@link KeyMapper} constructor.
+     * {@link TimesMapper} constructor.
      */
-    public KeyMapper() {
+    public TimesMapper() {
         try {
-            Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-            this.createMethod = keyClass.getMethod("key", String.class);
+            Class<?> timesClass = Class.forName(AdventureConverter.PACKAGE + "title.Title$Times");
+            if (Arrays.stream(timesClass.getMethods()).anyMatch(m -> m.getName().equals("times"))) {
+                this.createMethod = timesClass.getMethod("times", Duration.class, Duration.class, Duration.class);
+            } else {
+                this.createMethod = timesClass.getMethod("of", Duration.class, Duration.class, Duration.class);
+            }
         } catch (ReflectiveOperationException ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }
 
     /**
-     * Map {@link Key} to the platform version of Adventure.
+     * Map {@link Times} to the platform version of Adventure.
      *
-     * @param key {@link Key} to be mapped.
+     * @param times {@link Times} to be mapped.
      *
-     * @return Platform instance of {@link Key}.
+     * @return Platform instance of {@link Times}.
      */
     @Override
-    public @NotNull Object map(@NotNull Key key) {
+    public @NotNull Object map(@NotNull Times times) {
         try {
-            return this.createMethod.invoke(null, key.asString());
+            return this.createMethod.invoke(null, times.fadeIn(), times.stay(), times.fadeOut());
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to map Times object to platform object", ex);
         }
     }
 

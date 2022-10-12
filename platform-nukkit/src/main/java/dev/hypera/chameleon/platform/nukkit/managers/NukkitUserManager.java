@@ -24,11 +24,11 @@
 package dev.hypera.chameleon.platform.nukkit.managers;
 
 import cn.nukkit.Server;
-import dev.hypera.chameleon.managers.UserManager;
 import dev.hypera.chameleon.platform.nukkit.users.NukkitUser;
 import dev.hypera.chameleon.platform.nukkit.users.NukkitUsers;
 import dev.hypera.chameleon.users.ChatUser;
 import dev.hypera.chameleon.users.User;
+import dev.hypera.chameleon.users.UserManager;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;

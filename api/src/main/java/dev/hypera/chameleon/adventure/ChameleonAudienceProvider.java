@@ -27,11 +27,13 @@ import dev.hypera.chameleon.users.ChatUser;
 import java.util.function.Predicate;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.AudienceProvider;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Chameleon {@link AudienceProvider}.
  */
+@NonExtendable
 public interface ChameleonAudienceProvider extends AudienceProvider {
 
     /**

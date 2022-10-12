@@ -21,39 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.logging.impl;
+package dev.hypera.chameleon.logging;
 
-import dev.hypera.chameleon.logging.ChameleonLogger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Internal {@link ChameleonLogger} implementation.
+ * Java {@link ChameleonLogger} implementation.
  */
 @Internal
-public class InternalChameleonLogger implements ChameleonLogger {
+public final class ChameleonJavaLogger implements ChameleonLogger {
 
-    private static final @NotNull String CHAMELEON_PREFIX = "[Chameleon] ";
-
-    private final @NotNull ChameleonLogger logger;
+    private final @NotNull Logger logger;
+    private boolean debug = false;
 
     /**
-     * {@link InternalChameleonLogger} constructor.
+     * {@link ChameleonJavaLogger} constructor.
      *
-     * @param logger {@link ChameleonLogger} instance to use.
+     * @param logger {@link Logger} instance to use.
      */
-    @Internal
-    public InternalChameleonLogger(@NotNull ChameleonLogger logger) {
+    public ChameleonJavaLogger(@NotNull Logger logger) {
         this.logger = logger;
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void info(@NotNull String message, @NotNull Object... o) {
-        this.logger.info(CHAMELEON_PREFIX + message, o);
+        this.logger.log(Level.INFO, String.format(message, o));
     }
 
     /**
@@ -61,7 +59,9 @@ public class InternalChameleonLogger implements ChameleonLogger {
      */
     @Override
     public void debug(@NotNull String message, @NotNull Object... o) {
-        this.logger.debug(CHAMELEON_PREFIX + message, o);
+        if (this.debug) {
+            this.logger.log(Level.FINE, String.format(message, o));
+        }
     }
 
     /**
@@ -69,7 +69,7 @@ public class InternalChameleonLogger implements ChameleonLogger {
      */
     @Override
     public void warn(@NotNull String message, @NotNull Object... o) {
-        this.logger.warn(CHAMELEON_PREFIX + message, o);
+        this.logger.log(Level.WARNING, String.format(message, o));
     }
 
     /**
@@ -77,7 +77,7 @@ public class InternalChameleonLogger implements ChameleonLogger {
      */
     @Override
     public void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
-        this.logger.warn(CHAMELEON_PREFIX + message, throwable, o);
+        this.logger.log(Level.WARNING, String.format(message, o), throwable);
     }
 
     /**
@@ -85,7 +85,7 @@ public class InternalChameleonLogger implements ChameleonLogger {
      */
     @Override
     public void error(@NotNull String message, @NotNull Object... o) {
-        this.logger.error(CHAMELEON_PREFIX + message, o);
+        this.logger.log(Level.SEVERE, String.format(message, o));
     }
 
     /**
@@ -93,7 +93,7 @@ public class InternalChameleonLogger implements ChameleonLogger {
      */
     @Override
     public void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
-        this.logger.error(CHAMELEON_PREFIX + message, throwable, o);
+        this.logger.log(Level.SEVERE, String.format(message, o), throwable);
     }
 
 
@@ -102,7 +102,7 @@ public class InternalChameleonLogger implements ChameleonLogger {
      */
     @Override
     public @NotNull ChameleonLogger enableDebug() {
-        this.logger.enableDebug();
+        this.debug = true;
         return this;
     }
 
@@ -111,7 +111,7 @@ public class InternalChameleonLogger implements ChameleonLogger {
      */
     @Override
     public @NotNull ChameleonLogger disableDebug() {
-        this.logger.disableDebug();
+        this.debug = false;
         return this;
     }
 

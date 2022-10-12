@@ -24,20 +24,21 @@
 package dev.hypera.chameleon;
 
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
+import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.data.PluginData;
 import dev.hypera.chameleon.events.EventBus;
 import dev.hypera.chameleon.events.EventBusImpl;
+import dev.hypera.chameleon.exceptions.extension.ChameleonExtensionException;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
 import dev.hypera.chameleon.extensions.annotations.PostLoadable;
+import dev.hypera.chameleon.logging.ChameleonInternalLogger;
 import dev.hypera.chameleon.logging.ChameleonLogger;
-import dev.hypera.chameleon.logging.impl.InternalChameleonLogger;
-import dev.hypera.chameleon.managers.CommandManager;
-import dev.hypera.chameleon.managers.PluginManager;
-import dev.hypera.chameleon.managers.Scheduler;
-import dev.hypera.chameleon.managers.UserManager;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PluginManager;
+import dev.hypera.chameleon.scheduling.Scheduler;
+import dev.hypera.chameleon.users.UserManager;
 import dev.hypera.chameleon.utils.ChameleonUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -70,7 +71,7 @@ public abstract class Chameleon {
     protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull PluginData pluginData, @NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
         try {
             this.logger = logger;
-            this.internalLogger = new InternalChameleonLogger(logger);
+            this.internalLogger = new ChameleonInternalLogger(logger);
 
             this.plugin = plugin.getConstructor(Chameleon.class).newInstance(this);
             this.pluginData = pluginData;
@@ -179,7 +180,7 @@ public abstract class Chameleon {
             this.extensions.add(platformExtension.getExtension());
             return platformExtension.getExtension();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonExtensionException(ex);
         }
     }
 

@@ -24,11 +24,13 @@
 package dev.hypera.chameleon.logging;
 
 import dev.hypera.chameleon.Chameleon;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * {@link Chameleon} logger.
  */
+@NonExtendable
 public interface ChameleonLogger {
 
     /**

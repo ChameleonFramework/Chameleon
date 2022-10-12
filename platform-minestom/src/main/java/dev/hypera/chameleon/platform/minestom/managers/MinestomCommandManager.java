@@ -25,7 +25,7 @@ package dev.hypera.chameleon.platform.minestom.managers;
 
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.command.Command;
-import dev.hypera.chameleon.managers.CommandManager;
+import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.platform.minestom.command.MinestomCommand;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.ApiStatus.Internal;

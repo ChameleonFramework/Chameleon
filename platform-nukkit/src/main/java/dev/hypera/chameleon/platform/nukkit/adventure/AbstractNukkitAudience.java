@@ -46,7 +46,7 @@ public abstract class AbstractNukkitAudience implements Audience {
      * @param sender {@link CommandSender} to be wrapped.
      */
     @Internal
-    public AbstractNukkitAudience(@NotNull CommandSender sender) {
+    protected AbstractNukkitAudience(@NotNull CommandSender sender) {
         this.sender = sender;
     }
 

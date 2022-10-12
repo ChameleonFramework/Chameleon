@@ -21,50 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.conversion.impl.sound;
+package dev.hypera.chameleon.adventure.conversion.mapping;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.adventure.conversion.IMapper;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 import java.lang.reflect.Method;
-import java.util.Objects;
-import net.kyori.adventure.sound.SoundStop;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform {@link SoundStop}.
+ * Maps shaded to platform {@link Key}.
  */
-public final class SoundStopMapper implements IMapper<SoundStop> {
+public final class KeyMapper implements Mapper<Key> {
 
-    private final @NotNull Method allMethod;
     private final @NotNull Method createMethod;
 
     /**
-     * {@link SoundStopMapper} constructor.
+     * {@link KeyMapper} constructor.
      */
-    public SoundStopMapper() {
+    public KeyMapper() {
         try {
-            Class<?> soundStopClass = Class.forName(AdventureConverter.PACKAGE + "sound.SoundStop");
             Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-            this.allMethod = soundStopClass.getMethod("all");
-            this.createMethod = soundStopClass.getMethod("named", keyClass);
+            this.createMethod = keyClass.getMethod("key", String.class);
         } catch (ReflectiveOperationException ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }
 
     /**
-     * Map {@link SoundStop} to the platform version of Adventure.
+     * Map {@link Key} to the platform version of Adventure.
      *
-     * @param soundStop {@link SoundStop} to be mapped.
+     * @param key {@link Key} to be mapped.
      *
-     * @return Platform instance of {@link SoundStop}.
+     * @return Platform instance of {@link Key}.
      */
     @Override
-    public @NotNull Object map(@NotNull SoundStop soundStop) {
+    public @NotNull Object map(@NotNull Key key) {
         try {
-            return null == soundStop.sound() ? this.allMethod.invoke(null) : this.createMethod.invoke(null, AdventureConverter.convertKey(Objects.requireNonNull(soundStop.sound())));
+            return this.createMethod.invoke(null, key.asString());
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonRuntimeException(ex);
         }
     }
 

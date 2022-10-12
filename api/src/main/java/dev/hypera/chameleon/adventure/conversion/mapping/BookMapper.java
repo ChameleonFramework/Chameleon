@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.conversion.impl.book;
+package dev.hypera.chameleon.adventure.conversion.mapping;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.adventure.conversion.IMapper;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Maps shaded to platform {@link Book}.
  */
-public final class BookMapper implements IMapper<Book> {
+public final class BookMapper implements Mapper<Book> {
 
     private final @NotNull Method createMethod;
 
@@ -69,7 +69,7 @@ public final class BookMapper implements IMapper<Book> {
                 book.pages().stream().map(AdventureConverter::convertComponent).collect(Collectors.toCollection(ArrayList::new))
             );
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonRuntimeException(ex);
         }
     }
 

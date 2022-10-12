@@ -38,7 +38,7 @@ public abstract class ChameleonPlugin {
      *
      * @param chameleon {@link Chameleon} instance.
      */
-    public ChameleonPlugin(@NotNull Chameleon chameleon) {
+    protected ChameleonPlugin(@NotNull Chameleon chameleon) {
         this.chameleon = chameleon;
     }
 

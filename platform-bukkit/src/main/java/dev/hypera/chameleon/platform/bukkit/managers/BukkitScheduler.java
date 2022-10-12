@@ -23,14 +23,12 @@
  */
 package dev.hypera.chameleon.platform.bukkit.managers;
 
-import dev.hypera.chameleon.managers.Scheduler;
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
 import dev.hypera.chameleon.scheduling.Schedule;
-import dev.hypera.chameleon.scheduling.ScheduleImpl.DurationSchedule;
-import dev.hypera.chameleon.scheduling.ScheduleImpl.TickSchedule;
-import dev.hypera.chameleon.scheduling.Task;
-import dev.hypera.chameleon.scheduling.TaskImpl;
+import dev.hypera.chameleon.scheduling.ScheduledTask;
+import dev.hypera.chameleon.scheduling.Scheduler;
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 @Internal
 public final class BukkitScheduler extends Scheduler {
 
+    private static final int CRAFT_NO_REPEATING = -1;
     private final @NotNull BukkitChameleon chameleon;
 
     /**
@@ -52,44 +51,24 @@ public final class BukkitScheduler extends Scheduler {
         this.chameleon = chameleon;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected void schedule(@NotNull TaskImpl task) {
-        if (task.getRepeat().getType().equals(Schedule.Type.NONE)) {
-            if (task.getDelay().getType().equals(Schedule.Type.NONE)) {
-                if (task.getType().equals(Task.Type.ASYNC)) {
-                    Bukkit.getScheduler().runTaskAsynchronously(this.chameleon.getPlatformPlugin(), task.getRunnable());
-                } else {
-                    Bukkit.getScheduler().runTask(this.chameleon.getPlatformPlugin(), task.getRunnable());
-                }
-            } else {
-                if (task.getType().equals(Task.Type.ASYNC)) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()));
-                } else {
-                    Bukkit.getScheduler().runTaskLater(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()));
-                }
-            }
-        } else {
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(this.chameleon.getPlatformPlugin(),
-                task.getType().equals(Task.Type.ASYNC) ? () -> Bukkit.getScheduler().runTaskAsynchronously(this.chameleon.getPlatformPlugin(), task.getRunnable()) : task.getRunnable(),
-                convert(task.getDelay()),
-                convert(task.getRepeat())
-            );
-        }
+    protected @NotNull ScheduledTask scheduleAsyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimerAsynchronously(
+            this.chameleon.getPlatformPlugin(),
+            task, delay.toTicks(), repeat.toTicks() < 1 ? CRAFT_NO_REPEATING : repeat.toTicks()
+        );
+
+        return bukkitTask::cancel;
     }
 
-    private long convert(@NotNull Schedule schedule) {
-        if (schedule.getType().equals(Schedule.Type.NONE)) {
-            return 0;
-        } else if (schedule.getType().equals(Schedule.Type.DURATION)) {
-            return ((DurationSchedule) schedule).getDuration().toMillis() / 50;
-        } else if (schedule.getType().equals(Schedule.Type.TICK)) {
-            return ((TickSchedule) schedule).getTicks();
-        } else {
-            throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
-        }
+    @Override
+    protected @NotNull ScheduledTask scheduleSyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimer(
+            this.chameleon.getPlatformPlugin(),
+            task, delay.toTicks(), repeat.toTicks() < 1 ? CRAFT_NO_REPEATING : repeat.toTicks()
+        );
+
+        return bukkitTask::cancel;
     }
 
 }

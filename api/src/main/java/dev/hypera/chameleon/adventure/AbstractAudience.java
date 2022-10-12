@@ -34,11 +34,13 @@ import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.title.Title;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Implements the Audience methods to prevent duplicate code.
  */
+@NonExtendable
 public abstract class AbstractAudience implements Audience {
 
     private final @NotNull Audience audience;
@@ -48,7 +50,7 @@ public abstract class AbstractAudience implements Audience {
      *
      * @param audience Adventure {@link Audience}.
      */
-    public AbstractAudience(@NotNull Audience audience) {
+    protected AbstractAudience(@NotNull Audience audience) {
         this.audience = audience;
     }
 

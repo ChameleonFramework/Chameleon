@@ -21,45 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.sponge.managers;
+package dev.hypera.chameleon.command;
 
-import dev.hypera.chameleon.command.Command;
-import dev.hypera.chameleon.command.CommandManager;
-import dev.hypera.chameleon.platform.sponge.SpongeChameleon;
-import dev.hypera.chameleon.platform.sponge.commands.SpongeCommand;
+import dev.hypera.chameleon.Chameleon;
 import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.api.Sponge;
 
 /**
- * Sponge {@link CommandManager} implementation.
+ * {@link Chameleon} command manager.
  */
-@Internal
-public final class SpongeCommandManager extends CommandManager {
+@NonExtendable
+public abstract class CommandManager {
 
-    private final @NotNull SpongeChameleon chameleon;
+    private final @NotNull Chameleon chameleon;
 
     /**
-     * {@link SpongeCommand} constructor.
+     * {@link CommandManager} constructor.
      *
-     * @param chameleon {@link SpongeChameleon} instance.
+     * @param chameleon {@link Chameleon} instance.
      */
     @Internal
-    public SpongeCommandManager(@NotNull SpongeChameleon chameleon) {
-        super(chameleon);
+    protected CommandManager(@NotNull Chameleon chameleon) {
         this.chameleon = chameleon;
     }
 
-    @Override
-    protected void registerCommand(@NotNull Command command) {
-        Sponge.server().commandManager().registrar(org.spongepowered.api.command.Command.Raw.class).ifPresent(registrar -> {
-            registrar.register(this.chameleon.getPlatformPlugin().getPluginContainer(), new SpongeCommand(this.chameleon, command), command.getName(), command.getAliases().toArray(new String[0]));
-        });
+    /**
+     * Register {@link Command}.
+     *
+     * @param command {@link Command} to be registered.
+     */
+    public void register(@NotNull Command command) {
+        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
+            registerCommand(command);
+        }
     }
 
-    @Override
-    protected void unregisterCommand(@NotNull Command command) {
-        // Cannot unregister commands on Sponge
+    /**
+     * Unregister {@link Command}.
+     *
+     * @param command {@link Command} to be unregistered.
+     */
+    public void unregister(@NotNull Command command) {
+        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
+            unregisterCommand(command);
+        }
     }
+
+    @Internal
+    protected abstract void registerCommand(@NotNull Command command);
+
+    @Internal
+    protected abstract void unregisterCommand(@NotNull Command command);
 
 }

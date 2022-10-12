@@ -26,6 +26,7 @@ package dev.hypera.chameleon.annotations.processing.generation.impl.velocity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -33,6 +34,7 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeSpec;
 import dev.hypera.chameleon.annotations.PlatformDependency;
 import dev.hypera.chameleon.annotations.Plugin;
+import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
@@ -52,6 +54,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public class VelocityGenerator extends Generator {
 
+    private static final @NotNull String LOGGER_VAR = "logger";
+    private static final @NotNull String PROXY_SERVER_VAR = "server";
+    private static final @NotNull String DATA_DIRECTORY_VAR = "dataDirectory";
+    private static final @NotNull String SET_STATEMENT = "this.$N = $N";
+    private static final @NotNull String RETURN_STATEMENT = "return this.$N";
+
+
     private static final @NotNull String DESCRIPTION_FILE = "velocity-plugin.json";
     private static final @NotNull Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -62,24 +71,32 @@ public class VelocityGenerator extends Generator {
      * @param plugin Chameleon plugin main class
      * @param env    Processing environment
      *
-     * @throws Exception if something goes wrong while creating the files.
+     * @throws ChameleonAnnotationException if something goes wrong while creating the files.
      */
     @Override
-    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
+    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
+        ClassName velocityChameleon = clazz("dev.hypera.chameleon.platform.velocity", "VelocityChameleon");
+        ClassName proxyServer = clazz("com.velocitypowered.api.proxy", "ProxyServer");
+        ClassName logger = clazz("org.slf4j", "Logger");
+        ClassName path = clazz("java.nio.file", "Path");
+
         MethodSpec constructorSpec = MethodSpec.constructorBuilder()
             .addAnnotation(clazz("com.google.inject", "Inject"))
             .addModifiers(Modifier.PUBLIC)
-            .addParameter(ParameterSpec.builder(clazz("org.slf4j", "Logger"), "logger").build())
-            .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.proxy", "ProxyServer"), "server").build())
-            .addParameter(ParameterSpec.builder(clazz("java.nio.file", "Path"), "dataDirectory").addAnnotation(clazz("com.velocitypowered.api.plugin.annotation", "DataDirectory")).build())
-            .addStatement("this.$N = $N", "server", "server")
-            .addStatement("this.$N = $N", "logger", "logger")
-            .addStatement("this.$N = $N", "dataDirectory", "dataDirectory")
+            .addParameter(ParameterSpec.builder(logger, LOGGER_VAR).build())
+            .addParameter(ParameterSpec.builder(proxyServer, PROXY_SERVER_VAR).build())
+            .addParameter(ParameterSpec.builder(path, DATA_DIRECTORY_VAR)
+                .addAnnotation(clazz("com.velocitypowered.api.plugin.annotation", "DataDirectory"))
+                .build())
+            .addStatement(SET_STATEMENT, PROXY_SERVER_VAR, PROXY_SERVER_VAR)
+            .addStatement(SET_STATEMENT, LOGGER_VAR, LOGGER_VAR)
+            .addStatement(SET_STATEMENT, DATA_DIRECTORY_VAR, DATA_DIRECTORY_VAR)
             .beginControlFlow("try")
             .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platform.velocity", "VelocityChameleon"), plugin, "pluginData")
+            .addStatement("this.$N = $T.create($T.class, this, $N).load()", CHAMELEON_VAR,
+                velocityChameleon, plugin, "pluginData")
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
-            .addStatement("this.$N.getLogger().error(\"An error occurred while loading Chameleon\", $N)", "chameleon", "ex")
+            .addStatement("this.$N.getLogger().error(\"An error occurred while loading Chameleon\", $N)", CHAMELEON_VAR, "ex")
             .endControlFlow()
             .build();
 
@@ -87,35 +104,35 @@ public class VelocityGenerator extends Generator {
             .addAnnotation(clazz("com.velocitypowered.api.event", "Subscribe"))
             .addModifiers(Modifier.PUBLIC)
             .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.event.proxy", "ProxyInitializeEvent"), "event").build())
-            .addStatement("this.$N.onEnable()", "chameleon")
+            .addStatement("this.$N.onEnable()", CHAMELEON_VAR)
             .build();
 
         MethodSpec shutdownEventSpec = MethodSpec.methodBuilder("onProxyShutdown")
             .addModifiers(Modifier.PUBLIC)
             .addAnnotation(clazz("com.velocitypowered.api.event", "Subscribe"))
             .addParameter(ParameterSpec.builder(clazz("com.velocitypowered.api.event.proxy", "ProxyShutdownEvent"), "event").build())
-            .addStatement("this.$N.onDisable()", "chameleon")
+            .addStatement("this.$N.onDisable()", CHAMELEON_VAR)
             .build();
-
+        
         MethodSpec getServerSpec = MethodSpec.methodBuilder("getServer")
             .addAnnotation(Override.class)
             .addModifiers(Modifier.PUBLIC)
-            .returns(clazz("com.velocitypowered.api.proxy", "ProxyServer"))
-            .addStatement("return this.$N", "server")
+            .returns(proxyServer)
+            .addStatement(RETURN_STATEMENT, PROXY_SERVER_VAR)
             .build();
 
         MethodSpec getLoggerSpec = MethodSpec.methodBuilder("getLogger")
             .addAnnotation(Override.class)
             .addModifiers(Modifier.PUBLIC)
-            .returns(clazz("org.slf4j", "Logger"))
-            .addStatement("return this.$N", "logger")
+            .returns(logger)
+            .addStatement(RETURN_STATEMENT, LOGGER_VAR)
             .build();
 
         MethodSpec getDataDirectorySpec = MethodSpec.methodBuilder("getDataDirectory")
             .addAnnotation(Override.class)
             .addModifiers(Modifier.PUBLIC)
-            .returns(clazz("java.nio.file", "Path"))
-            .addStatement("return this.$N", "dataDirectory")
+            .returns(path)
+            .addStatement(RETURN_STATEMENT, DATA_DIRECTORY_VAR)
             .build();
 
         AnnotationSpec.Builder pluginAnnotationSpecBuilder = AnnotationSpec.builder(clazz("com.velocitypowered.api.plugin", "Plugin"))
@@ -141,10 +158,10 @@ public class VelocityGenerator extends Generator {
             .addAnnotation(pluginAnnotationSpecBuilder.build())
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(clazz("dev.hypera.chameleon.platform.velocity", "VelocityPlugin"))
-            .addField(FieldSpec.builder(clazz("com.velocitypowered.api.proxy", "ProxyServer"), "server", Modifier.PRIVATE, Modifier.FINAL).build())
-            .addField(FieldSpec.builder(clazz("org.slf4j", "Logger"), "logger", Modifier.PRIVATE, Modifier.FINAL).build())
-            .addField(FieldSpec.builder(clazz("java.nio.file", "Path"), "dataDirectory", Modifier.PRIVATE, Modifier.FINAL).build())
-            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platform.velocity", "VelocityChameleon"), "chameleon", Modifier.PRIVATE).build())
+            .addField(FieldSpec.builder(proxyServer, PROXY_SERVER_VAR, Modifier.PRIVATE, Modifier.FINAL).build())
+            .addField(FieldSpec.builder(logger, LOGGER_VAR, Modifier.PRIVATE, Modifier.FINAL).build())
+            .addField(FieldSpec.builder(path, DATA_DIRECTORY_VAR, Modifier.PRIVATE, Modifier.FINAL).build())
+            .addField(FieldSpec.builder(velocityChameleon, CHAMELEON_VAR, Modifier.PRIVATE).build())
             .addMethod(constructorSpec)
             .addMethod(initEventSpec)
             .addMethod(shutdownEventSpec)
@@ -159,8 +176,12 @@ public class VelocityGenerator extends Generator {
         }
         packageName = packageName + ".platform.velocity";
 
-        JavaFile.builder(packageName, velocityMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
-        generateDescriptionFile(data, plugin, env, packageName);
+        try {
+            JavaFile.builder(packageName, velocityMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
+            generateDescriptionFile(data, plugin, env, packageName);
+        } catch (IOException ex) {
+            throw new ChameleonAnnotationException("Failed to write main class or description file", ex);
+        }
     }
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {

@@ -26,41 +26,41 @@ package dev.hypera.chameleon.events;
 /**
  * {@link EventSubscriber} priority.
  */
-public interface EventSubscriptionPriority {
+public enum EventSubscriptionPriority {
 
     /**
      * First, indicates that the subscriber should be called before all other subscribers.
      */
-    int FIRST = Integer.MIN_VALUE;
+    FIRST,
 
     /**
      * High priority, indicates that the subscriber should be before {@link #MEDIUM} priority subscribers.
      */
-    int HIGH = -100;
+    HIGH,
 
     /**
      * Medium priority, indicates that the subscriber should be called before {@link #NORMAL} priority subscribers.
      */
-    int MEDIUM = -50;
+    MEDIUM,
 
     /**
      * Normal priority.
      */
-    int NORMAL = 0;
+    NORMAL,
 
     /**
      * Low priority, indicates that the subscriber should be called after {@link #NORMAL} priority subscribers.
      */
-    int LOW = 50;
+    LOW,
 
     /**
      * Very low priority, indicates that the subscriber should be called after {@link #LOW} priority subscribers.
      */
-    int VERY_LOW = 100;
+    VERY_LOW,
 
     /**
      * Last, indicates that the subscriber should be called after all other subscribers.
      */
-    int LAST = Integer.MAX_VALUE;
+    LAST
 
 }

@@ -23,12 +23,10 @@
  */
 package dev.hypera.chameleon.platform.velocity.managers;
 
-import dev.hypera.chameleon.managers.Scheduler;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.scheduling.Schedule;
-import dev.hypera.chameleon.scheduling.ScheduleImpl.DurationSchedule;
-import dev.hypera.chameleon.scheduling.ScheduleImpl.TickSchedule;
-import dev.hypera.chameleon.scheduling.TaskImpl;
+import dev.hypera.chameleon.scheduling.ScheduledTask;
+import dev.hypera.chameleon.scheduling.Scheduler;
 import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -51,26 +49,21 @@ public final class VelocityScheduler extends Scheduler {
         this.chameleon = chameleon;
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected void schedule(@NotNull TaskImpl task) {
-        this.chameleon.getPlatformPlugin().getServer().getScheduler().buildTask(this.chameleon.getPlatformPlugin(), task.getRunnable()).delay(convert(task.getDelay()), TimeUnit.MILLISECONDS).repeat(convert(task.getRepeat()), TimeUnit.MILLISECONDS).schedule();
+    protected @NotNull ScheduledTask scheduleAsyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        com.velocitypowered.api.scheduler.ScheduledTask scheduledTask = this.chameleon.getPlatformPlugin().getServer().getScheduler()
+            .buildTask(this.chameleon.getPlatformPlugin(), task)
+            .delay(delay.toMillis(), TimeUnit.MILLISECONDS)
+            .repeat(delay.toMillis(), TimeUnit.MILLISECONDS)
+            .schedule();
+
+        return scheduledTask::cancel;
     }
 
-
-    private long convert(@NotNull Schedule schedule) {
-        if (schedule.getType().equals(Schedule.Type.NONE)) {
-            return 0;
-        } else if (schedule.getType().equals(Schedule.Type.DURATION)) {
-            return ((DurationSchedule) schedule).getDuration().toMillis();
-        } else if (schedule.getType().equals(Schedule.Type.TICK)) {
-            return (long) ((TickSchedule) schedule).getTicks() * 50;
-        } else {
-            throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
-        }
+    @Override
+    protected @NotNull ScheduledTask scheduleSyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        // Velocity does not support synchronous tasks.
+        return scheduleAsyncTask(task, delay, repeat);
     }
 
 }

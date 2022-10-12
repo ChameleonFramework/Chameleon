@@ -21,50 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.conversion.impl.sound;
+package dev.hypera.chameleon.adventure.conversion.mapping;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.adventure.conversion.IMapper;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 import java.lang.reflect.Method;
-import net.kyori.adventure.sound.Sound;
+import java.util.Objects;
+import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform {@link Sound}.
+ * Maps shaded to platform {@link Title}.
  */
-public final class SoundMapper implements IMapper<Sound> {
+public final class TitleMapper implements Mapper<Title> {
 
+    private final @NotNull TimesMapper timesConverter = new TimesMapper();
     private final @NotNull Method createMethod;
-    private final @NotNull Method sourceValueOf;
 
     /**
-     * {@link SoundMapper} constructor.
+     * {@link TimesMapper} constructor.
      */
-    public SoundMapper() {
+    public TitleMapper() {
         try {
-            Class<?> soundClass = Class.forName(AdventureConverter.PACKAGE + "sound.Sound");
-            Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-            Class<?> sourceClass = Class.forName(soundClass.getCanonicalName() + "$Source");
-            this.createMethod = soundClass.getMethod("sound", keyClass, sourceClass, float.class, float.class);
-            this.sourceValueOf = sourceClass.getMethod("valueOf", String.class);
+            Class<?> titleClass = Class.forName(AdventureConverter.PACKAGE + "title.Title");
+            Class<?> timesClass = Class.forName(AdventureConverter.PACKAGE + "title.Title$Times");
+            Class<?> componentClass = Class.forName(AdventureConverter.PACKAGE + "text.Component");
+            this.createMethod = titleClass.getMethod("title", componentClass, componentClass, timesClass);
         } catch (ReflectiveOperationException ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }
 
     /**
-     * Map {@link Sound} to the platform version of Adventure.
+     * Map {@link Title} to the platform version of Adventure.
      *
-     * @param sound {@link Sound} to be mapped.
+     * @param title {@link Title} to be mapped.
      *
-     * @return Platform instance of {@link Sound}.
+     * @return Platform instance of {@link Title}.
      */
     @Override
-    public @NotNull Object map(@NotNull Sound sound) {
+    public @NotNull Object map(@NotNull Title title) {
         try {
-            return this.createMethod.invoke(null, AdventureConverter.convertKey(sound.name()), this.sourceValueOf.invoke(null, sound.source().name()), sound.volume(), sound.pitch());
+            return this.createMethod.invoke(null,
+                AdventureConverter.convertComponent(title.title()),
+                AdventureConverter.convertComponent(title.subtitle()),
+                this.timesConverter.map(null == title.times() ? Title.DEFAULT_TIMES : Objects.requireNonNull(title.times()))
+            );
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonRuntimeException(ex);
         }
     }
 

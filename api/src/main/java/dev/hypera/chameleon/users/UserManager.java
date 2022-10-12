@@ -23,23 +23,40 @@
  */
 package dev.hypera.chameleon.users;
 
+import dev.hypera.chameleon.Chameleon;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents something that can hold permissions.
+ * {@link Chameleon} user manager.
  */
 @NonExtendable
-public interface PermissionHolder {
+public abstract class UserManager {
 
     /**
-     * Checks whether this permission holder has the given permission.
+     * Get Console {@link ChatUser}.
      *
-     * @param permission Permission.
-     *
-     * @return {@code true} if this permission holder has the given permission, otherwise
-     *     {@code false}.
+     * @return console {@link ChatUser}.
      */
-    boolean hasPermission(@NotNull String permission);
+    public abstract @NotNull ChatUser getConsole();
+
+    /**
+     * Get all online {@link User}s.
+     *
+     * @return set of online {@link User}s.
+     */
+    public abstract @NotNull Set<User> getPlayers();
+
+    /**
+     * Attempt to find {@link User} by unique id.
+     *
+     * @param uniqueId The unique id to search for.
+     *
+     * @return {@link Optional} containing the {@link User} if found, otherwise empty.
+     */
+    public abstract @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId);
 
 }

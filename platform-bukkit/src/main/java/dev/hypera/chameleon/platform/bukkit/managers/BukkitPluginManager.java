@@ -23,8 +23,8 @@
  */
 package dev.hypera.chameleon.platform.bukkit.managers;
 
-import dev.hypera.chameleon.managers.PluginManager;
 import dev.hypera.chameleon.platform.PlatformPlugin;
+import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bukkit.platform.objects.BukkitPlugin;
 import java.util.Arrays;
 import java.util.Optional;

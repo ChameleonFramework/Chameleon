@@ -4,8 +4,9 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
+    branches: [ "main" ]
   schedule:
-    - cron: '25 6 * * 5'
+    - cron: "25 6 * * 5"
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.event.number || github.ref }}"

@@ -24,7 +24,7 @@
 package dev.hypera.chameleon.platform.bukkit.managers;
 
 import dev.hypera.chameleon.command.Command;
-import dev.hypera.chameleon.managers.CommandManager;
+import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
 import dev.hypera.chameleon.platform.bukkit.commands.BukkitCommand;
 import java.lang.reflect.Field;

@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.conversion;
+package dev.hypera.chameleon.adventure.conversion.mapping;
 
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -30,7 +31,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <I> Object type.
  */
-public interface IMapper<I> {
+@NonExtendable
+public interface Mapper<I> {
 
     /**
      * Map {@link I} to the platform version of Adventure.

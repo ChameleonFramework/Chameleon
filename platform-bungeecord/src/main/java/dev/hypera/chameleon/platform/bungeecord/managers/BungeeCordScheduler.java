@@ -23,12 +23,10 @@
  */
 package dev.hypera.chameleon.platform.bungeecord.managers;
 
-import dev.hypera.chameleon.managers.Scheduler;
 import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.scheduling.Schedule;
-import dev.hypera.chameleon.scheduling.ScheduleImpl.DurationSchedule;
-import dev.hypera.chameleon.scheduling.ScheduleImpl.TickSchedule;
-import dev.hypera.chameleon.scheduling.TaskImpl;
+import dev.hypera.chameleon.scheduling.ScheduledTask;
+import dev.hypera.chameleon.scheduling.Scheduler;
 import java.util.concurrent.TimeUnit;
 import net.md_5.bungee.api.ProxyServer;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -52,33 +50,23 @@ public final class BungeeCordScheduler extends Scheduler {
         this.chameleon = chameleon;
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected void schedule(@NotNull TaskImpl task) {
-        if (task.getRepeat().getType().equals(Schedule.Type.NONE)) {
-            if (task.getDelay().getType().equals(Schedule.Type.NONE)) {
-                ProxyServer.getInstance().getScheduler().runAsync(this.chameleon.getPlatformPlugin(), task.getRunnable());
-            } else {
-                ProxyServer.getInstance().getScheduler().schedule(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()), TimeUnit.MILLISECONDS);
-            }
-        } else {
-            ProxyServer.getInstance().getScheduler().schedule(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()), convert(task.getRepeat()), TimeUnit.MILLISECONDS);
-        }
+    protected @NotNull ScheduledTask scheduleAsyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        net.md_5.bungee.api.scheduler.ScheduledTask scheduledTask = ProxyServer.getInstance()
+            .getScheduler().schedule(this.chameleon.getPlatformPlugin(),
+                task,
+                delay.toMillis(),
+                repeat.toMillis(),
+                TimeUnit.MILLISECONDS
+            );
+
+        return () -> ProxyServer.getInstance().getScheduler().cancel(scheduledTask);
     }
 
-    private long convert(@NotNull Schedule schedule) {
-        if (schedule.getType().equals(Schedule.Type.NONE)) {
-            return 0;
-        } else if (schedule.getType().equals(Schedule.Type.DURATION)) {
-            return ((DurationSchedule) schedule).getDuration().toMillis();
-        } else if (schedule.getType().equals(Schedule.Type.TICK)) {
-            return (long) ((TickSchedule) schedule).getTicks() * 50;
-        } else {
-            throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
-        }
+    @Override
+    protected @NotNull ScheduledTask scheduleSyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        // BungeeCord does not support synchronous tasks.
+        return scheduleAsyncTask(task, delay, repeat);
     }
 
 }

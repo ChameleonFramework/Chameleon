@@ -21,16 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.logging.impl;
+package dev.hypera.chameleon.logging;
 
-import dev.hypera.chameleon.logging.ChameleonLogger;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 /**
  * SLF4J {@link ChameleonLogger} implementation.
  */
-public class ChameleonSlf4jLogger implements ChameleonLogger {
+@Internal
+public final class ChameleonSlf4jLogger implements ChameleonLogger {
 
     private final @NotNull Logger logger;
     private boolean debug = false;

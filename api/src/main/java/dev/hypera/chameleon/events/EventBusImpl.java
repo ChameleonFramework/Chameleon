@@ -44,7 +44,7 @@ import org.jetbrains.annotations.NotNull;
 @Internal
 public final class EventBusImpl implements EventBus {
 
-    private static final @NotNull Comparator<EventSubscriber<? super ChameleonEvent>> PRIORITY_COMPARATOR = Comparator.comparingInt(EventSubscriber::getPriority);
+    private static final @NotNull Comparator<EventSubscriber<? super ChameleonEvent>> PRIORITY_COMPARATOR = Comparator.comparingInt(e -> e.getPriority().ordinal());
 
     private final @NotNull ChameleonLogger logger;
     private final @NotNull Map<Class<? extends ChameleonEvent>, Set<EventSubscriber<? super ChameleonEvent>>> subscriptions = new ConcurrentHashMap<>();

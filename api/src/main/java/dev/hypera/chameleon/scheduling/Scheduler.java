@@ -21,42 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.managers;
+package dev.hypera.chameleon.scheduling;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.users.ChatUser;
-import dev.hypera.chameleon.users.User;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Chameleon} user manager.
+ * Scheduler.
  */
-public abstract class UserManager {
+@NonExtendable
+public abstract class Scheduler {
 
     /**
-     * Get Console {@link ChatUser}.
+     * Submit a task to be scheduled.
      *
-     * @return console {@link ChatUser}.
+     * @param task Task.
+     *
+     * @return scheduled task.
      */
-    public abstract @NotNull ChatUser getConsole();
+    public final @NotNull ScheduledTask schedule(@NotNull Task task) {
+        Schedule delay = task instanceof TaskImpl ? ((TaskImpl) task).getDelay() : Schedule.none();
+        Schedule repeat = task instanceof TaskImpl ? ((TaskImpl) task).getRepeat() : Schedule.none();
 
-    /**
-     * Get all online {@link User}s.
-     *
-     * @return set of online {@link User}s.
-     */
-    public abstract @NotNull Set<User> getPlayers();
+        ScheduledTask scheduledTask;
+        if (task.isAsync()) {
+            scheduledTask = scheduleAsyncTask(task::run, delay, repeat);
+        } else {
+            scheduledTask = scheduleSyncTask(task::run, delay, repeat);
+        }
 
-    /**
-     * Attempt to find {@link User} by unique id.
-     *
-     * @param uniqueId The unique id to search for.
-     *
-     * @return {@link Optional} containing the {@link User} if found, otherwise empty.
-     */
-    public abstract @NotNull Optional<User> getPlayer(@NotNull UUID uniqueId);
+        if (task instanceof TaskImpl) {
+            ((TaskImpl) task).setScheduledTask(scheduledTask);
+        }
+
+        return scheduledTask;
+    }
+
+    protected abstract @NotNull ScheduledTask scheduleAsyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat);
+
+    protected abstract @NotNull ScheduledTask scheduleSyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat);
 
 }

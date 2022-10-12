@@ -28,6 +28,7 @@ import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import dev.hypera.chameleon.annotations.Plugin;
+import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import dev.hypera.chameleon.data.PluginData;
 import java.util.Arrays;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -41,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 @NonExtendable
 public abstract class Generator {
 
+    public static final @NotNull String CHAMELEON_VAR = "chameleon";
     public static final @NotNull String INDENT = "    ";
 
     /**
@@ -50,9 +52,9 @@ public abstract class Generator {
      * @param plugin Chameleon plugin main class
      * @param env    Processing environment
      *
-     * @throws Exception if something goes wrong while generating the files.
+     * @throws ChameleonAnnotationException if something goes wrong while generating the files.
      */
-    public abstract void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception;
+    public abstract void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException;
 
 
     protected @NotNull CodeBlock createPluginData(@NotNull Plugin data) {
@@ -60,7 +62,7 @@ public abstract class Generator {
             "$T pluginData = new $T($S, $S, $S, $S, $T.asList($L))",
             PluginData.class,
             PluginData.class,
-            data.name().isEmpty() ? (data.id().isEmpty() ? "Unknown" : data.id()) : data.name(),
+            data.name().isEmpty() ? data.id() : data.name(),
             data.version(),
             data.description(),
             data.url(),

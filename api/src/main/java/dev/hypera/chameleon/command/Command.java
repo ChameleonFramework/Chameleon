@@ -64,7 +64,7 @@ public abstract class Command {
      *
      * @param names Command aliases.
      */
-    public Command(@NotNull String... names) {
+    protected Command(@NotNull String... names) {
         try {
             if (names.length < 1) {
                 if (!getClass().isAnnotationPresent(CommandHandler.class)) {

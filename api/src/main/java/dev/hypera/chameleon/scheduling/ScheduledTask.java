@@ -21,25 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.users;
+package dev.hypera.chameleon.scheduling;
 
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents something that can hold permissions.
+ * A scheduled task.
  */
 @NonExtendable
-public interface PermissionHolder {
+public interface ScheduledTask {
 
     /**
-     * Checks whether this permission holder has the given permission.
-     *
-     * @param permission Permission.
-     *
-     * @return {@code true} if this permission holder has the given permission, otherwise
-     *     {@code false}.
+     * Cancel this task.
      */
-    boolean hasPermission(@NotNull String permission);
+    void cancel();
 
 }

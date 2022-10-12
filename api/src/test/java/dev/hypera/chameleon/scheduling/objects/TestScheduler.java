@@ -21,42 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.managers;
+package dev.hypera.chameleon.scheduling.objects;
 
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.platform.PlatformPlugin;
-import java.util.Optional;
+import dev.hypera.chameleon.scheduling.Schedule;
+import dev.hypera.chameleon.scheduling.ScheduledTask;
+import dev.hypera.chameleon.scheduling.Scheduler;
+import java.util.HashSet;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * {@link Platform} plugin manager.
- */
-public abstract class PluginManager {
+public class TestScheduler extends Scheduler {
 
-    /**
-     * Get {@link PlatformPlugin}s.
-     *
-     * @return set of {@link PlatformPlugin}s.
-     */
-    public abstract @NotNull Set<PlatformPlugin> getPlugins();
+    private final @NotNull Set<Runnable> tasks = new HashSet<>();
 
-    /**
-     * Attempt to find {@link PlatformPlugin} by name.
-     *
-     * @param name The name to search for.
-     *
-     * @return {@link Optional} containing the {@link PlatformPlugin} if found, otherwise empty.
-     */
-    public abstract @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name);
+    @Override
+    protected @NotNull ScheduledTask scheduleAsyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        this.tasks.add(task);
+        return () -> this.tasks.remove(task);
+    }
 
-    /**
-     * Check if a {@link PlatformPlugin} is enabled, by name.
-     *
-     * @param name The name to search for.
-     *
-     * @return {@code true} if the {@link PlatformPlugin} was found and if it's enabled, otherwise false.
-     */
-    public abstract boolean isPluginEnabled(@NotNull String name);
+    @Override
+    protected @NotNull ScheduledTask scheduleSyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        this.tasks.add(task);
+        return () -> this.tasks.remove(task);
+    }
+
+    public void execute() {
+        this.tasks.forEach(Runnable::run);
+    }
+
+    public int getTaskCount() {
+        return this.tasks.size();
+    }
 
 }

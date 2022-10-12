@@ -21,48 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.scheduling;
+package dev.hypera.chameleon.exceptions.extension;
 
-import java.time.Duration;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
+
 
 /**
- * {@link Schedule} implementations.
+ * {@link Chameleon} extension exception.
  */
-@Internal
-final class ScheduleImpl implements Schedule {
+public class ChameleonExtensionException extends ChameleonRuntimeException {
 
-    static final @NotNull Schedule NONE = new ScheduleImpl(Duration.ZERO);
-    private final @NotNull Duration duration;
+    private static final long serialVersionUID = 7922248281838810538L;
 
-    ScheduleImpl(@NotNull Duration duration) {
-        this.duration = duration;
+    /**
+     * {@link ChameleonExtensionException} constructor.
+     */
+    public ChameleonExtensionException() {
+        super();
     }
 
     /**
-     * {@inheritDoc}
+     * {@link ChameleonExtensionException} constructor.
+     *
+     * @param message Exception message.
      */
-    @Override
-    public long toTicks() {
-        // A tick occurs every 50 milliseconds.
-        return this.duration.toMillis() / 50;
+    public ChameleonExtensionException(String message) {
+        super(message);
     }
 
     /**
-     * {@inheritDoc}
+     * {@link ChameleonExtensionException} constructor.
+     *
+     * @param message Exception message.
+     * @param cause   Exception cause.
      */
-    @Override
-    public long toMillis() {
-        return this.duration.toMillis();
+    public ChameleonExtensionException(String message, Throwable cause) {
+        super(message, cause);
     }
 
     /**
-     * {@inheritDoc}
+     * {@link ChameleonExtensionException} constructor.
+     *
+     * @param cause Exception cause.
      */
-    @Override
-    public @NotNull Duration toDuration() {
-        return this.duration;
+    public ChameleonExtensionException(Throwable cause) {
+        super(cause);
+    }
+
+    protected ChameleonExtensionException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 
 }

@@ -21,54 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.conversion.impl.title;
+package dev.hypera.chameleon.adventure.conversion.mapping;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.adventure.conversion.IMapper;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 import java.lang.reflect.Method;
 import java.util.Objects;
-import net.kyori.adventure.title.Title;
+import net.kyori.adventure.sound.SoundStop;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform {@link Title}.
+ * Maps shaded to platform {@link SoundStop}.
  */
-public final class TitleMapper implements IMapper<Title> {
+public final class SoundStopMapper implements Mapper<SoundStop> {
 
-    private final @NotNull TimesMapper timesConverter = new TimesMapper();
+    private final @NotNull Method allMethod;
     private final @NotNull Method createMethod;
 
     /**
-     * {@link TimesMapper} constructor.
+     * {@link SoundStopMapper} constructor.
      */
-    public TitleMapper() {
+    public SoundStopMapper() {
         try {
-            Class<?> titleClass = Class.forName(AdventureConverter.PACKAGE + "title.Title");
-            Class<?> timesClass = Class.forName(AdventureConverter.PACKAGE + "title.Title$Times");
-            Class<?> componentClass = Class.forName(AdventureConverter.PACKAGE + "text.Component");
-            this.createMethod = titleClass.getMethod("title", componentClass, componentClass, timesClass);
+            Class<?> soundStopClass = Class.forName(AdventureConverter.PACKAGE + "sound.SoundStop");
+            Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
+            this.allMethod = soundStopClass.getMethod("all");
+            this.createMethod = soundStopClass.getMethod("named", keyClass);
         } catch (ReflectiveOperationException ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }
 
     /**
-     * Map {@link Title} to the platform version of Adventure.
+     * Map {@link SoundStop} to the platform version of Adventure.
      *
-     * @param title {@link Title} to be mapped.
+     * @param soundStop {@link SoundStop} to be mapped.
      *
-     * @return Platform instance of {@link Title}.
+     * @return Platform instance of {@link SoundStop}.
      */
     @Override
-    public @NotNull Object map(@NotNull Title title) {
+    public @NotNull Object map(@NotNull SoundStop soundStop) {
         try {
-            return this.createMethod.invoke(null,
-                AdventureConverter.convertComponent(title.title()),
-                AdventureConverter.convertComponent(title.subtitle()),
-                this.timesConverter.map(null == title.times() ? Title.DEFAULT_TIMES : Objects.requireNonNull(title.times()))
-            );
+            return null == soundStop.sound() ? this.allMethod.invoke(null) : this.createMethod.invoke(null, AdventureConverter.convertKey(Objects.requireNonNull(soundStop.sound())));
         } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException(ex);
+            throw new ChameleonRuntimeException(ex);
         }
     }
 

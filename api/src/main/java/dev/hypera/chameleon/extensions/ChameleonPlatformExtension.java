@@ -45,7 +45,7 @@ public abstract class ChameleonPlatformExtension<T extends ChameleonExtension<E>
      * {@link ChameleonPlatformExtension} constructor.
      */
     @SuppressWarnings("unchecked")
-    public ChameleonPlatformExtension() {
+    protected ChameleonPlatformExtension() {
         try {
             Class<E> customExtension = (Class<E>) ChameleonUtil.getGenericTypeAsClass(getClass(), 1);
             if (!customExtension.isAssignableFrom(getClass())) {

@@ -30,6 +30,7 @@ import com.squareup.javapoet.TypeSpec;
 import dev.hypera.chameleon.annotations.PlatformDependency;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.Plugin.Platform;
+import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.annotations.utils.MapBuilder;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
@@ -63,33 +64,33 @@ public class NukkitGenerator extends Generator {
      * @param plugin Chameleon plugin main class
      * @param env    Processing environment
      *
-     * @throws Exception if something goes wrong while creating the files.
+     * @throws ChameleonAnnotationException if something goes wrong while creating the files.
      */
     @Override
-    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
+    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
         MethodSpec loadSpec = MethodSpec.methodBuilder("onLoad")
             .addAnnotation(Override.class)
             .addModifiers(Modifier.PUBLIC)
             .beginControlFlow("try")
             .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platform.nukkit", "NukkitChameleon"), plugin, "pluginData")
+            .addStatement("this.$N = $T.create($T.class, this, $N).load()", CHAMELEON_VAR, clazz("dev.hypera.chameleon.platform.nukkit", "NukkitChameleon"), plugin, "pluginData")
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
-            .addStatement("this.$N.getLogger().error(\"An error occurred while loading Chameleon\", $N)", "chameleon", "ex")
+            .addStatement("this.$N.getLogger().error(\"An error occurred while loading Chameleon\", $N)", CHAMELEON_VAR, "ex")
             .endControlFlow()
             .build();
 
         MethodSpec enableSpec = MethodSpec.methodBuilder("onEnable")
             .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
-            .addStatement("this.$N.onEnable()", "chameleon").build();
+            .addStatement("this.$N.onEnable()", CHAMELEON_VAR).build();
 
         MethodSpec disableSpec = MethodSpec.methodBuilder("onDisable")
             .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
-            .addStatement("this.$N.onDisable()", "chameleon").build();
+            .addStatement("this.$N.onDisable()", CHAMELEON_VAR).build();
 
         TypeSpec nukkitMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Nukkit")
             .addModifiers(Modifier.PUBLIC)
             .superclass(clazz("cn.nukkit.plugin", "PluginBase"))
-            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platform.nukkit", "NukkitChameleon"), "chameleon", Modifier.PRIVATE).build())
+            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platform.nukkit", "NukkitChameleon"), CHAMELEON_VAR, Modifier.PRIVATE).build())
             .addMethod(loadSpec)
             .addMethod(enableSpec)
             .addMethod(disableSpec)
@@ -101,8 +102,12 @@ public class NukkitGenerator extends Generator {
         }
         packageName = packageName + ".platform.nukkit";
 
-        JavaFile.builder(packageName, nukkitMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
-        generateDescriptionFile(data, plugin, env, packageName);
+        try {
+            JavaFile.builder(packageName, nukkitMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
+            generateDescriptionFile(data, plugin, env, packageName);
+        } catch (IOException ex) {
+            throw new ChameleonAnnotationException("Failed to write main class or description file", ex);
+        }
     }
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {

@@ -26,13 +26,15 @@ package dev.hypera.chameleon.command.objects;
 import dev.hypera.chameleon.command.Command;
 import dev.hypera.chameleon.command.context.Context;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * {@link Command} condition.
  */
+@NonExtendable
 public interface Condition {
 
     /**
@@ -61,8 +63,8 @@ public interface Condition {
      *
      * @return New {@link Condition} instance.
      */
-    static @NotNull Condition of(@NotNull Function<Context, Boolean> test) {
-        return test::apply;
+    static @NotNull Condition of(@NotNull Predicate<Context> test) {
+        return test::test;
     }
 
     /**
@@ -73,12 +75,12 @@ public interface Condition {
      *
      * @return New {@link Condition} instance.
      */
-    static @NotNull Condition of(@NotNull Function<Context, Boolean> test, @NotNull Component errorMessage) {
+    static @NotNull Condition of(@NotNull Predicate<Context> test, @NotNull Component errorMessage) {
         return new Condition() {
 
             @Override
             public boolean test(@NotNull Context context) {
-                return test.apply(context);
+                return test.test(context);
             }
 
             @Override

@@ -23,13 +23,13 @@
  */
 package dev.hypera.chameleon.adventure.conversion;
 
-import dev.hypera.chameleon.adventure.conversion.impl.ComponentMapper;
-import dev.hypera.chameleon.adventure.conversion.impl.book.BookMapper;
-import dev.hypera.chameleon.adventure.conversion.impl.bossbar.BossBarMapper;
-import dev.hypera.chameleon.adventure.conversion.impl.key.KeyMapper;
-import dev.hypera.chameleon.adventure.conversion.impl.sound.SoundMapper;
-import dev.hypera.chameleon.adventure.conversion.impl.sound.SoundStopMapper;
-import dev.hypera.chameleon.adventure.conversion.impl.title.TitleMapper;
+import dev.hypera.chameleon.adventure.conversion.mapping.BookMapper;
+import dev.hypera.chameleon.adventure.conversion.mapping.BossBarMapper;
+import dev.hypera.chameleon.adventure.conversion.mapping.ComponentMapper;
+import dev.hypera.chameleon.adventure.conversion.mapping.KeyMapper;
+import dev.hypera.chameleon.adventure.conversion.mapping.SoundMapper;
+import dev.hypera.chameleon.adventure.conversion.mapping.SoundStopMapper;
+import dev.hypera.chameleon.adventure.conversion.mapping.TitleMapper;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.key.Key;

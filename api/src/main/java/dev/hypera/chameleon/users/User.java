@@ -27,11 +27,13 @@ import java.net.SocketAddress;
 import java.util.Optional;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an in-game player, e.g. a person connected with the Minecraft client.
  */
+@NonExtendable
 public interface User extends ChatUser {
 
     /**

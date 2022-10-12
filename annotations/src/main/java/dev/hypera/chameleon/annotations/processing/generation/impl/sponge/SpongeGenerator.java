@@ -26,12 +26,14 @@ package dev.hypera.chameleon.annotations.processing.generation.impl.sponge;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeSpec;
 import dev.hypera.chameleon.annotations.Plugin;
+import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.annotations.processing.generation.impl.sponge.meta.SerializedPluginMetadata;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
@@ -53,6 +55,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SpongeGenerator extends Generator {
 
+    private static final @NotNull String PLUGIN_CONTAINER_VAR = "pluginContainer";
+    private static final @NotNull String LOGGER_VAR = "logger";
+    private static final @NotNull String RETURN_STATEMENT = "return this.$N";
+    
     private static final @NotNull String DESCRIPTION_FILE = "META-INF/sponge_plugins.json";
     private static final @NotNull Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -63,22 +69,27 @@ public class SpongeGenerator extends Generator {
      * @param plugin Chameleon plugin main class
      * @param env    Processing environment
      *
-     * @throws Exception if something goes wrong while creating the files.
+     * @throws ChameleonAnnotationException if something goes wrong while creating the files.
      */
     @Override
-    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws Exception {
+    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
+        ClassName spongeChameleon = clazz("dev.hypera.chameleon.platform.sponge", "SpongeChameleon");
+        ClassName pluginContainer = clazz("org.spongepowered.plugin", "PluginContainer");
+        ClassName logger = clazz("org.apache.logging.log4j", "Logger");
+
         MethodSpec constructorSpec = MethodSpec.constructorBuilder()
             .addAnnotation(clazz("com.google.inject", "Inject"))
             .addModifiers(Modifier.PUBLIC)
-            .addParameter(ParameterSpec.builder(clazz("org.spongepowered.plugin", "PluginContainer"), "pluginContainer").build())
-            .addParameter(ParameterSpec.builder(clazz("org.apache.logging.log4j", "Logger"), "logger").build())
-            .addStatement("this.$N = $N", "pluginContainer", "pluginContainer")
-            .addStatement("this.$N = $N", "logger", "logger")
+            .addParameter(ParameterSpec.builder(pluginContainer, PLUGIN_CONTAINER_VAR).build())
+            .addParameter(ParameterSpec.builder(logger, LOGGER_VAR).build())
+            .addStatement("this.$N = $N", PLUGIN_CONTAINER_VAR, PLUGIN_CONTAINER_VAR)
+            .addStatement("this.$N = $N", LOGGER_VAR, LOGGER_VAR)
             .beginControlFlow("try")
             .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", "chameleon", clazz("dev.hypera.chameleon.platform.sponge", "SpongeChameleon"), plugin, "pluginData")
+            .addStatement("this.$N = $T.create($T.class, this, $N).load()", CHAMELEON_VAR,
+                spongeChameleon, plugin, "pluginData")
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
-            .addStatement("this.$N.getLogger().error(\"An error occurred while loading Chameleon\", $N)", "chameleon", "ex")
+            .addStatement("this.$N.getLogger().error(\"An error occurred while loading Chameleon\", $N)", CHAMELEON_VAR, "ex")
             .endControlFlow()
             .build();
 
@@ -86,49 +97,49 @@ public class SpongeGenerator extends Generator {
             .addAnnotation(clazz("org.spongepowered.api.event", "Listener"))
             .addModifiers(Modifier.PUBLIC)
             .addParameter(ParameterSpec.builder(generic(clazz("org.spongepowered.api.event.lifecycle", "StartingEngineEvent"), clazz("org.spongepowered.api", "Server")), "event").build())
-            .addStatement("this.$N.onEnable()", "chameleon")
+            .addStatement("this.$N.onEnable()", CHAMELEON_VAR)
             .build();
 
         MethodSpec stoppingEngineEventSpec = MethodSpec.methodBuilder("onStoppingEngineEvent")
             .addAnnotation(clazz("org.spongepowered.api.event", "Listener"))
             .addModifiers(Modifier.PUBLIC)
             .addParameter(ParameterSpec.builder(generic(clazz("org.spongepowered.api.event.lifecycle", "StoppingEngineEvent"), clazz("org.spongepowered.api", "Server")), "event").build())
-            .addStatement("this.$N.onDisable()", "chameleon")
+            .addStatement("this.$N.onDisable()", CHAMELEON_VAR)
             .build();
 
         MethodSpec getPluginContainerSpec = MethodSpec.methodBuilder("getPluginContainer")
             .addAnnotation(Override.class)
             .addModifiers(Modifier.PUBLIC)
-            .returns(clazz("org.spongepowered.plugin", "PluginContainer"))
-            .addStatement("return this.$N", "pluginContainer")
+            .returns(pluginContainer)
+            .addStatement(RETURN_STATEMENT, PLUGIN_CONTAINER_VAR)
             .build();
 
         MethodSpec getLoggerSpec = MethodSpec.methodBuilder("getLogger")
             .addAnnotation(Override.class)
             .addModifiers(Modifier.PUBLIC)
-            .returns(clazz("org.apache.logging.log4j", "Logger"))
-            .addStatement("return this.$N", "logger")
+            .returns(logger)
+            .addStatement(RETURN_STATEMENT, LOGGER_VAR)
             .build();
 
         MethodSpec getDataDirectorySpec = MethodSpec.methodBuilder("getDataDirectory")
             .addAnnotation(Override.class)
             .addModifiers(Modifier.PUBLIC)
             .returns(clazz("java.nio.file", "Path"))
-            .addStatement("return this.$N", "dataDirectory")
+            .addStatement(RETURN_STATEMENT, "dataDirectory")
             .build();
 
         TypeSpec spongeMainClassSpec = TypeSpec.classBuilder(plugin.getSimpleName() + "Sponge")
             .addModifiers(Modifier.PUBLIC)
             .addSuperinterface(clazz("dev.hypera.chameleon.platform.sponge", "SpongePlugin"))
-            .addField(FieldSpec.builder(clazz("org.spongepowered.plugin", "PluginContainer"), "pluginContainer", Modifier.PRIVATE, Modifier.FINAL).build())
-            .addField(FieldSpec.builder(clazz("org.apache.logging.log4j", "Logger"), "logger", Modifier.PRIVATE, Modifier.FINAL).build())
+            .addField(FieldSpec.builder(pluginContainer, PLUGIN_CONTAINER_VAR, Modifier.PRIVATE, Modifier.FINAL).build())
+            .addField(FieldSpec.builder(logger, LOGGER_VAR, Modifier.PRIVATE, Modifier.FINAL).build())
             .addField(
                 FieldSpec.builder(clazz("java.nio.file", "Path"), "dataDirectory", Modifier.PRIVATE)
                     .addAnnotation(clazz("com.google.inject", "Inject"))
                     .addAnnotation(AnnotationSpec.builder(clazz("org.spongepowered.api.config", "DefaultConfig")).addMember("sharedRoot", "false").build())
                     .build()
             )
-            .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platform.sponge", "SpongeChameleon"), "chameleon", Modifier.PRIVATE).build())
+            .addField(FieldSpec.builder(spongeChameleon, CHAMELEON_VAR, Modifier.PRIVATE).build())
             .addMethod(constructorSpec)
             .addMethod(startingEngineEventSpec)
             .addMethod(stoppingEngineEventSpec)
@@ -143,8 +154,12 @@ public class SpongeGenerator extends Generator {
         }
         packageName = packageName + ".platform.sponge";
 
-        JavaFile.builder(packageName, spongeMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
-        generateDescriptionFile(data, plugin, env, packageName);
+        try {
+            JavaFile.builder(packageName, spongeMainClassSpec).indent(INDENT).build().writeTo(env.getFiler());
+            generateDescriptionFile(data, plugin, env, packageName);
+        } catch (IOException ex) {
+            throw new ChameleonAnnotationException("Failed to write main class or description file", ex);
+        }
     }
 
     private void generateDescriptionFile(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env, @NotNull String packageName) throws IOException {

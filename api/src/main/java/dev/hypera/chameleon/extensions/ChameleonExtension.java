@@ -40,7 +40,7 @@ public abstract class ChameleonExtension<T extends CustomPlatformExtension> {
      *
      * @param platform {@link CustomPlatformExtension} instance.
      */
-    public ChameleonExtension(@NotNull T platform) {
+    protected ChameleonExtension(@NotNull T platform) {
         this.platform = platform;
     }
 

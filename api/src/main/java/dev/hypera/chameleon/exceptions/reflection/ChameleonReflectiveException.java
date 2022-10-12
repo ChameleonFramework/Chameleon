@@ -21,29 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.managers;
+package dev.hypera.chameleon.exceptions.reflection;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.scheduling.Task;
-import dev.hypera.chameleon.scheduling.TaskImpl;
-import org.jetbrains.annotations.NotNull;
+import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 
 /**
- * {@link Chameleon} scheduler.
+ * {@link Chameleon} reflective exception.
  */
-public abstract class Scheduler {
+public class ChameleonReflectiveException extends ChameleonRuntimeException {
+
+    private static final long serialVersionUID = 6727730791800930118L;
 
     /**
-     * Create new {@link Task.Builder}.
-     *
-     * @param runnable Task runnable.
-     *
-     * @return new {@link Task.Builder}.
+     * {@link ChameleonReflectiveException} constructor.
      */
-    public final @NotNull Task.Builder createBuilder(@NotNull Runnable runnable) {
-        return new Task.Builder(this::schedule, runnable);
+    public ChameleonReflectiveException() {
+        super();
     }
 
-    protected abstract void schedule(@NotNull TaskImpl task);
+    /**
+     * {@link ChameleonReflectiveException} constructor.
+     *
+     * @param message Exception message.
+     */
+    public ChameleonReflectiveException(String message) {
+        super(message);
+    }
+
+    /**
+     * {@link ChameleonReflectiveException} constructor.
+     *
+     * @param message Exception message.
+     * @param cause   Exception cause.
+     */
+    public ChameleonReflectiveException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * {@link ChameleonReflectiveException} constructor.
+     *
+     * @param cause Exception cause.
+     */
+    public ChameleonReflectiveException(Throwable cause) {
+        super(cause);
+    }
+
+    protected ChameleonReflectiveException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 
 }
