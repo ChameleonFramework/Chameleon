@@ -61,7 +61,7 @@ blossom {
 }
 
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:2.15.0")
+    errorprone("com.google.errorprone:error_prone_core:2.16")
     annotationProcessor("com.uber.nullaway:nullaway:0.10.2")
 }
 
