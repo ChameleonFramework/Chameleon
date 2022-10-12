@@ -21,42 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.managers;
+package dev.hypera.chameleon.scheduling;
 
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.platform.PlatformPlugin;
-import java.util.Optional;
-import java.util.Set;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 
 /**
- * {@link Platform} plugin manager.
+ * A scheduled task.
  */
-public abstract class PluginManager {
+@NonExtendable
+public interface ScheduledTask {
 
     /**
-     * Get {@link PlatformPlugin}s.
-     *
-     * @return set of {@link PlatformPlugin}s.
+     * Cancel this task.
      */
-    public abstract @NotNull Set<PlatformPlugin> getPlugins();
-
-    /**
-     * Attempt to find {@link PlatformPlugin} by name.
-     *
-     * @param name The name to search for.
-     *
-     * @return {@link Optional} containing the {@link PlatformPlugin} if found, otherwise empty.
-     */
-    public abstract @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name);
-
-    /**
-     * Check if a {@link PlatformPlugin} is enabled, by name.
-     *
-     * @param name The name to search for.
-     *
-     * @return {@code true} if the {@link PlatformPlugin} was found and if it's enabled, otherwise false.
-     */
-    public abstract boolean isPluginEnabled(@NotNull String name);
+    void cancel();
 
 }

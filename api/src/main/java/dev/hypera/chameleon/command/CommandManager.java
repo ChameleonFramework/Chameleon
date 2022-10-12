@@ -21,24 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.conversion;
+package dev.hypera.chameleon.command;
 
+import dev.hypera.chameleon.Chameleon;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Adventure object mapper, used for converting shaded Adventure objects to platform ones.
- *
- * @param <I> Object type.
+ * {@link Chameleon} command manager.
  */
-public interface IMapper<I> {
+@NonExtendable
+public abstract class CommandManager {
+
+    private final @NotNull Chameleon chameleon;
 
     /**
-     * Map {@link I} to the platform version of Adventure.
+     * {@link CommandManager} constructor.
      *
-     * @param i {@link I} to be mapped.
-     *
-     * @return Platform instance of {@link I}.
+     * @param chameleon {@link Chameleon} instance.
      */
-    @NotNull Object map(@NotNull I i);
+    @Internal
+    protected CommandManager(@NotNull Chameleon chameleon) {
+        this.chameleon = chameleon;
+    }
+
+    /**
+     * Register {@link Command}.
+     *
+     * @param command {@link Command} to be registered.
+     */
+    public void register(@NotNull Command command) {
+        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
+            registerCommand(command);
+        }
+    }
+
+    /**
+     * Unregister {@link Command}.
+     *
+     * @param command {@link Command} to be unregistered.
+     */
+    public void unregister(@NotNull Command command) {
+        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
+            unregisterCommand(command);
+        }
+    }
+
+    @Internal
+    protected abstract void registerCommand(@NotNull Command command);
+
+    @Internal
+    protected abstract void unregisterCommand(@NotNull Command command);
 
 }

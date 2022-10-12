@@ -21,48 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.conversion.impl.key;
+package dev.hypera.chameleon.adventure.conversion.mapping;
 
-import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.adventure.conversion.IMapper;
-import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
-import java.lang.reflect.Method;
-import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform {@link Key}.
+ * Adventure object mapper, used for converting shaded Adventure objects to platform ones.
+ *
+ * @param <I> Object type.
  */
-public final class KeyMapper implements IMapper<Key> {
-
-    private final @NotNull Method createMethod;
-
-    /**
-     * {@link KeyMapper} constructor.
-     */
-    public KeyMapper() {
-        try {
-            Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
-            this.createMethod = keyClass.getMethod("key", String.class);
-        } catch (ReflectiveOperationException ex) {
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
+@NonExtendable
+public interface Mapper<I> {
 
     /**
-     * Map {@link Key} to the platform version of Adventure.
+     * Map {@link I} to the platform version of Adventure.
      *
-     * @param key {@link Key} to be mapped.
+     * @param i {@link I} to be mapped.
      *
-     * @return Platform instance of {@link Key}.
+     * @return Platform instance of {@link I}.
      */
-    @Override
-    public @NotNull Object map(@NotNull Key key) {
-        try {
-            return this.createMethod.invoke(null, key.asString());
-        } catch (ReflectiveOperationException ex) {
-            throw new ChameleonRuntimeException(ex);
-        }
-    }
+    @NotNull Object map(@NotNull I i);
 
 }

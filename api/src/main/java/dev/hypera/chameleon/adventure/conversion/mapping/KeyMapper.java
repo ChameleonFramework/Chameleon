@@ -21,54 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.conversion.impl.book;
+package dev.hypera.chameleon.adventure.conversion.mapping;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.adventure.conversion.IMapper;
 import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
-import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform {@link Book}.
+ * Maps shaded to platform {@link Key}.
  */
-public final class BookMapper implements IMapper<Book> {
+public final class KeyMapper implements Mapper<Key> {
 
     private final @NotNull Method createMethod;
 
     /**
-     * {@link BookMapper} constructor.
+     * {@link KeyMapper} constructor.
      */
-    public BookMapper() {
+    public KeyMapper() {
         try {
-            Class<?> componentClass = Class.forName(AdventureConverter.PACKAGE + "text.Component");
-            Class<?> bookClass = Class.forName(AdventureConverter.PACKAGE + "inventory.Book");
-            this.createMethod = bookClass.getMethod("book", componentClass, componentClass, Collection.class);
+            Class<?> keyClass = Class.forName(AdventureConverter.PACKAGE + "key.Key");
+            this.createMethod = keyClass.getMethod("key", String.class);
         } catch (ReflectiveOperationException ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }
 
-
     /**
-     * Map {@link Book} to the platform version of Adventure.
+     * Map {@link Key} to the platform version of Adventure.
      *
-     * @param book {@link Book} to be mapped.
+     * @param key {@link Key} to be mapped.
      *
-     * @return Platform instance of {@link Book}.
+     * @return Platform instance of {@link Key}.
      */
     @Override
-    public @NotNull Object map(@NotNull Book book) {
+    public @NotNull Object map(@NotNull Key key) {
         try {
-            return this.createMethod.invoke(null,
-                AdventureConverter.convertComponent(book.title()),
-                AdventureConverter.convertComponent(book.author()),
-                book.pages().stream().map(AdventureConverter::convertComponent).collect(Collectors.toCollection(ArrayList::new))
-            );
+            return this.createMethod.invoke(null, key.asString());
         } catch (ReflectiveOperationException ex) {
             throw new ChameleonRuntimeException(ex);
         }

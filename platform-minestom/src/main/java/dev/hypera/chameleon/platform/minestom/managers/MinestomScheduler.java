@@ -23,14 +23,12 @@
  */
 package dev.hypera.chameleon.platform.minestom.managers;
 
-import dev.hypera.chameleon.managers.Scheduler;
 import dev.hypera.chameleon.scheduling.Schedule;
-import dev.hypera.chameleon.scheduling.ScheduleImpl.DurationSchedule;
-import dev.hypera.chameleon.scheduling.ScheduleImpl.TickSchedule;
-import dev.hypera.chameleon.scheduling.TaskImpl;
+import dev.hypera.chameleon.scheduling.ScheduledTask;
+import dev.hypera.chameleon.scheduling.Scheduler;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.timer.ExecutionType;
-import net.minestom.server.timer.TaskSchedule;
+import net.minestom.server.timer.Task;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,24 +46,20 @@ public final class MinestomScheduler extends Scheduler {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected void schedule(@NotNull TaskImpl task) {
-        MinecraftServer.getSchedulerManager().buildTask(task.getRunnable()).executionType(ExecutionType.valueOf(task.getType().name())).delay(convert(task.getDelay(), false)).repeat(convert(task.getRepeat(), true)).schedule();
+    protected @NotNull ScheduledTask scheduleAsyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        Task scheduledTask = MinecraftServer.getSchedulerManager().buildTask(task).executionType(ExecutionType.ASYNC)
+            .delay(delay.toDuration()).repeat(repeat.toDuration()).schedule();
+
+        return scheduledTask::cancel;
     }
 
-    private @NotNull TaskSchedule convert(@NotNull Schedule schedule, boolean repeat) {
-        if (schedule.getType().equals(Schedule.Type.NONE)) {
-            return repeat ? TaskSchedule.stop() : TaskSchedule.immediate();
-        } else if (schedule.getType().equals(Schedule.Type.DURATION)) {
-            return TaskSchedule.duration(((DurationSchedule) schedule).getDuration());
-        } else if (schedule.getType().equals(Schedule.Type.TICK)) {
-            return TaskSchedule.tick(((TickSchedule) schedule).getTicks());
-        } else {
-            throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
-        }
+    @Override
+    protected @NotNull ScheduledTask scheduleSyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        Task scheduledTask = MinecraftServer.getSchedulerManager().buildTask(task).executionType(ExecutionType.SYNC)
+            .delay(delay.toDuration()).repeat(repeat.toDuration()).schedule();
+
+        return scheduledTask::cancel;
     }
 
 }

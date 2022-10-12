@@ -23,8 +23,8 @@
  */
 package dev.hypera.chameleon.platform.bungeecord.managers;
 
-import dev.hypera.chameleon.managers.PluginManager;
 import dev.hypera.chameleon.platform.PlatformPlugin;
+import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bungeecord.platform.objects.BungeeCordPlugin;
 import java.util.Optional;
 import java.util.Set;

@@ -23,10 +23,10 @@
  */
 package dev.hypera.chameleon.platform.sponge.managers;
 
-import dev.hypera.chameleon.managers.UserManager;
 import dev.hypera.chameleon.platform.sponge.users.SpongeUsers;
 import dev.hypera.chameleon.users.ChatUser;
 import dev.hypera.chameleon.users.User;
+import dev.hypera.chameleon.users.UserManager;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;

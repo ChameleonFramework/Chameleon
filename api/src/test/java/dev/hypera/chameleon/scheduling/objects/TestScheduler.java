@@ -21,29 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.managers;
+package dev.hypera.chameleon.scheduling.objects;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.scheduling.Task;
-import dev.hypera.chameleon.scheduling.TaskImpl;
+import dev.hypera.chameleon.scheduling.Schedule;
+import dev.hypera.chameleon.scheduling.ScheduledTask;
+import dev.hypera.chameleon.scheduling.Scheduler;
+import java.util.HashSet;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * {@link Chameleon} scheduler.
- */
-public abstract class Scheduler {
+public class TestScheduler extends Scheduler {
 
-    /**
-     * Create new {@link Task.Builder}.
-     *
-     * @param runnable Task runnable.
-     *
-     * @return new {@link Task.Builder}.
-     */
-    public final @NotNull Task.Builder createBuilder(@NotNull Runnable runnable) {
-        return new Task.Builder(this::schedule, runnable);
+    private final @NotNull Set<Runnable> tasks = new HashSet<>();
+
+    @Override
+    protected @NotNull ScheduledTask scheduleAsyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        this.tasks.add(task);
+        return () -> this.tasks.remove(task);
     }
 
-    protected abstract void schedule(@NotNull TaskImpl task);
+    @Override
+    protected @NotNull ScheduledTask scheduleSyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        this.tasks.add(task);
+        return () -> this.tasks.remove(task);
+    }
+
+    public void execute() {
+        this.tasks.forEach(Runnable::run);
+    }
+
+    public int getTaskCount() {
+        return this.tasks.size();
+    }
 
 }

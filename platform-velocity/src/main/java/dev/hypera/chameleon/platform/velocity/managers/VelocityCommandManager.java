@@ -24,7 +24,7 @@
 package dev.hypera.chameleon.platform.velocity.managers;
 
 import dev.hypera.chameleon.command.Command;
-import dev.hypera.chameleon.managers.CommandManager;
+import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.commands.VelocityCommand;
 import org.jetbrains.annotations.ApiStatus.Internal;

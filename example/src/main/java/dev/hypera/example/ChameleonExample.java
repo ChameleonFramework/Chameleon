@@ -32,6 +32,8 @@ import dev.hypera.chameleon.events.EventSubscriptionPriority;
 import dev.hypera.chameleon.events.common.UserConnectEvent;
 import dev.hypera.chameleon.events.common.UserDisconnectEvent;
 import dev.hypera.chameleon.logging.ChameleonLogger;
+import dev.hypera.chameleon.scheduling.Schedule;
+import dev.hypera.chameleon.scheduling.Task;
 import dev.hypera.example.commands.ExampleCommand;
 import java.time.Duration;
 import java.time.Instant;
@@ -91,13 +93,21 @@ public class ChameleonExample extends ChameleonPlugin {
             event.getUser().sendMessage(Component.text("Welcome to my server!", NamedTextColor.GREEN));
         });
 
-        chameleon.getEventBus().subscribe(UserConnectEvent.class, EventSubscriber.builder(UserConnectEvent.class).expireAfter(1).handler(event -> {
+        chameleon.getEventBus().subscribe(EventSubscriber.builder(UserConnectEvent.class).expireAfter(1).handler(event -> {
             event.getUser().sendMessage(Component.text("Welcome, you're the first person to join since the last restart!", NamedTextColor.GOLD));
         }).priority(EventSubscriptionPriority.HIGH).build());
 
         chameleon.getEventBus().subscribe(UserDisconnectEvent.class, event -> {
             chameleon.getLogger().info("%s left the server", event.getUser().getName());
         });
+
+        chameleon.getScheduler().schedule(Task.builder(() -> {
+            this.logger.info("This plugin has been running for 10 seconds!");
+        }).delay(Schedule.seconds(10)).build());
+
+        chameleon.getScheduler().schedule(Task.builder(() -> {
+            this.logger.info("This task will run twice!");
+        }).delay(Schedule.seconds(2)).repeat(Schedule.seconds(5)).cancelAfter(2).build());
 
         this.logger.info("Successfully started, took %s ms.", Duration.between(start, Instant.now()).toMillis());
         this.logger.info("Using Chameleon v%s!", Chameleon.getVersion());

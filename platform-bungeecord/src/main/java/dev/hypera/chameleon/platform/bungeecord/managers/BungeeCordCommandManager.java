@@ -24,7 +24,7 @@
 package dev.hypera.chameleon.platform.bungeecord.managers;
 
 import dev.hypera.chameleon.command.Command;
-import dev.hypera.chameleon.managers.CommandManager;
+import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platform.bungeecord.commands.BungeeCordCommand;
 import java.util.Map.Entry;

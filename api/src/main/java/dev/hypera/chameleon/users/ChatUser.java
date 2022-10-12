@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.users;
 
 import net.kyori.adventure.audience.Audience;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>This could either be an actual player using the Minecraft client, or the platform
  * Console.</p>
  */
+@NonExtendable
 public interface ChatUser extends Audience, PermissionHolder {
 
     /**

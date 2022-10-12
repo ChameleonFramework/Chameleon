@@ -21,10 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.conversion.impl.bossbar;
+package dev.hypera.chameleon.adventure.conversion.mapping;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.adventure.conversion.IMapper;
 import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -35,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Maps shaded to platform {@link BossBar}.
  */
-public final class BossBarMapper implements IMapper<BossBar> {
+public final class BossBarMapper implements Mapper<BossBar> {
 
     private static final @NotNull String VALUE_OF = "valueOf";
 

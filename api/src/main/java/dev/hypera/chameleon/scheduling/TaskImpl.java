@@ -23,7 +23,12 @@
  */
 package dev.hypera.chameleon.scheduling;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BooleanSupplier;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.VisibleForTesting;
 
 /**
  * {@link Task} implementation.
@@ -31,51 +36,165 @@ import org.jetbrains.annotations.NotNull;
 public class TaskImpl implements Task {
 
     private final @NotNull Runnable runnable;
-    private final @NotNull Type type;
     private final @NotNull Schedule delay;
     private final @NotNull Schedule repeat;
+    private final boolean async;
 
-    TaskImpl(@NotNull Runnable runnable, @NotNull Type type, @NotNull Schedule delay, @NotNull Schedule repeat) {
+    private final @NotNull BooleanSupplier cancelWhen;
+    private final @Nullable AtomicInteger cancellationCount;
+
+    private boolean cancelled = false;
+    private @Nullable ScheduledTask scheduledTask;
+
+    TaskImpl(@NotNull Runnable runnable, @NotNull Schedule delay, @NotNull Schedule repeat, boolean async, @NotNull BooleanSupplier cancelWhen, int cancelAfter) {
         this.runnable = runnable;
-        this.type = type;
         this.delay = delay;
         this.repeat = repeat;
+        this.async = async;
+
+        this.cancelWhen = cancelWhen;
+        this.cancellationCount = cancelAfter > 0 ? new AtomicInteger(cancelAfter) : null;
     }
 
     /**
-     * Get Task {@link Runnable}.
-     *
-     * @return Task {@link Runnable}.
+     * {@inheritDoc}
      */
-    public @NotNull Runnable getRunnable() {
-        return this.runnable;
+    @Override
+    public void run() {
+        if (this.cancelled) {
+            if (null != this.scheduledTask) {
+                this.scheduledTask.cancel();
+            }
+
+            return;
+        }
+
+        if (this.cancelWhen.getAsBoolean()) {
+            this.cancelled = true;
+            if (null != this.scheduledTask) {
+                this.scheduledTask.cancel();
+            }
+
+            return;
+        }
+
+        this.runnable.run();
+
+        if (null != this.cancellationCount && this.cancellationCount.decrementAndGet() == 0) {
+            this.cancelled = true;
+            if (null != this.scheduledTask) {
+                this.scheduledTask.cancel();
+            }
+        }
     }
 
     /**
-     * Get {@link Task.Type}.
-     *
-     * @return {@link Task.Type}.
+     * {@inheritDoc}
      */
-    public @NotNull Type getType() {
-        return this.type;
+    @Override
+    public boolean isAsync() {
+        return this.async;
     }
 
-    /**
-     * Get Task delay.
-     *
-     * @return Task delay {@link Schedule}.
-     */
-    public @NotNull Schedule getDelay() {
+    @NotNull Schedule getDelay() {
         return this.delay;
     }
 
-    /**
-     * Get Task repeat.
-     *
-     * @return Task repeat {@link Schedule}.
-     */
-    public @NotNull Schedule getRepeat() {
+    @NotNull Schedule getRepeat() {
         return this.repeat;
+    }
+
+    /**
+     * Get whether this task was cancelled.
+     *
+     * @return cancelled.
+     */
+    @Internal
+    @VisibleForTesting
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
+
+    void setScheduledTask(@NotNull ScheduledTask task) {
+        this.scheduledTask = task;
+    }
+
+    static final class BuilderImpl implements Builder {
+
+        private final @NotNull Runnable runnable;
+        private @NotNull Schedule delay = Schedule.none();
+        private @NotNull Schedule repeat = Schedule.none();
+        private boolean async = true;
+
+        private @NotNull BooleanSupplier cancelWhen = () -> false;
+        private int cancelAfter = -1;
+
+        BuilderImpl(@NotNull Runnable runnable) {
+            this.runnable = runnable;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull Builder sync() {
+            this.async = false;
+            return this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull Builder async() {
+            this.async = true;
+            return this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull Builder delay(@NotNull Schedule delay) {
+            this.delay = delay;
+            return this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull Builder repeat(@NotNull Schedule repeat) {
+            this.repeat = repeat;
+            return this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull Builder cancelWhen(@NotNull BooleanSupplier cancelWhen) {
+            this.cancelWhen = cancelWhen;
+            return this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull Builder cancelAfter(int cancelAfter) {
+            this.cancelAfter = cancelAfter;
+            return this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public @NotNull Task build() {
+            return new TaskImpl(this.runnable, this.delay, this.repeat, this.async, this.cancelWhen, this.cancelAfter);
+        }
+
     }
 
 }

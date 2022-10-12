@@ -23,8 +23,8 @@
  */
 package dev.hypera.chameleon.platform.sponge.managers;
 
-import dev.hypera.chameleon.managers.PluginManager;
 import dev.hypera.chameleon.platform.PlatformPlugin;
+import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.sponge.platform.plugin.SpongePlugin;
 import java.util.Optional;
 import java.util.Set;

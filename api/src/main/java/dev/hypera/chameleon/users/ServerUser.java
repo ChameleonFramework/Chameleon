@@ -25,11 +25,13 @@ package dev.hypera.chameleon.users;
 
 import dev.hypera.chameleon.platform.server.GameMode;
 import dev.hypera.chameleon.platform.server.ServerPlatform;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an in-game {@link User} on a {@link ServerPlatform}.
  */
+@NonExtendable
 public interface ServerUser extends User {
 
     /**

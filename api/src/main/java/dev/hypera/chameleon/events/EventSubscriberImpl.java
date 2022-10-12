@@ -41,7 +41,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
 
     private final @NotNull List<Predicate<T>> filters;
     private final @NotNull Predicate<T> expireWhen;
-    private final @NotNull AtomicInteger expirationCount;
+    private final @Nullable AtomicInteger expirationCount;
 
     private @Nullable EventSubscription subscription;
 
@@ -53,7 +53,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
 
         this.filters = filters;
         this.expireWhen = expireWhen;
-        this.expirationCount = new AtomicInteger(expiresAfter);
+        this.expirationCount = expiresAfter > 0 ? new AtomicInteger(expiresAfter) : null;
     }
 
     /**
@@ -76,7 +76,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
 
         this.handler.on(event);
 
-        if (this.expirationCount.decrementAndGet() == 0) {
+        if (null != this.expirationCount && this.expirationCount.decrementAndGet() == 0) {
             this.subscription.unsubscribe();
         }
     }
@@ -105,12 +105,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
         return this.type;
     }
 
-    /**
-     * Set the subscription.
-     *
-     * @param subscription Event subscription.
-     */
-    public void setSubscription(@NotNull EventSubscription subscription) {
+    void setSubscription(@NotNull EventSubscription subscription) {
         this.subscription = subscription;
     }
 
@@ -129,42 +124,63 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
             this.type = type;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull Builder<T> handler(@NotNull Consumer<T> handler) {
             this.handler = handler::accept;
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull Builder<T> priority(@NotNull EventSubscriptionPriority priority) {
             this.priority = priority;
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull Builder<T> acceptsCancelled(boolean acceptsCancelled) {
             this.acceptsCancelled = acceptsCancelled;
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull Builder<T> filter(Predicate<T> filter) {
             this.filters.add(filter);
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull Builder<T> expireAfter(int expiresAfter) {
             this.expiresAfter = expiresAfter;
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull Builder<T> expireWhen(@NotNull Predicate<T> expireWhen) {
             this.expireWhen = expireWhen;
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull EventSubscriber<T> build() {
             if (null == this.handler) {

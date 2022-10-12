@@ -28,11 +28,13 @@ import dev.hypera.chameleon.command.context.Context;
 import java.util.Optional;
 import java.util.function.Predicate;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * {@link Command} condition.
  */
+@NonExtendable
 public interface Condition {
 
     /**

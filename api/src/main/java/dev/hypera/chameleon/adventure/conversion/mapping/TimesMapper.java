@@ -21,55 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.conversion.impl.title;
+package dev.hypera.chameleon.adventure.conversion.mapping;
 
 import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
-import dev.hypera.chameleon.adventure.conversion.IMapper;
-import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
+import dev.hypera.chameleon.exceptions.reflection.ChameleonReflectiveException;
 import java.lang.reflect.Method;
-import java.util.Objects;
-import net.kyori.adventure.title.Title;
+import java.time.Duration;
+import java.util.Arrays;
+import net.kyori.adventure.title.Title.Times;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Maps shaded to platform {@link Title}.
+ * Maps shaded to platform {@link Times}.
  */
-public final class TitleMapper implements IMapper<Title> {
+public final class TimesMapper implements Mapper<Times> {
 
-    private final @NotNull TimesMapper timesConverter = new TimesMapper();
     private final @NotNull Method createMethod;
 
     /**
      * {@link TimesMapper} constructor.
      */
-    public TitleMapper() {
+    public TimesMapper() {
         try {
-            Class<?> titleClass = Class.forName(AdventureConverter.PACKAGE + "title.Title");
             Class<?> timesClass = Class.forName(AdventureConverter.PACKAGE + "title.Title$Times");
-            Class<?> componentClass = Class.forName(AdventureConverter.PACKAGE + "text.Component");
-            this.createMethod = titleClass.getMethod("title", componentClass, componentClass, timesClass);
+            if (Arrays.stream(timesClass.getMethods()).anyMatch(m -> m.getName().equals("times"))) {
+                this.createMethod = timesClass.getMethod("times", Duration.class, Duration.class, Duration.class);
+            } else {
+                this.createMethod = timesClass.getMethod("of", Duration.class, Duration.class, Duration.class);
+            }
         } catch (ReflectiveOperationException ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }
 
     /**
-     * Map {@link Title} to the platform version of Adventure.
+     * Map {@link Times} to the platform version of Adventure.
      *
-     * @param title {@link Title} to be mapped.
+     * @param times {@link Times} to be mapped.
      *
-     * @return Platform instance of {@link Title}.
+     * @return Platform instance of {@link Times}.
      */
     @Override
-    public @NotNull Object map(@NotNull Title title) {
+    public @NotNull Object map(@NotNull Times times) {
         try {
-            return this.createMethod.invoke(null,
-                AdventureConverter.convertComponent(title.title()),
-                AdventureConverter.convertComponent(title.subtitle()),
-                this.timesConverter.map(null == title.times() ? Title.DEFAULT_TIMES : Objects.requireNonNull(title.times()))
-            );
+            return this.createMethod.invoke(null, times.fadeIn(), times.stay(), times.fadeOut());
         } catch (ReflectiveOperationException ex) {
-            throw new ChameleonRuntimeException(ex);
+            throw new ChameleonReflectiveException("Failed to map Times object to platform object", ex);
         }
     }
 

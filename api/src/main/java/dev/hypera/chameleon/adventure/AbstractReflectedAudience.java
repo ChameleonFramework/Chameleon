@@ -37,11 +37,13 @@ import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.title.Title;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Implements the Audience methods and uses Reflection to map objects to the non-shaded versions of themselves.
  */
+@NonExtendable
 public abstract class AbstractReflectedAudience implements Audience {
 
     private static final @NotNull Class<?> AUDIENCE_CLASS;

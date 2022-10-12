@@ -24,102 +24,111 @@
 package dev.hypera.chameleon.scheduling;
 
 import java.time.Duration;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Schedule.
  */
+@NonExtendable
 public interface Schedule {
 
     /**
-     * Get {@link Schedule} {@link Type}.
+     * Create a new schedule that is never executed.
      *
-     * @return {@link Schedule} {@link Type}.
-     */
-    @NotNull Type getType();
-
-    /**
-     * Create a new {@link Schedule} that never runs.
-     *
-     * @return new {@link Schedule}.
+     * @return new schedule.
      */
     static @NotNull Schedule none() {
         return ScheduleImpl.NONE;
     }
 
     /**
-     * Create a new {@link Schedule} that runs according to the provided {@link Duration}.
+     * Create a new schedule that is executed according to the provided {@link Duration}.
      *
      * @param duration {@link Duration}.
      *
-     * @return new {@link Schedule}.
+     * @return new schedule.
      */
     static @NotNull Schedule duration(@NotNull Duration duration) {
-        return new ScheduleImpl.DurationSchedule(duration);
+        return new ScheduleImpl(duration);
     }
 
     /**
-     * Create a new {@link Schedule} that runs every {@code tick} ticks.
+     * Create a new schedule that is executed every {@code ticks} ticks.
      *
-     * @param tick Ticks between runs.
+     * @param ticks Ticks between executions.
      *
-     * @return new {@link Schedule}.
+     * @return new schedule.
      */
-    static @NotNull Schedule tick(int tick) {
-        return new ScheduleImpl.TickSchedule(tick);
+    static @NotNull Schedule ticks(long ticks) {
+        // A tick occurs every 50 milliseconds.
+        return duration(Duration.ofMillis(ticks * 50L));
     }
 
     /**
-     * Create a new {@link Schedule} that runs every {@code hours} hours.
+     * Create a new schedule that runs every {@code hours} hours.
      *
      * @param hours Hours between runs.
      *
-     * @return new {@link Schedule}.
+     * @return new schedule.
      */
     static @NotNull Schedule hours(long hours) {
         return duration(Duration.ofHours(hours));
     }
 
     /**
-     * Create a new {@link Schedule} that runs every {@code minutes} minutes.
+     * Create a new schedule that runs every {@code minutes} minutes.
      *
      * @param minutes Minutes between runs.
      *
-     * @return new {@link Schedule}.
+     * @return new schedule.
      */
     static @NotNull Schedule minutes(long minutes) {
         return duration(Duration.ofMinutes(minutes));
     }
 
     /**
-     * Create a new {@link Schedule} that runs every {@code seconds} seconds.
+     * Create a new schedule that runs every {@code seconds} seconds.
      *
      * @param seconds Seconds between runs.
      *
-     * @return new {@link Schedule}.
+     * @return new schedule.
      */
     static @NotNull Schedule seconds(long seconds) {
         return duration(Duration.ofSeconds(seconds));
     }
 
     /**
-     * Create a new {@link Schedule} that runs every {@code millis} milliseconds.
+     * Create a new schedule that runs every {@code millis} milliseconds.
      *
      * @param millis Milliseconds between runs.
      *
-     * @return new {@link Schedule}.
+     * @return new schedule.
      */
     static @NotNull Schedule millis(long millis) {
         return duration(Duration.ofMillis(millis));
     }
 
+
     /**
-     * {@link Schedule} type.
+     * Convert this schedule to ticks.
+     *
+     * @return ticks.
      */
-    enum Type {
+    long toTicks();
 
-        DURATION, TICK, NONE
+    /**
+     * Convert this schedule to milliseconds.
+     *
+     * @return milliseconds.
+     */
+    long toMillis();
 
-    }
+    /**
+     * Convert this schedule to a Duration.
+     *
+     * @return Duration.
+     */
+    @NotNull Duration toDuration();
 
 }

@@ -27,11 +27,13 @@ import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
 import dev.hypera.chameleon.platform.proxy.Server;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an in-game {@link User} on a {@link ProxyPlatform}.
  */
+@NonExtendable
 public interface ProxyUser extends User {
 
     /**

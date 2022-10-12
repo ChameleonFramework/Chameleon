@@ -24,13 +24,11 @@
 package dev.hypera.chameleon.platform.nukkit.managers;
 
 import cn.nukkit.Server;
-import dev.hypera.chameleon.managers.Scheduler;
+import cn.nukkit.scheduler.TaskHandler;
 import dev.hypera.chameleon.platform.nukkit.NukkitChameleon;
 import dev.hypera.chameleon.scheduling.Schedule;
-import dev.hypera.chameleon.scheduling.ScheduleImpl.DurationSchedule;
-import dev.hypera.chameleon.scheduling.ScheduleImpl.TickSchedule;
-import dev.hypera.chameleon.scheduling.Task;
-import dev.hypera.chameleon.scheduling.TaskImpl;
+import dev.hypera.chameleon.scheduling.ScheduledTask;
+import dev.hypera.chameleon.scheduling.Scheduler;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,36 +50,22 @@ public class NukkitScheduler extends Scheduler {
         this.chameleon = chameleon;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected void schedule(@NotNull TaskImpl task) {
-        if (task.getRepeat().getType().equals(Schedule.Type.NONE)) {
-            if (task.getDelay().getType().equals(Schedule.Type.NONE)) {
-                Server.getInstance().getScheduler().scheduleTask(this.chameleon.getPlatformPlugin(), task.getRunnable(), task.getType().equals(Task.Type.ASYNC));
-            } else {
-                Server.getInstance().getScheduler().scheduleDelayedTask(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()), task.getType().equals(Task.Type.ASYNC));
-            }
-        } else {
-            if (task.getDelay().getType().equals(Schedule.Type.NONE)) {
-                Server.getInstance().getScheduler().scheduleRepeatingTask(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getRepeat()), task.getType().equals(Task.Type.ASYNC));
-            } else {
-                Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(this.chameleon.getPlatformPlugin(), task.getRunnable(), convert(task.getDelay()), convert(task.getRepeat()), task.getType().equals(Task.Type.ASYNC));
-            }
-        }
+    protected @NotNull ScheduledTask scheduleAsyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        TaskHandler handler = Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(
+            this.chameleon.getPlatformPlugin(), task, (int) delay.toTicks(), (int) repeat.toTicks(), true
+        );
+
+        return handler::cancel;
     }
 
-    private int convert(@NotNull Schedule schedule) {
-        if (schedule.getType().equals(Schedule.Type.NONE)) {
-            return 0;
-        } else if (schedule.getType().equals(Schedule.Type.DURATION)) {
-            return (int) Math.min(((DurationSchedule) schedule).getDuration().toMillis() / 50, Integer.MAX_VALUE);
-        } else if (schedule.getType().equals(Schedule.Type.TICK)) {
-            return ((TickSchedule) schedule).getTicks();
-        } else {
-            throw new UnsupportedOperationException("Cannot convert scheduler type '" + schedule.getType() + "'");
-        }
+    @Override
+    protected @NotNull ScheduledTask scheduleSyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
+        TaskHandler handler = Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(
+            this.chameleon.getPlatformPlugin(), task, (int) delay.toTicks(), (int) repeat.toTicks(), false
+        );
+
+        return handler::cancel;
     }
 
 }

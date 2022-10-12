@@ -31,88 +31,38 @@ import org.jetbrains.annotations.NotNull;
  * {@link Schedule} implementations.
  */
 @Internal
-public final class ScheduleImpl {
+final class ScheduleImpl implements Schedule {
 
-    static final @NotNull Schedule NONE = () -> Schedule.Type.NONE;
+    static final @NotNull Schedule NONE = new ScheduleImpl(Duration.ZERO);
+    private final @NotNull Duration duration;
 
-    private ScheduleImpl() {
-
+    ScheduleImpl(@NotNull Duration duration) {
+        this.duration = duration;
     }
 
     /**
-     * {@link Schedule} {@link Duration} implementation.
-     *
-     * @see Schedule#duration(Duration)
+     * {@inheritDoc}
      */
-    @Internal
-    public static final class DurationSchedule implements Schedule {
-
-        private final @NotNull Duration duration;
-
-        /**
-         * {@link DurationSchedule} constructor.
-         *
-         * @param duration {@link Duration} between runs.
-         */
-        public DurationSchedule(@NotNull Duration duration) {
-            this.duration = duration;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public @NotNull Type getType() {
-            return Type.DURATION;
-        }
-
-        /**
-         * Get {@link Duration}.
-         *
-         * @return {@link Duration}.
-         */
-        public @NotNull Duration getDuration() {
-            return this.duration;
-        }
-
+    @Override
+    public long toTicks() {
+        // A tick occurs every 50 milliseconds.
+        return this.duration.toMillis() / 50;
     }
 
     /**
-     * {@link Schedule} tick implementation.
-     *
-     * @see Schedule#tick(int)
+     * {@inheritDoc}
      */
-    @Internal
-    public static final class TickSchedule implements Schedule {
+    @Override
+    public long toMillis() {
+        return this.duration.toMillis();
+    }
 
-        private final int ticks;
-
-        /**
-         * {@link TickSchedule} constructor.
-         *
-         * @param ticks Ticks between runs.
-         */
-        public TickSchedule(int ticks) {
-            this.ticks = ticks;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public @NotNull Type getType() {
-            return Type.TICK;
-        }
-
-        /**
-         * Get ticks.
-         *
-         * @return ticks.
-         */
-        public int getTicks() {
-            return this.ticks;
-        }
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Duration toDuration() {
+        return this.duration;
     }
 
 }

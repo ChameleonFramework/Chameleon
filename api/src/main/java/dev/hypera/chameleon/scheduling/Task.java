@@ -23,93 +23,137 @@
  */
 package dev.hypera.chameleon.scheduling;
 
-import java.util.function.Consumer;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import dev.hypera.chameleon.scheduling.TaskImpl.BuilderImpl;
+import java.util.function.BooleanSupplier;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Task.
  */
+@FunctionalInterface
 public interface Task {
 
     /**
-     * {@link Task} builder.
+     * Create a new task builder.
+     *
+     * @param runnable Task runnable.
+     *
+     * @return new builder.
      */
-    class Builder {
-
-        private final @NotNull Consumer<TaskImpl> schedule;
-        private final @NotNull Runnable runnable;
-
-        private @NotNull Type type = Type.ASYNC;
-        private @NotNull Schedule delay = Schedule.none();
-        private @NotNull Schedule repeat = Schedule.none();
-
-        /**
-         * {@link Builder} constructor.
-         *
-         * @param schedule {@link TaskImpl} schedule consumer.
-         * @param runnable Task {@link Runnable}.
-         */
-        @Internal
-        public Builder(@NotNull Consumer<TaskImpl> schedule, @NotNull Runnable runnable) {
-            this.schedule = schedule;
-            this.runnable = runnable;
-        }
-
-        /**
-         * Set Task {@link Type}.
-         *
-         * @param type {@link Type}.
-         *
-         * @return {@code this}.
-         */
-        @Contract("_ -> this")
-        public @NotNull Builder type(@NotNull Type type) {
-            this.type = type;
-            return this;
-        }
-
-        /**
-         * Set Task delay.
-         *
-         * @param delay Task delay {@link Schedule}.
-         *
-         * @return {@code this}.
-         */
-        @Contract("_ -> this")
-        public @NotNull Builder delay(@NotNull Schedule delay) {
-            this.delay = delay;
-            return this;
-        }
-
-        /**
-         * Set Task repeat.
-         *
-         * @param repeat Task repeat {@link Schedule}.
-         *
-         * @return {@code this}.
-         */
-        @Contract("_ -> this")
-        public @NotNull Builder repeat(@NotNull Schedule repeat) {
-            this.repeat = repeat;
-            return this;
-        }
-
-        /**
-         * Build new {@link Schedule}.
-         */
-        public void build() {
-            this.schedule.accept(new TaskImpl(this.runnable, this.type, this.delay, this.repeat));
-        }
-
+    static @NotNull Builder builder(@NotNull Runnable runnable) {
+        return new BuilderImpl(runnable);
     }
 
     /**
-     * Task type.
+     * Create a new synchronous task.
+     *
+     * @param runnable Task runnable.
+     *
+     * @return new task.
      */
-    enum Type {
-        SYNC, ASYNC
+    static @NotNull Task sync(@NotNull Runnable runnable) {
+        return builder(runnable).sync().build();
+    }
+
+    /**
+     * Create a new asynchronous task.
+     *
+     * @param runnable Task runnable.
+     *
+     * @return new task.
+     */
+    static @NotNull Task async(@NotNull Runnable runnable) {
+        return builder(runnable).async().build();
+    }
+
+
+    /**
+     * Execute this task.
+     */
+    void run();
+
+    /**
+     * Get whether this task should be executed asynchronously.
+     *
+     * @return asynchronous execution.
+     */
+    default boolean isAsync() {
+        return true;
+    }
+
+
+    /**
+     * Task builder.
+     */
+    @NonExtendable
+    interface Builder {
+
+        /**
+         * Execute this task synchronously.
+         *
+         * @return {@code this}.
+         */
+        @Contract("-> this")
+        @NotNull Builder sync();
+
+        /**
+         * Execute this task asynchronously.
+         *
+         * @return {@code this}.
+         */
+        @Contract("-> this")
+        @NotNull Builder async();
+
+        /**
+         * Execute this task after a delay.
+         *
+         * @param delay Delay schedule.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        @NotNull Builder delay(@NotNull Schedule delay);
+
+        /**
+         * Execute this task repeatedly.
+         *
+         * @param repeat Repeat schedule.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        @NotNull Builder repeat(@NotNull Schedule repeat);
+
+        /**
+         * Cancel this task when this the supplier returns {@code true}.
+         *
+         * @param cancelWhen Cancel when.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        @NotNull Builder cancelWhen(@NotNull BooleanSupplier cancelWhen);
+
+        /**
+         * Cancel after {@code cancelAfter} executions.
+         *
+         * @param cancelAfter Cancel after.
+         *
+         * @return {@code this}.
+         */
+        @Contract("_ -> this")
+        @NotNull Builder cancelAfter(int cancelAfter);
+
+        /**
+         * Build.
+         *
+         * @return new {@link Task} instance.
+         */
+        @Contract(value = "-> new", pure = true)
+        @NotNull Task build();
+
     }
 
 }

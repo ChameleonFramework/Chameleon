@@ -21,56 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.managers;
+package dev.hypera.chameleon.platform;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.command.Command;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import java.util.Optional;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Chameleon} command manager.
+ * {@link Platform} plugin manager.
  */
-public abstract class CommandManager {
-
-    private final @NotNull Chameleon chameleon;
+public abstract class PluginManager {
 
     /**
-     * {@link CommandManager} constructor.
+     * Get {@link PlatformPlugin}s.
      *
-     * @param chameleon {@link Chameleon} instance.
+     * @return set of {@link PlatformPlugin}s.
      */
-    @Internal
-    protected CommandManager(@NotNull Chameleon chameleon) {
-        this.chameleon = chameleon;
-    }
+    public abstract @NotNull Set<PlatformPlugin> getPlugins();
 
     /**
-     * Register {@link Command}.
+     * Attempt to find {@link PlatformPlugin} by name.
      *
-     * @param command {@link Command} to be registered.
+     * @param name The name to search for.
+     *
+     * @return {@link Optional} containing the {@link PlatformPlugin} if found, otherwise empty.
      */
-    public void register(@NotNull Command command) {
-        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
-            registerCommand(command);
-        }
-    }
+    public abstract @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name);
 
     /**
-     * Unregister {@link Command}.
+     * Check if a {@link PlatformPlugin} is enabled, by name.
      *
-     * @param command {@link Command} to be unregistered.
+     * @param name The name to search for.
+     *
+     * @return {@code true} if the {@link PlatformPlugin} was found and if it's enabled, otherwise false.
      */
-    public void unregister(@NotNull Command command) {
-        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
-            unregisterCommand(command);
-        }
-    }
-
-    @Internal
-    protected abstract void registerCommand(@NotNull Command command);
-
-    @Internal
-    protected abstract void unregisterCommand(@NotNull Command command);
+    public abstract boolean isPluginEnabled(@NotNull String name);
 
 }

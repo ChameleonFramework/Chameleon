@@ -26,11 +26,13 @@ package dev.hypera.chameleon.command.context;
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.command.Command;
 import dev.hypera.chameleon.users.ChatUser;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * {@link Command} context.
  */
+@NonExtendable
 public interface Context {
 
     /**

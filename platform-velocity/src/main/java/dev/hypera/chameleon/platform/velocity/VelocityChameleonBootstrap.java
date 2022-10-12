@@ -29,7 +29,7 @@ import dev.hypera.chameleon.data.PluginData;
 import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extensions.ChameleonExtension;
 import dev.hypera.chameleon.logging.ChameleonLogger;
-import dev.hypera.chameleon.logging.impl.ChameleonSlf4jLogger;
+import dev.hypera.chameleon.logging.ChameleonSlf4jLogger;
 import dev.hypera.chameleon.platform.velocity.extensions.VelocityChameleonExtension;
 import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
