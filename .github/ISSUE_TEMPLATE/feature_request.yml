@@ -1,6 +1,6 @@
 name: Feature Request
 description: Create a feature request to suggest a feature that we can add.
-labels: [ "status: enhancement" ]
+labels: [ "status: triage", "type: enhancement" ]
 body:
   - type: markdown
     attributes:
