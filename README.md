@@ -166,6 +166,7 @@ This project was made possible by the [amazing people who have contributed](http
 ### Supporters
 People and companies who have donated or provided us with something that aids us in continuing this project.  
 [![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_square.svg)](https://jb.gg/OpenSourceSupport)
+[![MacStadium](https://uploads-ssl.webflow.com/5ac3c046c82724970fc60918/5c019d917bba312af7553b49_MacStadium-developerlogo.png)](https://www.macstadium.com/)
 
 ### Plugins
 Plugins or resources that have been created using Chameleon.  
