@@ -50,7 +50,7 @@ build-testLogger = "com.adarshr:gradle-test-logger-plugin:3.2.0"
 build-errorpronePlugin = "net.ltgt.gradle:gradle-errorprone-plugin:3.0.1"
 
 # Testing
-test-junit-bom = "org.junit:junit-bom:5.9.1"
+test-junit-bom = "org.junit:junit-bom:5.9.2"
 test-junit-api = { module = "org.junit.jupiter:junit-jupiter-api" }
 test-junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
 test-junit-params = { module = "org.junit.jupiter:junit-jupiter-params" }
