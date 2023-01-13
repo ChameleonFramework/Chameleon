@@ -51,5 +51,12 @@ tasks {
 
     jacocoTestReport {
         dependsOn(test)
+
+        reports {
+            html.required.set(true)
+            csv.required.set(false)
+            xml.required.set(true)
+            xml.outputLocation.set(buildDir.resolve("reports/jacoco/report.xml"))
+        }
     }
 }
