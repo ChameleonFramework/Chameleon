@@ -26,9 +26,9 @@ package dev.hypera.chameleon.platform.minestom.platform.objects;
 import dev.hypera.chameleon.platform.PlatformPlugin;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import net.minestom.server.extensions.Extension;
@@ -36,23 +36,22 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom {@link PlatformPlugin} implementation.
+ * Minestom platform plugin implementation.
  */
 @Internal
-public class MinestomPlugin implements PlatformPlugin {
+public final class MinestomPlugin implements PlatformPlugin {
 
     private final @NotNull Extension extension;
 
     /**
-     * {@link MinestomPlugin} constructor.
+     * Minestom plugin constructor.
      *
-     * @param extension {@link Extension} instance.
+     * @param extension Extension instance.
      */
     @Internal
     public MinestomPlugin(@NotNull Extension extension) {
         this.extension = extension;
     }
-
 
     /**
      * {@inheritDoc}
@@ -90,7 +89,7 @@ public class MinestomPlugin implements PlatformPlugin {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull List<String> getAuthors() {
+    public @NotNull Collection<String> getAuthors() {
         return Arrays.asList(this.extension.getOrigin().getAuthors());
     }
 

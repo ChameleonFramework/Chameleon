@@ -25,9 +25,8 @@ package dev.hypera.chameleon.platform.sponge.platform.plugin;
 
 import dev.hypera.chameleon.platform.PlatformPlugin;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -37,17 +36,17 @@ import org.spongepowered.plugin.metadata.model.PluginContributor;
 import org.spongepowered.plugin.metadata.model.PluginDependency;
 
 /**
- * Sponge {@link PlatformPlugin} implementation.
+ * Sponge platform plugin implementation.
  */
 @Internal
-public class SpongePlugin implements PlatformPlugin {
+public final class SpongePlugin implements PlatformPlugin {
 
     private final @NotNull PluginContainer plugin;
 
     /**
-     * {@link SpongePlugin} constructor.
+     * Sponge plugin constructor.
      *
-     * @param plugin {@link PluginContainer} to be wrapped.
+     * @param plugin Sponge plugin container to be wrapped.
      */
     @Internal
     public SpongePlugin(@NotNull PluginContainer plugin) {
@@ -90,24 +89,27 @@ public class SpongePlugin implements PlatformPlugin {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull List<String> getAuthors() {
-        return this.plugin.metadata().contributors().stream().map(PluginContributor::name).collect(Collectors.toList());
+    public @NotNull Collection<String> getAuthors() {
+        return this.plugin.metadata().contributors().stream().map(PluginContributor::name)
+            .collect(Collectors.toList());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Set<String> getDependencies() {
-        return this.plugin.metadata().dependencies().stream().filter(d -> !d.optional()).map(PluginDependency::id).collect(Collectors.toSet());
+    public @NotNull Collection<String> getDependencies() {
+        return this.plugin.metadata().dependencies().stream().filter(d -> !d.optional())
+            .map(PluginDependency::id).collect(Collectors.toSet());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Set<String> getSoftDependencies() {
-        return this.plugin.metadata().dependencies().stream().filter(PluginDependency::optional).map(PluginDependency::id).collect(Collectors.toSet());
+    public @NotNull Collection<String> getSoftDependencies() {
+        return this.plugin.metadata().dependencies().stream().filter(PluginDependency::optional)
+            .map(PluginDependency::id).collect(Collectors.toSet());
     }
 
     /**
@@ -116,7 +118,8 @@ public class SpongePlugin implements PlatformPlugin {
     @Override
     public @NotNull Path getDataFolder() {
         // This is probably the best we can do
-        return Sponge.game().gameDirectory().resolve("mods").resolve(this.plugin.metadata().id());
+        return Sponge.game().gameDirectory().resolve("mods")
+            .resolve(this.plugin.metadata().id());
     }
 
 

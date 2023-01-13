@@ -23,31 +23,24 @@
  */
 package dev.hypera.chameleon.platform.bukkit.platform;
 
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.server.ServerPlatform;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Bukkit {@link ServerPlatform} implementation.
+ * Bukkit server platform implementation.
  */
 @Internal
 public final class BukkitPlatform implements ServerPlatform {
-
-    /**
-     * {@link BukkitPlatform} constructor.
-     */
-    @Internal
-    public BukkitPlatform() {
-
-    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public @NotNull String getId() {
-        return "Bukkit";
+        return Platform.BUKKIT;
     }
 
     /**

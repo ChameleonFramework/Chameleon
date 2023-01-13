@@ -23,31 +23,24 @@
  */
 package dev.hypera.chameleon.platform.minestom.platform;
 
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.server.ServerPlatform;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom {@link ServerPlatform} implementation.
+ * Minestom server platform implementation.
  */
 @Internal
 public final class MinestomPlatform implements ServerPlatform {
-
-    /**
-     * {@link MinestomPlatform} constructor.
-     */
-    @Internal
-    public MinestomPlatform() {
-
-    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public @NotNull String getId() {
-        return "Minestom";
+        return Platform.MINESTOM;
     }
 
     /**

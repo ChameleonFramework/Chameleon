@@ -26,28 +26,27 @@ package dev.hypera.chameleon.platform.nukkit.platform.plugin;
 import cn.nukkit.Server;
 import cn.nukkit.plugin.Plugin;
 import dev.hypera.chameleon.platform.PlatformPlugin;
-import dev.hypera.chameleon.utils.ChameleonUtil;
+import dev.hypera.chameleon.util.ChameleonUtil;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Nukkit {@link PlatformPlugin} implementation.
+ * Nukkit platform plugin implementation.
  */
 @Internal
-public class NukkitPlugin implements PlatformPlugin {
+public final class NukkitPlugin implements PlatformPlugin {
 
     private final @NotNull Plugin plugin;
 
     /**
-     * {@link NukkitPlugin} constructor.
+     * Nukkit plugin constructor.
      *
-     * @param plugin {@link Plugin} to be wrapped.
+     * @param plugin Nukkit plugin to be wrapped.
      */
     @Internal
     public NukkitPlugin(@NotNull Plugin plugin) {
@@ -91,7 +90,7 @@ public class NukkitPlugin implements PlatformPlugin {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull List<String> getAuthors() {
+    public @NotNull Collection<String> getAuthors() {
         return ChameleonUtil.getOrDefault(this.plugin.getDescription().getAuthors(), Collections.emptyList());
     }
 
@@ -99,7 +98,7 @@ public class NukkitPlugin implements PlatformPlugin {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Set<String> getDependencies() {
+    public @NotNull Collection<String> getDependencies() {
         return new HashSet<>(this.plugin.getDescription().getDepend());
     }
 
@@ -107,7 +106,7 @@ public class NukkitPlugin implements PlatformPlugin {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Set<String> getSoftDependencies() {
+    public @NotNull Collection<String> getSoftDependencies() {
         return new HashSet<>(this.plugin.getDescription().getSoftDepend());
     }
 

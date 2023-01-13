@@ -28,10 +28,10 @@ plugins {
 
 /* Set up publishing */
 indra {
+    mitLicense()
     github("ChameleonFramework", "Chameleon") {
         ci(true)
     }
-    mitLicense()
 
     publishReleasesTo("hyperaReleases", "https://repo.hypera.dev/releases")
     publishSnapshotsTo("hyperaSnapshots", "https://repo.hypera.dev/snapshots")

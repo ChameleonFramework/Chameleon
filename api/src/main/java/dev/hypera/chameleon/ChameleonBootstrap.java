@@ -23,13 +23,15 @@
  */
 package dev.hypera.chameleon;
 
-import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extensions.ChameleonExtension;
-import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
-import dev.hypera.chameleon.logging.ChameleonLogger;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
+import dev.hypera.chameleon.logger.ChameleonLogger;
+import dev.hypera.chameleon.util.Preconditions;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.Contract;
@@ -37,10 +39,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * {@link Chameleon} bootstrap. Allows for runtime dependency loading, etc. before Chameleon is actually loaded.
+ * Chameleon bootstrap.
+ * <p>Allows for runtime dependency loading, etc. before Chameleon is actually loaded.</p>
  *
- * @param <T> {@link Chameleon} implementation type.
- * @param <E> {@link ChameleonPlatformExtension} implementation type.
+ * @param <T> Chameleon implementation type.
+ * @param <E> Chameleon platform extension implementation type.
  */
 public abstract class ChameleonBootstrap<T extends Chameleon, E extends ChameleonPlatformExtension<?, ?, T>> {
 
@@ -52,7 +55,7 @@ public abstract class ChameleonBootstrap<T extends Chameleon, E extends Chameleo
     /**
      * Load with extensions.
      *
-     * @param extensions {@link ChameleonPlatformExtension}s to be loaded.
+     * @param extensions Chameleon platform extensions to be loaded.
      *
      * @return {@code this}.
      */
@@ -60,18 +63,24 @@ public abstract class ChameleonBootstrap<T extends Chameleon, E extends Chameleo
     @SuppressWarnings("varargs")
     @Contract("_ -> this")
     public final @NotNull ChameleonBootstrap<T, E> withExtensions(@NotNull E... extensions) {
+        Preconditions.checkNotNull("extensions", extensions);
         return withExtensions(Arrays.asList(extensions));
     }
 
     /**
      * Load with extensions.
      *
-     * @param extensions {@link ChameleonPlatformExtension}s to be loaded.
+     * @param extensions Chameleon platform extensions to be loaded.
      *
      * @return {@code this}.
      */
     @Contract("_ -> this")
     public final @NotNull ChameleonBootstrap<T, E> withExtensions(@NotNull Collection<E> extensions) {
+        Preconditions.checkNotNull("extensions", extensions);
+        Preconditions.checkArgument(
+            extensions.stream().noneMatch(Objects::isNull),
+            "extensions must not contain null"
+        );
         this.platformExtensions.addAll(extensions);
         return this;
     }
@@ -86,19 +95,20 @@ public abstract class ChameleonBootstrap<T extends Chameleon, E extends Chameleo
      */
     @Contract("_ -> this")
     public final @NotNull ChameleonBootstrap<T, E> onPreLoad(@NotNull Consumer<ChameleonLogger> preLoad) {
+        Preconditions.checkNotNull("preLoad", preLoad);
         this.preLoad = preLoad;
         return this;
     }
 
     /**
-     * Load {@link Chameleon} implementation.
+     * Load Chameleon implementation.
      *
-     * @return {@link Chameleon} implementation instance.
-     * @throws ChameleonInstantiationException if something goes wrong while loading the {@link Chameleon} implementation.
+     * @return Chameleon implementation instance.
+     * @throws ChameleonInstantiationException if something goes wrong while loading the Chameleon implementation.
      */
     @Contract("-> new")
     public final @NotNull T load() throws ChameleonInstantiationException {
-        if (null != this.preLoad) {
+        if (this.preLoad != null) {
             this.preLoad.accept(createLogger());
         }
 

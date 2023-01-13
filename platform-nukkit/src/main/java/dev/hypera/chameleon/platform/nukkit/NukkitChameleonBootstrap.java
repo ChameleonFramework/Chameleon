@@ -26,27 +26,27 @@ package dev.hypera.chameleon.platform.nukkit;
 import cn.nukkit.plugin.PluginBase;
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.data.PluginData;
-import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extensions.ChameleonExtension;
-import dev.hypera.chameleon.logging.ChameleonLogger;
-import dev.hypera.chameleon.platform.nukkit.extensions.NukkitChameleonExtension;
-import dev.hypera.chameleon.platform.nukkit.logging.ChameleonNukkitLogger;
+import dev.hypera.chameleon.ChameleonPluginData;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.logger.ChameleonLogger;
+import dev.hypera.chameleon.platform.nukkit.extension.NukkitChameleonExtension;
+import dev.hypera.chameleon.platform.nukkit.logger.ChameleonNukkitLogger;
 import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Nukkit {@link ChameleonBootstrap} implementation.
+ * Nukkit Chameleon bootstrap implementation.
  */
 public final class NukkitChameleonBootstrap extends ChameleonBootstrap<NukkitChameleon, NukkitChameleonExtension<?, ?>> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull PluginBase nukkitPlugin;
-    private final @NotNull PluginData pluginData;
+    private final @NotNull ChameleonPluginData pluginData;
 
     @Internal
-    NukkitChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull PluginData pluginData) {
+    NukkitChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull ChameleonPluginData pluginData) {
         this.chameleonPlugin = chameleonPlugin;
         this.nukkitPlugin = nukkitPlugin;
         this.pluginData = pluginData;

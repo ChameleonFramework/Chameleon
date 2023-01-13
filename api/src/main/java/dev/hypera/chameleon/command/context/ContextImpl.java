@@ -24,13 +24,14 @@
 package dev.hypera.chameleon.command.context;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.user.ChatUser;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Context} implementation.
+ * Context implementation.
  */
+@Internal
 public final class ContextImpl implements Context {
 
     private final @NotNull ChatUser sender;
@@ -38,11 +39,11 @@ public final class ContextImpl implements Context {
     private final @NotNull String[] args;
 
     /**
-     * {@link ContextImpl} constructor.
+     * Context implementation constructor.
      *
-     * @param sender Command sender.
-     * @param chameleon {@link Chameleon} instance.
-     * @param args Command arguments.
+     * @param sender    Command sender.
+     * @param chameleon Chameleon implementation.
+     * @param args      Command arguments.
      */
     @Internal
     public ContextImpl(@NotNull ChatUser sender, @NotNull Chameleon chameleon, @NotNull String[] args) {

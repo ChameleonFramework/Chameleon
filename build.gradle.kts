@@ -32,7 +32,7 @@ plugins {
 }
 
 group = "dev.hypera"
-version = "0.12.0-SNAPSHOT"
+version = "0.13.0-SNAPSHOT"
 description = "Cross-platform Minecraft plugin framework"
 
 indraSonatype {

@@ -36,17 +36,17 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity {@link PlatformPlugin} implementation.
+ * Velocity platform plugin implementation.
  */
 @Internal
-public class VelocityPlugin implements PlatformPlugin {
+public final class VelocityPlugin implements PlatformPlugin {
 
     private final @NotNull PluginContainer plugin;
 
     /**
-     * {@link VelocityPlugin} constructor.
+     * Velocity constructor.
      *
-     * @param plugin {@link PluginContainer} to be wrapped.
+     * @param plugin Velocity plugin container to be wrapped.
      */
     @Internal
     public VelocityPlugin(@NotNull PluginContainer plugin) {
@@ -99,7 +99,8 @@ public class VelocityPlugin implements PlatformPlugin {
      */
     @Override
     public @NotNull Set<String> getDependencies() {
-        return this.plugin.getDescription().getDependencies().stream().filter(d -> !d.isOptional()).map(PluginDependency::getId).collect(Collectors.toSet());
+        return this.plugin.getDescription().getDependencies().stream()
+            .filter(d -> !d.isOptional()).map(PluginDependency::getId).collect(Collectors.toSet());
     }
 
     /**
@@ -107,7 +108,9 @@ public class VelocityPlugin implements PlatformPlugin {
      */
     @Override
     public @NotNull Set<String> getSoftDependencies() {
-        return this.plugin.getDescription().getDependencies().stream().filter(PluginDependency::isOptional).map(PluginDependency::getId).collect(Collectors.toSet());
+        return this.plugin.getDescription().getDependencies().stream()
+            .filter(PluginDependency::isOptional).map(PluginDependency::getId)
+            .collect(Collectors.toSet());
     }
 
     /**
@@ -115,7 +118,7 @@ public class VelocityPlugin implements PlatformPlugin {
      */
     @Override
     public @NotNull Path getDataFolder() {
-        return Paths.get("/");
+        return Paths.get("plugins", this.plugin.getDescription().getId());
     }
 
     /**

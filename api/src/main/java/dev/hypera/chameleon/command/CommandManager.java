@@ -24,12 +24,13 @@
 package dev.hypera.chameleon.command;
 
 import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.util.Preconditions;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Chameleon} command manager.
+ * Chameleon command manager.
  */
 @NonExtendable
 public abstract class CommandManager {
@@ -37,9 +38,9 @@ public abstract class CommandManager {
     private final @NotNull Chameleon chameleon;
 
     /**
-     * {@link CommandManager} constructor.
+     * Command manager constructor.
      *
-     * @param chameleon {@link Chameleon} instance.
+     * @param chameleon Chameleon implementation.
      */
     @Internal
     protected CommandManager(@NotNull Chameleon chameleon) {
@@ -47,23 +48,25 @@ public abstract class CommandManager {
     }
 
     /**
-     * Register {@link Command}.
+     * Register the given command.
      *
-     * @param command {@link Command} to be registered.
+     * @param command Command to be registered.
      */
     public void register(@NotNull Command command) {
-        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
+        Preconditions.checkNotNull("command", command);
+        if (command.getPlatform().test(this.chameleon.getPlatform())) {
             registerCommand(command);
         }
     }
 
     /**
-     * Unregister {@link Command}.
+     * Unregister the given command.
      *
-     * @param command {@link Command} to be unregistered.
+     * @param command Command to be unregistered.
      */
     public void unregister(@NotNull Command command) {
-        if (command.getPlatform().matches(this.chameleon.getPlatform())) {
+        Preconditions.checkNotNull("command", command);
+        if (command.getPlatform().test(this.chameleon.getPlatform())) {
             unregisterCommand(command);
         }
     }

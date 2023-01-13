@@ -23,17 +23,13 @@
  */
 package dev.hypera.chameleon.platform.velocity.adventure;
 
-import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
-import dev.hypera.chameleon.platform.velocity.user.VelocityConsoleUser;
-import dev.hypera.chameleon.platform.velocity.user.VelocityUser;
-import dev.hypera.chameleon.platform.velocity.user.VelocityUsers;
-import dev.hypera.chameleon.users.ChatUser;
-import dev.hypera.chameleon.users.ProxyUser;
+import dev.hypera.chameleon.user.ChatUser;
+import dev.hypera.chameleon.user.ProxyUser;
+import dev.hypera.chameleon.util.Preconditions;
 import java.util.UUID;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
@@ -41,17 +37,17 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity {@link ChameleonAudienceProvider} implementation.
+ * Velocity Chameleon audience provider implementation.
  */
 @Internal
-public class VelocityAudienceProvider implements ChameleonAudienceProvider {
+public final class VelocityAudienceProvider implements ChameleonAudienceProvider {
 
     private final @NotNull VelocityChameleon chameleon;
 
     /**
-     * {@link VelocityAudienceProvider} constructor.
+     * Velocity audience provider constructor.
      *
-     * @param chameleon {@link Chameleon} instance.
+     * @param chameleon Velocity Chameleon implementation.
      */
     @Internal
     public VelocityAudienceProvider(@NotNull VelocityChameleon chameleon) {
@@ -71,7 +67,7 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience console() {
-        return new VelocityConsoleUser(this.chameleon);
+        return this.chameleon.getUserManager().getConsole();
     }
 
     /**
@@ -79,7 +75,7 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience players() {
-        return Audience.audience(this.chameleon.getPlatformPlugin().getServer().getAllPlayers().stream().map(p -> new VelocityUser(this.chameleon, p)).collect(Collectors.toSet()));
+        return Audience.audience(this.chameleon.getUserManager().getUsers());
     }
 
     /**
@@ -87,7 +83,9 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience player(@NotNull UUID playerId) {
-        return VelocityUsers.wrap(this.chameleon, this.chameleon.getPlatformPlugin().getServer().getPlayer(playerId).orElseThrow(() -> new IllegalArgumentException("Cannot find player with id '" + playerId + "'")));
+        Preconditions.checkNotNull("playerId", playerId);
+        return this.chameleon.getUserManager().getUserById(playerId).map(Audience.class::cast)
+            .orElse(Audience.empty());
     }
 
     /**
@@ -95,6 +93,7 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
+        Preconditions.checkNotNull("filter", filter);
         return all().filterAudience(f -> filter.test((ChatUser) f));
     }
 
@@ -103,6 +102,7 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience permission(@NotNull String permission) {
+        Preconditions.checkNotNull("permission", permission);
         return filter(p -> p.hasPermission(permission));
     }
 
@@ -111,6 +111,7 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience world(@NotNull Key world) {
+        Preconditions.checkNotNull("world", world);
         return all();
     }
 
@@ -119,7 +120,12 @@ public class VelocityAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience server(@NotNull String serverName) {
-        return filter(p -> p instanceof ProxyUser && ((ProxyUser) p).getServer().isPresent() && ((ProxyUser) p).getServer().get().getName().equals(serverName));
+        Preconditions.checkNotNull("serverName", serverName);
+        return filter(p ->
+            p instanceof ProxyUser &&
+            ((ProxyUser) p).getConnectedServer().isPresent() &&
+            ((ProxyUser) p).getConnectedServer().get().getName().equals(serverName)
+        );
     }
 
     /**

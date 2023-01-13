@@ -25,25 +25,26 @@ package dev.hypera.chameleon.platform.bukkit;
 
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
-import dev.hypera.chameleon.data.PluginData;
-import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extensions.ChameleonExtension;
-import dev.hypera.chameleon.logging.ChameleonJavaLogger;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.logger.ChameleonJavaLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bukkit.adventure.BukkitAudienceProvider;
-import dev.hypera.chameleon.platform.bukkit.events.BukkitListener;
-import dev.hypera.chameleon.platform.bukkit.managers.BukkitCommandManager;
-import dev.hypera.chameleon.platform.bukkit.managers.BukkitPluginManager;
-import dev.hypera.chameleon.platform.bukkit.managers.BukkitScheduler;
-import dev.hypera.chameleon.platform.bukkit.managers.BukkitUserManager;
+import dev.hypera.chameleon.platform.bukkit.command.BukkitCommandManager;
+import dev.hypera.chameleon.platform.bukkit.event.BukkitListener;
 import dev.hypera.chameleon.platform.bukkit.platform.BukkitPlatform;
-import dev.hypera.chameleon.scheduling.Scheduler;
-import dev.hypera.chameleon.users.UserManager;
+import dev.hypera.chameleon.platform.bukkit.platform.BukkitPluginManager;
+import dev.hypera.chameleon.platform.bukkit.scheduler.BukkitScheduler;
+import dev.hypera.chameleon.platform.bukkit.user.BukkitUserManager;
+import dev.hypera.chameleon.scheduler.Scheduler;
+import dev.hypera.chameleon.util.Preconditions;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -51,7 +52,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Bukkit {@link Chameleon} implementation.
+ * Bukkit Chameleon implementation.
  */
 public final class BukkitChameleon extends Chameleon {
 
@@ -65,21 +66,21 @@ public final class BukkitChameleon extends Chameleon {
     private @Nullable ChameleonAudienceProvider audienceProvider;
 
     @Internal
-    BukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull JavaPlugin bukkitPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+    BukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull JavaPlugin bukkitPlugin, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, extensions, pluginData, new ChameleonJavaLogger(bukkitPlugin.getLogger()));
         this.plugin = bukkitPlugin;
     }
 
     /**
-     * Create a new {@link BukkitChameleonBootstrap} instance.
+     * Create a new Bukkit Chameleon bootstrap instance.
      *
-     * @param chameleonPlugin {@link ChameleonPlugin} to load.
-     * @param bukkitPlugin    {@link JavaPlugin}.
-     * @param pluginData      {@link PluginData}.
+     * @param chameleonPlugin Chameleon plugin to be loaded.
+     * @param bukkitPlugin    Bukkit JavaPlugin instance.
+     * @param pluginData      Chameleon plugin data.
      *
-     * @return new {@link BukkitChameleonBootstrap}.
+     * @return new Bukkit Chameleon bootstrap.
      */
-    public static @NotNull BukkitChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin, @NotNull PluginData pluginData) {
+    public static @NotNull BukkitChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin, @NotNull ChameleonPluginData pluginData) {
         return new BukkitChameleonBootstrap(chameleonPlugin, bukkitPlugin, pluginData);
     }
 
@@ -87,8 +88,16 @@ public final class BukkitChameleon extends Chameleon {
      * {@inheritDoc}
      */
     @Override
-    public void onEnable() {
+    public void onLoad() {
         this.audienceProvider = new BukkitAudienceProvider(this, this.plugin);
+        super.onLoad();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), this.plugin);
         super.onEnable();
     }
@@ -97,9 +106,20 @@ public final class BukkitChameleon extends Chameleon {
      * {@inheritDoc}
      */
     @Override
+    public void onDisable() {
+        this.getAdventure().close();
+        super.onDisable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public @NotNull ChameleonAudienceProvider getAdventure() {
-        if (this.audienceProvider == null) throw new IllegalStateException("Chameleon has not been enabled yet.");
-        return this.audienceProvider;
+        Preconditions.checkState(
+            this.audienceProvider != null, "Chameleon has not been loaded"
+        );
+        return Objects.requireNonNull(this.audienceProvider);
     }
 
     /**
@@ -109,7 +129,6 @@ public final class BukkitChameleon extends Chameleon {
     public @NotNull Platform getPlatform() {
         return this.platform;
     }
-
 
     /**
      * {@inheritDoc}
@@ -131,7 +150,7 @@ public final class BukkitChameleon extends Chameleon {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull UserManager getUserManager() {
+    public @NotNull BukkitUserManager getUserManager() {
         return this.userManager;
     }
 
@@ -143,7 +162,6 @@ public final class BukkitChameleon extends Chameleon {
         return this.scheduler;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -153,9 +171,9 @@ public final class BukkitChameleon extends Chameleon {
     }
 
     /**
-     * Get stored {@link JavaPlugin}.
+     * Get stored platform JavaPlugin.
      *
-     * @return stored {@link JavaPlugin}
+     * @return stored JavaPlugin.
      */
     public @NotNull JavaPlugin getPlatformPlugin() {
         return this.plugin;

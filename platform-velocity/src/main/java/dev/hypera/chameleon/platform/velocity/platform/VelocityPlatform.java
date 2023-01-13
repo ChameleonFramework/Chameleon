@@ -23,6 +23,7 @@
  */
 package dev.hypera.chameleon.platform.velocity.platform;
 
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
@@ -34,7 +35,7 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity {@link ProxyPlatform} implementation.
+ * Velocity proxy platform implementation.
  */
 @Internal
 public final class VelocityPlatform implements ProxyPlatform {
@@ -42,9 +43,9 @@ public final class VelocityPlatform implements ProxyPlatform {
     private final @NotNull VelocityChameleon chameleon;
 
     /**
-     * {@link VelocityPlatform} constructor.
+     * Velocity platform constructor.
      *
-     * @param chameleon {@link VelocityChameleon} instance.
+     * @param chameleon Velocity Chameleon implementation.
      */
     @Internal
     public VelocityPlatform(@NotNull VelocityChameleon chameleon) {
@@ -57,7 +58,7 @@ public final class VelocityPlatform implements ProxyPlatform {
      */
     @Override
     public @NotNull String getId() {
-        return "Velocity";
+        return Platform.VELOCITY;
     }
 
     /**
@@ -81,7 +82,8 @@ public final class VelocityPlatform implements ProxyPlatform {
      */
     @Override
     public @NotNull Set<Server> getServers() {
-        return this.chameleon.getPlatformPlugin().getServer().getAllServers().stream().map(s -> new VelocityServer(this.chameleon, s)).collect(Collectors.toSet());
+        return this.chameleon.getPlatformPlugin().getServer().getAllServers().stream()
+            .map(s -> new VelocityServer(this.chameleon, s)).collect(Collectors.toSet());
     }
 
     /**
@@ -89,7 +91,8 @@ public final class VelocityPlatform implements ProxyPlatform {
      */
     @Override
     public @NotNull Optional<Server> getServer(@NotNull String name) {
-        return this.chameleon.getPlatformPlugin().getServer().getServer(name).map(s -> new VelocityServer(this.chameleon, s));
+        return this.chameleon.getPlatformPlugin().getServer().getServer(name)
+            .map(s -> new VelocityServer(this.chameleon, s));
     }
 
 }

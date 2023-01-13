@@ -27,14 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import dev.hypera.chameleon.events.ChameleonEvent;
-import dev.hypera.chameleon.events.EventBus;
-import dev.hypera.chameleon.events.EventBusImpl;
-import dev.hypera.chameleon.events.EventSubscriber;
-import dev.hypera.chameleon.events.EventSubscription;
-import dev.hypera.chameleon.events.EventSubscriptionPriority;
-import dev.hypera.chameleon.events.cancellable.AbstractCancellable;
-import dev.hypera.chameleon.logging.DummyChameleonLogger;
+import dev.hypera.chameleon.event.cancellable.AbstractCancellable;
+import dev.hypera.chameleon.logger.DummyChameleonLogger;
 import org.junit.jupiter.api.Test;
 
 final class EventBusTests {
@@ -191,8 +185,8 @@ final class EventBusTests {
         EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
         eventBus.subscribe(TestEvent.class,
             EventSubscriber.builder(TestEvent.class)
-                .filter(e -> e.getTouches() == 0 || e.getTouches() == 2)
-                .filter(e -> e.getTouches() < 3)
+                .filters(e -> e.getTouches() == 0 || e.getTouches() == 2)
+                .filters(e -> e.getTouches() < 3)
                 .handler(TestEvent::touch)
                 .build()
         );

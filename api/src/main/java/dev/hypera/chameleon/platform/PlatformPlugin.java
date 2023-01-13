@@ -24,15 +24,16 @@
 package dev.hypera.chameleon.platform;
 
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 import org.jetbrains.annotations.ApiStatus.Experimental;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a plugin running on the platform.
  */
+@NonExtendable
 public interface PlatformPlugin {
 
     /**
@@ -69,21 +70,21 @@ public interface PlatformPlugin {
      *
      * @return authors.
      */
-    @NotNull List<String> getAuthors();
+    @NotNull Collection<String> getAuthors();
 
     /**
      * Get the required dependencies of this plugin.
      *
      * @return required dependencies.
      */
-    @NotNull Set<String> getDependencies();
+    @NotNull Collection<String> getDependencies();
 
     /**
      * Get the optional dependencies of this plugin.
      *
      * @return optional dependencies.
      */
-    @NotNull Set<String> getSoftDependencies();
+    @NotNull Collection<String> getSoftDependencies();
 
     /**
      * Get the data folder of this plugin.

@@ -25,9 +25,9 @@ package dev.hypera.chameleon.platform.objects;
 
 import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
 import dev.hypera.chameleon.platform.proxy.Server;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 public class TestProxyPlatform implements ProxyPlatform {
@@ -48,7 +48,7 @@ public class TestProxyPlatform implements ProxyPlatform {
     }
 
     @Override
-    public @NotNull Set<Server> getServers() {
+    public @NotNull Collection<Server> getServers() {
         return new HashSet<>();
     }
 

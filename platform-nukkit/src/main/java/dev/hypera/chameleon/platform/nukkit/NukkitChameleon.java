@@ -27,35 +27,34 @@ import cn.nukkit.Server;
 import cn.nukkit.plugin.PluginBase;
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
-import dev.hypera.chameleon.data.PluginData;
-import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extensions.ChameleonExtension;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.nukkit.adventure.NukkitAudienceProvider;
-import dev.hypera.chameleon.platform.nukkit.listeners.NukkitListener;
-import dev.hypera.chameleon.platform.nukkit.logging.ChameleonNukkitLogger;
-import dev.hypera.chameleon.platform.nukkit.managers.NukkitCommandManager;
-import dev.hypera.chameleon.platform.nukkit.managers.NukkitPluginManager;
-import dev.hypera.chameleon.platform.nukkit.managers.NukkitScheduler;
-import dev.hypera.chameleon.platform.nukkit.managers.NukkitUserManager;
+import dev.hypera.chameleon.platform.nukkit.command.NukkitCommandManager;
+import dev.hypera.chameleon.platform.nukkit.event.NukkitListener;
+import dev.hypera.chameleon.platform.nukkit.logger.ChameleonNukkitLogger;
 import dev.hypera.chameleon.platform.nukkit.platform.NukkitPlatform;
-import dev.hypera.chameleon.scheduling.Scheduler;
-import dev.hypera.chameleon.users.UserManager;
+import dev.hypera.chameleon.platform.nukkit.platform.NukkitPluginManager;
+import dev.hypera.chameleon.platform.nukkit.scheduler.NukkitScheduler;
+import dev.hypera.chameleon.platform.nukkit.user.NukkitUserManager;
+import dev.hypera.chameleon.scheduler.Scheduler;
 import java.nio.file.Path;
 import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Nukkit {@link Chameleon} implementation.
+ * Nukkit Chameleon implementation.
  */
 public final class NukkitChameleon extends Chameleon {
 
     private final @NotNull PluginBase plugin;
-    private final @NotNull NukkitAudienceProvider audienceProvider = new NukkitAudienceProvider();
+    private final @NotNull NukkitAudienceProvider audienceProvider = new NukkitAudienceProvider(this);
     private final @NotNull NukkitPlatform platform = new NukkitPlatform();
     private final @NotNull NukkitCommandManager commandManager = new NukkitCommandManager(this);
     private final @NotNull NukkitPluginManager pluginManager = new NukkitPluginManager();
@@ -63,24 +62,27 @@ public final class NukkitChameleon extends Chameleon {
     private final @NotNull NukkitScheduler scheduler = new NukkitScheduler(this);
 
     @Internal
-    NukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull PluginBase nukkitPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+    NukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull PluginBase nukkitPlugin, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, extensions, pluginData, new ChameleonNukkitLogger(nukkitPlugin.getLogger()));
         this.plugin = nukkitPlugin;
     }
 
     /**
-     * Create a new {@link NukkitChameleonBootstrap} instance.
+     * Create a new Nukkit Chameleon bootstrap instance.
      *
-     * @param chameleonPlugin {@link ChameleonPlugin} to load.
-     * @param nukkitPlugin    Nukkit {@link PluginBase}.
-     * @param pluginData      {@link PluginData}.
+     * @param chameleonPlugin Chameleon plugin to load.
+     * @param nukkitPlugin    Nukkit PluginBase instance.
+     * @param pluginData      Chameleon plugin data.
      *
-     * @return new {@link NukkitChameleonBootstrap}.
+     * @return new Nukkit Chameleon bootstrap.
      */
-    public static @NotNull NukkitChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull PluginData pluginData) {
+    public static @NotNull NukkitChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull ChameleonPluginData pluginData) {
         return new NukkitChameleonBootstrap(chameleonPlugin, nukkitPlugin, pluginData);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onEnable() {
         Server.getInstance().getPluginManager().registerEvents(new NukkitListener(this), this.plugin);
@@ -124,7 +126,7 @@ public final class NukkitChameleon extends Chameleon {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull UserManager getUserManager() {
+    public @NotNull NukkitUserManager getUserManager() {
         return this.userManager;
     }
 
@@ -147,9 +149,9 @@ public final class NukkitChameleon extends Chameleon {
 
 
     /**
-     * Get stored {@link PluginBase}.
+     * Get the stored Nukkit PluginBase.
      *
-     * @return stored {@link PluginBase}.
+     * @return the stored Nukkit PluginBase.
      */
     public @NotNull PluginBase getPlatformPlugin() {
         return this.plugin;

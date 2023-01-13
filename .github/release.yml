@@ -1,0 +1,28 @@
+changelog:
+  exclude:
+  categories:
+    - title: "Breaking changes :warning:"
+      labels:
+        - "status: breaking"
+    - title: "Additions :sparkles:"
+      labels:
+        - "type: feature"
+        - "type: enhancement"
+    - title: "Bug fixes :bug:"
+      labels:
+        - "type: bug: fix"
+    - title: "Improvements :wrench:"
+      labels:
+        - "type: refactor"
+    - title: "Documentation :book:"
+      labels:
+        - "type: documentation"
+    - title: "Test coverage :test_tube:"
+      labels:
+        - "type: test"
+    - title: "Dependency updates"
+      labels:
+        - "type: dependencies"
+    - title: "Other"
+      labels:
+        - "*"

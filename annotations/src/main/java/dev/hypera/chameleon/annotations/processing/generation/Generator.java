@@ -27,9 +27,9 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
+import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
-import dev.hypera.chameleon.data.PluginData;
 import java.util.Arrays;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
@@ -48,9 +48,9 @@ public abstract class Generator {
     /**
      * Generate main class and any required files.
      *
-     * @param data   {@link Plugin} data
-     * @param plugin Chameleon plugin main class
-     * @param env    Processing environment
+     * @param data   Plugin data.
+     * @param plugin Chameleon plugin main class.
+     * @param env    Processing environment.
      *
      * @throws ChameleonAnnotationException if something goes wrong while generating the files.
      */
@@ -59,9 +59,9 @@ public abstract class Generator {
 
     protected @NotNull CodeBlock createPluginData(@NotNull Plugin data) {
         return CodeBlock.builder().add(
-            "$T pluginData = new $T($S, $S, $S, $S, $T.asList($L))",
-            PluginData.class,
-            PluginData.class,
+            "$T pluginData = $T.builder($S, $S).description($S).url($S).authors($T.asList($L)).build()",
+            ChameleonPluginData.class,
+            ChameleonPluginData.class,
             data.name().isEmpty() ? data.id() : data.name(),
             data.version(),
             data.description(),

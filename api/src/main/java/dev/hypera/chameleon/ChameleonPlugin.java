@@ -23,22 +23,23 @@
  */
 package dev.hypera.chameleon;
 
-import dev.hypera.chameleon.data.PluginData;
+import dev.hypera.chameleon.util.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Chameleon} plugin.
+ * Chameleon plugin.
  */
 public abstract class ChameleonPlugin {
 
     protected final @NotNull Chameleon chameleon;
 
     /**
-     * {@link ChameleonPlugin} constructor.
+     * Chameleon plugin constructor.
      *
-     * @param chameleon {@link Chameleon} instance.
+     * @param chameleon Chameleon implementation.
      */
     protected ChameleonPlugin(@NotNull Chameleon chameleon) {
+        Preconditions.checkNotNull("chameleon", chameleon);
         this.chameleon = chameleon;
     }
 
@@ -60,11 +61,11 @@ public abstract class ChameleonPlugin {
     public abstract void onDisable();
 
     /**
-     * Get {@link PluginData} instance.
+     * Get Chameleon plugin data.
      *
-     * @return the stored {@link PluginData} instance.
+     * @return the stored Chameleon plugin data.
      */
-    public final @NotNull PluginData getData() {
+    public final @NotNull ChameleonPluginData getData() {
         return this.chameleon.getData();
     }
 

@@ -23,6 +23,7 @@
  */
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import net.ltgt.gradle.errorprone.errorprone
+import net.ltgt.gradle.nullaway.nullaway
 
 plugins {
     id("net.kyori.indra")
@@ -33,7 +34,10 @@ plugins {
 
     id("com.adarshr.test-logger")
     id("net.ltgt.errorprone")
+    id("net.ltgt.nullaway")
 }
+
+val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 indra {
     javaVersions {
@@ -61,18 +65,23 @@ blossom {
 }
 
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:2.17.0")
-    annotationProcessor("com.uber.nullaway:nullaway:0.10.7")
+    errorprone(libs.findLibrary("build-errorprone-core").get())
+    errorprone(libs.findLibrary("build-nullaway-core").get())
+    compileOnly(libs.findLibrary("build-errorprone-annotations").get())
 }
 
-tasks {
-    compileJava {
-        options.errorprone {
-            disable("AnnotateFormatMethod")
-            disable("CanIgnoreReturnValueSuggester")
-            error("NullAway")
+tasks.withType<JavaCompile>().configureEach {
+    options.errorprone {
+        disable("AnnotateFormatMethod")
+        disable("CanIgnoreReturnValueSuggester")
 
-            option("NullAway:AnnotatedPackages", "dev.hypera.chameleon")
+        nullaway {
+            error()
+            annotatedPackages.add("dev.hypera.chameleon")
+            unannotatedSubPackages.add("dev.hypera.chameleon.example")
+            acknowledgeRestrictiveAnnotations.set(true)
+            checkOptionalEmptiness.set(true)
+            checkContracts.set(true)
         }
     }
 }

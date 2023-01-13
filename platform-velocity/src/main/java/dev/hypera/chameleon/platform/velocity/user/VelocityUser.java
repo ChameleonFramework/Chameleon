@@ -25,55 +25,47 @@ package dev.hypera.chameleon.platform.velocity.user;
 
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
-import dev.hypera.chameleon.adventure.AbstractReflectedAudience;
-import dev.hypera.chameleon.adventure.conversion.AdventureConverter;
+import dev.hypera.chameleon.adventure.ReflectedAudience;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityServer;
-import dev.hypera.chameleon.users.ProxyUser;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import dev.hypera.chameleon.user.ProxyUser;
 import java.net.SocketAddress;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity {@link ProxyUser} implementation.
+ * Velocity proxy user implementation.
  */
 @Internal
-public class VelocityUser extends AbstractReflectedAudience implements ProxyUser {
-
-    private static final @NotNull Method DISCONNECT_METHOD;
+public final class VelocityUser implements ProxyUser, ForwardingAudience.Single {
 
     private final @NotNull VelocityChameleon chameleon;
     private final @NotNull Player player;
-
-    static {
-        try {
-            DISCONNECT_METHOD = Player.class.getMethod("disconnect", Class.forName(AdventureConverter.PACKAGE + "text.Component"));
-        } catch (ClassNotFoundException | NoSuchMethodException ex) {
-            throw new IllegalStateException("Failed to initialise VelocityUser");
-        }
-    }
+    private final @NotNull ReflectedAudience audience;
+    private final @NotNull PlayerReflection playerReflection;
 
     /**
-     * {@link VelocityUser} constructor.
+     * Velocity user constructor.
      *
-     * @param chameleon {@link VelocityChameleon} instance.
-     * @param player    {@link Player} to be wrapped.
+     * @param chameleon        Velocity Chameleon implementation.
+     * @param player           Player to be wrapped.
+     * @param audience         Reflected audience instance.
+     * @param playerReflection Player reflection instance.
      */
     @Internal
-    public VelocityUser(@NotNull VelocityChameleon chameleon, @NotNull Player player) {
-        super(player);
+    VelocityUser(@NotNull VelocityChameleon chameleon, @NotNull Player player, @NotNull ReflectedAudience audience, @NotNull PlayerReflection playerReflection) {
         this.chameleon = chameleon;
         this.player = player;
+        this.audience = audience;
+        this.playerReflection = playerReflection;
     }
-
 
     /**
      * {@inheritDoc}
@@ -112,15 +104,8 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
      */
     @Override
     public int getLatency() {
-        return this.player.getPing() > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) this.player.getPing();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void chat(@NotNull Component message) {
-        this.player.spoofChatInput(LegacyComponentSerializer.legacyAmpersand().serialize(message));
+        return this.player.getPing() > Integer.MAX_VALUE
+            ? Integer.MAX_VALUE : (int) this.player.getPing();
     }
 
     /**
@@ -136,11 +121,7 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
      */
     @Override
     public void disconnect(@NotNull Component reason) {
-        try {
-            DISCONNECT_METHOD.invoke(this.player, AdventureConverter.convertComponent(reason));
-        } catch (IllegalAccessException | InvocationTargetException ex) {
-            throw new IllegalStateException(ex);
-        }
+        this.playerReflection.disconnect(this.player, reason);
     }
 
     /**
@@ -155,8 +136,9 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Optional<Server> getServer() {
-        return this.player.getCurrentServer().map(s -> new VelocityServer(this.chameleon, s.getServer()));
+    public @NotNull Optional<Server> getConnectedServer() {
+        return this.player.getCurrentServer()
+            .map(s -> new VelocityServer(this.chameleon, s.getServer()));
     }
 
     /**
@@ -164,7 +146,8 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
      */
     @Override
     public void connect(@NotNull Server server) {
-        this.player.createConnectionRequest(((VelocityServer) server).getVelocity()).fireAndForget();
+        this.player.createConnectionRequest(((VelocityServer) server).getVelocity())
+            .fireAndForget();
     }
 
     /**
@@ -172,9 +155,18 @@ public class VelocityUser extends AbstractReflectedAudience implements ProxyUser
      */
     @Override
     public void connect(@NotNull Server server, @NotNull BiConsumer<Boolean, Throwable> callback) {
-        this.player.createConnectionRequest(((VelocityServer) server).getVelocity()).connect().whenComplete((result, ex) -> {
-            callback.accept(result.isSuccessful(), ex);
-        }).join();
+        this.player.createConnectionRequest(((VelocityServer) server).getVelocity()).connect()
+            .whenComplete((result, ex) -> callback.accept(result.isSuccessful(), ex)).join();
+    }
+
+    /**
+     * Gets the audience.
+     *
+     * @return the audience.
+     */
+    @Override
+    public @NotNull Audience audience() {
+        return this.audience;
     }
 
 }

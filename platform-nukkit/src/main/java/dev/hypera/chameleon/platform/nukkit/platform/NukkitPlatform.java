@@ -25,30 +25,23 @@ package dev.hypera.chameleon.platform.nukkit.platform;
 
 import cn.nukkit.Nukkit;
 import cn.nukkit.Server;
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.server.ServerPlatform;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Nukkit {@link ServerPlatform} implementation.
+ * Nukkit server platform implementation.
  */
 @Internal
-public class NukkitPlatform implements ServerPlatform {
-
-    /**
-     * {@link NukkitPlatform} constructor.
-     */
-    @Internal
-    public NukkitPlatform() {
-
-    }
+public final class NukkitPlatform implements ServerPlatform {
 
     /**
      * {@inheritDoc}
      */
     @Override
     public @NotNull String getId() {
-        return "Nukkit";
+        return Platform.NUKKIT;
     }
 
     /**

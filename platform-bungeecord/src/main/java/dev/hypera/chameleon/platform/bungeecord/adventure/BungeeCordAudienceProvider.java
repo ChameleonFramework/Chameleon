@@ -23,10 +23,10 @@
  */
 package dev.hypera.chameleon.platform.bungeecord.adventure;
 
-import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.platform.bungeecord.users.BungeeCordUsers;
-import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
+import dev.hypera.chameleon.user.ChatUser;
+import dev.hypera.chameleon.util.Preconditions;
 import java.util.UUID;
 import java.util.function.Predicate;
 import net.kyori.adventure.audience.Audience;
@@ -38,28 +38,31 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord {@link ChameleonAudienceProvider} implementation.
+ * BungeeCord chameleon audience provider implementation.
  */
 @Internal
 public final class BungeeCordAudienceProvider implements ChameleonAudienceProvider {
 
-    private final @NotNull Chameleon chameleon;
+    private final @NotNull BungeeCordChameleon chameleon;
     private final @NotNull BungeeAudiences adventure;
 
     /**
-     * {@link BungeeCordAudienceProvider} constructor.
+     * Bungeecord audience provider constructor.
      *
-     * @param chameleon {@link Chameleon} instance.
-     * @param plugin    {@link Plugin} instance.
+     * @param chameleon Chameleon implementation.
+     * @param plugin    BungeeCord plugin instance.
      */
     @Internal
-    public BungeeCordAudienceProvider(@NotNull Chameleon chameleon, @NotNull Plugin plugin) {
+    public BungeeCordAudienceProvider(@NotNull BungeeCordChameleon chameleon, @NotNull Plugin plugin) {
         this.chameleon = chameleon;
         this.adventure = BungeeAudiences.create(plugin);
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for all online players, including the server's console.
+     * <p>The audience is dynamically updated as players join and leave.</p>
+     *
+     * @return the players' and console audience.
      */
     @Override
     public @NotNull Audience all() {
@@ -67,7 +70,9 @@ public final class BungeeCordAudienceProvider implements ChameleonAudienceProvid
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for the server's console.
+     *
+     * @return the console audience.
      */
     @Override
     public @NotNull Audience console() {
@@ -75,7 +80,10 @@ public final class BungeeCordAudienceProvider implements ChameleonAudienceProvid
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for all online players.
+     * <p>The audience is dynamically updated as players join and leave.</p>
+     *
+     * @return the players' audience.
      */
     @Override
     public @NotNull Audience players() {
@@ -83,47 +91,84 @@ public final class BungeeCordAudienceProvider implements ChameleonAudienceProvid
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for an individual player.
+     * <p>If the player is not online, messages are silently dropped.</p>
+     *
+     * @param playerId a player uuid.
+     *
+     * @return a player audience.
      */
     @Override
     public @NotNull Audience player(@NotNull UUID playerId) {
+        Preconditions.checkNotNull("playerId", playerId);
         return this.adventure.player(playerId);
     }
 
     /**
-     * {@inheritDoc}
+     * Creates an audience based on a filter.
+     *
+     * @param filter a filter.
+     *
+     * @return an audience.
      */
     @Override
     public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
-        return this.adventure.filter(c -> filter.test(BungeeCordUsers.wrap(this.chameleon, c)));
+        Preconditions.checkNotNull("filter", filter);
+        return this.adventure.filter(c -> filter.test(this.chameleon.getUserManager().wrap(c)));
     }
 
     /**
-     * {@inheritDoc}
+     * Gets or creates an audience containing all viewers with the provided permission.
+     * <p>The audience is dynamically updated as permissions change.</p>
+     *
+     * @param permission the permission to filter sending to.
+     *
+     * @return a permissible audience.
      */
     @Override
     public @NotNull Audience permission(@NotNull String permission) {
+        Preconditions.checkNotNull("permission", permission);
         return this.adventure.permission(permission);
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for online players in a world, including the server's console.
+     * <p>The audience is dynamically updated as players join and leave.</p>
+     *
+     * <p>World identifiers were introduced in Minecraft 1.16. On older game instances, worlds will
+     * be assigned the key {@code minecraft:<world name>}</p>
+     *
+     * @param world identifier for a world.
+     *
+     * @return the world's audience.
      */
     @Override
     public @NotNull Audience world(@NotNull Key world) {
+        Preconditions.checkNotNull("world", world);
         return this.adventure.world(world);
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for online players on a server, including the server's console.
+     * <p>If the platform is not a proxy, the audience defaults to everyone.</p>
+     *
+     * @param serverName a server name.
+     *
+     * @return a server's audience.
      */
     @Override
     public @NotNull Audience server(@NotNull String serverName) {
+        Preconditions.checkNotNull("serverName", serverName);
         return this.adventure.server(serverName);
     }
 
     /**
-     * {@inheritDoc}
+     * Return a component flattener that can use game data to resolve extra information about
+     * components.
+     * <p>This can be used for displaying components, or with serializers including the plain and
+     * legacy serializers.</p>
+     *
+     * @return the flattener.
      */
     @Override
     public @NotNull ComponentFlattener flattener() {
@@ -131,7 +176,7 @@ public final class BungeeCordAudienceProvider implements ChameleonAudienceProvid
     }
 
     /**
-     * {@inheritDoc}
+     * Closes the provider and forces audiences to be empty.
      */
     @Override
     public void close() {

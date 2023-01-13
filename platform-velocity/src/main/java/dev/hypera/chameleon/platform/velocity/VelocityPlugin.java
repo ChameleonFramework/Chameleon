@@ -34,23 +34,23 @@ import org.slf4j.Logger;
 public interface VelocityPlugin {
 
     /**
-     * Get Velocity {@link ProxyServer} instance.
+     * Get Velocity proxy server instance.
      *
-     * @return {@link ProxyServer} instance.
+     * @return proxy server instance.
      */
     @NotNull ProxyServer getServer();
 
     /**
-     * Get Velocity {@link Logger} instance.
+     * Get Velocity logger instance.
      *
-     * @return {@link Logger} instance.
+     * @return logger instance.
      */
     @NotNull Logger getLogger();
 
     /**
      * Get plugin data directory.
      *
-     * @return {@link Path}.
+     * @return plugin data directory path.
      */
     @NotNull Path getDataDirectory();
 

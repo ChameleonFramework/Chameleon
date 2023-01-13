@@ -23,25 +23,21 @@
  */
 package dev.hypera.chameleon.platform;
 
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a proxy or server platform.
  */
+@NonExtendable
 public interface Platform {
 
-    /**
-     * Create a new Platform target.
-     * <p>This allows you to target a certain Platform or restrict a feature to a certain Platform.</p>
-     *
-     * @param id Target Platform identifier.
-     *
-     * @return new Platform target.
-     */
-    static @NotNull PlatformTarget target(@NotNull String id) {
-        return PlatformTarget.id(id);
-    }
-
+    @NotNull String BUKKIT = "Bukkit";
+    @NotNull String BUNGEECORD = "BungeeCord";
+    @NotNull String MINESTOM = "Minestom";
+    @NotNull String NUKKIT = "Nukkit";
+    @NotNull String SPONGE = "Sponge";
+    @NotNull String VELOCITY = "Velocity";
 
     /**
      * Get a unique identifier for this Platform.

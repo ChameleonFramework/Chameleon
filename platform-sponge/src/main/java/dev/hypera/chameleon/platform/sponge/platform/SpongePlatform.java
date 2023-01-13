@@ -23,6 +23,7 @@
  */
 package dev.hypera.chameleon.platform.sponge.platform;
 
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.server.ServerPlatform;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +31,7 @@ import org.spongepowered.api.Platform.Component;
 import org.spongepowered.api.Sponge;
 
 /**
- * Sponge {@link ServerPlatform} implementation.
+ * Sponge server platform implementation.
  */
 @Internal
 public final class SpongePlatform implements ServerPlatform {
@@ -40,7 +41,7 @@ public final class SpongePlatform implements ServerPlatform {
      */
     @Override
     public @NotNull String getId() {
-        return Sponge.game().platform().container(Component.API).metadata().name().orElse("Sponge");
+        return Platform.SPONGE;
     }
 
     /**
@@ -48,7 +49,8 @@ public final class SpongePlatform implements ServerPlatform {
      */
     @Override
     public @NotNull String getName() {
-        return Sponge.game().platform().container(Component.IMPLEMENTATION).metadata().name().orElse("Sponge");
+        return Sponge.game().platform().container(Component.IMPLEMENTATION)
+            .metadata().name().orElse(Platform.SPONGE);
     }
 
     /**
@@ -56,7 +58,9 @@ public final class SpongePlatform implements ServerPlatform {
      */
     @Override
     public @NotNull String getVersion() {
-        return Sponge.game().platform().container(Component.IMPLEMENTATION).metadata().version().toString() + " (" + Sponge.game().platform().container(Component.API).metadata().version() + ")";
+        return Sponge.game().platform().container(Component.IMPLEMENTATION)
+            .metadata().version().toString() + " (" +
+            Sponge.game().platform().container(Component.API).metadata().version() + ")";
     }
 
 }
