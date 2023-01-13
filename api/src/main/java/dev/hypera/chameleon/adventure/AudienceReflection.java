@@ -30,6 +30,7 @@ import dev.hypera.chameleon.util.Preconditions;
 import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.chat.ChatType;
 import net.kyori.adventure.chat.SignedMessage;
@@ -53,6 +54,7 @@ import org.jetbrains.annotations.Nullable;
 public final class AudienceReflection {
 
     private final @NotNull AdventureMapper adventure;
+    private final @NotNull AtomicBoolean loaded = new AtomicBoolean(false);
     private @Nullable EnumMapper<net.kyori.adventure.audience.MessageType> messageTypeMapper;
     private @Nullable Method audienceSendMessageMethod;
     private @Nullable Method audienceSendMessageBoundMethod;
@@ -152,6 +154,8 @@ public final class AudienceReflection {
         Class<?> pointeredClass = Class.forName(AdventureMapper.ORIGINAL_POINTERED_CLASS_NAME);
         Class<?> pointerClass = Class.forName(AdventureMapper.ORIGINAL_POINTER_CLASS_NAME);
         this.pointeredGetMethod = pointeredClass.getMethod("get", pointerClass);
+
+        this.loaded.set(true);
     }
 
     /**
@@ -160,18 +164,7 @@ public final class AudienceReflection {
      * @return loaded.
      */
     public boolean isLoaded() {
-        return this.adventure.isLoaded() && this.messageTypeMapper != null &&
-            this.messageTypeMapper.isLoaded() && this.audienceSendMessageMethod != null &&
-            this.audienceSendMessageBoundMethod != null && this.audienceDeleteMessageMethod != null &&
-            this.audienceSendMessageSourceTypeMethod != null && this.audienceSendActionBarMethod != null &&
-            this.audienceClearTitleMethod != null && this.audienceResetTitleMethod != null &&
-            this.audienceShowBossBarMethod != null && this.audienceHideBossBarMethod != null &&
-            this.audiencePlaySoundMethod != null && this.audiencePlaySoundPositionMethod != null &&
-            this.audiencePlaySoundEmitterMethod != null && this.audienceStopSoundMethod != null &&
-            this.audienceOpenBookMethod != null && this.audienceSendPlayerListHeader != null &&
-            this.audienceSendPlayerListFooter != null && this.audienceSendPlayerListHeaderAndFooter != null &&
-            this.audienceSendTitlePart != null && this.soundEmitterSelfMethod != null &&
-            this.pointeredGetMethod != null;
+        return this.loaded.get();
     }
 
     /**
