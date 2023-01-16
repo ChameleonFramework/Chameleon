@@ -1,5 +1,5 @@
 Chameleon Framework - https://github.com/ChameleonFramework/Chameleon
-Copyright (c) 2021-2022 The Chameleon Framework Authors.
+Copyright (c) 2021-2023 The Chameleon Framework Authors.
 
 This software includes the Chameleon Framework, which is provided under the MIT license:
 

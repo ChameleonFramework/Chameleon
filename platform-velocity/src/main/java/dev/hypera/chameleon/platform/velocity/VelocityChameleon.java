@@ -25,58 +25,80 @@ package dev.hypera.chameleon.platform.velocity;
 
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
+import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.command.CommandManager;
-import dev.hypera.chameleon.data.PluginData;
-import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extensions.ChameleonExtension;
-import dev.hypera.chameleon.logging.ChameleonSlf4jLogger;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.velocity.adventure.VelocityAudienceProvider;
-import dev.hypera.chameleon.platform.velocity.events.VelocityListener;
-import dev.hypera.chameleon.platform.velocity.managers.VelocityCommandManager;
-import dev.hypera.chameleon.platform.velocity.managers.VelocityPluginManager;
-import dev.hypera.chameleon.platform.velocity.managers.VelocityScheduler;
-import dev.hypera.chameleon.platform.velocity.managers.VelocityUserManager;
+import dev.hypera.chameleon.platform.velocity.command.VelocityCommandManager;
+import dev.hypera.chameleon.platform.velocity.event.VelocityListener;
 import dev.hypera.chameleon.platform.velocity.platform.VelocityPlatform;
-import dev.hypera.chameleon.scheduling.Scheduler;
-import dev.hypera.chameleon.users.UserManager;
+import dev.hypera.chameleon.platform.velocity.platform.VelocityPluginManager;
+import dev.hypera.chameleon.platform.velocity.scheduler.VelocityScheduler;
+import dev.hypera.chameleon.platform.velocity.user.VelocityUserManager;
+import dev.hypera.chameleon.scheduler.Scheduler;
 import java.nio.file.Path;
 import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity {@link Chameleon} implementation.
+ * Velocity Chameleon implementation.
  */
 public final class VelocityChameleon extends Chameleon {
 
     private final @NotNull VelocityPlugin plugin;
+    private final @NotNull AdventureMapper adventureMapper = new AdventureMapper(this);
     private final @NotNull VelocityAudienceProvider audienceProvider = new VelocityAudienceProvider(this);
-    private final @NotNull VelocityPlatform platform = new VelocityPlatform(this);
     private final @NotNull VelocityCommandManager commandManager = new VelocityCommandManager(this);
+    private final @NotNull VelocityPlatform platform = new VelocityPlatform(this);
     private final @NotNull VelocityPluginManager pluginManager = new VelocityPluginManager(this);
-    private final @NotNull VelocityUserManager userManager = new VelocityUserManager(this);
     private final @NotNull VelocityScheduler scheduler = new VelocityScheduler(this);
+    private final @NotNull VelocityUserManager userManager = new VelocityUserManager(this);
 
     @Internal
-    VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+    VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull VelocityPlugin velocityPlugin, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, extensions, pluginData, new ChameleonSlf4jLogger(velocityPlugin.getLogger()));
         this.plugin = velocityPlugin;
     }
 
     /**
-     * Create a new {@link VelocityChameleonBootstrap} instance.
+     * Create a new Velocity Chameleon bootstrap instance.
      *
-     * @param chameleonPlugin {@link ChameleonPlugin} to load.
-     * @param velocityPlugin  {@link VelocityPlugin}.
-     * @param pluginData      {@link PluginData}.
+     * @param chameleonPlugin Chameleon plugin to be loaded.
+     * @param velocityPlugin  Velocity plugin instance.
+     * @param pluginData      Chameleon plugin data.
      *
-     * @return new {@link VelocityChameleonBootstrap}.
+     * @return new Velocity Chameleon bootstrap.
      */
-    public static @NotNull VelocityChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) {
+    public static @NotNull VelocityChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull ChameleonPluginData pluginData) {
         return new VelocityChameleonBootstrap(chameleonPlugin, velocityPlugin, pluginData);
+    }
+
+    /**
+     * Get stored Adventure mapper instance.
+     *
+     * @return mapper instance.
+     */
+    public @NotNull AdventureMapper getAdventureMapper() {
+        return this.adventureMapper;
+    }
+
+    @Override
+    public void onLoad() {
+        try {
+            this.adventureMapper.load();
+            this.userManager.load();
+        } catch (ReflectiveOperationException ex) {
+            throw new ChameleonReflectiveException(ex);
+        }
+        super.onLoad();
     }
 
     /**
@@ -124,7 +146,7 @@ public final class VelocityChameleon extends Chameleon {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull UserManager getUserManager() {
+    public @NotNull VelocityUserManager getUserManager() {
         return this.userManager;
     }
 
@@ -146,9 +168,9 @@ public final class VelocityChameleon extends Chameleon {
     }
 
     /**
-     * Get stored {@link VelocityPlugin}.
+     * Get the stored Velocity plugin instance.
      *
-     * @return stored {@link VelocityPlugin}.
+     * @return stored plugin instance.
      */
     public @NotNull VelocityPlugin getPlatformPlugin() {
         return this.plugin;

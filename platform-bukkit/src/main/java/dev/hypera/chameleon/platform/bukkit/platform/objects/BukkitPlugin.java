@@ -24,11 +24,11 @@
 package dev.hypera.chameleon.platform.bukkit.platform.objects;
 
 import dev.hypera.chameleon.platform.PlatformPlugin;
-import dev.hypera.chameleon.utils.ChameleonUtil;
+import dev.hypera.chameleon.util.ChameleonUtil;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.bukkit.Bukkit;
@@ -37,17 +37,17 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Bukkit {@link PlatformPlugin} implementation.
+ * Bukkit platform plugin implementation.
  */
 @Internal
-public class BukkitPlugin implements PlatformPlugin {
+public final class BukkitPlugin implements PlatformPlugin {
 
     private final @NotNull Plugin plugin;
 
     /**
-     * {@link BukkitPlugin} constructor.
+     * Bukkit plugin constructor.
      *
-     * @param plugin {@link Plugin} to be wrapped.
+     * @param plugin Plugin to be wrapped.
      */
     @Internal
     public BukkitPlugin(@NotNull Plugin plugin) {
@@ -91,7 +91,7 @@ public class BukkitPlugin implements PlatformPlugin {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull List<String> getAuthors() {
+    public @NotNull Collection<String> getAuthors() {
         return ChameleonUtil.getOrDefault(this.plugin.getDescription().getAuthors(), Collections.emptyList());
     }
 

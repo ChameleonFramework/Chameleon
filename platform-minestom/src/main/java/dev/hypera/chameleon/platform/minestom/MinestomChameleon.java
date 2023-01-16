@@ -25,23 +25,25 @@ package dev.hypera.chameleon.platform.minestom;
 
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
+import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.command.CommandManager;
-import dev.hypera.chameleon.data.PluginData;
-import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extensions.ChameleonExtension;
-import dev.hypera.chameleon.logging.ChameleonSlf4jLogger;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.minestom.adventure.MinestomAudienceProvider;
-import dev.hypera.chameleon.platform.minestom.events.MinestomListener;
-import dev.hypera.chameleon.platform.minestom.managers.MinestomCommandManager;
-import dev.hypera.chameleon.platform.minestom.managers.MinestomPluginManager;
-import dev.hypera.chameleon.platform.minestom.managers.MinestomScheduler;
-import dev.hypera.chameleon.platform.minestom.managers.MinestomUserManager;
+import dev.hypera.chameleon.platform.minestom.command.MinestomCommandManager;
+import dev.hypera.chameleon.platform.minestom.event.MinestomListener;
 import dev.hypera.chameleon.platform.minestom.platform.MinestomPlatform;
-import dev.hypera.chameleon.scheduling.Scheduler;
-import dev.hypera.chameleon.users.UserManager;
+import dev.hypera.chameleon.platform.minestom.platform.MinestomPluginManager;
+import dev.hypera.chameleon.platform.minestom.scheduler.MinestomScheduler;
+import dev.hypera.chameleon.platform.minestom.user.MinestomUserManager;
+import dev.hypera.chameleon.scheduler.Scheduler;
+import dev.hypera.chameleon.user.UserManager;
 import java.nio.file.Path;
 import java.util.Collection;
 import net.minestom.server.extensions.Extension;
@@ -49,38 +51,61 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom {@link Chameleon} implementation.
+ * Minestom Chameleon implementation.
  */
 public final class MinestomChameleon extends Chameleon {
 
     private final @NotNull Extension extension;
-    private final @NotNull MinestomAudienceProvider audienceProvider = new MinestomAudienceProvider();
+    private final @NotNull AdventureMapper adventureMapper = new AdventureMapper(this);
+    private final @NotNull MinestomUserManager userManager = new MinestomUserManager(this);
+    private final @NotNull MinestomAudienceProvider audienceProvider = new MinestomAudienceProvider(this);
     private final @NotNull MinestomPlatform platform = new MinestomPlatform();
     private final @NotNull MinestomCommandManager commandManager = new MinestomCommandManager(this);
     private final @NotNull MinestomPluginManager pluginManager = new MinestomPluginManager();
-    private final @NotNull MinestomUserManager userManager = new MinestomUserManager();
     private final @NotNull MinestomScheduler scheduler = new MinestomScheduler();
 
     @Internal
-    MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull Extension extension, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+    MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull Extension extension, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, extensions, pluginData, new ChameleonSlf4jLogger(extension.getLogger()));
         this.extension = extension;
         new MinestomListener(this);
     }
 
     /**
-     * Create a new {@link MinestomChameleonBootstrap} instance.
+     * Create a new Minestom Chameleon bootstrap instance.
      *
-     * @param chameleonPlugin {@link ChameleonPlugin} to load.
-     * @param extension       Minestom {@link Extension}.
-     * @param pluginData      {@link PluginData}.
+     * @param chameleonPlugin Chameleon plugin to be loaded.
+     * @param extension       Minestom Extension instance.
+     * @param pluginData      Chameleon plugin data.
      *
-     * @return new {@link MinestomChameleonBootstrap}.
+     * @return new Minestom Chameleon bootstrap.
      */
-    public static @NotNull MinestomChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull PluginData pluginData) {
+    public static @NotNull MinestomChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull ChameleonPluginData pluginData) {
         return new MinestomChameleonBootstrap(chameleonPlugin, extension, pluginData);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onLoad() {
+        try {
+            this.adventureMapper.load();
+            this.userManager.load();
+        } catch (ReflectiveOperationException ex) {
+            throw new ChameleonReflectiveException(ex);
+        }
+        super.onLoad();
+    }
+
+    /**
+     * Get stored Adventure mapper instance.
+     *
+     * @return mapper instance.
+     */
+    public @NotNull AdventureMapper getAdventureMapper() {
+        return this.adventureMapper;
+    }
 
     /**
      * {@inheritDoc}
@@ -131,7 +156,6 @@ public final class MinestomChameleon extends Chameleon {
         return this.scheduler;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -141,9 +165,9 @@ public final class MinestomChameleon extends Chameleon {
     }
 
     /**
-     * Get stored {@link Extension}.
+     * Get the stored Minestom Extension instance.
      *
-     * @return stored {@link Extension}.
+     * @return stored Extension instance.
      */
     public @NotNull Extension getPlatformPlugin() {
         return this.extension;

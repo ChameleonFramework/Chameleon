@@ -23,6 +23,7 @@
  */
 package dev.hypera.chameleon.platform.bungeecord.platform;
 
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platform.bungeecord.platform.objects.BungeeCordServer;
 import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
@@ -35,7 +36,7 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord {@link ProxyPlatform} implementation.
+ * BungeeCord proxy platform implementation.
  */
 @Internal
 public final class BungeeCordPlatform implements ProxyPlatform {
@@ -43,9 +44,9 @@ public final class BungeeCordPlatform implements ProxyPlatform {
     private final @NotNull BungeeCordChameleon chameleon;
 
     /**
-     * {@link BungeeCordPlatform} constructor.
+     * BungeeCord platform constructor.
      *
-     * @param chameleon {@link BungeeCordChameleon} instance.
+     * @param chameleon BungeeCord Chameleon implementation.
      */
     @Internal
     public BungeeCordPlatform(@NotNull BungeeCordChameleon chameleon) {
@@ -58,7 +59,7 @@ public final class BungeeCordPlatform implements ProxyPlatform {
      */
     @Override
     public @NotNull String getId() {
-        return "BungeeCord";
+        return Platform.BUNGEECORD;
     }
 
     /**
@@ -82,7 +83,8 @@ public final class BungeeCordPlatform implements ProxyPlatform {
      */
     @Override
     public @NotNull Set<Server> getServers() {
-        return ProxyServer.getInstance().getServers().values().stream().map(s -> new BungeeCordServer(this.chameleon, s)).collect(Collectors.toSet());
+        return ProxyServer.getInstance().getServers().values().stream()
+            .map(s -> new BungeeCordServer(this.chameleon, s)).collect(Collectors.toSet());
     }
 
     /**
@@ -90,7 +92,8 @@ public final class BungeeCordPlatform implements ProxyPlatform {
      */
     @Override
     public @NotNull Optional<Server> getServer(@NotNull String name) {
-        return Optional.ofNullable(ProxyServer.getInstance().getServerInfo(name)).map(s -> new BungeeCordServer(this.chameleon, s));
+        return Optional.ofNullable(ProxyServer.getInstance().getServerInfo(name))
+            .map(s -> new BungeeCordServer(this.chameleon, s));
     }
 
 }

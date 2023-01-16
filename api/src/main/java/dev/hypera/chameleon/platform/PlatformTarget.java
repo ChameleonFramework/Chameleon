@@ -25,21 +25,26 @@ package dev.hypera.chameleon.platform;
 
 import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
 import dev.hypera.chameleon.platform.server.ServerPlatform;
+import dev.hypera.chameleon.util.Preconditions;
+import java.util.function.Predicate;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Platform} target.
+ * Platform target.
  * <p>This allows you to target a certain platform or restrict a feature to a certain platform.</p>
  */
-public interface PlatformTarget {
+@FunctionalInterface
+public interface PlatformTarget extends Predicate<Platform> {
 
     /**
      * Create a new platform target that matches all platforms.
      *
      * @return new platform target.
      */
+    @Contract(pure = true)
     static @NotNull PlatformTarget all() {
-        return new PlatformTargetImpl("all", p -> true);
+        return p -> true;
     }
 
     /**
@@ -47,8 +52,9 @@ public interface PlatformTarget {
      *
      * @return new platform target.
      */
+    @Contract(pure = true)
     static @NotNull PlatformTarget none() {
-        return new PlatformTargetImpl("none", p -> false);
+        return p -> false;
     }
 
     /**
@@ -56,8 +62,9 @@ public interface PlatformTarget {
      *
      * @return new platform target.
      */
+    @Contract(pure = true)
     static @NotNull PlatformTarget proxy() {
-        return new PlatformTargetImpl("proxy", p -> p instanceof ProxyPlatform);
+        return ProxyPlatform.class::isInstance;
     }
 
     /**
@@ -65,8 +72,69 @@ public interface PlatformTarget {
      *
      * @return new platform target.
      */
+    @Contract(pure = true)
     static @NotNull PlatformTarget server() {
-        return new PlatformTargetImpl("server", p -> p instanceof ServerPlatform);
+        return ServerPlatform.class::isInstance;
+    }
+
+    /**
+     * Create a new platform target that matches Bukkit.
+     *
+     * @return new platform target.
+     */
+    @Contract(pure = true)
+    static @NotNull PlatformTarget bukkit() {
+        return id(Platform.BUKKIT, true);
+    }
+
+    /**
+     * Create a new platform target that matches BungeeCord.
+     *
+     * @return new platform target.
+     */
+    @Contract(pure = true)
+    static @NotNull PlatformTarget bungeeCord() {
+        return id(Platform.BUNGEECORD, true);
+    }
+
+    /**
+     * Create a new platform target that matches Minestom.
+     *
+     * @return new platform target.
+     */
+    @Contract(pure = true)
+    static @NotNull PlatformTarget minestom() {
+        return id(Platform.MINESTOM, true);
+    }
+
+    /**
+     * Create a new platform target that matches Nukkit.
+     *
+     * @return new platform target.
+     */
+    @Contract(pure = true)
+    static @NotNull PlatformTarget nukkit() {
+        return id(Platform.NUKKIT, true);
+    }
+
+    /**
+     * Create a new platform target that matches Sponge.
+     *
+     * @return new platform target.
+     */
+    @Contract(pure = true)
+    static @NotNull PlatformTarget sponge() {
+        return id(Platform.SPONGE, true);
+    }
+
+    /**
+     * Create a new platform target that matches Sponge.
+     *
+     * @return new platform target.
+     */
+    @Contract(pure = true)
+    static @NotNull PlatformTarget velocity() {
+        return id(Platform.VELOCITY, true);
     }
 
     /**
@@ -76,16 +144,29 @@ public interface PlatformTarget {
      *
      * @return new platform target.
      */
+    @Contract(pure = true)
     static @NotNull PlatformTarget id(@NotNull String id) {
-        return new PlatformTargetImpl(id, p -> p.getId().equalsIgnoreCase(id));
+        return id(id, false);
     }
 
     /**
-     * Get the target platform identifier.
+     * Create a new platform target that matches platforms with the given {@code id}.
      *
-     * @return target identifier.
+     * @param id     Target platform identifier.
+     * @param strict Whether the id equality should be case-sensitive.
+     *
+     * @return new platform target.
      */
-    @NotNull String getId();
+    @Contract(pure = true)
+    static @NotNull PlatformTarget id(@NotNull String id, boolean strict) {
+        Preconditions.checkNotNull("id", id);
+
+        if (strict) {
+            return p -> p.getId().equals(id);
+        } else {
+            return p -> p.getId().equalsIgnoreCase(id);
+        }
+    }
 
     /**
      * Check if the given platform matches this target.
@@ -94,6 +175,44 @@ public interface PlatformTarget {
      *
      * @return {@code true} if the given platform matches this target, otherwise {@code false}.
      */
-    boolean matches(@NotNull Platform platform);
+    @Override
+    boolean test(@NotNull Platform platform);
+
+    /**
+     * Returns a new platform target that matches this target, and the {@code other} target.
+     *
+     * @param other Other platform target.
+     *
+     * @return new platform target.
+     */
+    @Contract(value = "_ -> new", pure = true)
+    default @NotNull PlatformTarget and(@NotNull PlatformTarget other) {
+        Preconditions.checkNotNull("other", other);
+        return p -> test(p) && other.test(p);
+    }
+
+    /**
+     * Returns a new platform target that matches this target, or the {@code other} target.
+     *
+     * @param other Other platform target.
+     *
+     * @return new platform target.
+     */
+    @Contract(value = "_ -> new", pure = true)
+    default @NotNull PlatformTarget or(@NotNull PlatformTarget other) {
+        Preconditions.checkNotNull("other", other);
+        return p -> test(p) || other.test(p);
+    }
+
+    /**
+     * Returns a new platform target that negates the result of this target.
+     *
+     * @return new platform target.
+     */
+    @Override
+    @Contract(value = "-> new", pure = true)
+    default @NotNull PlatformTarget negate() {
+        return p -> !test(p);
+    }
 
 }

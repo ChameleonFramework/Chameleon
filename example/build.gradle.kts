@@ -42,7 +42,7 @@ repositories {
     maven("https://jitpack.io/") // Required for Minestom support
     maven("https://repo.spongepowered.org/maven/") // Required for Minestom/Sponge support
     maven("https://repo.opencollab.dev/main/") // Required for Nukkit support
-    maven("https://nexus.velocitypowered.com/repository/maven-public/") // Required for Velocity support
+    maven("https://repo.papermc.io/repository/maven-public/") // Required for Velocity support
 }
 
 dependencies {
@@ -67,9 +67,10 @@ tasks {
         archiveFileName.set(String.format("%s-%s.jar", project.name, rootProject.version))
         mergeServiceFiles()
 
-        relocate("dev.hypera.chameleon", "dev.hypera.example.lib.chameleon")
-        relocate("net.kyori", "dev.hypera.example.lib.kyori")
-        relocate("com.google.gson", "dev.hypera.example.lib.gson")
+        /* IMPORTANT: Relocate all dependencies to avoid conflicts */
+        relocate("dev.hypera.chameleon", "dev.hypera.chameleon.example.lib.chameleon")
+        relocate("net.kyori", "dev.hypera.chameleon.example.lib.kyori")
+        relocate("com.google.gson", "dev.hypera.chameleon.example.lib.gson")
     }
 
     jar {

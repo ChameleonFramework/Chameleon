@@ -27,28 +27,27 @@ import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
-import dev.hypera.chameleon.platform.velocity.user.VelocityUser;
-import dev.hypera.chameleon.users.ProxyUser;
+import dev.hypera.chameleon.user.ProxyUser;
 import java.net.SocketAddress;
-import java.util.Set;
+import java.util.Collection;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity {@link Server} implementation.
+ * Velocity server implementation.
  */
 @Internal
-public class VelocityServer implements Server {
+public final class VelocityServer implements Server {
 
     private final @NotNull VelocityChameleon chameleon;
     private final @NotNull RegisteredServer server;
 
     /**
-     * {@link VelocityServer} constructor.
+     * Velocity server constructor.
      *
-     * @param chameleon {@link VelocityChameleon} instance.
-     * @param server    {@link RegisteredServer} to be wrapped.
+     * @param chameleon Velocity Chameleon implementation.
+     * @param server    Velocity registered server to be wrapped.
      */
     @Internal
     public VelocityServer(@NotNull VelocityChameleon chameleon, @NotNull RegisteredServer server) {
@@ -77,8 +76,9 @@ public class VelocityServer implements Server {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Set<ProxyUser> getPlayers() {
-        return this.server.getPlayersConnected().stream().map(p -> new VelocityUser(this.chameleon, p)).collect(Collectors.toSet());
+    public @NotNull Collection<ProxyUser> getPlayers() {
+        return this.server.getPlayersConnected().stream()
+            .map(this.chameleon.getUserManager()::wrap).collect(Collectors.toSet());
     }
 
     /**
@@ -90,9 +90,9 @@ public class VelocityServer implements Server {
     }
 
     /**
-     * Get stored {@link RegisteredServer}.
+     * Get the stored Velocity registered server.
      *
-     * @return stored {@link RegisteredServer}.
+     * @return the stored Velocity registered server.
      */
     @Internal
     public @NotNull RegisteredServer getVelocity() {

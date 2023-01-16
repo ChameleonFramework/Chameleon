@@ -24,8 +24,15 @@
 package dev.hypera.chameleon.annotations.processing;
 
 import dev.hypera.chameleon.annotations.Plugin;
-import dev.hypera.chameleon.annotations.Plugin.Platform;
 import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
+import dev.hypera.chameleon.annotations.processing.generation.Generator;
+import dev.hypera.chameleon.annotations.processing.generation.bukkit.BukkitGenerator;
+import dev.hypera.chameleon.annotations.processing.generation.bungeecord.BungeeCordGenerator;
+import dev.hypera.chameleon.annotations.processing.generation.minestom.MinestomGenerator;
+import dev.hypera.chameleon.annotations.processing.generation.nukkit.NukkitGenerator;
+import dev.hypera.chameleon.annotations.processing.generation.sponge.SpongeGenerator;
+import dev.hypera.chameleon.annotations.processing.generation.velocity.VelocityGenerator;
+import dev.hypera.chameleon.platform.Platform;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -64,17 +71,32 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
             TypeElement plugin = (TypeElement) element;
 
             Plugin data = plugin.getAnnotation(Plugin.class);
-            Platform[] platforms = data.platforms();
-            if (platforms.length < 1) {
-                platforms = Platform.values();
-            }
-
-            for (Platform platform : platforms) {
-                try {
-                    platform.getGenerator().getConstructor().newInstance().generate(data, plugin, processingEnv);
-                } catch (ReflectiveOperationException ex) {
-                    throw new ChameleonAnnotationException("Failed to construct generator", ex);
+            for (String platform : data.platforms()) {
+                Generator generator;
+                switch (platform) {
+                    case Platform.BUKKIT:
+                        generator = new BukkitGenerator();
+                        break;
+                    case Platform.BUNGEECORD:
+                        generator = new BungeeCordGenerator();
+                        break;
+                    case Platform.MINESTOM:
+                        generator = new MinestomGenerator();
+                        break;
+                    case Platform.NUKKIT:
+                        generator = new NukkitGenerator();
+                        break;
+                    case Platform.SPONGE:
+                        generator = new SpongeGenerator();
+                        break;
+                    case Platform.VELOCITY:
+                        generator = new VelocityGenerator();
+                        break;
+                    default:
+                        throw new IllegalStateException("Invalid platform: " + platform);
                 }
+
+                generator.generate(data, plugin, processingEnv);
             }
         }
 

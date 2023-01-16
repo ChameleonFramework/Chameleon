@@ -25,21 +25,21 @@ package dev.hypera.chameleon;
 
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
-import dev.hypera.chameleon.data.PluginData;
-import dev.hypera.chameleon.events.EventBus;
-import dev.hypera.chameleon.events.EventBusImpl;
-import dev.hypera.chameleon.exceptions.extension.ChameleonExtensionException;
-import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extensions.ChameleonExtension;
-import dev.hypera.chameleon.extensions.ChameleonPlatformExtension;
-import dev.hypera.chameleon.extensions.annotations.PostLoadable;
-import dev.hypera.chameleon.logging.ChameleonInternalLogger;
-import dev.hypera.chameleon.logging.ChameleonLogger;
+import dev.hypera.chameleon.event.EventBus;
+import dev.hypera.chameleon.event.EventBusImpl;
+import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
+import dev.hypera.chameleon.extension.annotations.PostLoadable;
+import dev.hypera.chameleon.logger.ChameleonInternalLogger;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
-import dev.hypera.chameleon.scheduling.Scheduler;
-import dev.hypera.chameleon.users.UserManager;
-import dev.hypera.chameleon.utils.ChameleonUtil;
+import dev.hypera.chameleon.scheduler.Scheduler;
+import dev.hypera.chameleon.user.UserManager;
+import dev.hypera.chameleon.util.ChameleonUtil;
+import dev.hypera.chameleon.util.Preconditions;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
@@ -61,23 +61,30 @@ public abstract class Chameleon {
     private final @NotNull ChameleonLogger internalLogger;
 
     private final @NotNull ChameleonPlugin plugin;
-    private final @NotNull PluginData pluginData;
+    private final @NotNull ChameleonPluginData pluginData;
     private final @NotNull Collection<ChameleonExtension<?>> extensions;
-    private final @NotNull EventBus eventBus = new EventBusImpl(getInternalLogger());
+    private final @NotNull EventBus eventBus;
 
     private boolean enabled = false;
 
     @Internal
-    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull PluginData pluginData, @NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
+    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull ChameleonPluginData pluginData, @NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
+        Preconditions.checkNotNull("plugin", plugin);
+        Preconditions.checkNotNull("extensions", extensions);
+        Preconditions.checkNotNull("pluginData", plugin);
+        Preconditions.checkNotNull("logger", logger);
+
         try {
             this.logger = logger;
             this.internalLogger = new ChameleonInternalLogger(logger);
-
             this.plugin = plugin.getConstructor(Chameleon.class).newInstance(this);
             this.pluginData = pluginData;
             this.extensions = extensions;
+            this.eventBus = new EventBusImpl(this.internalLogger);
         } catch (Exception ex) {
-            throw new ChameleonInstantiationException("Failed to initialise instance of " + plugin.getCanonicalName(), ex);
+            throw new ChameleonInstantiationException(
+                "Failed to initialise instance of " + plugin.getCanonicalName(), ex
+            );
         }
     }
 
@@ -109,44 +116,46 @@ public abstract class Chameleon {
 
 
     /**
-     * Get {@link ChameleonPlugin} instance.
+     * Get the plugin.
      *
-     * @return the stored {@link ChameleonPlugin} instance.
+     * @return the plugin.
      */
     public final @NotNull ChameleonPlugin getPlugin() {
         return this.plugin;
     }
 
     /**
-     * Get {@link PluginData} instance.
+     * Get the plugin data.
      *
-     * @return the stored {@link PluginData} instance.
+     * @return the plugin data.
      */
-    public final @NotNull PluginData getData() {
+    public final @NotNull ChameleonPluginData getData() {
         return this.pluginData;
     }
 
     /**
      * Get a loaded extension.
      *
-     * @param extension {@link ChameleonExtension} implementation class.
-     * @param <T>       {@link ChameleonExtension} type.
+     * @param extension Chameleon extension implementation class.
+     * @param <T>       Chameleon extension type.
      *
-     * @return an optional containing the {@link ChameleonExtension} if found, otherwise empty.
+     * @return an optional containing the extension, if found, otherwise an empty optional.
      */
-    @SuppressWarnings("unchecked")
     public final <T extends ChameleonExtension<?>> @NotNull Optional<T> getExtension(@NotNull Class<T> extension) {
-        return this.extensions.stream().filter(ext -> ext.getClass().equals(extension)).findFirst().map(ext -> (T) ext);
+        return this.extensions.stream()
+            .filter(ext -> ext.getClass().equals(extension))
+            .findFirst()
+            .map(extension::cast);
     }
 
     /**
      * Load and return an extension.
      *
-     * @param extension {@link ChameleonExtension} implementation class.
-     * @param <T>       {@link ChameleonExtension} type.
-     * @param <C>       {@link Chameleon} type.
+     * @param extension Extension implementation class.
+     * @param <T>       Extension type.
+     * @param <C>       Chameleon type.
      *
-     * @return the loaded {@link ChameleonExtension}.
+     * @return the loaded extension.
      */
     @SuppressWarnings("unchecked")
     public final <T extends ChameleonExtension<?>, C extends Chameleon> @NotNull T loadExtension(@NotNull Class<T> extension) {
@@ -161,16 +170,25 @@ public abstract class Chameleon {
         PostLoadable extensionAnnotation = extension.getAnnotation(PostLoadable.class);
         Constructor<?>[] platformExtensionConstructors = Arrays.stream(extensionAnnotation.value())
             .filter(p -> ChameleonUtil.getGenericTypeAsClass(p, 2).isAssignableFrom(getClass()))
-            .findFirst().map(Class::getConstructors).orElse(new Constructor<?>[0]);
+            .findFirst()
+            .map(Class::getConstructors)
+            .orElse(new Constructor<?>[0]);
 
-        if (platformExtensionConstructors.length < 1 || Arrays.stream(platformExtensionConstructors).noneMatch(c -> c.getParameterCount() == 0)) {
+        if (platformExtensionConstructors.length < 1 || Arrays.stream(platformExtensionConstructors)
+            .noneMatch(c -> c.getParameterCount() == 0)) {
             throw new IllegalArgumentException("cannot load platform extension: invalid constructor");
         }
 
-        Constructor<?> constructor = Arrays.stream(platformExtensionConstructors).filter(c -> c.getParameterCount() == 0).findFirst().orElseThrow(IllegalStateException::new);
+        Constructor<?> constructor = Arrays.stream(platformExtensionConstructors)
+            .filter(c -> c.getParameterCount() == 0)
+            .findFirst()
+            .orElseThrow(IllegalStateException::new);
         try {
             ChameleonPlatformExtension<T, ?, C> platformExtension = (ChameleonPlatformExtension<T, ?, C>) constructor.newInstance();
-            platformExtension.onLoad((C) ChameleonUtil.getGenericTypeAsClass(platformExtension.getClass(), 2).cast(this));
+            platformExtension.onLoad((C) ChameleonUtil.getGenericTypeAsClass(
+                platformExtension.getClass(),
+                2
+            ).cast(this));
             platformExtension.getExtension().onLoad(this);
 
             if (this.enabled) {
@@ -185,18 +203,20 @@ public abstract class Chameleon {
     }
 
     /**
-     * Get {@link ChameleonLogger} instance.
+     * Get the logger instance.
      *
-     * @return the stored {@link ChameleonLogger} instance.
+     * @return the logger instance.
      */
     public final @NotNull ChameleonLogger getLogger() {
         return this.logger;
     }
 
     /**
-     * Get internal {@link ChameleonLogger} instance. This is only to be used internally by Chameleon for debugging and error reporting.
+     * Get an internal logger instance for use by Chameleon.
+     * <p>This should <strong>not</strong> be used outside of Chameleon and is only intended to be
+     * used for debugging and error reporting by Chameleon.</p>
      *
-     * @return the stored internal {@link ChameleonLogger} instance.
+     * @return the internal logger instance.
      */
     @Internal
     public final @NotNull ChameleonLogger getInternalLogger() {
@@ -204,9 +224,9 @@ public abstract class Chameleon {
     }
 
     /**
-     * Get {@link EventBus} instance.
+     * Get the event bus.
      *
-     * @return the stored {@link EventBus} instance.
+     * @return the event bus.
      */
     public final @NotNull EventBus getEventBus() {
         return this.eventBus;
@@ -214,51 +234,51 @@ public abstract class Chameleon {
 
 
     /**
-     * Get Adventure {@link ChameleonAudienceProvider} instance.
+     * Get the audience provider.
      *
-     * @return Adventure {@link ChameleonAudienceProvider} instance.
+     * @return the audience provider.
      */
     public abstract @NotNull ChameleonAudienceProvider getAdventure();
 
     /**
-     * Get {@link Platform} instance.
+     * Get the platform.
      *
-     * @return {@link Platform} instance.
+     * @return the platform.
      */
     public abstract @NotNull Platform getPlatform();
 
     /**
-     * Get {@link CommandManager} instance.
+     * Get the command manager.
      *
-     * @return {@link CommandManager} instance.
+     * @return the command manager.
      */
     public abstract @NotNull CommandManager getCommandManager();
 
     /**
-     * Get {@link PluginManager} instance.
+     * Get the plugin manager.
      *
-     * @return {@link PluginManager} instance.
+     * @return the plugin manager.
      */
     public abstract @NotNull PluginManager getPluginManager();
 
     /**
-     * Get {@link UserManager} instance.
+     * Get the user manager.
      *
-     * @return {@link UserManager} instance.
+     * @return the user manager.
      */
     public abstract @NotNull UserManager getUserManager();
 
     /**
-     * Get {@link Scheduler} instance.
+     * Get the scheduler.
      *
-     * @return {@link Scheduler} instance.
+     * @return the scheduler.
      */
     public abstract @NotNull Scheduler getScheduler();
 
     /**
-     * Get the plugin's data folder.
+     * Get the plugin data folder.
      *
-     * @return plugin data folder as a {@link Path}.
+     * @return plugin data folder.
      */
     public abstract @NotNull Path getDataFolder();
 
@@ -266,7 +286,7 @@ public abstract class Chameleon {
     /**
      * Get the current Chameleon version.
      *
-     * @return the current {@link Chameleon} version.
+     * @return the current Chameleon version.
      */
     public static @NotNull String getVersion() {
         return VERSION;
@@ -275,7 +295,7 @@ public abstract class Chameleon {
     /**
      * Get the current Chameleon commit.
      *
-     * @return the current {@link Chameleon} commit.
+     * @return the current Chameleon commit.
      */
     public static @NotNull String getCommit() {
         return COMMIT;

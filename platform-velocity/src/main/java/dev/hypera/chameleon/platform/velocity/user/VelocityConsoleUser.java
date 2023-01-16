@@ -23,42 +23,33 @@
  */
 package dev.hypera.chameleon.platform.velocity.user;
 
-import dev.hypera.chameleon.adventure.AbstractReflectedAudience;
-import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
-import dev.hypera.chameleon.users.ChatUser;
+import com.velocitypowered.api.command.CommandSource;
+import dev.hypera.chameleon.adventure.ReflectedAudience;
+import dev.hypera.chameleon.user.ConsoleUser;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity console {@link ChatUser} implementation.
+ * Velocity console user implementation.
  */
 @Internal
-public class VelocityConsoleUser extends AbstractReflectedAudience implements ChatUser {
+public final class VelocityConsoleUser implements ConsoleUser, ForwardingAudience.Single {
+
+    private final @NotNull CommandSource console;
+    private final @NotNull ReflectedAudience audience;
 
     /**
-     * {@link VelocityConsoleUser} constructor.
+     * Velocity console user constructor.
      *
-     * @param chameleon {@link VelocityChameleon} instance.
+     * @param console  Velocity console command source.
+     * @param audience Reflected audience instance.
      */
     @Internal
-    public VelocityConsoleUser(@NotNull VelocityChameleon chameleon) {
-        super(chameleon.getPlatformPlugin().getServer().getConsoleCommandSource());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull String getName() {
-        return "Console";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasInteractiveChat() {
-        return false;
+    VelocityConsoleUser(@NotNull CommandSource console, @NotNull ReflectedAudience audience) {
+        this.console = console;
+        this.audience = audience;
     }
 
     /**
@@ -66,7 +57,17 @@ public class VelocityConsoleUser extends AbstractReflectedAudience implements Ch
      */
     @Override
     public boolean hasPermission(@NotNull String permission) {
-        return true;
+        return this.console.hasPermission(permission);
+    }
+
+    /**
+     * Gets the audience.
+     *
+     * @return the audience.
+     */
+    @Override
+    public @NotNull Audience audience() {
+        return this.audience;
     }
 
 }

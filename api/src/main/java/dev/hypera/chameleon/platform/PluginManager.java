@@ -23,38 +23,39 @@
  */
 package dev.hypera.chameleon.platform;
 
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Platform} plugin manager.
+ * Platform plugin manager.
  */
-public abstract class PluginManager {
+public interface PluginManager {
 
     /**
-     * Get {@link PlatformPlugin}s.
+     * Get platform plugins.
      *
-     * @return set of {@link PlatformPlugin}s.
+     * @return set of platform plugins.
      */
-    public abstract @NotNull Set<PlatformPlugin> getPlugins();
+    @NotNull Collection<PlatformPlugin> getPlugins();
 
     /**
-     * Attempt to find {@link PlatformPlugin} by name.
+     * Attempt to find a platform plugin by name.
      *
      * @param name The name to search for.
      *
-     * @return {@link Optional} containing the {@link PlatformPlugin} if found, otherwise empty.
+     * @return an optional containing the platform plugin, if found, otherwise an empty optional.
      */
-    public abstract @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name);
+    @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name);
 
     /**
-     * Check if a {@link PlatformPlugin} is enabled, by name.
+     * Check if a platform plugin is enabled, by name.
      *
      * @param name The name to search for.
      *
-     * @return {@code true} if the {@link PlatformPlugin} was found and if it's enabled, otherwise false.
+     * @return {@code true} if the platform plugin was found and if it's enabled, otherwise
+     *     {@code false}.
      */
-    public abstract boolean isPluginEnabled(@NotNull String name);
+    boolean isPluginEnabled(@NotNull String name);
 
 }

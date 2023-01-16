@@ -23,18 +23,10 @@
  */
 package dev.hypera.chameleon.annotations;
 
-import dev.hypera.chameleon.annotations.processing.generation.Generator;
-import dev.hypera.chameleon.annotations.processing.generation.impl.bukkit.BukkitGenerator;
-import dev.hypera.chameleon.annotations.processing.generation.impl.bungeecord.BungeeCordGenerator;
-import dev.hypera.chameleon.annotations.processing.generation.impl.minestom.MinestomGenerator;
-import dev.hypera.chameleon.annotations.processing.generation.impl.nukkit.NukkitGenerator;
-import dev.hypera.chameleon.annotations.processing.generation.impl.sponge.SpongeGenerator;
-import dev.hypera.chameleon.annotations.processing.generation.impl.velocity.VelocityGenerator;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -91,46 +83,15 @@ public @interface Plugin {
      *
      * @return the plugin's dependencies.
      */
-    @NotNull PlatformDependency[] dependencies() default {};
+    @NotNull Dependency[] dependencies() default {};
 
     /**
-     * The {@link Platform}s this plugin can run on.
-     * This is used by Chameleon Annotations to determine what generators should be run.
+     * The platforms this plugin can run on.
+     * <p>This is used by Chameleon Annotations to determine what generators should be run.</p>
+     * <p>Defaults to all platforms.</p>
      *
-     * @return the {@link Platform}s this plugin can run on.
+     * @return the platforms this plugin can run on.
      */
-    @NotNull Platform[] platforms() default {};
-
-
-    /**
-     * Server and Proxy platforms.
-     */
-    enum Platform {
-
-        BUKKIT(BukkitGenerator.class),
-        BUNGEECORD(BungeeCordGenerator.class),
-        MINESTOM(MinestomGenerator.class),
-        NUKKIT(NukkitGenerator.class),
-        SPONGE(SpongeGenerator.class),
-        VELOCITY(VelocityGenerator.class);
-
-        private final @NotNull Class<? extends Generator> generator;
-
-        Platform(@NotNull Class<? extends Generator> generator) {
-            this.generator = generator;
-        }
-
-        /**
-         * This platform's generator.
-         *
-         * @return platform generator.
-         */
-        @Internal
-        public @NotNull Class<? extends Generator> getGenerator() {
-            return this.generator;
-        }
-
-    }
-
+    @NotNull String[] platforms() default {};
 
 }

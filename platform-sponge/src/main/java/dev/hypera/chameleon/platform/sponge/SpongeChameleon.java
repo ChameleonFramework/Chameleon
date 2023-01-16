@@ -25,63 +25,88 @@ package dev.hypera.chameleon.platform.sponge;
 
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
+import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.command.CommandManager;
-import dev.hypera.chameleon.data.PluginData;
-import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extensions.ChameleonExtension;
-import dev.hypera.chameleon.logging.ChameleonLog4jLogger;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.logger.ChameleonLog4jLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.sponge.adventure.SpongeAudienceProvider;
-import dev.hypera.chameleon.platform.sponge.events.SpongeListener;
-import dev.hypera.chameleon.platform.sponge.managers.SpongeCommandManager;
-import dev.hypera.chameleon.platform.sponge.managers.SpongePluginManager;
-import dev.hypera.chameleon.platform.sponge.managers.SpongeScheduler;
-import dev.hypera.chameleon.platform.sponge.managers.SpongeUserManager;
+import dev.hypera.chameleon.platform.sponge.command.SpongeCommandManager;
+import dev.hypera.chameleon.platform.sponge.event.SpongeListener;
 import dev.hypera.chameleon.platform.sponge.platform.SpongePlatform;
-import dev.hypera.chameleon.scheduling.Scheduler;
-import dev.hypera.chameleon.users.UserManager;
+import dev.hypera.chameleon.platform.sponge.platform.SpongePluginManager;
+import dev.hypera.chameleon.platform.sponge.scheduler.SpongeScheduler;
+import dev.hypera.chameleon.platform.sponge.user.SpongeUserManager;
+import dev.hypera.chameleon.scheduler.Scheduler;
 import java.nio.file.Path;
 import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.plugin.PluginContainer;
 
 /**
- * Sponge {@link Chameleon} implementation.
+ * Sponge Chameleon implementation.
  */
 public final class SpongeChameleon extends Chameleon {
 
     private final @NotNull SpongePlugin plugin;
-    private final @NotNull SpongeAudienceProvider audienceProvider = new SpongeAudienceProvider();
+    private final @NotNull AdventureMapper adventureMapper = new AdventureMapper(this);
+    private final @NotNull SpongeAudienceProvider audienceProvider = new SpongeAudienceProvider(this);
     private final @NotNull SpongePlatform platform = new SpongePlatform();
     private final @NotNull SpongeCommandManager commandManager = new SpongeCommandManager(this);
     private final @NotNull SpongePluginManager pluginManager = new SpongePluginManager();
-    private final @NotNull SpongeUserManager userManager = new SpongeUserManager();
+    private final @NotNull SpongeUserManager userManager = new SpongeUserManager(this);
     private final @NotNull SpongeScheduler scheduler = new SpongeScheduler(this);
+    private final @NotNull SpongeListener listener = new SpongeListener(this);
 
     @Internal
-    SpongeChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull SpongePlugin spongePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+    SpongeChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull SpongePlugin spongePlugin, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, extensions, pluginData, new ChameleonLog4jLogger(spongePlugin.getLogger()));
         this.plugin = spongePlugin;
-        Sponge.eventManager().registerListeners(this.plugin.getPluginContainer(), new SpongeListener(this));
     }
 
     /**
-     * Create a new {@link SpongeChameleonBootstrap} instance.
+     * Create a new Sponge Chameleon bootstrap instance.
      *
-     * @param chameleonPlugin {@link ChameleonPlugin} to load.
-     * @param spongePlugin    {@link SpongePlugin}.
-     * @param pluginData      {@link PluginData}.
+     * @param chameleonPlugin Chameleon plugin to be loaded.
+     * @param spongePlugin    Sponge plugin instance.
+     * @param pluginData      Chameleon plugin data.
      *
-     * @return new {@link SpongeChameleonBootstrap}.
+     * @return new Sponge Chameleon bootstrap.
      */
-    public static @NotNull SpongeChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin, @NotNull PluginData pluginData) {
+    public static @NotNull SpongeChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin, @NotNull ChameleonPluginData pluginData) {
         return new SpongeChameleonBootstrap(chameleonPlugin, spongePlugin, pluginData);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onLoad() {
+        try {
+            this.adventureMapper.load();
+            this.userManager.load();
+            this.listener.load();
+        } catch (ReflectiveOperationException ex) {
+            throw new ChameleonReflectiveException(ex);
+        }
+        Sponge.eventManager().registerListeners(this.plugin.getPluginContainer(), this.listener);
+        super.onLoad();
+    }
+
+    /**
+     * Get stored Adventure mapper instance.
+     *
+     * @return mapper instance.
+     */
+    public @NotNull AdventureMapper getAdventureMapper() {
+        return this.adventureMapper;
+    }
 
     /**
      * {@inheritDoc}
@@ -119,7 +144,7 @@ public final class SpongeChameleon extends Chameleon {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull UserManager getUserManager() {
+    public @NotNull SpongeUserManager getUserManager() {
         return this.userManager;
     }
 
@@ -141,9 +166,9 @@ public final class SpongeChameleon extends Chameleon {
 
 
     /**
-     * Get the plugin's {@link PluginContainer Container} using the provided id.
+     * Get the stored Sponge plugin.
      *
-     * @return {@link PluginContainer}.
+     * @return the stored Sponge plugin.
      */
     public @NotNull SpongePlugin getPlatformPlugin() {
         return this.plugin;

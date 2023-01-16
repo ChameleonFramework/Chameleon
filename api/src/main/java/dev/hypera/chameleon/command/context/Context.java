@@ -24,13 +24,12 @@
 package dev.hypera.chameleon.command.context;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.command.Command;
-import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.user.ChatUser;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Command} context.
+ * Command context.
  */
 @NonExtendable
 public interface Context {
@@ -43,9 +42,9 @@ public interface Context {
     @NotNull ChatUser getSender();
 
     /**
-     * Get {@link Chameleon} instance.
+     * Get Chameleon implementation.
      *
-     * @return {@link Chameleon} instance.
+     * @return Chameleon implementation.
      */
     @NotNull Chameleon getChameleon();
 

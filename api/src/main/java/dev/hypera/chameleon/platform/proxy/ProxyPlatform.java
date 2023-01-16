@@ -24,8 +24,8 @@
 package dev.hypera.chameleon.platform.proxy;
 
 import dev.hypera.chameleon.platform.Platform;
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -38,7 +38,7 @@ public interface ProxyPlatform extends Platform {
      *
      * @return all "sub-servers".
      */
-    @NotNull Set<Server> getServers();
+    @NotNull Collection<Server> getServers();
 
     /**
      * Attempt to find a "sub-server" by the name or identifier it has.

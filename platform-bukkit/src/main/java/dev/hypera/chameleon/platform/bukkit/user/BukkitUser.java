@@ -23,13 +23,16 @@
  */
 package dev.hypera.chameleon.platform.bukkit.user;
 
-import dev.hypera.chameleon.adventure.AbstractAudience;
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
 import dev.hypera.chameleon.platform.server.GameMode;
-import dev.hypera.chameleon.users.ServerUser;
+import dev.hypera.chameleon.user.ServerUser;
+import dev.hypera.chameleon.util.Preconditions;
 import java.net.SocketAddress;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
@@ -38,34 +41,34 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Bukkit {@link ServerUser} implementation.
+ * Bukkit server user implementation.
  */
 @Internal
-public class BukkitUser extends AbstractAudience implements ServerUser {
+public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
 
     private final @NotNull BukkitChameleon chameleon;
     private final @NotNull Player player;
+    private final @NotNull Audience audience;
 
     /**
-     * {@link BukkitUser} constructor.
+     * Bukkit user constructor.
      *
-     * @param chameleon {@link BukkitChameleon} instance.
-     * @param player    {@link Player} to be wrapped.
+     * @param chameleon Bukkit Chameleon implementation.
+     * @param player    Player to be wrapped.
      */
     @Internal
     public BukkitUser(@NotNull BukkitChameleon chameleon, @NotNull Player player) {
-        super(chameleon.getAdventure().player(player.getUniqueId()));
         this.chameleon = chameleon;
         this.player = player;
+        this.audience = chameleon.getAdventure().player(player.getUniqueId());
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Override
     public @NotNull String getName() {
-        return this.player.getName();
+        return Objects.requireNonNull(this.player.getName());
     }
 
     /**
@@ -104,15 +107,8 @@ public class BukkitUser extends AbstractAudience implements ServerUser {
      * {@inheritDoc}
      */
     @Override
-    public void chat(@NotNull Component message) {
-        this.player.chat(LegacyComponentSerializer.legacySection().serialize(message));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void sendData(@NotNull String channel, byte[] data) {
+        Preconditions.checkNotNull("channel", channel);
         if (!Bukkit.getMessenger().isOutgoingChannelRegistered(this.chameleon.getPlatformPlugin(), channel)) {
             Bukkit.getMessenger().registerOutgoingPluginChannel(this.chameleon.getPlatformPlugin(), channel);
         }
@@ -125,6 +121,7 @@ public class BukkitUser extends AbstractAudience implements ServerUser {
      */
     @Override
     public void disconnect(@NotNull Component reason) {
+        Preconditions.checkNotNull("reason", reason);
         this.player.kickPlayer(LegacyComponentSerializer.legacySection().serialize(reason));
     }
 
@@ -133,6 +130,7 @@ public class BukkitUser extends AbstractAudience implements ServerUser {
      */
     @Override
     public boolean hasPermission(@NotNull String permission) {
+        Preconditions.checkNotNull("permission", permission);
         return this.player.hasPermission(permission);
     }
 
@@ -149,9 +147,19 @@ public class BukkitUser extends AbstractAudience implements ServerUser {
      */
     @Override
     public void setGameMode(@NotNull GameMode gameMode) {
+        Preconditions.checkNotNull("gameMode", gameMode);
         this.player.setGameMode(convertGameModeToBukkit(gameMode));
     }
 
+    /**
+     * Get the audience for this user.
+     *
+     * @return audience.
+     */
+    @Override
+    public @NotNull Audience audience() {
+        return this.audience;
+    }
 
     private @NotNull org.bukkit.GameMode convertGameModeToBukkit(@NotNull GameMode gameMode) {
         switch (gameMode) {

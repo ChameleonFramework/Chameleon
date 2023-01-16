@@ -34,23 +34,23 @@ import org.spongepowered.plugin.PluginContainer;
 public interface SpongePlugin {
 
     /**
-     * Get Sponge {@link PluginContainer} instance.
+     * Get Sponge plugin container instance.
      *
-     * @return {@link PluginContainer} instance.
+     * @return Sponge plugin container instance.
      */
     @NotNull PluginContainer getPluginContainer();
 
     /**
-     * Get Sponge {@link Logger} instance.
+     * Get Sponge logger instance.
      *
-     * @return {@link Logger} instance.
+     * @return logger instance.
      */
     @NotNull Logger getLogger();
 
     /**
      * Get plugin data directory.
      *
-     * @return {@link Path}.
+     * @return plugin data directory path.
      */
     @NotNull Path getDataDirectory();
 

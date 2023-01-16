@@ -31,10 +31,16 @@ plugins {
 val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 dependencies {
+    /* JUnit */
     testImplementation(platform(libs.findLibrary("test-junit-bom").get()))
     testImplementation(libs.findLibrary("test-junit-api").get())
     testImplementation(libs.findLibrary("test-junit-engine").get())
     testImplementation(libs.findLibrary("test-junit-params").get())
+
+    /* Mockito */
+    testImplementation(platform(libs.findLibrary("test-mockito-bom").get()))
+    testImplementation(libs.findLibrary("test-mockito-core").get())
+    testImplementation(libs.findLibrary("test-mockito-junit").get())
 }
 
 tasks {
@@ -45,5 +51,12 @@ tasks {
 
     jacocoTestReport {
         dependsOn(test)
+
+        reports {
+            html.required.set(true)
+            csv.required.set(false)
+            xml.required.set(true)
+            xml.outputLocation.set(buildDir.resolve("reports/jacoco/report.xml"))
+        }
     }
 }

@@ -23,9 +23,9 @@
  */
 package dev.hypera.chameleon.platform.proxy;
 
-import dev.hypera.chameleon.users.ProxyUser;
+import dev.hypera.chameleon.user.ProxyUser;
 import java.net.SocketAddress;
-import java.util.Set;
+import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -52,7 +52,7 @@ public interface Server {
      *
      * @return players connected to this server.
      */
-    @NotNull Set<ProxyUser> getPlayers();
+    @NotNull Collection<ProxyUser> getPlayers();
 
     /**
      * Send a plugin message to this server.

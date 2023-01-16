@@ -25,27 +25,27 @@ package dev.hypera.chameleon.platform.velocity;
 
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.data.PluginData;
-import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extensions.ChameleonExtension;
-import dev.hypera.chameleon.logging.ChameleonLogger;
-import dev.hypera.chameleon.logging.ChameleonSlf4jLogger;
-import dev.hypera.chameleon.platform.velocity.extensions.VelocityChameleonExtension;
+import dev.hypera.chameleon.ChameleonPluginData;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.logger.ChameleonLogger;
+import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
+import dev.hypera.chameleon.platform.velocity.extension.VelocityChameleonExtension;
 import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Velocity {@link ChameleonBootstrap} implementation.
+ * Velocity Chameleon bootstrap implementation.
  */
 public final class VelocityChameleonBootstrap extends ChameleonBootstrap<VelocityChameleon, VelocityChameleonExtension<?, ?>> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull VelocityPlugin velocityPlugin;
-    private final @NotNull PluginData pluginData;
+    private final @NotNull ChameleonPluginData pluginData;
 
     @Internal
-    VelocityChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull PluginData pluginData) {
+    VelocityChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull ChameleonPluginData pluginData) {
         this.chameleonPlugin = chameleonPlugin;
         this.velocityPlugin = velocityPlugin;
         this.pluginData = pluginData;

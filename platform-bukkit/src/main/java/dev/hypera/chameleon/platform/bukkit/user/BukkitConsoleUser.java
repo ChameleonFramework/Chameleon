@@ -24,43 +24,29 @@
 package dev.hypera.chameleon.platform.bukkit.user;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.adventure.AbstractAudience;
-import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.user.ConsoleUser;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Bukkit console {@link ChatUser} implementation.
+ * Bukkit console user implementation.
  */
 @Internal
-public class BukkitConsoleUser extends AbstractAudience implements ChatUser {
+public final class BukkitConsoleUser implements ConsoleUser, ForwardingAudience.Single {
+
+    private final @NotNull Audience audience;
 
     /**
-     * {@link BukkitConsoleUser} constructor.
+     * Bukkit console user constructor.
      *
-     * @param chameleon {@link Chameleon} instance.
+     * @param chameleon Chameleon implementation.
      */
     @Internal
     public BukkitConsoleUser(@NotNull Chameleon chameleon) {
-        super(chameleon.getAdventure().console());
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull String getName() {
-        return Bukkit.getConsoleSender().getName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasInteractiveChat() {
-        return false;
+        this.audience = chameleon.getAdventure().console();
     }
 
     /**
@@ -68,7 +54,17 @@ public class BukkitConsoleUser extends AbstractAudience implements ChatUser {
      */
     @Override
     public boolean hasPermission(@NotNull String permission) {
-        return true;
+        return Bukkit.getConsoleSender().hasPermission(permission);
+    }
+
+    /**
+     * Get the audience for this user.
+     *
+     * @return audience.
+     */
+    @Override
+    public @NotNull Audience audience() {
+        return this.audience;
     }
 
 }

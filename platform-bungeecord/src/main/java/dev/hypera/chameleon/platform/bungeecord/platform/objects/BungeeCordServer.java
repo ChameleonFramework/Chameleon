@@ -24,9 +24,9 @@
 package dev.hypera.chameleon.platform.bungeecord.platform.objects;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.platform.bungeecord.users.BungeeCordUser;
+import dev.hypera.chameleon.platform.bungeecord.user.BungeeCordUser;
 import dev.hypera.chameleon.platform.proxy.Server;
-import dev.hypera.chameleon.users.ProxyUser;
+import dev.hypera.chameleon.user.ProxyUser;
 import java.net.SocketAddress;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,19 +35,19 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord {@link Server} implementation.
+ * BungeeCord server implementation.
  */
 @Internal
-public class BungeeCordServer implements Server {
+public final class BungeeCordServer implements Server {
 
     private final @NotNull Chameleon chameleon;
     private final @NotNull ServerInfo server;
 
     /**
-     * {@link BungeeCordServer} implementation.
+     * BungeeCord server implementation.
      *
-     * @param chameleon {@link Chameleon} instance.
-     * @param server    {@link ServerInfo} instance.
+     * @param chameleon Chameleon implementation.
+     * @param server    ServerInfo instance.
      */
     @Internal
     public BungeeCordServer(@NotNull Chameleon chameleon, @NotNull ServerInfo server) {
@@ -89,9 +89,9 @@ public class BungeeCordServer implements Server {
     }
 
     /**
-     * Get stored {@link ServerInfo}.
+     * Get the stored ServerInfo.
      *
-     * @return stored {@link ServerInfo}.
+     * @return the stored ServerInfo.
      */
     @Internal
     public @NotNull ServerInfo getBungeeCord() {

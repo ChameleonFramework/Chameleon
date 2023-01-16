@@ -24,27 +24,39 @@
 package dev.hypera.chameleon.platform.minestom.adventure;
 
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.platform.minestom.users.MinestomUsers;
-import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.platform.minestom.MinestomChameleon;
+import dev.hypera.chameleon.user.ChatUser;
+import dev.hypera.chameleon.util.Preconditions;
 import java.util.UUID;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom {@link ChameleonAudienceProvider} implementation.
+ * Minestom chameleon audience provider implementation.
  */
 @Internal
-public class MinestomAudienceProvider implements ChameleonAudienceProvider {
+public final class MinestomAudienceProvider implements ChameleonAudienceProvider {
+
+    private final @NotNull MinestomChameleon chameleon;
 
     /**
-     * {@inheritDoc}
+     * Minestom audience provider constructor.
+     *
+     * @param chameleon Minestom Chameleon implementation.
+     */
+    public MinestomAudienceProvider(@NotNull MinestomChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
+
+    /**
+     * Gets an audience for all online players, including the server's console.
+     * <p>The audience is dynamically updated as players join and leave.</p>
+     *
+     * @return the players' and console audience.
      */
     @Override
     public @NotNull Audience all() {
@@ -52,69 +64,106 @@ public class MinestomAudienceProvider implements ChameleonAudienceProvider {
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for the server's console.
+     *
+     * @return the console audience.
      */
     @Override
     public @NotNull Audience console() {
-        return MinestomUsers.console();
+        return this.chameleon.getUserManager().getConsole();
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for all online players.
+     * <p>The audience is dynamically updated as players join and leave.</p>
+     *
+     * @return the players' audience.
      */
     @Override
     public @NotNull Audience players() {
-        return Audience.audience(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().map(MinestomUsers::wrap).collect(Collectors.toSet()));
+        return Audience.audience(this.chameleon.getUserManager().getUsers());
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for an individual player.
+     * <p>If the player is not online, messages are silently dropped.</p>
+     *
+     * @param playerId a player uuid.
+     *
+     * @return a player audience.
      */
     @Override
     public @NotNull Audience player(@NotNull UUID playerId) {
-        Player player = MinecraftServer.getConnectionManager().getPlayer(playerId);
-
-        if (null != player) {
-            return MinestomUsers.wrap(player);
-        } else {
-            throw new IllegalArgumentException("Cannot find player with id '" + playerId + "'");
-        }
+        Preconditions.checkNotNull("playerId", playerId);
+        return this.chameleon.getUserManager().getUserById(playerId).map(Audience.class::cast)
+            .orElse(Audience.empty());
     }
 
     /**
-     * {@inheritDoc}
+     * Creates an audience based on a filter.
+     *
+     * @param filter a filter.
+     *
+     * @return an audience.
      */
     @Override
     public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
+        Preconditions.checkNotNull("filter", filter);
         return all().filterAudience(f -> filter.test((ChatUser) f));
     }
 
     /**
-     * {@inheritDoc}
+     * Gets or creates an audience containing all viewers with the provided permission.
+     * <p>The audience is dynamically updated as permissions change.</p>
+     *
+     * @param permission the permission to filter sending to.
+     *
+     * @return a permissible audience.
      */
     @Override
     public @NotNull Audience permission(@NotNull String permission) {
+        Preconditions.checkNotNull("permission", permission);
         return filter(p -> p.hasPermission(permission));
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for online players in a world, including the server's console.
+     * <p>The audience is dynamically updated as players join and leave.</p>
+     *
+     * <p>World identifiers were introduced in Minecraft 1.16. On older game instances, worlds will
+     * be assigned the key {@code minecraft:<world name>}</p>
+     *
+     * @param world identifier for a world.
+     *
+     * @return the world's audience.
      */
     @Override
     public @NotNull Audience world(@NotNull Key world) {
+        Preconditions.checkNotNull("world", world);
         return all();
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for online players on a server, including the server's console.
+     * <p>If the platform is not a proxy, the audience defaults to everyone.</p>
+     *
+     * @param serverName a server name.
+     *
+     * @return a server's audience.
      */
     @Override
     public @NotNull Audience server(@NotNull String serverName) {
+        Preconditions.checkNotNull("serverName");
         return all();
     }
 
     /**
-     * {@inheritDoc}
+     * Return a component flattener that can use game data to resolve extra information about
+     * components.
+     * <p>This can be used for displaying components, or with serializers including the plain and
+     * legacy serializers.</p>
+     *
+     * @return the flattener.
      */
     @Override
     public @NotNull ComponentFlattener flattener() {
@@ -122,7 +171,7 @@ public class MinestomAudienceProvider implements ChameleonAudienceProvider {
     }
 
     /**
-     * {@inheritDoc}
+     * Closes the provider and forces audiences to be empty.
      */
     @Override
     public void close() {

@@ -24,7 +24,7 @@
 package dev.hypera.chameleon.platform.server;
 
 /**
- * {@link dev.hypera.chameleon.users.ServerUser} Game mode.
+ * Server user game mode.
  */
 public enum GameMode {
 

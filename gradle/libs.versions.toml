@@ -2,18 +2,44 @@
 version = "1.0"
 
 [versions]
-# Kyori
+# Adventure
 adventure = "4.12.0"
-adventure-platform = "4.1.2"
-indra = "3.0.1"
+adventure-platform = "4.2.0"
 
 # Platforms
 platform-bukkit = "1.19-R0.1-SNAPSHOT"
 platform-bungeecord = "1.19-R0.1-SNAPSHOT"
-platform-minestom = "c694c4074e"
+platform-minestom = "f291437ada"
 platform-nukkit = "1.0-SNAPSHOT"
 platform-sponge = "8.1.0"
-platform-velocity = "3.1.0"
+platform-velocity = "3.1.1"
+
+# File formats
+gson = "2.10.1"
+yaml = "1.33"
+
+# Code generation
+javapoet = "1.13.0"
+
+# Logging
+slf4j = "2.0.6"
+log4j = "2.19.0"
+
+# Code safety
+annotations = "24.0.0"
+
+# Build
+build-indra = "3.0.1"
+build-blossom = "1.3.1"
+build-test-logger = "3.2.0"
+build-errorprone = "2.18.0"
+build-errorprone-plugin = "2.0.2"
+build-nullaway = "0.10.8"
+build-nullaway-plugin = "1.5.0"
+
+# Test
+test-junit-bom = "5.9.2"
+test-mockito-bom = "4.11.0"
 
 
 [libraries]
@@ -33,33 +59,41 @@ platform-nukkit = { module = "cn.nukkit:nukkit", version.ref = "platform-nukkit"
 platform-sponge = { module = "org.spongepowered:spongeapi", version.ref = "platform-sponge" }
 platform-velocity = { module = "com.velocitypowered:velocity-api", version.ref = "platform-velocity" }
 
-# File reading/writing
-gson = "com.google.code.gson:gson:2.10"
-jsonSimple = "com.googlecode.json-simple:json-simple:1.1.1"
-yaml = "org.yaml:snakeyaml:1.33"
+# File formats
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+yaml = { module = "org.yaml:snakeyaml", version.ref = "yaml" }
 
 # Code generation
-javapoet = "com.squareup:javapoet:1.13.0"
+javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
+
+# Logging
+slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+log4j = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
+
+# Code safety
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 
 # Build
-build-indra-common = { module = "net.kyori:indra-common", version.ref = "indra" }
-build-indra-publishing = { module = "net.kyori:indra-publishing-gradle-plugin", version.ref = "indra" }
-build-indra-spotless = { module = "net.kyori:indra-licenser-spotless", version.ref = "indra" }
-build-blossom = "net.kyori:blossom:1.3.1"
-build-testLogger = "com.adarshr:gradle-test-logger-plugin:3.2.0"
-build-errorpronePlugin = "net.ltgt.gradle:gradle-errorprone-plugin:3.0.1"
+build-indra-common = { module = "net.kyori:indra-common", version.ref = "build-indra" }
+build-indra-publishing = { module = "net.kyori:indra-publishing-gradle-plugin", version.ref = "build-indra" }
+build-indra-licenser-spotless = { module = "net.kyori:indra-licenser-spotless", version.ref = "build-indra" }
+build-blossom = { module = "net.kyori:blossom", version.ref = "build-blossom" }
+build-test-logger = { module = "com.adarshr:gradle-test-logger-plugin", version.ref = "build-test-logger" }
+build-errorprone-plugin = { module = "net.ltgt.gradle:gradle-errorprone-plugin", version.ref = "build-errorprone-plugin" }
+build-errorprone-core = { module = "com.google.errorprone:error_prone_core", version.ref = "build-errorprone" }
+build-errorprone-annotations = { module = "com.google.errorprone:error_prone_annotations", version.ref = "build-errorprone" }
+build-nullaway-plugin = { module = "net.ltgt.gradle:gradle-nullaway-plugin", version.ref = "build-nullaway-plugin" }
+build-nullaway-core = { module = "com.uber.nullaway:nullaway", version.ref = "build-nullaway" }
 
-# Testing
-test-junit-bom = "org.junit:junit-bom:5.9.1"
+# Test
+test-junit-bom = { module = "org.junit:junit-bom", version.ref = "test-junit-bom" }
 test-junit-api = { module = "org.junit.jupiter:junit-jupiter-api" }
 test-junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
 test-junit-params = { module = "org.junit.jupiter:junit-jupiter-params" }
-
-# Miscellaneous
-annotations = "org.jetbrains:annotations:23.1.0"
-slf4j = "org.slf4j:slf4j-api:2.0.6"
-log4j = "org.apache.logging.log4j:log4j-api:2.19.0"
+test-mockito-bom = { module = "org.mockito:mockito-bom", version.ref = "test-mockito-bom" }
+test-mockito-core = { module = "org.mockito:mockito-core" }
+test-mockito-junit = { module = "org.mockito:mockito-junit-jupiter" }
 
 
 [plugins]
-indra-sonatype = { id = "net.kyori.indra.publishing.sonatype", version.ref = "indra" }
+indra-sonatype = { id = "net.kyori.indra.publishing.sonatype", version.ref = "build-indra" }

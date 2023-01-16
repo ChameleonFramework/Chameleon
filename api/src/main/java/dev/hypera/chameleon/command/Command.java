@@ -28,8 +28,9 @@ import dev.hypera.chameleon.command.annotations.Permission;
 import dev.hypera.chameleon.command.annotations.SubCommandHandler;
 import dev.hypera.chameleon.command.context.Context;
 import dev.hypera.chameleon.command.objects.Condition;
-import dev.hypera.chameleon.exceptions.command.ChameleonCommandException;
+import dev.hypera.chameleon.exception.command.ChameleonCommandException;
 import dev.hypera.chameleon.platform.PlatformTarget;
+import dev.hypera.chameleon.util.Preconditions;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -51,8 +51,8 @@ import org.jetbrains.annotations.Nullable;
 public abstract class Command {
 
     private final @NotNull String name;
-    private final @NotNull Set<String> aliases = new HashSet<>();
-    private final @NotNull Set<SubCommand> subCommands = new HashSet<>();
+    private final @NotNull Collection<String> aliases = new HashSet<>();
+    private final @NotNull Collection<SubCommand> subCommands = new HashSet<>();
     private final @Nullable Permission permission;
 
     private @NotNull PlatformTarget platform = PlatformTarget.all();
@@ -60,27 +60,38 @@ public abstract class Command {
     private @Nullable Component permissionErrorMessage;
 
     /**
-     * {@link Command} constructor.
+     * Command constructor.
      *
      * @param names Command aliases.
      */
     protected Command(@NotNull String... names) {
+        Preconditions.checkNotNull("names", names);
+
         try {
             if (names.length < 1) {
-                if (!getClass().isAnnotationPresent(CommandHandler.class)) {
-                    throw new IllegalStateException("Classes extending Command must either be annotated with @CommandHandler or provide names in the constructor");
-                }
+                Preconditions.checkState(
+                    getClass().isAnnotationPresent(CommandHandler.class),
+                    "Classes extending Command must entier be annotated with" + "@CommandHandler or provide names in the constructor"
+                );
 
                 names = getClass().getAnnotation(CommandHandler.class).value().split("\\|");
             }
 
             this.name = names[0];
-            this.aliases.addAll(names.length > 1 ? new HashSet<>(Arrays.asList(Arrays.copyOfRange(names, 1, names.length))) : Collections.emptySet());
-            this.permission = getClass().isAnnotationPresent(Permission.class) ? getClass().getAnnotation(Permission.class) : null;
+            this.aliases.addAll(names.length > 1 ? new HashSet<>(Arrays.asList(Arrays.copyOfRange(
+                names, 1, names.length
+            ))) : Collections.emptySet());
+            this.permission = getClass().isAnnotationPresent(Permission.class)
+                ? getClass().getAnnotation(Permission.class)
+                : null;
 
             for (Method method : getClass().getDeclaredMethods()) {
-                if (method.isAnnotationPresent(SubCommandHandler.class) && method.getParameterCount() == 1 && method.getParameterTypes()[0] == Context.class) {
-                    this.subCommands.add(new SubCommand(method.getAnnotation(SubCommandHandler.class).value(), method));
+                if (method.isAnnotationPresent(SubCommandHandler.class) &&
+                    method.getParameterCount() == 1 &&
+                    method.getParameterTypes()[0] == Context.class) {
+                    this.subCommands.add(new SubCommand(
+                        method.getAnnotation(SubCommandHandler.class).value(), method
+                    ));
                 }
             }
         } catch (Exception ex) {
@@ -91,30 +102,31 @@ public abstract class Command {
     /**
      * Execute the command.
      *
-     * @param context Execution {@link Context}.
+     * @param context Execution context.
      */
     public abstract void execute(@NotNull Context context);
 
     /**
      * Tab complete.
      *
-     * @param context Execution {@link Context}.
+     * @param context Execution context.
      *
      * @return Tab complete results.
      */
-    public @NotNull List<String> tabComplete(@NotNull Context context) {
+    public @NotNull Collection<String> tabComplete(@NotNull Context context) {
         return Collections.emptyList();
     }
 
     /**
      * Execute the command.
      *
-     * @param context Execution {@link Context}.
+     * @param context Execution context.
      */
     @Internal
     public final void executeCommand(@NotNull Context context) {
-        if (null != this.permission && !this.permission.value().isEmpty() && !context.getSender().hasPermission(Objects.requireNonNull(this.permission.value()))) {
-            if (null != this.permissionErrorMessage) {
+        if (this.permission != null && !this.permission.value().isEmpty() && !context.getSender()
+            .hasPermission(Objects.requireNonNull(this.permission.value()))) {
+            if (this.permissionErrorMessage != null) {
                 context.getSender().sendMessage(this.permissionErrorMessage);
             }
 
@@ -122,9 +134,13 @@ public abstract class Command {
         }
 
         if (!this.conditions.isEmpty()) {
-            Optional<Condition> failedCondition = this.conditions.stream().filter(condition -> !condition.test(context)).findFirst();
+            Optional<Condition> failedCondition = this.conditions.stream()
+                .filter(condition -> !condition.test(context))
+                .findFirst();
             if (failedCondition.isPresent()) {
-                failedCondition.get().getErrorMessage().ifPresent(errorMessage -> context.getSender().sendMessage(errorMessage));
+                failedCondition.get()
+                    .getErrorMessage()
+                    .ifPresent(errorMessage -> context.getSender().sendMessage(errorMessage));
                 return;
             }
         }
@@ -135,14 +151,16 @@ public abstract class Command {
     /**
      * Execute sub command.
      *
-     * @param context Execution {@link Context}.
+     * @param context Execution context.
      * @param command Sub-command name.
      *
      * @return {@code true} if a sub-command was found and executed, otherwise {@code false}.
      */
     @Internal
     public final boolean executeSubCommand(@NotNull Context context, @NotNull String command) {
-        Optional<SubCommand> subCommand = this.subCommands.stream().filter(c -> c.getNames().stream().anyMatch(n -> command.toLowerCase().matches(n))).findFirst();
+        Optional<SubCommand> subCommand = this.subCommands.stream()
+            .filter(c -> c.getNames().stream().anyMatch(n -> command.toLowerCase().matches(n)))
+            .findFirst();
         if (subCommand.isPresent()) {
             subCommand.get().execute(context, this);
             return false;
@@ -166,7 +184,7 @@ public abstract class Command {
      *
      * @return command aliases.
      */
-    public final @NotNull Set<String> getAliases() {
+    public final @NotNull Collection<String> getAliases() {
         return this.aliases;
     }
 
@@ -176,23 +194,25 @@ public abstract class Command {
      * @param aliases Command aliases.
      */
     protected final void addAliases(@NotNull Collection<String> aliases) {
+        Preconditions.checkNotNull("aliases", aliases);
         this.aliases.addAll(aliases);
     }
 
     /**
-     * Get {@link SubCommand}s.
+     * Get sub-commands.
      *
-     * @return {@link SubCommand}s.
+     * @return sub-commands.
      */
     @Internal
-    public final @NotNull Set<SubCommand> getSubCommands() {
+    public final @NotNull Collection<SubCommand> getSubCommands() {
         return this.subCommands;
     }
 
     /**
-     * Get {@link Permission}.
+     * Get permission.
      *
-     * @return command {@link Permission}, or {@code null}.
+     * @return an optional containing the command permission, if available, otherwise an empty
+     *     optional.
      */
     protected final @NotNull Optional<Permission> getPermission() {
         return Optional.ofNullable(this.permission);
@@ -213,24 +233,26 @@ public abstract class Command {
      * @param platform platform target.
      */
     protected final void setPlatform(@NotNull PlatformTarget platform) {
+        Preconditions.checkNotNull("platform", platform);
         this.platform = platform;
     }
 
     /**
-     * Get command {@link Condition}s.
+     * Get command conditions.
      *
-     * @return command {@link Condition}s.
+     * @return command conditions.
      */
-    protected final @NotNull List<Condition> getConditions() {
+    protected final @NotNull Collection<Condition> getConditions() {
         return this.conditions;
     }
 
     /**
-     * Set command {@link Condition}s.
+     * Set command conditions.
      *
-     * @param conditions Command {@link Condition}s.
+     * @param conditions Command conditions.
      */
     protected final void setConditions(@NotNull Condition... conditions) {
+        Preconditions.checkNotNull("conditions", conditions);
         this.conditions = Arrays.asList(conditions);
     }
 
@@ -249,6 +271,7 @@ public abstract class Command {
      * @param permissionErrorMessage Command permission error message.
      */
     protected final void setPermissionErrorMessage(@NotNull Component permissionErrorMessage) {
+        Preconditions.checkNotNull("permissionErrorMessage", permissionErrorMessage);
         this.permissionErrorMessage = permissionErrorMessage;
     }
 

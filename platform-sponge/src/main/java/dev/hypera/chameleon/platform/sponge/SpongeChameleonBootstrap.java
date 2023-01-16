@@ -25,27 +25,27 @@ package dev.hypera.chameleon.platform.sponge;
 
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.data.PluginData;
-import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extensions.ChameleonExtension;
-import dev.hypera.chameleon.logging.ChameleonLog4jLogger;
-import dev.hypera.chameleon.logging.ChameleonLogger;
-import dev.hypera.chameleon.platform.sponge.extensions.SpongeChameleonExtension;
+import dev.hypera.chameleon.ChameleonPluginData;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.logger.ChameleonLog4jLogger;
+import dev.hypera.chameleon.logger.ChameleonLogger;
+import dev.hypera.chameleon.platform.sponge.extension.SpongeChameleonExtension;
 import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Sponge {@link ChameleonBootstrap} implementation.
+ * Sponge Chameleon bootstrap implementation.
  */
 public final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeChameleon, SpongeChameleonExtension<?, ?>> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull SpongePlugin spongePlugin;
-    private final @NotNull PluginData pluginData;
+    private final @NotNull ChameleonPluginData pluginData;
 
     @Internal
-    SpongeChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin, @NotNull PluginData pluginData) {
+    SpongeChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin, @NotNull ChameleonPluginData pluginData) {
         this.chameleonPlugin = chameleonPlugin;
         this.spongePlugin = spongePlugin;
         this.pluginData = pluginData;

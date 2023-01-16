@@ -25,17 +25,19 @@ package dev.hypera.chameleon.command;
 
 import dev.hypera.chameleon.command.annotations.Permission;
 import dev.hypera.chameleon.command.context.Context;
-import dev.hypera.chameleon.exceptions.command.ChameleonCommandException;
+import dev.hypera.chameleon.exception.command.ChameleonCommandException;
+import dev.hypera.chameleon.util.Preconditions;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Sub command.
+ * Sub-command.
  */
 @Internal
 public final class SubCommand {
@@ -45,9 +47,9 @@ public final class SubCommand {
     private final @NotNull Method method;
 
     /**
-     * {@link SubCommand} constructor.
+     * Sub-command constructor.
      *
-     * @param names Command names, separated by '|'.
+     * @param names  Command names, separated by '|'.
      * @param method Command method.
      */
     @Internal
@@ -55,7 +57,8 @@ public final class SubCommand {
         this.names = Arrays.asList(names.split("\\|"));
         this.method = method;
 
-        this.permission = method.isAnnotationPresent(Permission.class) ? method.getAnnotation(Permission.class) : null;
+        this.permission = method.isAnnotationPresent(Permission.class) ?
+            method.getAnnotation(Permission.class) : null;
     }
 
     /**
@@ -63,7 +66,7 @@ public final class SubCommand {
      *
      * @return command names.
      */
-    public @NotNull List<String> getNames() {
+    public @NotNull Collection<String> getNames() {
         return this.names;
     }
 
@@ -81,20 +84,25 @@ public final class SubCommand {
      *
      * @return command aliases.
      */
-    public @NotNull List<String> getAliases() {
+    public @NotNull Collection<String> getAliases() {
         return this.names.subList(1, this.names.size());
     }
 
     /**
      * Execute the command.
      *
-     * @param context Execution {@link Context}.
-     * @param parent Parent {@link Command}.
+     * @param context Execution context.
+     * @param parent  Parent command.
      */
     public void execute(@NotNull Context context, @NotNull Command parent) {
+        Preconditions.checkNotNull("context", context);
+        Preconditions.checkNotNull("parent", parent);
+
         try {
-            if (null != this.permission && !this.permission.value().isEmpty() && !context.getSender().hasPermission(this.permission.value())) {
-                parent.getPermissionErrorMessage().ifPresent(component -> context.getSender().sendMessage(component));
+            if (this.permission != null && !this.permission.value().isEmpty() &&
+                !context.getSender().hasPermission(this.permission.value())) {
+                parent.getPermissionErrorMessage().ifPresent(component ->
+                    context.getSender().sendMessage(component));
                 return;
             }
 

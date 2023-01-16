@@ -23,8 +23,8 @@
  */
 package dev.hypera.chameleon.command.objects;
 
-import dev.hypera.chameleon.command.Command;
 import dev.hypera.chameleon.command.context.Context;
+import dev.hypera.chameleon.util.Preconditions;
 import java.util.Optional;
 import java.util.function.Predicate;
 import net.kyori.adventure.text.Component;
@@ -32,7 +32,7 @@ import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * {@link Command} condition.
+ * Command condition.
  */
 @NonExtendable
 public interface Condition {
@@ -40,7 +40,7 @@ public interface Condition {
     /**
      * Condition test.
      *
-     * @param context {@link Command} execution context.
+     * @param context Command execution context.
      *
      * @return {@code true} if condition passed, otherwise {@code false}.
      */
@@ -57,25 +57,28 @@ public interface Condition {
 
 
     /**
-     * Create new {@link Condition}.
+     * Create new condition.
      *
      * @param test Command condition test.
      *
-     * @return New {@link Condition} instance.
+     * @return new condition.
      */
     static @NotNull Condition of(@NotNull Predicate<Context> test) {
+        Preconditions.checkNotNull("test", test);
         return test::test;
     }
 
     /**
-     * Create new {@link Condition} with an error message.
+     * Create new condition with an error message.
      *
      * @param test         Command condition test.
-     * @param errorMessage Error message {@link Component}.
+     * @param errorMessage Error message component.
      *
-     * @return New {@link Condition} instance.
+     * @return new condition.
      */
     static @NotNull Condition of(@NotNull Predicate<Context> test, @NotNull Component errorMessage) {
+        Preconditions.checkNotNull("test", test);
+        Preconditions.checkNotNull("errorMessage", errorMessage);
         return new Condition() {
 
             @Override

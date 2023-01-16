@@ -26,31 +26,38 @@ package dev.hypera.chameleon.platform.minestom.command;
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.command.Command;
 import dev.hypera.chameleon.command.context.ContextImpl;
-import dev.hypera.chameleon.platform.minestom.users.MinestomUsers;
+import dev.hypera.chameleon.platform.minestom.user.MinestomUserManager;
 import java.util.Arrays;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Minestom {@link Command} wrapper.
+ * Minestom command wrapper.
  */
 @Internal
-public class MinestomCommand extends net.minestom.server.command.builder.Command {
+public final class MinestomCommand extends net.minestom.server.command.builder.Command {
 
     /**
-     * {@link MinestomCommand} constructor.
+     * Minestom command constructor.
      *
-     * @param chameleon {@link Chameleon} instance.
-     * @param command   {@link Command} to be wrapped.
+     * @param chameleon   Chameleon implementation.
+     * @param command     Command to be wrapped.
+     * @param userManager Minestom user manager implementation.
      */
     @Internal
-    public MinestomCommand(@NotNull Chameleon chameleon, @NotNull Command command) {
+    public MinestomCommand(@NotNull Chameleon chameleon, @NotNull Command command, @NotNull MinestomUserManager userManager) {
         super(command.getName(), command.getAliases().toArray(new String[0]));
 
         setDefaultExecutor((sender, context) -> {
-            String[] args = context.getInput().replace(context.getCommandName(), "").trim().split(" ");
-            if (args.length < 1 || command.executeSubCommand(new ContextImpl(MinestomUsers.wrap(sender), chameleon, Arrays.copyOfRange(args, 1, args.length)), args[0])) {
-                command.executeCommand(new ContextImpl(MinestomUsers.wrap(sender), chameleon, args));
+            String[] args = context.getInput().replace(context.getCommandName(), "")
+                .trim().split(" ");
+
+            if (args.length < 1 || command.executeSubCommand(new ContextImpl(
+                userManager.wrap(sender), chameleon, Arrays.copyOfRange(args, 1, args.length)
+            ), args[0])) {
+                command.executeCommand(new ContextImpl(
+                    userManager.wrap(sender), chameleon, args
+                ));
             }
         });
     }

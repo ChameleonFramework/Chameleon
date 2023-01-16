@@ -23,11 +23,12 @@
  */
 package dev.hypera.chameleon.platform.nukkit.adventure;
 
-import cn.nukkit.Player;
 import cn.nukkit.Server;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.platform.nukkit.users.NukkitUsers;
-import dev.hypera.chameleon.users.ChatUser;
+import dev.hypera.chameleon.platform.nukkit.NukkitChameleon;
+import dev.hypera.chameleon.user.ChatUser;
+import dev.hypera.chameleon.util.Preconditions;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -38,13 +39,28 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Nukkit {@link ChameleonAudienceProvider} implementation.
+ * Nukkit Chameleon audience provider implementation.
  */
 @Internal
-public class NukkitAudienceProvider implements ChameleonAudienceProvider {
+public final class NukkitAudienceProvider implements ChameleonAudienceProvider {
+
+    private final @NotNull NukkitChameleon chameleon;
 
     /**
-     * {@inheritDoc}
+     * Nukkit audience provider constructor.
+     *
+     * @param chameleon Nukkit Chameleon implementation.
+     */
+    @Internal
+    public NukkitAudienceProvider(@NotNull NukkitChameleon chameleon) {
+        this.chameleon = chameleon;
+    }
+
+    /**
+     * Gets an audience for all online players, including the server's console.
+     * <p>The audience is dynamically updated as players join and leave.</p>
+     *
+     * @return the players' and console audience.
      */
     @Override
     public @NotNull Audience all() {
@@ -52,69 +68,107 @@ public class NukkitAudienceProvider implements ChameleonAudienceProvider {
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for the server's console.
+     *
+     * @return the console audience.
      */
     @Override
     public @NotNull Audience console() {
-        return NukkitUsers.console();
+        return this.chameleon.getUserManager().getConsole();
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for all online players.
+     * <p>The audience is dynamically updated as players join and leave.</p>
+     *
+     * @return the players' audience.
      */
     @Override
     public @NotNull Audience players() {
-        return Audience.audience(Server.getInstance().getOnlinePlayers().values().stream().map(NukkitUsers::wrap).collect(Collectors.toSet()));
+        return Audience.audience(Server.getInstance().getOnlinePlayers().values().stream()
+            .map(this.chameleon.getUserManager()::wrap).collect(Collectors.toSet()));
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for an individual player.
+     * <p>If the player is not online, messages are silently dropped.</p>
+     *
+     * @param playerId a player uuid.
+     *
+     * @return a player audience.
      */
     @Override
     public @NotNull Audience player(@NotNull UUID playerId) {
-        Player player = Server.getInstance().getOnlinePlayers().get(playerId);
-
-        if (null != player) {
-            return NukkitUsers.wrap(player);
-        } else {
-            throw new IllegalArgumentException("Cannot find player with id '" + playerId + "'");
-        }
+        Preconditions.checkNotNull("playerId", playerId);
+        return Optional.ofNullable(Server.getInstance().getOnlinePlayers().get(playerId))
+            .map(this.chameleon.getUserManager()::wrap).map(Audience.class::cast).orElse(Audience.empty());
     }
 
     /**
-     * {@inheritDoc}
+     * Creates an audience based on a filter.
+     *
+     * @param filter a filter.
+     *
+     * @return an audience.
      */
     @Override
     public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
+        Preconditions.checkNotNull("filter", filter);
         return all().filterAudience(f -> filter.test((ChatUser) f));
     }
 
     /**
-     * {@inheritDoc}
+     * Gets or creates an audience containing all viewers with the provided permission.
+     * <p>The audience is dynamically updated as permissions change.</p>
+     *
+     * @param permission the permission to filter sending to.
+     *
+     * @return a permissible audience.
      */
     @Override
     public @NotNull Audience permission(@NotNull String permission) {
+        Preconditions.checkNotNull("permission", permission);
         return filter(p -> p.hasPermission(permission));
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for online players in a world, including the server's console.
+     * <p>The audience is dynamically updated as players join and leave.</p>
+     *
+     * <p>World identifiers were introduced in Minecraft 1.16. On older game instances, worlds will
+     * be assigned the key {@code minecraft:<world name>}</p>
+     *
+     * @param world identifier for a world.
+     *
+     * @return the world's audience.
      */
     @Override
     public @NotNull Audience world(@NotNull Key world) {
+        Preconditions.checkNotNull("world", world);
         return all();
     }
 
     /**
-     * {@inheritDoc}
+     * Gets an audience for online players on a server, including the server's console.
+     * <p>If the platform is not a proxy, the audience defaults to everyone.</p>
+     *
+     * @param serverName a server name.
+     *
+     * @return a server's audience.
      */
     @Override
     public @NotNull Audience server(@NotNull String serverName) {
+        Preconditions.checkNotNull("serverName", serverName);
         return all();
     }
 
     /**
-     * {@inheritDoc}
+     * Return a component flattener that can use game data to resolve extra information about
+     * components.
+     * <p>This can be used for displaying components, or with serializers including the plain and
+     * legacy serializers.</p>
+     *
+     * @return the flattener.
      */
     @Override
     public @NotNull ComponentFlattener flattener() {
@@ -122,7 +176,7 @@ public class NukkitAudienceProvider implements ChameleonAudienceProvider {
     }
 
     /**
-     * {@inheritDoc}
+     * Closes the provider and forces audiences to be empty.
      */
     @Override
     public void close() {

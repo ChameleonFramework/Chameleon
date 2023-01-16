@@ -23,11 +23,10 @@
  */
 package dev.hypera.chameleon.annotations.exception;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.exceptions.ChameleonRuntimeException;
+import dev.hypera.chameleon.exception.ChameleonRuntimeException;
 
 /**
- * {@link Chameleon} extension exception.
+ * Chameleon extension exception.
  */
 public class ChameleonAnnotationException extends ChameleonRuntimeException {
 

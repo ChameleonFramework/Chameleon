@@ -24,10 +24,10 @@
 package dev.hypera.chameleon.platform.bungeecord.platform.objects;
 
 import dev.hypera.chameleon.platform.PlatformPlugin;
-import dev.hypera.chameleon.utils.ChameleonUtil;
+import dev.hypera.chameleon.util.ChameleonUtil;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import net.md_5.bungee.api.ProxyServer;
@@ -36,23 +36,22 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord {@link PlatformPlugin} implementation.
+ * BungeeCord platform plugin implementation.
  */
 @Internal
-public class BungeeCordPlugin implements PlatformPlugin {
+public final class BungeeCordPlugin implements PlatformPlugin {
 
     private final @NotNull Plugin plugin;
 
     /**
-     * {@link BungeeCordPlugin} constructor.
+     * BungeeCord plugin constructor.
      *
-     * @param plugin {@link Plugin} instance.
+     * @param plugin Plugin to be wrapped.
      */
     @Internal
     public BungeeCordPlugin(@NotNull Plugin plugin) {
         this.plugin = plugin;
     }
-
 
     /**
      * {@inheritDoc}
@@ -90,8 +89,9 @@ public class BungeeCordPlugin implements PlatformPlugin {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull List<String> getAuthors() {
-        return null == this.plugin.getDescription().getAuthor() ? Collections.emptyList() : Collections.singletonList(this.plugin.getDescription().getAuthor());
+    public @NotNull Collection<String> getAuthors() {
+        return this.plugin.getDescription().getAuthor() == null ? Collections.emptyList()
+            : Collections.singletonList(this.plugin.getDescription().getAuthor());
     }
 
     /**

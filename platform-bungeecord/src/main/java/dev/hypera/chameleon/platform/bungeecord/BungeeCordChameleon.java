@@ -25,23 +25,22 @@ package dev.hypera.chameleon.platform.bungeecord;
 
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
-import dev.hypera.chameleon.data.PluginData;
-import dev.hypera.chameleon.exceptions.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extensions.ChameleonExtension;
-import dev.hypera.chameleon.logging.ChameleonJavaLogger;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.logger.ChameleonJavaLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bungeecord.adventure.BungeeCordAudienceProvider;
-import dev.hypera.chameleon.platform.bungeecord.events.BungeeCordListener;
-import dev.hypera.chameleon.platform.bungeecord.managers.BungeeCordCommandManager;
-import dev.hypera.chameleon.platform.bungeecord.managers.BungeeCordPluginManager;
-import dev.hypera.chameleon.platform.bungeecord.managers.BungeeCordScheduler;
-import dev.hypera.chameleon.platform.bungeecord.managers.BungeeCordUserManager;
+import dev.hypera.chameleon.platform.bungeecord.command.BungeeCordCommandManager;
+import dev.hypera.chameleon.platform.bungeecord.event.BungeeCordListener;
 import dev.hypera.chameleon.platform.bungeecord.platform.BungeeCordPlatform;
-import dev.hypera.chameleon.scheduling.Scheduler;
-import dev.hypera.chameleon.users.UserManager;
+import dev.hypera.chameleon.platform.bungeecord.platform.BungeeCordPluginManager;
+import dev.hypera.chameleon.platform.bungeecord.scheduler.BungeeCordScheduler;
+import dev.hypera.chameleon.platform.bungeecord.user.BungeeCordUserManager;
+import dev.hypera.chameleon.scheduler.Scheduler;
 import java.nio.file.Path;
 import java.util.Collection;
 import net.md_5.bungee.api.ProxyServer;
@@ -50,7 +49,7 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord {@link Chameleon} implementation.
+ * BungeeCord Chameleon implementation.
  */
 public final class BungeeCordChameleon extends Chameleon {
 
@@ -63,7 +62,7 @@ public final class BungeeCordChameleon extends Chameleon {
     private final @NotNull BungeeCordScheduler scheduler = new BungeeCordScheduler(this);
 
     @Internal
-    BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) throws ChameleonInstantiationException {
+    BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull Plugin bungeePlugin, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, extensions, pluginData, new ChameleonJavaLogger(bungeePlugin.getLogger()));
         this.plugin = bungeePlugin;
         this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);
@@ -71,15 +70,15 @@ public final class BungeeCordChameleon extends Chameleon {
     }
 
     /**
-     * Create a new {@link BungeeCordChameleonBootstrap} instance.
+     * Create a new BungeeCord Chameleon bootstrap instance.
      *
-     * @param chameleonPlugin {@link ChameleonPlugin} to load.
-     * @param bungeePlugin    BungeeCord {@link Plugin}.
-     * @param pluginData      {@link PluginData}.
+     * @param chameleonPlugin Chameleon plugin to be loaded.
+     * @param bungeePlugin    BungeeCord plugin instance.
+     * @param pluginData      Chameleon plugin data.
      *
-     * @return new {@link BungeeCordChameleonBootstrap}.
+     * @return new BungeeCord Chameleon boostrap.
      */
-    public static @NotNull BungeeCordChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull PluginData pluginData) {
+    public static @NotNull BungeeCordChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull ChameleonPluginData pluginData) {
         return new BungeeCordChameleonBootstrap(chameleonPlugin, bungeePlugin, pluginData);
     }
 
@@ -119,7 +118,7 @@ public final class BungeeCordChameleon extends Chameleon {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull UserManager getUserManager() {
+    public @NotNull BungeeCordUserManager getUserManager() {
         return this.userManager;
     }
 
@@ -141,9 +140,9 @@ public final class BungeeCordChameleon extends Chameleon {
     }
 
     /**
-     * Get stored {@link Plugin}.
+     * Get the stored platform Plugin.
      *
-     * @return stored {@link Plugin}.
+     * @return stored platform Plugin.
      */
     public @NotNull Plugin getPlatformPlugin() {
         return this.plugin;
