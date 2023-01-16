@@ -167,8 +167,7 @@ Please read [the Contributing guide](CONTRIBUTING.md).
 
 ### Building
 
-You can build this project by running `./gradlew build` in the project root directory, or if you use
-Microsoft Windows, you can run `./gradlew.bat build`.
+You can build this project by running `./gradlew build` in the project root directory.
 If you have Gradle 7.0+ installed, you can simply run the `gradle build` command in the project root
 directory.
 

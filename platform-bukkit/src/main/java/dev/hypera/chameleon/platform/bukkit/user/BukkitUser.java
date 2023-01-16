@@ -139,7 +139,7 @@ public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
      */
     @Override
     public @NotNull GameMode getGameMode() {
-        return GameMode.valueOf(this.player.getGameMode().name());
+        return convertGameModeToChameleon(this.player.getGameMode());
     }
 
     /**
@@ -148,7 +148,7 @@ public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
     @Override
     public void setGameMode(@NotNull GameMode gameMode) {
         Preconditions.checkNotNull("gameMode", gameMode);
-        this.player.setGameMode(org.bukkit.GameMode.valueOf(gameMode.name()));
+        this.player.setGameMode(convertGameModeToBukkit(gameMode));
     }
 
     /**
@@ -159,6 +159,32 @@ public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
     @Override
     public @NotNull Audience audience() {
         return this.audience;
+    }
+
+    private @NotNull org.bukkit.GameMode convertGameModeToBukkit(@NotNull GameMode gameMode) {
+        switch (gameMode) {
+            case CREATIVE:
+                return org.bukkit.GameMode.CREATIVE;
+            case ADVENTURE:
+                return org.bukkit.GameMode.ADVENTURE;
+            case SPECTATOR:
+                return org.bukkit.GameMode.SPECTATOR;
+            default:
+                return org.bukkit.GameMode.SURVIVAL;
+        }
+    }
+
+    private @NotNull GameMode convertGameModeToChameleon(@NotNull org.bukkit.GameMode gameMode) {
+        switch (gameMode) {
+            case CREATIVE:
+                return GameMode.CREATIVE;
+            case ADVENTURE:
+                return GameMode.ADVENTURE;
+            case SPECTATOR:
+                return GameMode.SPECTATOR;
+            default:
+                return GameMode.SURVIVAL;
+        }
     }
 
 }

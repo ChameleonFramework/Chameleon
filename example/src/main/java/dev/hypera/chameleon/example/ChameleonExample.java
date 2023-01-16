@@ -96,45 +96,49 @@ public final class ChameleonExample extends ChameleonPlugin {
 
         /* Events */
         // User connect event
-        chameleon.getEventBus().subscribe(UserConnectEvent.class, event -> {
+        chameleon.getEventBus().subscribe(UserConnectEvent.class, event ->
             event.getUser().sendMessage(Component.text(
                 "Welcome to my server!", NamedTextColor.GREEN
-            ));
-        });
+            ))
+        );
 
         // User connect event with an expiry after of 1 and HIGH priority.
         chameleon.getEventBus().subscribe(EventSubscriber.builder(UserConnectEvent.class)
-            .expireAfter(1).handler(event -> {
+            .expireAfter(1).handler(event ->
                 event.getUser().sendMessage(Component.text(
                     "Welcome, you're the first person to join since the last restart!",
                     NamedTextColor.GOLD
-                ));
-            }).priority(EventSubscriptionPriority.HIGH).build());
+                ))
+            ).priority(EventSubscriptionPriority.HIGH).build());
 
         // User disconnect event
-        chameleon.getEventBus().subscribe(UserDisconnectEvent.class, event -> {
-            this.logger.info("%s left the server", event.getUser().getName());
-        });
+        chameleon.getEventBus().subscribe(UserDisconnectEvent.class, event ->
+            this.logger.info("%s left the server", event.getUser().getName())
+        );
 
         // Custom event
-        chameleon.getEventBus().subscribe(ExampleCustomEvent.class, event -> {
-            this.logger.info("Received example custom event! Hello, " + event.getName() + "!");
-        });
+        chameleon.getEventBus().subscribe(ExampleCustomEvent.class, event ->
+            this.logger.info("Received example custom event! Hello, %s!", event.getName())
+        );
 
         /* Scheduling */
-        chameleon.getScheduler().schedule(Task.builder(() -> {
-            this.logger.info("This plugin has been running for 10 seconds!");
-        }).delay(Schedule.seconds(10)).build());
+        chameleon.getScheduler().schedule(Task.builder(() ->
+            this.logger.info("This plugin has been running for 10 seconds!")
+        ).delay(Schedule.seconds(10)).build());
 
-        chameleon.getScheduler().schedule(Task.builder(() -> {
-            this.logger.info("This task will run twice!");
-        }).delay(Schedule.seconds(2)).repeat(Schedule.seconds(5)).cancelAfter(2).build());
+        chameleon.getScheduler().schedule(Task.builder(() ->
+            this.logger.info("This task will run twice!")
+        ).delay(Schedule.seconds(2)).repeat(Schedule.seconds(5)).cancelAfter(2).build());
 
-        this.logger.info("Successfully started ChameleonExample plugin, took %s ms.",
-            Duration.between(start, Instant.now()).toMillis());
-        this.logger.info("Running on %s (%s) v%s with Chameleon v%s!",
+        this.logger.info(
+            "Successfully started ChameleonExample plugin, took %s ms.",
+            Duration.between(start, Instant.now()).toMillis()
+        );
+        this.logger.info(
+            "Running on %s (%s) v%s with Chameleon v%s!",
             chameleon.getPlatform().getName(), chameleon.getPlatform().getId(),
-            chameleon.getPlatform().getVersion(), Chameleon.getVersion());
+            chameleon.getPlatform().getVersion(), Chameleon.getVersion()
+        );
     }
 
     /**
