@@ -38,6 +38,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Bukkit user manager implementation.
@@ -46,7 +47,8 @@ import org.jetbrains.annotations.NotNull;
 public final class BukkitUserManager implements UserManager {
 
     private final @NotNull BukkitChameleon chameleon;
-    private final @NotNull BukkitConsoleUser consoleUser;
+
+    private @Nullable BukkitConsoleUser consoleUser;
 
     /**
      * Bukkit user manager constructor.
@@ -56,7 +58,6 @@ public final class BukkitUserManager implements UserManager {
     @Internal
     public BukkitUserManager(@NotNull BukkitChameleon chameleon) {
         this.chameleon = chameleon;
-        this.consoleUser = new BukkitConsoleUser(this.chameleon);
     }
 
     /**
@@ -64,6 +65,7 @@ public final class BukkitUserManager implements UserManager {
      */
     @Override
     public @NotNull ConsoleUser getConsole() {
+        if (this.consoleUser == null) this.consoleUser = new BukkitConsoleUser(this.chameleon);
         return this.consoleUser;
     }
 
