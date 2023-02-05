@@ -44,7 +44,6 @@ import dev.hypera.chameleon.scheduler.Scheduler;
 import dev.hypera.chameleon.util.Preconditions;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -88,16 +87,8 @@ public final class BukkitChameleon extends Chameleon {
      * {@inheritDoc}
      */
     @Override
-    public void onLoad() {
-        this.audienceProvider = new BukkitAudienceProvider(this, this.plugin);
-        super.onLoad();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void onEnable() {
+        this.audienceProvider = new BukkitAudienceProvider(this, this.plugin);
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), this.plugin);
         super.onEnable();
     }
@@ -119,7 +110,7 @@ public final class BukkitChameleon extends Chameleon {
         Preconditions.checkState(
             this.audienceProvider != null, "Chameleon has not been loaded"
         );
-        return Objects.requireNonNull(this.audienceProvider);
+        return this.audienceProvider;
     }
 
     /**
