@@ -23,6 +23,7 @@
  */
 plugins {
     `kotlin-dsl`
+    kotlin("jvm") version "1.8.0" apply false // TODO: update to 1.8.10 when codeql feels like updating their software - that everyone uses - after kotlin being updated for 2 weeks
 }
 
 repositories {
