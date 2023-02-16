@@ -32,8 +32,10 @@ plugins {
  * need to keep your source code compatible with Java 8, and it should work fine.
  */
 java {
-    targetCompatibility = JavaVersion.VERSION_17
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }
 
 repositories {
