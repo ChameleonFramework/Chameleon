@@ -39,10 +39,19 @@ java {
 repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots/") // Required for BungeeCord support
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // Required for Bukkit support
-    maven("https://jitpack.io/") // Required for Minestom support
+    // maven("https://jitpack.io/") // Required for Minestom support
     maven("https://repo.spongepowered.org/maven/") // Required for Minestom/Sponge support
     maven("https://repo.opencollab.dev/main/") // Required for Nukkit support
     maven("https://repo.papermc.io/repository/maven-public/") // Required for Velocity support
+
+    // Due to JitPack deleting old versions of Minestom, which breaks Chameleon
+    // builds, we have decided to start mirroring certain JitPack artifacts to
+    // our Maven repository and caching them so that if JitPack does delete an
+    // artifact, we have a copy of it to keep builds running until we get the
+    // chance to update the dependency.
+    //
+    // If you wish to use JitPack, uncomment the JitPack repository at line 42.
+    maven("https://repo.hypera.dev/mirror/")
 }
 
 dependencies {
