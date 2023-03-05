@@ -41,12 +41,12 @@ val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 indra {
     javaVersions {
-        if (project.name.contains("minestom") || project.name.contains("example")) {
+        if (project.name.contains("minestom") || project.name.contains("sponge") || project.name.contains("example")) {
             target(17)
-            testWith(18)
+            testWith(17)
         } else {
             target(8)
-            testWith(8, 11, 18)
+            testWith(8, 11, 17)
         }
     }
 }
