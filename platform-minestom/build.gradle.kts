@@ -27,7 +27,12 @@ plugins {
 }
 
 repositories {
-    maven("https://jitpack.io/")
+    // Due to JitPack deleting old versions of Minestom, which breaks Chameleon
+    // builds, we have decided to start mirroring certain JitPack artifacts to
+    // our Maven repository and caching them so that if JitPack does delete an
+    // artifact, we have a copy of it to keep builds running until we get the
+    // chance to update the dependency.
+    maven("https://repo.hypera.dev/mirror/")
     maven("https://repo.spongepowered.org/maven/")
 }
 
