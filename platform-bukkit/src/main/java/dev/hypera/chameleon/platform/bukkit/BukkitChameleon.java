@@ -28,9 +28,10 @@ import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
+import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.logger.ChameleonJavaLogger;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bukkit.adventure.BukkitAudienceProvider;
@@ -65,8 +66,8 @@ public final class BukkitChameleon extends Chameleon {
     private @Nullable ChameleonAudienceProvider audienceProvider;
 
     @Internal
-    BukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull JavaPlugin bukkitPlugin, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, extensions, pluginData, new ChameleonJavaLogger(bukkitPlugin.getLogger()));
+    BukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension> extensions) throws ChameleonInstantiationException {
+        super(chameleonPlugin, pluginData, eventBus, logger, extensions);
         this.plugin = bukkitPlugin;
     }
 

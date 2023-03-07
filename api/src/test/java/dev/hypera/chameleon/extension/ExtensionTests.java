@@ -23,27 +23,69 @@
  */
 package dev.hypera.chameleon.extension;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import dev.hypera.chameleon.extension.objects.TestInvalidPlatformExtension;
-import dev.hypera.chameleon.extension.objects.TestPlatformExtension;
+import dev.hypera.chameleon.TestChameleon;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("unchecked")
 final class ExtensionTests {
 
-    @Test
-    void catchesInvalid() {
-        assertDoesNotThrow(TestPlatformExtension::new);
-        assertThrows(IllegalStateException.class, TestInvalidPlatformExtension::new);
+    private static TestChameleon chameleon;
+    private @NotNull ChameleonExtensionFactory<ChameleonExtension> extensionFactory = mock(ChameleonExtensionFactory.class);
+    private @NotNull ChameleonExtension extension = mock(ChameleonExtension.class);
+
+    @BeforeAll
+    static void init() throws ChameleonInstantiationException {
+        chameleon = new TestChameleon();
+    }
+
+    @BeforeEach
+    void setup() {
+        this.extension = mock(ChameleonExtension.class);
+        this.extensionFactory = mock(ChameleonExtensionFactory.class);
+        when(this.extensionFactory.create(any())).thenReturn(this.extension);
     }
 
     @Test
-    void successfullyLoadsParent() {
-        TestPlatformExtension platformExtension = assertDoesNotThrow(TestPlatformExtension::new);
-        assertNotNull(platformExtension.extension);
-        assertNotNull(platformExtension.getExtension());
+    void testExtensionManagerLoad() {
+        // Load extension
+        ChameleonExtension ext = chameleon.getExtensionManager().loadExtension(this.extensionFactory);
+        assertEquals(this.extension, ext);
+
+        // Verify that the factory created the extension, and the extension was initialised and loaded.
+        verify(this.extensionFactory, times(1)).create(chameleon.getPlatform());
+        verify(ext, times(1)).init(chameleon.getLogger(), chameleon.getEventBus());
+        verify(ext, times(1)).load(chameleon);
+
+        // Verify that the extension can be retrieved from the extension manager.
+        assertEquals(ext, chameleon.getExtensionManager().getExtension(this.extension.getClass()).orElse(null));
+        assertEquals(ext, chameleon.getExtensionManager().loadExtension(this.extensionFactory));
+        assertEquals(1, chameleon.getExtensionManager().getExtensions().size());
     }
+
+    @Test
+    void testBootstrapLoad() throws ChameleonInstantiationException {
+        // Create a new Chameleon bootstrap with the extension and load it.
+        TestChameleon testChameleon = TestChameleon.create().withExtensions(this.extension).load();
+
+        // Verify that the extension was initialised and loaded.
+        verify(this.extension, times(1)).init(testChameleon.getLogger(), testChameleon.getEventBus());
+        verify(this.extension, times(1)).load(testChameleon);
+
+        // Verify that the extension can be retrieved from the extension manager.
+        assertEquals(this.extension, testChameleon.getExtensionManager().getExtension(this.extension.getClass()).orElse(null));
+        assertEquals(1, testChameleon.getExtensionManager().getExtensions().size());
+    }
+
 
 }

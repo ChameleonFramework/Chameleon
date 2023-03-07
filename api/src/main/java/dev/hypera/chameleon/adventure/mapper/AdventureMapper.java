@@ -29,6 +29,7 @@ import dev.hypera.chameleon.adventure.ReflectedAudience;
 import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
 import dev.hypera.chameleon.util.Preconditions;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +40,7 @@ import org.jetbrains.annotations.NotNull;
  * version of Adventure without there being problems. To get around this we map the relocated
  * Adventure objects to platform objects using reflection.</p>
  */
-@Internal
+@Experimental
 public final class AdventureMapper {
 
     public static final @NotNull String ORIGINAL_PACKAGE = "net.ky".concat("ori.adventure.");

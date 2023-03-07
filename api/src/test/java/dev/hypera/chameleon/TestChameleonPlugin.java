@@ -21,16 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension.objects;
+package dev.hypera.chameleon;
 
-import dev.hypera.chameleon.extension.ChameleonExtension;
 import org.jetbrains.annotations.NotNull;
 
-public class TestInvalidExtension extends ChameleonExtension<TestPlatform> {
+/**
+ * Dummy Chameleon plugin implementation.
+ */
+public final class TestChameleonPlugin extends ChameleonPlugin {
 
-    // Invalid constructor
-    public TestInvalidExtension(@NotNull TestPlatform platform, @NotNull String shouldNotBeHere) {
-        super(platform);
+    /**
+     * Chameleon plugin constructor.
+     *
+     * @param chameleon Chameleon implementation.
+     */
+    public TestChameleonPlugin(@NotNull Chameleon chameleon) {
+        super(chameleon);
+    }
+
+    /**
+     * Called when the platform plugin is enabled.
+     */
+    @Override
+    public void onEnable() {
+
+    }
+
+    /**
+     * Called when the platform plugin is disabled.
+     */
+    @Override
+    public void onDisable() {
+
     }
 
 }

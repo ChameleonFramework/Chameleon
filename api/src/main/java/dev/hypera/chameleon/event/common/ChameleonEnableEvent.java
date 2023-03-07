@@ -21,30 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension.annotations;
+package dev.hypera.chameleon.event.common;
 
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.event.ChameleonEvent;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Post loadable. Used to mark an extension as capable of being loaded after Chameleon.
- * <p>Warning: When an extension is "post loaded", the {@link ChameleonExtension#onPreLoad()} method
- * will <strong>not</strong> be called.</p>
+ * Chameleon enable event.
+ * <p>Dispatched when Chameleon#onLoad is called by the plugin.</p>
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PostLoadable {
+public final class ChameleonEnableEvent implements ChameleonEvent {
+
+    private final @NotNull Chameleon chameleon;
 
     /**
-     * Get the platform extensions for this extension.
+     * ChameleonEnableEvent constructor.
+     * <p>This event is intended to be dispatched internally by Chameleon only.</p>
      *
-     * @return platform extensions.
+     * @param chameleon Chameleon instance.
      */
-    @NotNull Class<? extends ChameleonPlatformExtension<?, ?, ?>>[] value();
+    @Internal
+    public ChameleonEnableEvent(@NotNull Chameleon chameleon) {
+        this.chameleon = chameleon;
+    }
+
+    /**
+     * Get the Chameleon instance that triggered this event.
+     *
+     * @return Chameleon instance.
+     */
+    public @NotNull Chameleon chameleon() {
+        return this.chameleon;
+    }
 
 }

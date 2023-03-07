@@ -29,10 +29,11 @@ import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.command.CommandManager;
+import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
 import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.velocity.adventure.VelocityAudienceProvider;
@@ -45,6 +46,7 @@ import dev.hypera.chameleon.platform.velocity.user.VelocityUserManager;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.HashSet;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,8 +65,8 @@ public final class VelocityChameleon extends Chameleon {
     private final @NotNull VelocityUserManager userManager = new VelocityUserManager(this);
 
     @Internal
-    VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull VelocityPlugin velocityPlugin, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, extensions, pluginData, new ChameleonSlf4jLogger(velocityPlugin.getLogger()));
+    VelocityChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension> extensions) throws ChameleonInstantiationException {
+        super(chameleonPlugin, pluginData, eventBus, logger, new HashSet<>(extensions));
         this.plugin = velocityPlugin;
     }
 

@@ -21,12 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension.objects;
+package dev.hypera.chameleon;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
+import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.logger.DummyChameleonLogger;
+import org.jetbrains.annotations.NotNull;
 
-// Has parent extension with invalid constructor
-public class TestInvalidPlatformExtension extends ChameleonPlatformExtension<TestInvalidExtension, TestPlatform, Chameleon> implements TestPlatform {
+public final class TestChameleonBootstrap extends ChameleonBootstrap<TestChameleon> {
+
+    public TestChameleonBootstrap() {
+        super(new DummyChameleonLogger());
+    }
+
+    @Override
+    protected @NotNull TestChameleon loadInternal() throws ChameleonInstantiationException {
+        return new TestChameleon(this.logger, this.eventBus, this.extensions);
+    }
 
 }

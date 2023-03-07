@@ -67,19 +67,15 @@ public final class EventBusImpl implements EventBus {
     @Override
     public void dispatch(@NotNull ChameleonEvent event) {
         Preconditions.checkNotNull("event", event);
-        List<EventSubscriber<? super ChameleonEvent>> subscribers = getSubscribers(event.getClass());
-
-        synchronized (subscribers) {
-            subscribers.iterator().forEachRemaining(subscriber -> {
-                if (subscriber.acceptsCancelled() || !(event instanceof Cancellable) || !((Cancellable) event).isCancelled()) {
-                    try {
-                        subscriber.on(event);
-                    } catch (Exception ex) {
-                        this.logger.error("An error occurred while dispatching an event to %s", ex, subscriber.getClass().getCanonicalName());
-                    }
+        getSubscribers(event.getClass()).iterator().forEachRemaining(subscriber -> {
+            if (subscriber.acceptsCancelled() || !(event instanceof Cancellable) || !((Cancellable) event).isCancelled()) {
+                try {
+                    subscriber.on(event);
+                } catch (Exception ex) {
+                    this.logger.error("An error occurred while dispatching an event to %s", ex, subscriber.getClass().getCanonicalName());
                 }
-            });
-        }
+            }
+        });
     }
 
     /**
@@ -150,7 +146,7 @@ public final class EventBusImpl implements EventBus {
         }
     }
 
-    private @NotNull List<EventSubscriber<? super ChameleonEvent>> getSubscribers(@NotNull Class<? extends ChameleonEvent> event) {
+    private synchronized @NotNull List<EventSubscriber<? super ChameleonEvent>> getSubscribers(@NotNull Class<? extends ChameleonEvent> event) {
         Preconditions.checkNotNull("event", event);
         List<EventSubscriber<? super ChameleonEvent>> subscribers = this.sortedSubscriptions.entrySet().stream()
             .filter(entry -> entry.getKey().isAssignableFrom(event)).map(Entry::getValue).findFirst().orElse(null);

@@ -21,38 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon;
+package dev.hypera.chameleon.extension;
 
+import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import java.util.Collection;
+import java.util.Optional;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Dummy Chameleon plugin implementation.
+ * Extension manager.
+ *
+ * @see ChameleonExtension
+ * @see ChameleonExtensionFactory
  */
-public final class DummyChameleonPlugin extends ChameleonPlugin {
+@NonExtendable
+public interface ExtensionManager {
 
     /**
-     * Chameleon plugin constructor.
+     * Load a Chameleon extension.
      *
-     * @param chameleon Chameleon implementation.
+     * @param factory The factory to create the Chameleon extension.
+     * @param <T>     Chameleon extension type.
+     *
+     * @return new Chameleon extension.
+     * @throws ChameleonExtensionException if something goes wrong while loading the extension.
      */
-    public DummyChameleonPlugin(@NotNull Chameleon chameleon) {
-        super(chameleon);
-    }
+    <T extends ChameleonExtension> @NotNull T loadExtension(@NotNull ChameleonExtensionFactory<T> factory) throws ChameleonExtensionException;
 
     /**
-     * Called when the platform plugin is enabled.
+     * Get a loaded Chameleon extension.
+     *
+     * @param clazz Chameleon extension class.
+     * @param <T>   Chameleon extension type.
+     *
+     * @return an optional containing the loaded Chameleon extension, if loaded, otherwise an empty
+     *     optional.
      */
-    @Override
-    public void onEnable() {
-
-    }
+    <T extends ChameleonExtension> @NotNull Optional<T> getExtension(@NotNull Class<T> clazz);
 
     /**
-     * Called when the platform plugin is disabled.
+     * Get all loaded Chameleon extensions.
+     *
+     * @return loaded Chameleon extensions.
      */
-    @Override
-    public void onDisable() {
-
-    }
+    @NotNull Collection<ChameleonExtension> getExtensions();
 
 }

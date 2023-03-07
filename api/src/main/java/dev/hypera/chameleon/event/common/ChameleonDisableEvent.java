@@ -21,10 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension.objects;
+package dev.hypera.chameleon.event.common;
 
-import dev.hypera.chameleon.extension.CustomPlatformExtension;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.event.ChameleonEvent;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
-public interface TestPlatform extends CustomPlatformExtension {
+/**
+ * Chameleon disable event.
+ * <p>Dispatched when Chameleon#onDisable is called by the plugin.</p>
+ */
+public final class ChameleonDisableEvent implements ChameleonEvent {
+
+    private final @NotNull Chameleon chameleon;
+
+    /**
+     * ChameleonDisableEvent constructor.
+     * <p>This event is intended to be dispatched internally by Chameleon only.</p>
+     *
+     * @param chameleon Chameleon instance.
+     */
+    @Internal
+    public ChameleonDisableEvent(@NotNull Chameleon chameleon) {
+        this.chameleon = chameleon;
+    }
+
+    /**
+     * Get the Chameleon instance that triggered this event.
+     *
+     * @return Chameleon instance.
+     */
+    public @NotNull Chameleon chameleon() {
+        return this.chameleon;
+    }
 
 }

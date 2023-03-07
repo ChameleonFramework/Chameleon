@@ -24,54 +24,38 @@
 package dev.hypera.chameleon.extension;
 
 import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.event.EventBus;
+import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Extension.
- *
- * @param <T> Chameleon platform extension type.
  */
-public abstract class ChameleonExtension<T extends CustomPlatformExtension> {
-
-    protected final @NotNull T platform;
+public interface ChameleonExtension {
 
     /**
-     * Chameleon extension constructor.
+     * Extension init.
      *
-     * @param platform Chameleon platform extension instance.
-     */
-    protected ChameleonExtension(@NotNull T platform) {
-        this.platform = platform;
-    }
-
-    /**
-     * Called before Chameleon is loaded.
-     */
-    public void onPreLoad() {
-
-    }
-
-    /**
-     * Called after Chameleon has loaded.
+     * <p>This method will be called when the Extension is initialised by Chameleon, either before
+     * Chameleon is constructed, or when EventManager#loadExtension is called.</p>
      *
-     * @param chameleon Initialised Chameleon implementation.
+     * @param logger   Logger.
+     * @param eventBus Event bus.
      */
-    public void onLoad(@NotNull Chameleon chameleon) {
-
-    }
+    void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException;
 
     /**
-     * Called when the platform plugin is enabled.
+     * Extension load.
+     *
+     * <p>This method will be called when Chameleon has finished loading, or when
+     * EventManager#loadExtension is called after Chameleon has loaded.</p>
+     *
+     * <p>If your extension is platform dependant, then you can cast {@code chameleon} to the
+     * platform Chameleon implementation, e.g. BukkitChameleon, BungeeCordChameleon, etc.</p>
+     *
+     * @param chameleon Chameleon instance.
      */
-    public void onEnable() {
-
-    }
-
-    /**
-     * Called when the platform plugin is disabled.
-     */
-    public void onDisable() {
-
-    }
+    void load(@NotNull Chameleon chameleon);
 
 }

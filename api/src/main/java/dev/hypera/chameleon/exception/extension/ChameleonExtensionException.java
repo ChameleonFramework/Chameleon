@@ -25,7 +25,6 @@ package dev.hypera.chameleon.exception.extension;
 
 import dev.hypera.chameleon.exception.ChameleonRuntimeException;
 
-
 /**
  * Chameleon extension exception.
  */

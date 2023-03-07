@@ -30,14 +30,15 @@ import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
+import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.nukkit.adventure.NukkitAudienceProvider;
 import dev.hypera.chameleon.platform.nukkit.command.NukkitCommandManager;
 import dev.hypera.chameleon.platform.nukkit.event.NukkitListener;
-import dev.hypera.chameleon.platform.nukkit.logger.ChameleonNukkitLogger;
 import dev.hypera.chameleon.platform.nukkit.platform.NukkitPlatform;
 import dev.hypera.chameleon.platform.nukkit.platform.NukkitPluginManager;
 import dev.hypera.chameleon.platform.nukkit.scheduler.NukkitScheduler;
@@ -62,8 +63,8 @@ public final class NukkitChameleon extends Chameleon {
     private final @NotNull NukkitScheduler scheduler = new NukkitScheduler(this);
 
     @Internal
-    NukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull PluginBase nukkitPlugin, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, extensions, pluginData, new ChameleonNukkitLogger(nukkitPlugin.getLogger()));
+    NukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension> extensions) throws ChameleonInstantiationException {
+        super(chameleonPlugin, pluginData, eventBus, logger, extensions);
         this.plugin = nukkitPlugin;
     }
 

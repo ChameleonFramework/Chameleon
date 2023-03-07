@@ -26,6 +26,7 @@ package dev.hypera.chameleon.util;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 final class PreconditionsTests {
@@ -34,6 +35,7 @@ final class PreconditionsTests {
     void checkArgument() {
         assertDoesNotThrow(() -> Preconditions.checkArgument(true));
         assertDoesNotThrow(() -> Preconditions.checkArgument(true, "test"));
+        assertDoesNotThrow(() -> Preconditions.checkArgument(true, "Hello, %s!", "world"));
         assertThrowsExactly(IllegalArgumentException.class, () ->
             Preconditions.checkArgument(false));
         assertThrowsExactly(IllegalArgumentException.class, () ->
@@ -46,6 +48,7 @@ final class PreconditionsTests {
     void checkState() {
         assertDoesNotThrow(() -> Preconditions.checkState(true));
         assertDoesNotThrow(() -> Preconditions.checkState(true, "test"));
+        assertDoesNotThrow(() -> Preconditions.checkState(true, "Hello, %s!", "world"));
         assertThrowsExactly(IllegalStateException.class, () ->
             Preconditions.checkState(false));
         assertThrowsExactly(IllegalStateException.class, () ->
@@ -58,10 +61,22 @@ final class PreconditionsTests {
     void checkNotNull() {
         assertDoesNotThrow(() -> Preconditions.checkNotNull("value"));
         assertDoesNotThrow(() -> Preconditions.checkNotNull("value", "test"));
+        assertDoesNotThrow(() -> Preconditions.checkNotNullState("value", "test"));
         assertThrowsExactly(NullPointerException.class, () ->
             Preconditions.checkNotNull(null));
         assertThrowsExactly(IllegalArgumentException.class, () ->
             Preconditions.checkNotNull("test", null), "test");
+        assertThrowsExactly(IllegalStateException.class, () ->
+            Preconditions.checkNotNullState("test", null), "test");
+    }
+
+    @Test
+    void checkNoneNull() {
+        assertDoesNotThrow(() -> Preconditions.checkNoneNull("test", Collections.emptySet()));
+        assertThrowsExactly(IllegalArgumentException.class, () ->
+            Preconditions.checkNoneNull("test", null), "test cannot be null");
+        assertThrowsExactly(IllegalArgumentException.class, () ->
+            Preconditions.checkNoneNull("test", Collections.singleton(null)), "test cannot contain null");
     }
 
 }

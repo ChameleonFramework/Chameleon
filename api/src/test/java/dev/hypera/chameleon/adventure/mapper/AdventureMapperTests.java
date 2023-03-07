@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import dev.hypera.chameleon.DummyChameleon;
+import dev.hypera.chameleon.TestChameleon;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ final class AdventureMapperTests {
 
     @BeforeAll
     static void setup() throws ChameleonInstantiationException {
-        mapper = new AdventureMapper(new DummyChameleon());
+        mapper = new AdventureMapper(new TestChameleon());
     }
 
     @Test

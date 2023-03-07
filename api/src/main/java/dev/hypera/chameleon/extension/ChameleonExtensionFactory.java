@@ -21,19 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.velocity.extension;
+package dev.hypera.chameleon.extension;
 
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import dev.hypera.chameleon.extension.CustomPlatformExtension;
-import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
+import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.platform.Platform;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Chameleon Velocity extension.
+ * Chameleon extension factory.
  *
  * @param <T> Chameleon extension type.
- * @param <C> Chameleon platform extension type.
  */
-public abstract class VelocityChameleonExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, VelocityChameleon> {
+@FunctionalInterface
+public interface ChameleonExtensionFactory<T extends ChameleonExtension> {
+
+    /**
+     * Create an extension instance for the given platform.
+     *
+     * @param platform Platform to create extension for.
+     *
+     * @return new extension instance.
+     * @throws ChameleonExtensionException if something goes wrong while creating the extension.
+     */
+    @NotNull T create(@NotNull Platform platform) throws ChameleonExtensionException;
 
 }

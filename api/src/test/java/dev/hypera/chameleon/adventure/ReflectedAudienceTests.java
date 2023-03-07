@@ -33,7 +33,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import dev.hypera.chameleon.DummyChameleon;
+import dev.hypera.chameleon.TestChameleon;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.adventure.matches.BossBarMatcher;
 import dev.hypera.chameleon.adventure.matches.BoundMatcher;
@@ -70,18 +70,17 @@ import org.junit.jupiter.api.Test;
 final class ReflectedAudienceTests {
 
     private static AdventureMapper adventureMapper;
-    private Audience audience;
+    private Audience audience = mock(Audience.class);
     private Audience reflectedAudience;
 
     @BeforeAll
     static void loadAdventureMapper() throws ChameleonInstantiationException {
-        adventureMapper = new AdventureMapper(new DummyChameleon());
+        adventureMapper = new AdventureMapper(new TestChameleon());
         assertDoesNotThrow(adventureMapper::load);
     }
 
     @BeforeEach
     void setup() {
-        // Note: the first time #mock is called, it may take up to 1,000 ms to fully initialise.
         this.audience = mock(Audience.class);
         this.reflectedAudience = adventureMapper.createReflectedAudience(this.audience);
     }

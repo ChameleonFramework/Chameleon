@@ -21,19 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.sponge.extension;
+package dev.hypera.chameleon.util;
 
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import dev.hypera.chameleon.extension.CustomPlatformExtension;
-import dev.hypera.chameleon.platform.sponge.SpongeChameleon;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Chameleon Sponge extension.
- *
- * @param <T> Chameleon extension type.
- * @param <C> Chameleon platform extension type.
- */
-public abstract class SpongeChameleonExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, SpongeChameleon> {
+import org.junit.jupiter.api.Test;
+
+final class ChameleonUtilTests {
+
+    @Test
+    void testGetOrDefault() {
+        assertEquals("test", ChameleonUtil.getOrDefault("test", "test2"));
+        assertEquals("test", ChameleonUtil.getOrDefault(null, "test"));
+    }
 
 }

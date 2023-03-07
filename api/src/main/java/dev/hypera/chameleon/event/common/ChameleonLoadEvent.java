@@ -21,19 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.bungeecord.extension;
+package dev.hypera.chameleon.event.common;
 
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import dev.hypera.chameleon.extension.CustomPlatformExtension;
-import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.event.ChameleonEvent;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Chameleon BungeeCord extension.
- *
- * @param <T> Chameleon extension type.
- * @param <C> Chameleon platform extension type.
+ * Chameleon load event.
+ * <p>Dispatched when Chameleon#onLoad is called by the plugin.</p>
  */
-public abstract class ChameleonBungeeCordExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, BungeeCordChameleon> {
+public final class ChameleonLoadEvent implements ChameleonEvent {
+
+    private final @NotNull Chameleon chameleon;
+
+    /**
+     * ChameleonLoadEvent constructor.
+     * <p>This event is intended to be dispatched internally by Chameleon only.</p>
+     *
+     * @param chameleon Chameleon instance.
+     */
+    @Internal
+    public ChameleonLoadEvent(@NotNull Chameleon chameleon) {
+        this.chameleon = chameleon;
+    }
+
+    /**
+     * Get the Chameleon instance that triggered this event.
+     *
+     * @return Chameleon instance.
+     */
+    public @NotNull Chameleon chameleon() {
+        return this.chameleon;
+    }
 
 }

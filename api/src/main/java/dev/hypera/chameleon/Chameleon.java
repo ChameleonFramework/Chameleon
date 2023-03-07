@@ -26,26 +26,22 @@ package dev.hypera.chameleon;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
-import dev.hypera.chameleon.event.EventBusImpl;
-import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.event.common.ChameleonDisableEvent;
+import dev.hypera.chameleon.event.common.ChameleonEnableEvent;
+import dev.hypera.chameleon.event.common.ChameleonLoadEvent;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import dev.hypera.chameleon.extension.annotations.PostLoadable;
+import dev.hypera.chameleon.extension.ExtensionManager;
+import dev.hypera.chameleon.extension.ExtensionManagerImpl;
 import dev.hypera.chameleon.logger.ChameleonInternalLogger;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import dev.hypera.chameleon.user.UserManager;
-import dev.hypera.chameleon.util.ChameleonUtil;
 import dev.hypera.chameleon.util.Preconditions;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Optional;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,37 +58,34 @@ public abstract class Chameleon {
 
     private final @NotNull ChameleonPlugin plugin;
     private final @NotNull ChameleonPluginData pluginData;
-    private final @NotNull Collection<ChameleonExtension<?>> extensions;
     private final @NotNull EventBus eventBus;
-
-    private boolean enabled = false;
+    private final @NotNull ExtensionManager extensionManager;
 
     @Internal
-    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull ChameleonPluginData pluginData, @NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
+    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension> extensions) throws ChameleonInstantiationException {
         Preconditions.checkNotNull("plugin", plugin);
-        Preconditions.checkNotNull("extensions", extensions);
         Preconditions.checkNotNull("pluginData", plugin);
+        Preconditions.checkNotNull("eventBus", eventBus);
         Preconditions.checkNotNull("logger", logger);
+        Preconditions.checkNoneNull("extensions", extensions);
 
         try {
             this.logger = logger;
             this.internalLogger = new ChameleonInternalLogger(logger);
             this.plugin = plugin.getConstructor(Chameleon.class).newInstance(this);
             this.pluginData = pluginData;
-            this.extensions = extensions;
-            this.eventBus = new EventBusImpl(this.internalLogger);
+            this.eventBus = eventBus;
+            this.extensionManager = new ExtensionManagerImpl(this, extensions);
         } catch (Exception ex) {
-            throw new ChameleonInstantiationException(
-                "Failed to initialise instance of " + plugin.getCanonicalName(), ex
-            );
+            throw new ChameleonInstantiationException("Failed to initialise instance of " + plugin.getCanonicalName(), ex);
         }
     }
-
 
     /**
      * Called after Chameleon has been loaded.
      */
     public void onLoad() {
+        this.eventBus.dispatch(new ChameleonLoadEvent(this));
         this.plugin.onLoad();
     }
 
@@ -100,18 +93,16 @@ public abstract class Chameleon {
      * Called when the platform plugin is enabled.
      */
     public void onEnable() {
-        this.extensions.forEach(ChameleonExtension::onEnable);
+        this.eventBus.dispatch(new ChameleonEnableEvent(this));
         this.plugin.onEnable();
-        this.enabled = true;
     }
 
     /**
      * Called when the platform plugin is disabled.
      */
     public void onDisable() {
-        this.extensions.forEach(ChameleonExtension::onDisable);
+        this.eventBus.dispatch(new ChameleonDisableEvent(this));
         this.plugin.onDisable();
-        this.enabled = false;
     }
 
 
@@ -131,75 +122,6 @@ public abstract class Chameleon {
      */
     public final @NotNull ChameleonPluginData getData() {
         return this.pluginData;
-    }
-
-    /**
-     * Get a loaded extension.
-     *
-     * @param extension Chameleon extension implementation class.
-     * @param <T>       Chameleon extension type.
-     *
-     * @return an optional containing the extension, if found, otherwise an empty optional.
-     */
-    public final <T extends ChameleonExtension<?>> @NotNull Optional<T> getExtension(@NotNull Class<T> extension) {
-        return this.extensions.stream()
-            .filter(ext -> ext.getClass().equals(extension))
-            .findFirst()
-            .map(extension::cast);
-    }
-
-    /**
-     * Load and return an extension.
-     *
-     * @param extension Extension implementation class.
-     * @param <T>       Extension type.
-     * @param <C>       Chameleon type.
-     *
-     * @return the loaded extension.
-     */
-    @SuppressWarnings("unchecked")
-    public final <T extends ChameleonExtension<?>, C extends Chameleon> @NotNull T loadExtension(@NotNull Class<T> extension) {
-        if (!extension.isAnnotationPresent(PostLoadable.class)) {
-            throw new IllegalArgumentException("extension cannot be post loaded");
-        }
-
-        if (this.extensions.stream().anyMatch(extension::isInstance)) {
-            throw new IllegalArgumentException("extension has already been loaded");
-        }
-
-        PostLoadable extensionAnnotation = extension.getAnnotation(PostLoadable.class);
-        Constructor<?>[] platformExtensionConstructors = Arrays.stream(extensionAnnotation.value())
-            .filter(p -> ChameleonUtil.getGenericTypeAsClass(p, 2).isAssignableFrom(getClass()))
-            .findFirst()
-            .map(Class::getConstructors)
-            .orElse(new Constructor<?>[0]);
-
-        if (platformExtensionConstructors.length < 1 || Arrays.stream(platformExtensionConstructors)
-            .noneMatch(c -> c.getParameterCount() == 0)) {
-            throw new IllegalArgumentException("cannot load platform extension: invalid constructor");
-        }
-
-        Constructor<?> constructor = Arrays.stream(platformExtensionConstructors)
-            .filter(c -> c.getParameterCount() == 0)
-            .findFirst()
-            .orElseThrow(IllegalStateException::new);
-        try {
-            ChameleonPlatformExtension<T, ?, C> platformExtension = (ChameleonPlatformExtension<T, ?, C>) constructor.newInstance();
-            platformExtension.onLoad((C) ChameleonUtil.getGenericTypeAsClass(
-                platformExtension.getClass(),
-                2
-            ).cast(this));
-            platformExtension.getExtension().onLoad(this);
-
-            if (this.enabled) {
-                platformExtension.getExtension().onEnable();
-            }
-
-            this.extensions.add(platformExtension.getExtension());
-            return platformExtension.getExtension();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-            throw new ChameleonExtensionException(ex);
-        }
     }
 
     /**
@@ -232,6 +154,14 @@ public abstract class Chameleon {
         return this.eventBus;
     }
 
+    /**
+     * Get the extension manager.
+     *
+     * @return the extension manager.
+     */
+    public final @NotNull ExtensionManager getExtensionManager() {
+        return this.extensionManager;
+    }
 
     /**
      * Get the audience provider.
