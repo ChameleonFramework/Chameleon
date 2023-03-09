@@ -38,6 +38,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * BungeeCord user manager implementation.
@@ -46,7 +47,8 @@ import org.jetbrains.annotations.NotNull;
 public final class BungeeCordUserManager implements UserManager {
 
     private final @NotNull BungeeCordChameleon chameleon;
-    private final @NotNull BungeeCordConsoleUser consoleUser;
+
+    private @Nullable BungeeCordConsoleUser consoleUser;
 
     /**
      * BungeeCord user manager constructor.
@@ -56,7 +58,6 @@ public final class BungeeCordUserManager implements UserManager {
     @Internal
     public BungeeCordUserManager(@NotNull BungeeCordChameleon chameleon) {
         this.chameleon = chameleon;
-        this.consoleUser = new BungeeCordConsoleUser(chameleon);
     }
 
     /**
@@ -64,6 +65,7 @@ public final class BungeeCordUserManager implements UserManager {
      */
     @Override
     public @NotNull ConsoleUser getConsole() {
+        if (this.consoleUser == null) this.consoleUser = new BungeeCordConsoleUser(this.chameleon);
         return this.consoleUser;
     }
 
