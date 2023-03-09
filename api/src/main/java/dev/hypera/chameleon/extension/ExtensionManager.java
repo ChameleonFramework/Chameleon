@@ -42,29 +42,31 @@ public interface ExtensionManager {
      * Load a Chameleon extension.
      *
      * @param factory The factory to create the Chameleon extension.
+     * @param <P>     Chameleon extension platform type.
      * @param <T>     Chameleon extension type.
      *
      * @return new Chameleon extension.
      * @throws ChameleonExtensionException if something goes wrong while loading the extension.
      */
-    <T extends ChameleonExtension> @NotNull T loadExtension(@NotNull ChameleonExtensionFactory<T> factory) throws ChameleonExtensionException;
+    <P, T extends ChameleonExtension<P>> @NotNull P loadExtension(@NotNull ChameleonExtensionFactory<T> factory) throws ChameleonExtensionException;
 
     /**
      * Get a loaded Chameleon extension.
      *
      * @param clazz Chameleon extension class.
+     * @param <P>   Chameleon extension platform type.
      * @param <T>   Chameleon extension type.
      *
-     * @return an optional containing the loaded Chameleon extension, if loaded, otherwise an empty
+     * @return an optional containing the loaded Chameleon extension platform, if loaded, otherwise an empty
      *     optional.
      */
-    <T extends ChameleonExtension> @NotNull Optional<T> getExtension(@NotNull Class<T> clazz);
+    <P, T extends ChameleonExtension<P>> @NotNull Optional<P> getExtension(@NotNull Class<T> clazz);
 
     /**
      * Get all loaded Chameleon extensions.
      *
      * @return loaded Chameleon extensions.
      */
-    @NotNull Collection<ChameleonExtension> getExtensions();
+    @NotNull Collection<ChameleonExtension<?>> getExtensions();
 
 }

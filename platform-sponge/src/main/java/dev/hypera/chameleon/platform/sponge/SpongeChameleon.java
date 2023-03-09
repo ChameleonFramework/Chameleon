@@ -66,7 +66,14 @@ public final class SpongeChameleon extends Chameleon {
     private final @NotNull SpongeListener listener = new SpongeListener(this);
 
     @Internal
-    SpongeChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension> extensions) throws ChameleonInstantiationException {
+    SpongeChameleon(
+            @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+            @NotNull SpongePlugin spongePlugin,
+            @NotNull ChameleonPluginData pluginData,
+            @NotNull EventBus eventBus,
+            @NotNull ChameleonLogger logger,
+            @NotNull Collection<? super ChameleonExtension<?>> extensions
+    ) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, eventBus, logger, extensions);
         this.plugin = spongePlugin;
     }

@@ -63,7 +63,14 @@ public final class BungeeCordChameleon extends Chameleon {
     private final @NotNull BungeeCordScheduler scheduler = new BungeeCordScheduler(this);
 
     @Internal
-    BungeeCordChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension> extensions) throws ChameleonInstantiationException {
+    BungeeCordChameleon(
+            @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+            @NotNull Plugin bungeePlugin,
+            @NotNull ChameleonPluginData pluginData,
+            @NotNull EventBus eventBus,
+            @NotNull ChameleonLogger logger,
+            @NotNull Collection<? super ChameleonExtension<?>> extensions
+    ) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, eventBus, logger, extensions);
         this.plugin = bungeePlugin;
         this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);

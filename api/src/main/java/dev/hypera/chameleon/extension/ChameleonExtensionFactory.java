@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <T> Chameleon extension type.
  */
 @FunctionalInterface
-public interface ChameleonExtensionFactory<T extends ChameleonExtension> {
+public interface ChameleonExtensionFactory<T extends ChameleonExtension<?>> {
 
     /**
      * Create an extension instance for the given platform.

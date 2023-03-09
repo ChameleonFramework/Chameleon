@@ -41,7 +41,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ExtensionManagerImpl implements ExtensionManager {
 
     private final @NotNull Chameleon chameleon;
-    private final @NotNull Collection<? super ChameleonExtension> loadedExtensions;
+    private final @NotNull Collection<? super ChameleonExtension<?>> loadedExtensions;
 
     /**
      * Extension manager constructor.
@@ -50,7 +50,7 @@ public final class ExtensionManagerImpl implements ExtensionManager {
      * @param loadedExtensions Extensions.
      */
     @Internal
-    public ExtensionManagerImpl(@NotNull Chameleon chameleon, @NotNull Collection<? super ChameleonExtension> loadedExtensions) {
+    public ExtensionManagerImpl(@NotNull Chameleon chameleon, @NotNull Collection<? super ChameleonExtension<?>> loadedExtensions) {
         this.chameleon = chameleon;
         this.loadedExtensions = loadedExtensions;
     }
@@ -66,21 +66,18 @@ public final class ExtensionManagerImpl implements ExtensionManager {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends ChameleonExtension> @NotNull T loadExtension(@NotNull ChameleonExtensionFactory<T> factory) throws ChameleonExtensionException {
+    public <P, T extends ChameleonExtension<P>> @NotNull P loadExtension(@NotNull ChameleonExtensionFactory<T> factory) throws ChameleonExtensionException {
         T extension = factory.create(this.chameleon.getPlatform());
         Preconditions.checkNotNullState("extension", extension);
 
         // Check if this extension has already been loaded, if so, return the loaded instance.
-        Optional<T> loadedExtension = getExtension((Class<T>) extension.getClass());
-        if (loadedExtension.isPresent()) {
-            return loadedExtension.get();
-        }
-
-        // Initialise and load extension
-        extension.init(this.chameleon.getLogger(), this.chameleon.getEventBus());
-        extension.load(this.chameleon);
-        this.loadedExtensions.add(extension);
-        return extension;
+        return getExtension((Class<T>) extension.getClass()).orElseGet(() -> {
+            // If not, load the extension.
+            extension.init(this.chameleon.getLogger(), this.chameleon.getEventBus());
+            extension.load(this.chameleon);
+            this.loadedExtensions.add(extension);
+            return extension.getPlatform();
+        });
     }
 
     /**
@@ -94,8 +91,8 @@ public final class ExtensionManagerImpl implements ExtensionManager {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends ChameleonExtension> @NotNull Optional<T> getExtension(@NotNull Class<T> clazz) {
-        return this.loadedExtensions.parallelStream().filter(e -> clazz.isAssignableFrom(e.getClass())).map(e -> (T) e).findFirst();
+    public <P, T extends ChameleonExtension<P>> @NotNull Optional<P> getExtension(@NotNull Class<T> clazz) {
+        return this.loadedExtensions.parallelStream().filter(e -> clazz.isAssignableFrom(e.getClass())).map(e -> ((T) e).getPlatform()).findFirst();
     }
 
     /**
@@ -105,8 +102,8 @@ public final class ExtensionManagerImpl implements ExtensionManager {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull Collection<ChameleonExtension> getExtensions() {
-        return (Collection<ChameleonExtension>) Collections.unmodifiableCollection(this.loadedExtensions);
+    public @NotNull Collection<ChameleonExtension<?>> getExtensions() {
+        return (Collection<ChameleonExtension<?>>) Collections.unmodifiableCollection(this.loadedExtensions);
     }
 
 }

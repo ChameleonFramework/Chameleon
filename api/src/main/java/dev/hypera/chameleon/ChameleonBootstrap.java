@@ -47,7 +47,7 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
     private @NotNull Consumer<ChameleonLogger> preLoad = l -> {};
     protected final @NotNull ChameleonLogger logger;
     protected final @NotNull EventBus eventBus;
-    protected final @NotNull Collection<? super ChameleonExtension> extensions = new HashSet<>();
+    protected final @NotNull Collection<? super ChameleonExtension<?>> extensions = new HashSet<>();
 
     protected ChameleonBootstrap(@NotNull ChameleonLogger logger) {
         this.logger = logger;
@@ -62,7 +62,7 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
      * @return {@code this}.
      */
     @Contract("_ -> this")
-    public final @NotNull ChameleonBootstrap<T> withExtensions(@NotNull ChameleonExtension... extensions) {
+    public final @NotNull ChameleonBootstrap<T> withExtensions(@NotNull ChameleonExtension<?>... extensions) {
         Preconditions.checkNotNull("extensions", extensions);
         return withExtensions(Arrays.asList(extensions));
     }
@@ -75,7 +75,7 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
      * @return {@code this}.
      */
     @Contract("_ -> this")
-    public final @NotNull ChameleonBootstrap<T> withExtensions(@NotNull Collection<? extends ChameleonExtension> extensions) {
+    public final @NotNull ChameleonBootstrap<T> withExtensions(@NotNull Collection<? extends ChameleonExtension<?>> extensions) {
         Preconditions.checkNoneNull("extensions", extensions);
         this.extensions.addAll(extensions);
         return this;
@@ -106,14 +106,14 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
     public final @NotNull T load() throws ChameleonInstantiationException {
         // Run preload and initialise extensions.
         this.preLoad.accept(this.logger);
-        this.extensions.forEach(ext -> ((ChameleonExtension) ext).init(this.logger, this.eventBus));
+        this.extensions.forEach(ext -> ((ChameleonExtension<?>) ext).init(this.logger, this.eventBus));
 
         // Load Chameleon
         T chameleon = loadInternal();
         chameleon.onLoad();
 
         // Load extensions
-        this.extensions.forEach(ext -> ((ChameleonExtension) ext).load(chameleon));
+        this.extensions.forEach(ext -> ((ChameleonExtension<?>) ext).load(chameleon));
         return chameleon;
     }
 

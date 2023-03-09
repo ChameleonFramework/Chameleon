@@ -63,7 +63,14 @@ public final class NukkitChameleon extends Chameleon {
     private final @NotNull NukkitScheduler scheduler = new NukkitScheduler(this);
 
     @Internal
-    NukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension> extensions) throws ChameleonInstantiationException {
+    NukkitChameleon(
+            @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+            @NotNull PluginBase nukkitPlugin,
+            @NotNull ChameleonPluginData pluginData,
+            @NotNull EventBus eventBus,
+            @NotNull ChameleonLogger logger,
+            @NotNull Collection<? super ChameleonExtension<?>> extensions
+    ) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, eventBus, logger, extensions);
         this.plugin = nukkitPlugin;
     }

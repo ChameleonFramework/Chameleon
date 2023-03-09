@@ -67,7 +67,14 @@ public final class MinestomChameleon extends Chameleon {
     private final @NotNull MinestomScheduler scheduler = new MinestomScheduler();
 
     @Internal
-    MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension> extensions) throws ChameleonInstantiationException {
+    MinestomChameleon(
+            @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+            @NotNull Extension extension,
+            @NotNull ChameleonPluginData pluginData,
+            @NotNull EventBus eventBus,
+            @NotNull ChameleonLogger logger,
+            @NotNull Collection<? super ChameleonExtension<?>> extensions
+    ) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, eventBus, logger, new HashSet<>(extensions));
         this.extension = extension;
         new MinestomListener(this);

@@ -66,7 +66,14 @@ public final class BukkitChameleon extends Chameleon {
     private @Nullable ChameleonAudienceProvider audienceProvider;
 
     @Internal
-    BukkitChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension> extensions) throws ChameleonInstantiationException {
+    BukkitChameleon(
+            @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+            @NotNull JavaPlugin bukkitPlugin,
+            @NotNull ChameleonPluginData pluginData,
+            @NotNull EventBus eventBus,
+            @NotNull ChameleonLogger logger,
+            @NotNull Collection<? super ChameleonExtension<?>> extensions
+    ) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, eventBus, logger, extensions);
         this.plugin = bukkitPlugin;
     }

@@ -62,7 +62,7 @@ public abstract class Chameleon {
     private final @NotNull ExtensionManager extensionManager;
 
     @Internal
-    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension> extensions) throws ChameleonInstantiationException {
+    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension<?>> extensions) throws ChameleonInstantiationException {
         Preconditions.checkNotNull("plugin", plugin);
         Preconditions.checkNotNull("pluginData", plugin);
         Preconditions.checkNotNull("eventBus", eventBus);

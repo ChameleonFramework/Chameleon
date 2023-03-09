@@ -76,7 +76,7 @@ public final class TestChameleon extends Chameleon {
      *
      * @throws ChameleonInstantiationException if something goes wrong whilst starting.
      */
-    public TestChameleon(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus, @NotNull Collection<? super ChameleonExtension> extensions) throws ChameleonInstantiationException {
+    public TestChameleon(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus, @NotNull Collection<? super ChameleonExtension<?>> extensions) throws ChameleonInstantiationException {
         super(
             TestChameleonPlugin.class,
             ChameleonPluginData.create("Chameleon", Chameleon.getVersion()),

@@ -31,8 +31,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Extension.
+ *
+ * @param <P> Extension platform.
  */
-public interface ChameleonExtension {
+public interface ChameleonExtension<P> {
 
     /**
      * Extension init.
@@ -57,5 +59,12 @@ public interface ChameleonExtension {
      * @param chameleon Chameleon instance.
      */
     void load(@NotNull Chameleon chameleon);
+
+    /**
+     * Get the extension's loaded platform.
+     *
+     * @return extension platform.
+     */
+    @NotNull P getPlatform();
 
 }
