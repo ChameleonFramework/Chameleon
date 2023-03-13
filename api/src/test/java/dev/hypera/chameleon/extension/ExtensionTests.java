@@ -23,70 +23,153 @@
  */
 package dev.hypera.chameleon.extension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
+import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import dev.hypera.chameleon.TestChameleon;
+import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.extension.objects.Test2Extension;
+import dev.hypera.chameleon.extension.objects.Test2ExtensionImpl;
+import dev.hypera.chameleon.extension.objects.TestExtension;
+import dev.hypera.chameleon.extension.objects.TestExtensionFactory;
+import dev.hypera.chameleon.extension.objects.TestExtensionImpl;
+import dev.hypera.chameleon.extension.objects.TestRequiredDependencyEmptyExtension;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("unchecked")
-final class ExtensionTests<P> {
+final class ExtensionTests {
 
-    private static TestChameleon chameleon;
-    private @NotNull ChameleonExtensionFactory<ChameleonExtension<P>> extensionFactory = mock(ChameleonExtensionFactory.class);
-    private @NotNull ChameleonExtension<P> extension = mock(ChameleonExtension.class);
-
-    @BeforeAll
-    static void init() throws ChameleonInstantiationException {
-        chameleon = new TestChameleon();
-    }
+    private TestChameleon chameleon;
+    private @NotNull TestExtensionFactory<TestExtension> factory = spy(TestExtension.create(spy(new TestExtensionImpl())));
 
     @BeforeEach
-    void setup() {
-        this.extension = mock(ChameleonExtension.class);
-        this.extensionFactory = mock(ChameleonExtensionFactory.class);
-        when(this.extensionFactory.create(any())).thenReturn(this.extension);
+    void setup() throws ChameleonInstantiationException {
+        this.chameleon = new TestChameleon();
+        this.factory = spy(TestExtension.create(spy(new TestExtensionImpl())));
+    }
+
+    @Test
+    void testDependencies() {
+        assertTrue(ChameleonExtensionDependency.required("test-required").required());
+        assertFalse(ChameleonExtensionDependency.required("test-required").optional());
+        assertFalse(ChameleonExtensionDependency.optional("test-optional").required());
+        assertTrue(ChameleonExtensionDependency.optional("test-optional").optional());
     }
 
     @Test
     void testExtensionManagerLoad() {
         // Load extension
-        P ext = chameleon.getExtensionManager().loadExtension(this.extensionFactory);
-        assertEquals(this.extension, ext);
+        TestExtension ext = this.chameleon.getExtensionManager().loadExtension(this.factory);
+        assertThat(ext.greet("Chameleon")).isEqualTo("こんにちは、Chameleon!");
 
         // Verify that the factory created the extension, and the extension was initialised and loaded.
-        verify(this.extensionFactory, times(1)).create(chameleon.getPlatform());
-        //verify(ext, times(1)).init(chameleon.getLogger(), chameleon.getEventBus());
-        //verify(ext, times(1)).load(chameleon);
-        // TODO: fix
+        verify(this.factory, times(1)).create(TestChameleon.PLATFORM_ID);
+        verify((ChameleonPlatformExtension) ext, times(1))
+            .init(this.chameleon.getLogger(), this.chameleon.getEventBus());
+        verify((ChameleonPlatformExtension) ext, times(1)).load(this.chameleon);
 
         // Verify that the extension can be retrieved from the extension manager.
-        assertEquals(ext, chameleon.getExtensionManager().getExtension(this.extension.getClass()).orElse(null));
-        assertEquals(ext, chameleon.getExtensionManager().loadExtension(this.extensionFactory));
-        assertEquals(1, chameleon.getExtensionManager().getExtensions().size());
+        assertThat(this.chameleon.getExtensionManager().getExtensions()).hasSize(1);
+        assertThat(this.chameleon.getExtensionManager().getExtension(TestExtension.class)).hasValue(ext);
+        assertThat(
+            this.chameleon.getExtensionManager()
+                .loadExtension(TestExtension.create(new TestExtensionImpl()))
+        ).isEqualTo(ext);
     }
 
     @Test
     void testBootstrapLoad() throws ChameleonInstantiationException {
         // Create a new Chameleon bootstrap with the extension and load it.
-        TestChameleon testChameleon = TestChameleon.create().withExtensions(this.extension).load();
+        TestChameleon testChameleon = TestChameleon.create().withExtension(this.factory).load();
 
         // Verify that the extension was initialised and loaded.
-        verify(this.extension, times(1)).init(testChameleon.getLogger(), testChameleon.getEventBus());
-        verify(this.extension, times(1)).load(testChameleon);
+        assertThat(testChameleon.getExtensionManager().getExtensions()).hasSize(1);
+        TestExtension ext = testChameleon.getExtensionManager().getExtension(TestExtension.class)
+            .orElseGet(() -> fail("extension missing"));
+        verify((ChameleonPlatformExtension) ext, times(1))
+            .init(testChameleon.getLogger(), testChameleon.getEventBus());
+        verify((ChameleonPlatformExtension) ext, times(1)).load(testChameleon);
 
-        // Verify that the extension can be retrieved from the extension manager.
-        assertEquals(this.extension, testChameleon.getExtensionManager().getExtension(this.extension.getClass()).orElse(null));
-        assertEquals(1, testChameleon.getExtensionManager().getExtensions().size());
+        // Verify that attempting to load the extension again will just return the already loaded ext.
+        assertThat(
+            testChameleon.getExtensionManager()
+                .loadExtension(TestExtension.create(new TestExtensionImpl()))
+        ).isEqualTo(ext);
     }
 
+    @Test
+    void testExtensionDependency() {
+        // Load first extension.
+        TestExtension ext = this.chameleon.getExtensionManager().loadExtension(this.factory);
+        assertThat(ext.greet("Chameleon")).isEqualTo("こんにちは、Chameleon!");
+
+        // Load second extension which depends on the first extension.
+        Test2Extension ext2 = this.chameleon.getExtensionManager()
+            .loadExtension(Test2Extension.create(new Test2ExtensionImpl()));
+        assertThat(ext2.greet("Chameleon")).isEqualTo("こんにちは、Chameleon!");
+
+        // Verify that the first extension was called by the second extension.
+        verify(ext, times(2)).greet("Chameleon");
+    }
+
+    @Test
+    void testExtensionMissingDependencyFails() {
+        ChameleonExtensionException ex = assertThrowsExactly(ChameleonExtensionException.class, () ->
+            this.chameleon.getExtensionManager().loadExtension(Test2Extension.create(new Test2ExtensionImpl())));
+        assertThat(ex).hasMessageThat().isEqualTo(
+            "Test2Extension requires dependencies but some are missing: Test"
+        );
+    }
+
+    @Test
+    void testFactoryReturnsInvalidFails() {
+        // Attempt to load the extension using the extension manager.
+        ChameleonExtensionException ex = assertThrowsExactly(ChameleonExtensionException.class, () ->
+            this.chameleon.getExtensionManager().loadExtension(TestExtension.create(new Test2ExtensionImpl())));
+        assertThat(ex).hasMessageThat().isEqualTo(
+            "Cannot load TestExtension: not assignable from Test2ExtensionImpl"
+        );
+
+        // Create a new Chameleon bootstrap with the extension and attempt to load it.
+        ex = assertThrowsExactly(ChameleonExtensionException.class, () ->
+            TestChameleon.create().withExtension(
+                TestExtension.create(new Test2ExtensionImpl())
+            ).load());
+        assertThat(ex).hasMessageThat().isEqualTo(
+            "Cannot load TestExtension: not assignable from Test2ExtensionImpl"
+        );
+    }
+
+    @Test
+    void testExtensionRequiredDependencyEmptyFails() {
+        // Attempt to load the extension using the extension manager.
+        ChameleonExtensionException ex = assertThrowsExactly(ChameleonExtensionException.class, () ->
+            this.chameleon.getExtensionManager().loadExtension(
+                TestExtension.create(new TestRequiredDependencyEmptyExtension())
+            ));
+        assertThat(ex).hasMessageThat().isEqualTo(
+            "TestExtension requires dependencies but some are missing: " +
+                "dev.hypera.chameleon.nonexistant.NonexistantExtension"
+        );
+
+        // Create a new Chameleon bootstrap with the extension and attempt to load it.
+        ex = assertThrowsExactly(ChameleonExtensionException.class, () ->
+            TestChameleon.create().withExtension(
+                TestExtension.create(new TestRequiredDependencyEmptyExtension())
+            ).load());
+        assertThat(ex).hasMessageThat().isEqualTo(
+            "TestExtension requires dependencies but some are missing: " +
+                "dev.hypera.chameleon.nonexistant.NonexistantExtension"
+        );
+    }
 
 }

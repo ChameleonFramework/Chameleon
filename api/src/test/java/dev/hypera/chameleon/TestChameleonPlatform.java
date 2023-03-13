@@ -37,7 +37,7 @@ public final class TestChameleonPlatform implements Platform {
      */
     @Override
     public @NotNull String getId() {
-        return "test";
+        return TestChameleon.PLATFORM_ID;
     }
 
     /**
@@ -60,7 +60,7 @@ public final class TestChameleonPlatform implements Platform {
      */
     @Override
     public @NotNull String getVersion() {
-        return Chameleon.getVersion();
+        return Chameleon.getVersion() + "-" + Chameleon.getCommit();
     }
 
 }

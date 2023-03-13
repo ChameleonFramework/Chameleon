@@ -25,13 +25,15 @@ package dev.hypera.chameleon;
 
 import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.event.EventBusImpl;
+import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.extension.ChameleonExtensionFactory;
+import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
+import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.util.Preconditions;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
 import java.util.function.Consumer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -46,38 +48,35 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
 
     private @NotNull Consumer<ChameleonLogger> preLoad = l -> {};
     protected final @NotNull ChameleonLogger logger;
+    private final @NotNull String platform;
     protected final @NotNull EventBus eventBus;
-    protected final @NotNull Collection<? super ChameleonExtension<?>> extensions = new HashSet<>();
+    protected final @NotNull ExtensionMap extensions = new ExtensionMap();
 
-    protected ChameleonBootstrap(@NotNull ChameleonLogger logger) {
+    protected ChameleonBootstrap(@NotNull ChameleonLogger logger, @NotNull String platform) {
         this.logger = logger;
+        this.platform = platform;
         this.eventBus = new EventBusImpl(logger);
     }
 
     /**
-     * Load with extensions.
+     * Load with a Chameleon extension.
      *
-     * @param extensions Chameleon platform extensions to be loaded.
-     *
-     * @return {@code this}.
-     */
-    @Contract("_ -> this")
-    public final @NotNull ChameleonBootstrap<T> withExtensions(@NotNull ChameleonExtension<?>... extensions) {
-        Preconditions.checkNotNull("extensions", extensions);
-        return withExtensions(Arrays.asList(extensions));
-    }
-
-    /**
-     * Load with extensions.
-     *
-     * @param extensions Chameleon platform extensions to be loaded.
+     * @param factory The factory to create the Chameleon extension.
+     * @param <E>     Extension type.
      *
      * @return {@code this}.
      */
     @Contract("_ -> this")
-    public final @NotNull ChameleonBootstrap<T> withExtensions(@NotNull Collection<? extends ChameleonExtension<?>> extensions) {
-        Preconditions.checkNoneNull("extensions", extensions);
-        this.extensions.addAll(extensions);
+    public final <E extends ChameleonExtension> @NotNull ChameleonBootstrap<T> withExtension(@NotNull ChameleonExtensionFactory<E> factory) {
+        Preconditions.checkNotNull("factory", this.extensions);
+        ChameleonPlatformExtension extension = factory.create(this.platform);
+        if (!factory.getType().isAssignableFrom(extension.getClass())) {
+            throw ChameleonExtensionException.create(
+                "Cannot load %s: not assignable from %s",
+                factory.getType().getSimpleName(), extension.getClass().getSimpleName()
+            );
+        }
+        this.extensions.put(factory.getType(), factory.create(this.platform));
         return this;
     }
 
@@ -106,14 +105,15 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
     public final @NotNull T load() throws ChameleonInstantiationException {
         // Run preload and initialise extensions.
         this.preLoad.accept(this.logger);
-        this.extensions.forEach(ext -> ((ChameleonExtension<?>) ext).init(this.logger, this.eventBus));
+        List<ChameleonPlatformExtension> sortedExtensions = this.extensions.loadSort();
+        sortedExtensions.forEach(ext -> ext.init(this.logger, this.eventBus));
 
         // Load Chameleon
         T chameleon = loadInternal();
         chameleon.onLoad();
 
         // Load extensions
-        this.extensions.forEach(ext -> ((ChameleonExtension<?>) ext).load(chameleon));
+        sortedExtensions.forEach(ext -> ext.load(chameleon));
         return chameleon;
     }
 

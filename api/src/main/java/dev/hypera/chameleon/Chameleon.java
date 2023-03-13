@@ -30,9 +30,9 @@ import dev.hypera.chameleon.event.common.ChameleonDisableEvent;
 import dev.hypera.chameleon.event.common.ChameleonEnableEvent;
 import dev.hypera.chameleon.event.common.ChameleonLoadEvent;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extension.ChameleonExtension;
 import dev.hypera.chameleon.extension.ExtensionManager;
 import dev.hypera.chameleon.extension.ExtensionManagerImpl;
+import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonInternalLogger;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
@@ -41,7 +41,6 @@ import dev.hypera.chameleon.scheduler.Scheduler;
 import dev.hypera.chameleon.user.UserManager;
 import dev.hypera.chameleon.util.Preconditions;
 import java.nio.file.Path;
-import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,12 +61,12 @@ public abstract class Chameleon {
     private final @NotNull ExtensionManager extensionManager;
 
     @Internal
-    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull Collection<? super ChameleonExtension<?>> extensions) throws ChameleonInstantiationException {
+    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull ExtensionMap extensions) throws ChameleonInstantiationException {
         Preconditions.checkNotNull("plugin", plugin);
         Preconditions.checkNotNull("pluginData", plugin);
         Preconditions.checkNotNull("eventBus", eventBus);
         Preconditions.checkNotNull("logger", logger);
-        Preconditions.checkNoneNull("extensions", extensions);
+        Preconditions.checkNotNull("extensions", extensions);
 
         try {
             this.logger = logger;

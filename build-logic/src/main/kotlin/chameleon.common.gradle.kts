@@ -37,6 +37,10 @@ dependencies {
     testImplementation(libs.findLibrary("test-junit-engine").get())
     testImplementation(libs.findLibrary("test-junit-params").get())
 
+    /* Truth */
+    testImplementation(libs.findLibrary("test-truth").get())
+    testImplementation(libs.findLibrary("test-truth-java8").get())
+
     /* Mockito */
     testImplementation(platform(libs.findLibrary("test-mockito-bom").get()))
     testImplementation(libs.findLibrary("test-mockito-core").get())

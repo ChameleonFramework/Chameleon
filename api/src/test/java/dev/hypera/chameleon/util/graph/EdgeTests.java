@@ -21,35 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension;
+package dev.hypera.chameleon.util.graph;
 
-import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
-import org.jetbrains.annotations.NotNull;
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-/**
- * Chameleon extension factory.
- *
- * @param <T> Chameleon extension type.
- */
-public interface ChameleonExtensionFactory<T extends ChameleonExtension> {
+import org.junit.jupiter.api.Test;
 
-    /**
-     * Create an extension instance for the given platform.
-     * <p>Note that the returned ChameleonPlatformExtension <strong>must</strong> implement
-     * {@code T}.</p>
-     *
-     * @param platformId Platform to create extension for.
-     *
-     * @return new extension instance.
-     * @throws ChameleonExtensionException if something goes wrong while creating the extension.
-     */
-    @NotNull ChameleonPlatformExtension create(@NotNull String platformId) throws ChameleonExtensionException;
+final class EdgeTests {
 
-    /**
-     * Returns the class of the Chameleon extension implementation that this factory supports.
-     *
-     * @return Chameleon extension class.
-     */
-    @NotNull Class<T> getType();
+    @Test
+    void testEquality() {
+        Edge<Integer> edge = Edge.of(1, 2);
+        assertEquals(edge, edge);
+        assertNotEquals(null, edge);
+        assertNotEquals(edge, new Object());
+        assertEquals(Edge.of(1, 2), Edge.of(1, 2));
+        assertEquals(Edge.of("test", "test2"), Edge.of("test", "test2"));
+        assertNotEquals(Edge.of(1, 2), Edge.of(1, 3));
+        assertNotEquals(Edge.of(2, 3), Edge.of(1, 3));
+    }
+
+    @Test
+    void testFlip() {
+        assertThat(Edge.of(1, 2).flip()).isEqualTo(Edge.of(2, 1));
+        assertThat(Edge.of("test", "test2").flip()).isEqualTo(Edge.of("test2", "test"));
+    }
 
 }

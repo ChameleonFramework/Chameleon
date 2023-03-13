@@ -27,10 +27,10 @@ import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationExcept
 import dev.hypera.chameleon.logger.DummyChameleonLogger;
 import org.jetbrains.annotations.NotNull;
 
-public final class TestChameleonBootstrap extends ChameleonBootstrap<TestChameleon> {
+final class TestChameleonBootstrap extends ChameleonBootstrap<TestChameleon> {
 
-    public TestChameleonBootstrap() {
-        super(new DummyChameleonLogger());
+    TestChameleonBootstrap() {
+        super(new DummyChameleonLogger(), TestChameleon.PLATFORM_ID);
     }
 
     @Override

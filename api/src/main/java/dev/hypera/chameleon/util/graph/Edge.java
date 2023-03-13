@@ -21,35 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension;
+package dev.hypera.chameleon.util.graph;
 
-import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Chameleon extension factory.
+ * An edge between two nodes.
  *
- * @param <T> Chameleon extension type.
+ * @param <T> Node type.
  */
-public interface ChameleonExtensionFactory<T extends ChameleonExtension> {
+public interface Edge<T> {
 
     /**
-     * Create an extension instance for the given platform.
-     * <p>Note that the returned ChameleonPlatformExtension <strong>must</strong> implement
-     * {@code T}.</p>
+     * Create a new edge between {@code source} and {@code target}.
      *
-     * @param platformId Platform to create extension for.
+     * @param source Edge source.
+     * @param target Edge target.
+     * @param <T>    Node type.
      *
-     * @return new extension instance.
-     * @throws ChameleonExtensionException if something goes wrong while creating the extension.
+     * @return new edge.
      */
-    @NotNull ChameleonPlatformExtension create(@NotNull String platformId) throws ChameleonExtensionException;
+    static <T> @NotNull Edge<T> of(@NotNull T source, @NotNull T target) {
+        return new EdgeImpl<>(source, target);
+    }
 
     /**
-     * Returns the class of the Chameleon extension implementation that this factory supports.
+     * Returns the source of this edge.
      *
-     * @return Chameleon extension class.
+     * @return edge source.
      */
-    @NotNull Class<T> getType();
+    @NotNull T source();
+
+    /**
+     * Returns the target of this edge.
+     *
+     * @return edge target.
+     */
+    @NotNull T target();
+
+    /**
+     * Returns a new edge with the sources and targets of this edge, but reversed.
+     *
+     * @return flipped edge.
+     */
+    @NotNull Edge<T> flip();
 
 }

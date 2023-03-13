@@ -28,6 +28,7 @@ import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.nukkit.logger.ChameleonNukkitLogger;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Nukkit Chameleon bootstrap implementation.
  */
-public final class NukkitChameleonBootstrap extends ChameleonBootstrap<NukkitChameleon> {
+final class NukkitChameleonBootstrap extends ChameleonBootstrap<NukkitChameleon> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull PluginBase nukkitPlugin;
@@ -43,7 +44,7 @@ public final class NukkitChameleonBootstrap extends ChameleonBootstrap<NukkitCha
 
     @Internal
     NukkitChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull ChameleonPluginData pluginData) {
-        super(new ChameleonNukkitLogger(nukkitPlugin.getLogger()));
+        super(new ChameleonNukkitLogger(nukkitPlugin.getLogger()), Platform.NUKKIT);
         this.chameleonPlugin = chameleonPlugin;
         this.nukkitPlugin = nukkitPlugin;
         this.pluginData = pluginData;
@@ -51,7 +52,10 @@ public final class NukkitChameleonBootstrap extends ChameleonBootstrap<NukkitCha
 
     @Override
     protected @NotNull NukkitChameleon loadInternal() throws ChameleonInstantiationException {
-        return new NukkitChameleon(this.chameleonPlugin, this.nukkitPlugin, this.pluginData, this.eventBus, this.logger, this.extensions);
+        return new NukkitChameleon(
+            this.chameleonPlugin, this.nukkitPlugin, this.pluginData,
+            this.eventBus, this.logger, this.extensions
+        );
     }
 
 }

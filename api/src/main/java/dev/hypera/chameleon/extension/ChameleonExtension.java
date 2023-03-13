@@ -23,48 +23,11 @@
  */
 package dev.hypera.chameleon.extension;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.event.EventBus;
-import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
-import dev.hypera.chameleon.logger.ChameleonLogger;
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Extension.
  *
- * @param <P> Extension platform.
+ * @see ChameleonPlatformExtension
  */
-public interface ChameleonExtension<P> {
-
-    /**
-     * Extension init.
-     *
-     * <p>This method will be called when the Extension is initialised by Chameleon, either before
-     * Chameleon is constructed, or when EventManager#loadExtension is called.</p>
-     *
-     * @param logger   Logger.
-     * @param eventBus Event bus.
-     */
-    void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException;
-
-    /**
-     * Extension load.
-     *
-     * <p>This method will be called when Chameleon has finished loading, or when
-     * EventManager#loadExtension is called after Chameleon has loaded.</p>
-     *
-     * <p>If your extension is platform dependant, then you can cast {@code chameleon} to the
-     * platform Chameleon implementation, e.g. BukkitChameleon, BungeeCordChameleon, etc.</p>
-     *
-     * @param chameleon Chameleon instance.
-     */
-    void load(@NotNull Chameleon chameleon);
-
-    /**
-     * Get the extension's loaded platform.
-     *
-     * @return extension platform.
-     */
-    @NotNull P getPlatform();
+public interface ChameleonExtension {
 
 }

@@ -21,35 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension;
+package dev.hypera.chameleon.extension.objects;
 
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.extension.ChameleonExtensionFactory;
+import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Chameleon extension factory.
- *
- * @param <T> Chameleon extension type.
- */
-public interface ChameleonExtensionFactory<T extends ChameleonExtension> {
+public class TestExtensionFactory<T extends ChameleonExtension> implements ChameleonExtensionFactory<T> {
 
-    /**
-     * Create an extension instance for the given platform.
-     * <p>Note that the returned ChameleonPlatformExtension <strong>must</strong> implement
-     * {@code T}.</p>
-     *
-     * @param platformId Platform to create extension for.
-     *
-     * @return new extension instance.
-     * @throws ChameleonExtensionException if something goes wrong while creating the extension.
-     */
-    @NotNull ChameleonPlatformExtension create(@NotNull String platformId) throws ChameleonExtensionException;
+    private final @NotNull ChameleonPlatformExtension extension;
+    private final @NotNull Class<T> type;
 
-    /**
-     * Returns the class of the Chameleon extension implementation that this factory supports.
-     *
-     * @return Chameleon extension class.
-     */
-    @NotNull Class<T> getType();
+    public TestExtensionFactory(@NotNull ChameleonPlatformExtension extension, @NotNull Class<T> type) {
+        this.extension = extension;
+        this.type = type;
+    }
+
+    @Override
+    public @NotNull ChameleonPlatformExtension create(@NotNull String platformId) throws ChameleonExtensionException {
+        return this.extension;
+    }
+
+    @Override
+    public @NotNull Class<T> getType() {
+        return this.type;
+    }
 
 }

@@ -28,13 +28,14 @@ import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
+import dev.hypera.chameleon.platform.Platform;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Velocity Chameleon bootstrap implementation.
  */
-public final class VelocityChameleonBootstrap extends ChameleonBootstrap<VelocityChameleon> {
+final class VelocityChameleonBootstrap extends ChameleonBootstrap<VelocityChameleon> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull VelocityPlugin velocityPlugin;
@@ -42,7 +43,7 @@ public final class VelocityChameleonBootstrap extends ChameleonBootstrap<Velocit
 
     @Internal
     VelocityChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull ChameleonPluginData pluginData) {
-        super(new ChameleonSlf4jLogger(velocityPlugin.getLogger()));
+        super(new ChameleonSlf4jLogger(velocityPlugin.getLogger()), Platform.VELOCITY);
         this.chameleonPlugin = chameleonPlugin;
         this.velocityPlugin = velocityPlugin;
         this.pluginData = pluginData;

@@ -26,13 +26,14 @@ package dev.hypera.chameleon.platform.nukkit;
 import cn.nukkit.Server;
 import cn.nukkit.plugin.PluginBase;
 import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
@@ -45,7 +46,6 @@ import dev.hypera.chameleon.platform.nukkit.scheduler.NukkitScheduler;
 import dev.hypera.chameleon.platform.nukkit.user.NukkitUserManager;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import java.nio.file.Path;
-import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,12 +64,12 @@ public final class NukkitChameleon extends Chameleon {
 
     @Internal
     NukkitChameleon(
-            @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
-            @NotNull PluginBase nukkitPlugin,
-            @NotNull ChameleonPluginData pluginData,
-            @NotNull EventBus eventBus,
-            @NotNull ChameleonLogger logger,
-            @NotNull Collection<? super ChameleonExtension<?>> extensions
+        @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+        @NotNull PluginBase nukkitPlugin,
+        @NotNull ChameleonPluginData pluginData,
+        @NotNull EventBus eventBus,
+        @NotNull ChameleonLogger logger,
+        @NotNull ExtensionMap extensions
     ) throws ChameleonInstantiationException {
         super(chameleonPlugin, pluginData, eventBus, logger, extensions);
         this.plugin = nukkitPlugin;
@@ -84,7 +84,7 @@ public final class NukkitChameleon extends Chameleon {
      *
      * @return new Nukkit Chameleon bootstrap.
      */
-    public static @NotNull NukkitChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull ChameleonPluginData pluginData) {
+    public static @NotNull ChameleonBootstrap<NukkitChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull ChameleonPluginData pluginData) {
         return new NukkitChameleonBootstrap(chameleonPlugin, nukkitPlugin, pluginData);
     }
 

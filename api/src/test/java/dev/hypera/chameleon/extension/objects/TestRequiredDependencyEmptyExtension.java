@@ -21,35 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension;
+package dev.hypera.chameleon.extension.objects;
 
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.extension.ChameleonExtensionDependency;
+import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
+import dev.hypera.chameleon.logger.ChameleonLogger;
+import java.util.Collection;
+import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Chameleon extension factory.
- *
- * @param <T> Chameleon extension type.
- */
-public interface ChameleonExtensionFactory<T extends ChameleonExtension> {
+public class TestRequiredDependencyEmptyExtension implements ChameleonPlatformExtension, TestExtension {
 
-    /**
-     * Create an extension instance for the given platform.
-     * <p>Note that the returned ChameleonPlatformExtension <strong>must</strong> implement
-     * {@code T}.</p>
-     *
-     * @param platformId Platform to create extension for.
-     *
-     * @return new extension instance.
-     * @throws ChameleonExtensionException if something goes wrong while creating the extension.
-     */
-    @NotNull ChameleonPlatformExtension create(@NotNull String platformId) throws ChameleonExtensionException;
+    @Override
+    public void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException {
 
-    /**
-     * Returns the class of the Chameleon extension implementation that this factory supports.
-     *
-     * @return Chameleon extension class.
-     */
-    @NotNull Class<T> getType();
+    }
+
+    @Override
+    public void load(@NotNull Chameleon chameleon) {
+
+    }
+
+    @Override
+    public @NotNull Collection<ChameleonExtensionDependency> getDependencies() {
+        return Collections.singleton(
+            ChameleonExtensionDependency.required("dev.hypera.chameleon.nonexistant.NonexistantExtension")
+        );
+    }
 
 }

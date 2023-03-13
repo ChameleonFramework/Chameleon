@@ -21,35 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension;
+package dev.hypera.chameleon.extension.objects;
 
-import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Chameleon extension factory.
- *
- * @param <T> Chameleon extension type.
- */
-public interface ChameleonExtensionFactory<T extends ChameleonExtension> {
+public interface TestCircularDetection2Extension extends ChameleonExtension {
 
-    /**
-     * Create an extension instance for the given platform.
-     * <p>Note that the returned ChameleonPlatformExtension <strong>must</strong> implement
-     * {@code T}.</p>
-     *
-     * @param platformId Platform to create extension for.
-     *
-     * @return new extension instance.
-     * @throws ChameleonExtensionException if something goes wrong while creating the extension.
-     */
-    @NotNull ChameleonPlatformExtension create(@NotNull String platformId) throws ChameleonExtensionException;
-
-    /**
-     * Returns the class of the Chameleon extension implementation that this factory supports.
-     *
-     * @return Chameleon extension class.
-     */
-    @NotNull Class<T> getType();
+    void test(@NotNull String name);
 
 }

@@ -28,7 +28,7 @@ import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.event.EventBusImpl;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.logger.DummyChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
@@ -36,8 +36,6 @@ import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import dev.hypera.chameleon.user.UserManager;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.HashSet;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -45,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class TestChameleon extends Chameleon {
 
+    public static final @NotNull String PLATFORM_ID = "Test";
     private final @NotNull Platform platform = new TestChameleonPlatform();
 
     /**
@@ -64,7 +63,7 @@ public final class TestChameleon extends Chameleon {
      * @throws ChameleonInstantiationException if something goes wrong whilst starting.
      */
     public TestChameleon(@NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
-        this(logger, new EventBusImpl(logger), new HashSet<>());
+        this(logger, new EventBusImpl(logger), new ExtensionMap());
     }
 
     /**
@@ -76,7 +75,7 @@ public final class TestChameleon extends Chameleon {
      *
      * @throws ChameleonInstantiationException if something goes wrong whilst starting.
      */
-    public TestChameleon(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus, @NotNull Collection<? super ChameleonExtension<?>> extensions) throws ChameleonInstantiationException {
+    public TestChameleon(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus, @NotNull ExtensionMap extensions) throws ChameleonInstantiationException {
         super(
             TestChameleonPlugin.class,
             ChameleonPluginData.create("Chameleon", Chameleon.getVersion()),
@@ -86,7 +85,7 @@ public final class TestChameleon extends Chameleon {
         );
     }
 
-    public static @NotNull TestChameleonBootstrap create() {
+    public static @NotNull ChameleonBootstrap<TestChameleon> create() {
         return new TestChameleonBootstrap();
     }
 

@@ -23,53 +23,53 @@
  */
 package dev.hypera.chameleon.extension;
 
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import java.util.Collection;
-import java.util.Optional;
-import org.jetbrains.annotations.ApiStatus.NonExtendable;
-import org.jetbrains.annotations.Contract;
+import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Extension manager.
+ * Chameleon platform extension.
+ * <p>Classes implementing this interface must also implement {@code T}.</p>
  *
  * @see ChameleonExtension
- * @see ChameleonPlatformExtension
- * @see ChameleonExtensionFactory
  */
-@NonExtendable
-public interface ExtensionManager {
+public interface ChameleonPlatformExtension {
 
     /**
-     * Load a Chameleon extension.
+     * Extension init.
      *
-     * @param factory The factory to create the Chameleon extension.
-     * @param <T>     Chameleon extension type.
+     * <p>This method will be called when the Extension is initialised by Chameleon, either before
+     * Chameleon is constructed, or when EventManager#loadExtension is called.</p>
      *
-     * @return new Chameleon extension.
-     * @throws ChameleonExtensionException if something goes wrong while loading the extension.
+     * @param logger   Logger.
+     * @param eventBus Event bus.
      */
-    @Contract("_ -> _")
-    <T extends ChameleonExtension> @NotNull T loadExtension(@NotNull ChameleonExtensionFactory<T> factory) throws ChameleonExtensionException;
+    void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException;
 
     /**
-     * Get a loaded Chameleon extension.
+     * Extension load.
      *
-     * @param clazz Chameleon extension class.
-     * @param <T>   Chameleon extension type.
+     * <p>This method will be called when Chameleon has finished loading, or when
+     * EventManager#loadExtension is called after Chameleon has loaded.</p>
      *
-     * @return an optional containing the loaded Chameleon extension platform, if loaded, otherwise
-     *     an empty optional.
+     * <p>If your extension is platform dependant, then you can cast {@code chameleon} to the
+     * platform Chameleon implementation, e.g. BukkitChameleon, BungeeCordChameleon, etc.</p>
+     *
+     * @param chameleon Chameleon instance.
      */
-    @Contract(value = "_ -> _", pure = true)
-    <T extends ChameleonExtension> @NotNull Optional<T> getExtension(@NotNull Class<T> clazz);
+    void load(@NotNull Chameleon chameleon);
 
     /**
-     * Get all loaded Chameleon extensions.
+     * Returns the dependencies of this extension.
      *
-     * @return loaded Chameleon extensions.
+     * @return the dependencies of this extension.
      */
-    @Contract(value = "-> _", pure = true)
-    @NotNull Collection<ChameleonExtension> getExtensions();
+    default @NotNull Collection<ChameleonExtensionDependency> getDependencies() {
+        return Collections.emptySet();
+    }
 
 }

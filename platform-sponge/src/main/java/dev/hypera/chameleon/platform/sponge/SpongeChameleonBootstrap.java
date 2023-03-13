@@ -28,13 +28,14 @@ import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.logger.ChameleonLog4jLogger;
+import dev.hypera.chameleon.platform.Platform;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Sponge Chameleon bootstrap implementation.
  */
-public final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeChameleon> {
+final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeChameleon> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull SpongePlugin spongePlugin;
@@ -42,7 +43,7 @@ public final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeCha
 
     @Internal
     SpongeChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin, @NotNull ChameleonPluginData pluginData) {
-        super(new ChameleonLog4jLogger(spongePlugin.getLogger()));
+        super(new ChameleonLog4jLogger(spongePlugin.getLogger()), Platform.SPONGE);
         this.chameleonPlugin = chameleonPlugin;
         this.spongePlugin = spongePlugin;
         this.pluginData = pluginData;

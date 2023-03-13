@@ -21,35 +21,61 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension;
+package dev.hypera.chameleon.util.graph;
 
-import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Chameleon extension factory.
- *
- * @param <T> Chameleon extension type.
- */
-public interface ChameleonExtensionFactory<T extends ChameleonExtension> {
+final class EdgeImpl<T> implements Edge<T> {
+
+    private final @NotNull T source;
+    private final @NotNull T target;
+
+    EdgeImpl(@NotNull T source, @NotNull T target) {
+        this.source = source;
+        this.target = target;
+    }
 
     /**
-     * Create an extension instance for the given platform.
-     * <p>Note that the returned ChameleonPlatformExtension <strong>must</strong> implement
-     * {@code T}.</p>
-     *
-     * @param platformId Platform to create extension for.
-     *
-     * @return new extension instance.
-     * @throws ChameleonExtensionException if something goes wrong while creating the extension.
+     * {@inheritDoc}
      */
-    @NotNull ChameleonPlatformExtension create(@NotNull String platformId) throws ChameleonExtensionException;
+    @Override
+    public @NotNull T source() {
+        return this.source;
+    }
 
     /**
-     * Returns the class of the Chameleon extension implementation that this factory supports.
-     *
-     * @return Chameleon extension class.
+     * {@inheritDoc}
      */
-    @NotNull Class<T> getType();
+    @Override
+    public @NotNull T target() {
+        return this.target;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Edge<T> flip() {
+        return Edge.of(this.target, this.source);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Edge)) {
+            return false;
+        }
+
+        Edge<?> edge = (Edge<?>) o;
+        return this.source.equals(edge.source()) && this.target.equals(edge.target());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.source, this.target);
+    }
 
 }

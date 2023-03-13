@@ -29,6 +29,7 @@ import dev.hypera.chameleon.util.Preconditions;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ExtensionManagerImpl implements ExtensionManager {
 
     private final @NotNull Chameleon chameleon;
-    private final @NotNull Collection<? super ChameleonExtension<?>> loadedExtensions;
+    private final @NotNull ExtensionMap loadedExtensions;
 
     /**
      * Extension manager constructor.
@@ -50,60 +51,64 @@ public final class ExtensionManagerImpl implements ExtensionManager {
      * @param loadedExtensions Extensions.
      */
     @Internal
-    public ExtensionManagerImpl(@NotNull Chameleon chameleon, @NotNull Collection<? super ChameleonExtension<?>> loadedExtensions) {
+    public ExtensionManagerImpl(@NotNull Chameleon chameleon, @NotNull ExtensionMap loadedExtensions) {
         this.chameleon = chameleon;
         this.loadedExtensions = loadedExtensions;
     }
 
     /**
-     * Load a Chameleon extension.
-     *
-     * @param factory The factory to create the Chameleon extension.
-     * @param <T>     Chameleon extension type.
-     *
-     * @return new Chameleon extension.
-     * @throws ChameleonExtensionException if something goes wrong while loading the extension.
+     * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
-    public <P, T extends ChameleonExtension<P>> @NotNull P loadExtension(@NotNull ChameleonExtensionFactory<T> factory) throws ChameleonExtensionException {
-        T extension = factory.create(this.chameleon.getPlatform());
-        Preconditions.checkNotNullState("extension", extension);
+    public <T extends ChameleonExtension> @NotNull T loadExtension(@NotNull ChameleonExtensionFactory<T> factory) throws ChameleonExtensionException {
+        Preconditions.checkNotNull("factory", factory);
+        return getExtension(factory.getType()).orElseGet(() -> {
+            // Create the extension
+            ChameleonPlatformExtension extension = factory.create(this.chameleon.getPlatform().getId());
+            Preconditions.checkNotNullState("extension", extension);
+            if (!factory.getType().isAssignableFrom(extension.getClass())) {
+                throw ChameleonExtensionException.create(
+                    "Cannot load %s: not assignable from %s",
+                    factory.getType().getSimpleName(), extension.getClass().getSimpleName()
+                );
+            }
 
-        // Check if this extension has already been loaded, if so, return the loaded instance.
-        return getExtension((Class<T>) extension.getClass()).orElseGet(() -> {
-            // If not, load the extension.
+            // Check dependencies
+            Collection<ChameleonExtensionDependency> dependencies = extension.getDependencies();
+            Collection<ChameleonExtensionDependency> missingDependencies = dependencies.parallelStream()
+                .filter(d -> d.required() && (!d.extension().isPresent() || !getExtension(d.extension().get()).isPresent()))
+                .collect(Collectors.toSet());
+            if (!missingDependencies.isEmpty()) {
+                throw ChameleonExtensionException.create("%s requires dependencies but some are missing: %s",
+                    factory.getType().getSimpleName(),
+                    missingDependencies.parallelStream().map(ChameleonExtensionDependency::name)
+                        .collect(Collectors.joining(", "))
+                );
+            }
+
+            // Initialise and load the extension
             extension.init(this.chameleon.getLogger(), this.chameleon.getEventBus());
             extension.load(this.chameleon);
-            this.loadedExtensions.add(extension);
-            return extension.getPlatform();
+            this.loadedExtensions.put(factory.getType(), extension);
+            return factory.getType().cast(extension);
         });
     }
 
     /**
-     * Get a loaded Chameleon extension.
-     *
-     * @param clazz Chameleon extension class.
-     * @param <T>   Chameleon extension type.
-     *
-     * @return an optional containing the loaded Chameleon extension, if loaded, otherwise an empty
-     *     optional.
+     * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
-    public <P, T extends ChameleonExtension<P>> @NotNull Optional<P> getExtension(@NotNull Class<T> clazz) {
-        return this.loadedExtensions.parallelStream().filter(e -> clazz.isAssignableFrom(e.getClass())).map(e -> ((T) e).getPlatform()).findFirst();
+    public <T extends ChameleonExtension> @NotNull Optional<T> getExtension(@NotNull Class<T> clazz) {
+        return this.loadedExtensions.getExtension(clazz);
     }
 
     /**
-     * Get all loaded Chameleon extensions.
-     *
-     * @return loaded Chameleon extensions.
+     * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull Collection<ChameleonExtension<?>> getExtensions() {
-        return (Collection<ChameleonExtension<?>>) Collections.unmodifiableCollection(this.loadedExtensions);
+    public @NotNull Collection<ChameleonExtension> getExtensions() {
+        return Collections.unmodifiableCollection(this.loadedExtensions.entrySet().parallelStream()
+            .map(e -> e.getKey().cast(e.getValue())).collect(Collectors.toSet()));
     }
 
 }
