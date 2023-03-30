@@ -34,6 +34,7 @@ public interface Platform {
 
     @NotNull String BUKKIT = "Bukkit";
     @NotNull String BUNGEECORD = "BungeeCord";
+    @NotNull String FOLIA = "Folia";
     @NotNull String MINESTOM = "Minestom";
     @NotNull String NUKKIT = "Nukkit";
     @NotNull String SPONGE = "Sponge";

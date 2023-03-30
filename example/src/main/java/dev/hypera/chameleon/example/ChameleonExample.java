@@ -57,12 +57,13 @@ import org.jetbrains.annotations.NotNull;
             @Dependency(
                 name = "LuckPerms",
                 soft = true,
-                platforms = { Platform.BUKKIT }
+                platforms = { Platform.BUKKIT, Platform.FOLIA }
             )
         },
         platforms = {
             Platform.BUKKIT,
             Platform.BUNGEECORD,
+            Platform.FOLIA,
             Platform.MINESTOM,
             Platform.NUKKIT,
             Platform.SPONGE,
