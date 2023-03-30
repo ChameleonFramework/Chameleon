@@ -27,8 +27,12 @@ import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleonBootstrap;
+import dev.hypera.chameleon.platform.folia.platform.FoliaPlatform;
+import dev.hypera.chameleon.platform.folia.platform.FoliaPluginManager;
 import dev.hypera.chameleon.platform.folia.scheduler.FoliaScheduler;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import java.util.Collection;
@@ -45,12 +49,17 @@ import org.jetbrains.annotations.Nullable;
 @Experimental
 public final class FoliaChameleon extends BukkitChameleon {
 
+    private final @Nullable FoliaPlatform platform;
+    private final @Nullable FoliaPluginManager pluginManager;
     private final @Nullable FoliaScheduler scheduler;
 
     @Internal
     FoliaChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull JavaPlugin foliaPlugin, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
         super(chameleonPlugin, extensions, foliaPlugin, pluginData);
-        this.scheduler = isFolia() ? new FoliaScheduler(this) : null;
+        boolean isFolia = isFolia();
+        this.platform = isFolia ? new FoliaPlatform() : null;
+        this.pluginManager = isFolia ? new FoliaPluginManager() : null;
+        this.scheduler = isFolia ? new FoliaScheduler(this) : null;
     }
 
     /**
@@ -78,6 +87,16 @@ public final class FoliaChameleon extends BukkitChameleon {
     @Experimental
     public static @NotNull FoliaChameleonBootstrap createFoliaBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin foliaPlugin, @NotNull ChameleonPluginData pluginData) {
         return new FoliaChameleonBootstrap(chameleonPlugin, foliaPlugin, pluginData);
+    }
+
+    @Override
+    public @NotNull Platform getPlatform() {
+        return this.platform != null ? this.platform : super.getPlatform();
+    }
+
+    @Override
+    public @NotNull PluginManager getPluginManager() {
+        return this.pluginManager != null ? this.pluginManager : super.getPluginManager();
     }
 
     @Override

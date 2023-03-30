@@ -35,6 +35,7 @@ import dev.hypera.chameleon.example.command.ExampleCommand;
 import dev.hypera.chameleon.example.event.ExampleCustomEvent;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PlatformPlugin;
 import dev.hypera.chameleon.scheduler.Schedule;
 import dev.hypera.chameleon.scheduler.Task;
 import java.time.Duration;
@@ -56,7 +57,7 @@ import org.jetbrains.annotations.NotNull;
         dependencies = {
             @Dependency(
                 name = "LuckPerms",
-                soft = true,
+                soft = false,
                 platforms = { Platform.BUKKIT, Platform.FOLIA }
             )
         },
@@ -130,6 +131,11 @@ public final class ChameleonExample extends ChameleonPlugin {
         chameleon.getScheduler().schedule(Task.builder(() ->
             this.logger.info("This task will run twice!")
         ).delay(Schedule.seconds(2)).repeat(Schedule.seconds(5)).cancelAfter(2).build());
+
+        /* Plugin Management */
+        for (PlatformPlugin plugin : chameleon.getPluginManager().getPlugins()) {
+            this.logger.info("Found plugin %s v%s", plugin.getName(), plugin.getVersion());
+        }
 
         this.logger.info(
             "Successfully started ChameleonExample plugin, took %s ms.",
