@@ -45,8 +45,8 @@ indra {
             target(17)
             testWith(17)
         } else {
-            target(8)
-            testWith(8, 11, 17)
+            target(11)
+            testWith(11, 17)
         }
     }
 }

@@ -3,8 +3,8 @@ version = "1.0"
 
 [versions]
 # Adventure
-adventure = "4.12.0"
-adventure-platform = "4.2.0"
+adventure = "4.13.0"
+adventure-platform = "4.3.0"
 
 # Platforms
 platform-bukkit = "1.19-R0.1-SNAPSHOT"
@@ -22,7 +22,7 @@ yaml = "2.0"
 javapoet = "1.13.0"
 
 # Logging
-slf4j = "2.0.6"
+slf4j = "2.0.7"
 log4j = "2.20.0"
 
 # Code safety
@@ -40,7 +40,7 @@ build-nullaway-plugin = "1.5.0"
 # Test
 test-junit-bom = "5.9.2"
 test-truth = "1.1.3"
-test-mockito-bom = "4.11.0"
+test-mockito-bom = "5.2.0"
 
 
 [libraries]
