@@ -25,9 +25,9 @@ package dev.hypera.chameleon.extension;
 
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.util.Pair;
 import dev.hypera.chameleon.util.Preconditions;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -63,6 +63,20 @@ public final class ExtensionManagerImpl implements ExtensionManager {
     public <T extends ChameleonExtension> @NotNull T loadExtension(@NotNull ChameleonExtensionFactory<T> factory) throws ChameleonExtensionException {
         Preconditions.checkNotNull("factory", factory);
         return getExtension(factory.getType()).orElseGet(() -> {
+            // Check dependencies
+            Collection<ChameleonExtensionDependency> dependencies = factory.getDependencies(this.chameleon.getPlatform().getId());
+            Collection<ChameleonExtensionDependency> missingDependencies = dependencies.parallelStream()
+                .filter(d -> d.required() && (d.extension().isEmpty() || getExtension(d.extension().get()).isEmpty()))
+                .collect(Collectors.toSet());
+            if (!missingDependencies.isEmpty()) {
+                throw ChameleonExtensionException.create(
+                    "%s requires dependencies but some are missing: %s",
+                    factory.getType().getSimpleName(),
+                    missingDependencies.parallelStream().map(ChameleonExtensionDependency::name)
+                        .collect(Collectors.joining(", "))
+                );
+            }
+
             // Create the extension
             ChameleonPlatformExtension extension = factory.create(this.chameleon.getPlatform().getId());
             Preconditions.checkNotNullState("extension", extension);
@@ -73,23 +87,10 @@ public final class ExtensionManagerImpl implements ExtensionManager {
                 );
             }
 
-            // Check dependencies
-            Collection<ChameleonExtensionDependency> dependencies = extension.getDependencies();
-            Collection<ChameleonExtensionDependency> missingDependencies = dependencies.parallelStream()
-                .filter(d -> d.required() && (!d.extension().isPresent() || !getExtension(d.extension().get()).isPresent()))
-                .collect(Collectors.toSet());
-            if (!missingDependencies.isEmpty()) {
-                throw ChameleonExtensionException.create("%s requires dependencies but some are missing: %s",
-                    factory.getType().getSimpleName(),
-                    missingDependencies.parallelStream().map(ChameleonExtensionDependency::name)
-                        .collect(Collectors.joining(", "))
-                );
-            }
-
             // Initialise and load the extension
             extension.init(this.chameleon.getLogger(), this.chameleon.getEventBus());
             extension.load(this.chameleon);
-            this.loadedExtensions.put(factory.getType(), extension);
+            this.loadedExtensions.put(factory.getType(), Pair.of(extension, dependencies));
             return factory.getType().cast(extension);
         });
     }
@@ -107,8 +108,9 @@ public final class ExtensionManagerImpl implements ExtensionManager {
      */
     @Override
     public @NotNull Collection<ChameleonExtension> getExtensions() {
-        return Collections.unmodifiableCollection(this.loadedExtensions.entrySet().parallelStream()
-            .map(e -> e.getKey().cast(e.getValue())).collect(Collectors.toSet()));
+        return this.loadedExtensions.entrySet()
+            .parallelStream().map(e -> e.getKey().cast(e.getValue().first()))
+            .collect(Collectors.toUnmodifiableSet());
     }
 
 }

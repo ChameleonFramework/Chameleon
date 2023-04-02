@@ -21,25 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension.objects;
+package dev.hypera.chameleon.util;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.event.EventBus;
-import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import dev.hypera.chameleon.logger.ChameleonLogger;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
-public final class TestCircularDetection1ExtensionImpl implements ChameleonPlatformExtension, TestCircularDetection1Extension {
+/**
+ * Pair, stores two values together.
+ *
+ * @param <A> First type.
+ * @param <B> Second type.
+ */
+@NonExtendable
+public interface Pair<A, B> {
 
-    @Override
-    public void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException {
-
+    /**
+     * Returns a new pair with the given values.
+     *
+     * @param first  First value.
+     * @param second Second value.
+     * @param <A>    First type.
+     * @param <B>    Second type.
+     *
+     * @return new pair.
+     */
+    static @NotNull <A, B> Pair<A, B> of(@NotNull A first, @NotNull B second) {
+        return new PairImpl<>(first, second);
     }
 
-    @Override
-    public void load(@NotNull Chameleon chameleon) {
+    /**
+     * Returns the first value.
+     *
+     * @return an optional containing the first value, if not null, otherwise an empty optional.
+     */
+    @NotNull A first();
 
-    }
+    /**
+     * Returns the second value.
+     *
+     * @return an optional containing the second value, if not null, otherwise an empty optional.
+     */
+    @NotNull B second();
 
 }

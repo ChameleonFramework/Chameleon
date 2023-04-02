@@ -26,11 +26,8 @@ package dev.hypera.chameleon.extension.objects;
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
-import dev.hypera.chameleon.extension.ChameleonExtensionDependency;
 import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
 import dev.hypera.chameleon.logger.ChameleonLogger;
-import java.util.Arrays;
-import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,16 +43,6 @@ public final class Test2ExtensionImpl implements ChameleonPlatformExtension, Tes
     @Override
     public void load(@NotNull Chameleon chameleon) {
         this.chameleon = chameleon;
-    }
-
-    @Override
-    public @NotNull Collection<ChameleonExtensionDependency> getDependencies() {
-        return Arrays.asList(
-            ChameleonExtensionDependency.required("Test", TestExtension.class),
-            ChameleonExtensionDependency.optional(TestCircularDetection1Extension.class),
-            ChameleonExtensionDependency.optional(TestCircularDetection2Extension.class.getCanonicalName()),
-            ChameleonExtensionDependency.optional("dev.hypera.chameleon.nonexistant.NonexistantExtension")
-        );
     }
 
     @Override

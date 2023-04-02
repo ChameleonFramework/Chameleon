@@ -24,13 +24,16 @@
 package dev.hypera.chameleon.extension;
 
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.util.Pair;
 import dev.hypera.chameleon.util.graph.Graph;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -42,7 +45,7 @@ import org.jetbrains.annotations.NotNull;
  * Extension map.
  */
 @Internal
-public final class ExtensionMap extends ConcurrentHashMap<Class<? extends ChameleonExtension>, ChameleonPlatformExtension> {
+public final class ExtensionMap extends ConcurrentHashMap<Class<? extends ChameleonExtension>, Pair<ChameleonPlatformExtension, Collection<ChameleonExtensionDependency>>> {
 
     private static final long serialVersionUID = 9010417357635273389L;
 
@@ -56,7 +59,7 @@ public final class ExtensionMap extends ConcurrentHashMap<Class<? extends Chamel
      */
     @Contract(value = "_ -> _", pure = true)
     public <T extends ChameleonExtension> Optional<T> getExtension(Class<T> key) {
-        return Optional.ofNullable(super.get(key)).map(key::cast);
+        return Optional.ofNullable(super.get(key)).map(Pair::first).map(key::cast);
     }
 
     /**
@@ -68,12 +71,12 @@ public final class ExtensionMap extends ConcurrentHashMap<Class<? extends Chamel
      */
     public @NotNull List<ChameleonPlatformExtension> loadSort() {
         Graph<Class<? extends ChameleonExtension>> graph = Graph.<Class<? extends ChameleonExtension>>directed().build();
-        for (Entry<Class<? extends ChameleonExtension>, ChameleonPlatformExtension> ext : entrySet()) {
+        for (Entry<Class<? extends ChameleonExtension>, Pair<ChameleonPlatformExtension, Collection<ChameleonExtensionDependency>>> ext : entrySet()) {
             // Add this extension to the graph.
             graph.addNode(ext.getKey());
 
             // Add the dependencies of this extension as edges to this node.
-            for (ChameleonExtensionDependency dependency : ext.getValue().getDependencies()) {
+            for (ChameleonExtensionDependency dependency : ext.getValue().second()) {
                 // Get the dependency extension class, if present. If the dependency extension class
                 // is not present, it might mean that the class is not in the classpath, there is a
                 // typo, or the class doesn't exist.
@@ -93,7 +96,7 @@ public final class ExtensionMap extends ConcurrentHashMap<Class<? extends Chamel
 
         // None of the extensions have dependencies, therefore we don't need to sort the extensions.
         if (graph.edges().isEmpty()) {
-            return new ArrayList<>(values());
+            return values().stream().map(Pair::first).collect(Collectors.toUnmodifiableList());
         }
 
         // Sort the extensions by preforming a depth-first search.
@@ -135,7 +138,7 @@ public final class ExtensionMap extends ConcurrentHashMap<Class<? extends Chamel
 
         visitedNodes.put(node, VisitState.COMPLETE);
         scanStack.removeLast();
-        sortedExtensions.add(get(node));
+        sortedExtensions.add(Objects.requireNonNull(get(node)).first());
     }
 
     private enum VisitState {

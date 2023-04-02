@@ -26,11 +26,8 @@ package dev.hypera.chameleon.extension.objects;
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
-import dev.hypera.chameleon.extension.ChameleonExtensionDependency;
 import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
 import dev.hypera.chameleon.logger.ChameleonLogger;
-import java.util.Collection;
-import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,13 +43,6 @@ public final class TestCircularDetection2ExtensionImpl implements ChameleonPlatf
     @Override
     public void load(@NotNull Chameleon chameleon) {
 
-    }
-
-    @Override
-    public @NotNull Collection<ChameleonExtensionDependency> getDependencies() {
-        return Collections.singleton(
-            ChameleonExtensionDependency.required(TestCircularDetection1Extension.class)
-        );
     }
 
     @Override

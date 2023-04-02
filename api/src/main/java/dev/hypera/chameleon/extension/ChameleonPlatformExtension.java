@@ -27,8 +27,6 @@ import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
 import dev.hypera.chameleon.logger.ChameleonLogger;
-import java.util.Collection;
-import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -62,14 +60,5 @@ public interface ChameleonPlatformExtension {
      * @param chameleon Chameleon instance.
      */
     void load(@NotNull Chameleon chameleon);
-
-    /**
-     * Returns the dependencies of this extension.
-     *
-     * @return the dependencies of this extension.
-     */
-    default @NotNull Collection<ChameleonExtensionDependency> getDependencies() {
-        return Collections.emptySet();
-    }
 
 }

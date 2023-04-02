@@ -24,6 +24,8 @@
 package dev.hypera.chameleon.extension;
 
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import java.util.Collection;
+import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -38,12 +40,25 @@ public interface ChameleonExtensionFactory<T extends ChameleonExtension> {
      * <p>Note that the returned ChameleonPlatformExtension <strong>must</strong> implement
      * {@code T}.</p>
      *
-     * @param platformId Platform to create extension for.
+     * @param platformId Platform identifier to create the extension for. This identifier can be
+     *                   compared against known platform identifiers stored as constants in
+     *                   {@link dev.hypera.chameleon.platform.Platform}.
      *
      * @return new extension instance.
      * @throws ChameleonExtensionException if something goes wrong while creating the extension.
      */
     @NotNull ChameleonPlatformExtension create(@NotNull String platformId) throws ChameleonExtensionException;
+
+    /**
+     * Returns the dependencies this extension requires on the given platform.
+     *
+     * @param platformId Platform identifier.
+     *
+     * @return collection of dependencies.
+     */
+    default @NotNull Collection<ChameleonExtensionDependency> getDependencies(@NotNull String platformId) {
+        return Collections.emptySet();
+    }
 
     /**
      * Returns the class of the Chameleon extension implementation that this factory supports.

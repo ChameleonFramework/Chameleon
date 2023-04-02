@@ -42,6 +42,7 @@ import dev.hypera.chameleon.extension.objects.TestExtension;
 import dev.hypera.chameleon.extension.objects.TestExtensionFactory;
 import dev.hypera.chameleon.extension.objects.TestExtensionImpl;
 import dev.hypera.chameleon.extension.objects.TestRequiredDependencyEmptyExtension;
+import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -124,7 +125,10 @@ final class ExtensionTests {
     @Test
     void testExtensionMissingDependencyFails() {
         ChameleonExtensionException ex = assertThrowsExactly(ChameleonExtensionException.class, () ->
-            this.chameleon.getExtensionManager().loadExtension(Test2Extension.create(new Test2ExtensionImpl())));
+            this.chameleon.getExtensionManager().loadExtension(Test2Extension.create(
+                new Test2ExtensionImpl(), Collections.singleton(
+                    ChameleonExtensionDependency.required("Test", TestExtension.class)
+                ))));
         assertThat(ex).hasMessageThat().isEqualTo(
             "Test2Extension requires dependencies but some are missing: Test"
         );
@@ -154,7 +158,9 @@ final class ExtensionTests {
         // Attempt to load the extension using the extension manager.
         ChameleonExtensionException ex = assertThrowsExactly(ChameleonExtensionException.class, () ->
             this.chameleon.getExtensionManager().loadExtension(
-                TestExtension.create(new TestRequiredDependencyEmptyExtension())
+                TestExtension.create(new TestRequiredDependencyEmptyExtension(), Collections.singleton(
+                    ChameleonExtensionDependency.required("dev.hypera.chameleon.nonexistant.NonexistantExtension")
+                ))
             ));
         assertThat(ex).hasMessageThat().isEqualTo(
             "TestExtension requires dependencies but some are missing: " +
@@ -164,7 +170,9 @@ final class ExtensionTests {
         // Create a new Chameleon bootstrap with the extension and attempt to load it.
         ex = assertThrowsExactly(ChameleonExtensionException.class, () ->
             TestChameleon.create().withExtension(
-                TestExtension.create(new TestRequiredDependencyEmptyExtension())
+                TestExtension.create(new TestRequiredDependencyEmptyExtension(), Collections.singleton(
+                    ChameleonExtensionDependency.required("dev.hypera.chameleon.nonexistant.NonexistantExtension")
+                ))
             ).load());
         assertThat(ex).hasMessageThat().isEqualTo(
             "TestExtension requires dependencies but some are missing: " +

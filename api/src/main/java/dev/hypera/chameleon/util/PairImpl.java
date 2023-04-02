@@ -21,25 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension.objects;
+package dev.hypera.chameleon.util;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.event.EventBus;
-import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import dev.hypera.chameleon.logger.ChameleonLogger;
 import org.jetbrains.annotations.NotNull;
 
-public final class TestCircularDetection1ExtensionImpl implements ChameleonPlatformExtension, TestCircularDetection1Extension {
+/**
+ * Pair implementation.
+ *
+ * @param <A> First type.
+ * @param <B> Second type.
+ */
+final class PairImpl<A, B> implements Pair<A, B> {
 
-    @Override
-    public void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException {
+    private final @NotNull A first;
+    private final @NotNull B second;
 
+    PairImpl(@NotNull A first, @NotNull B second) {
+        this.first = first;
+        this.second = second;
     }
 
     @Override
-    public void load(@NotNull Chameleon chameleon) {
+    public @NotNull A first() {
+        return this.first;
+    }
 
+    @Override
+    public @NotNull B second() {
+        return this.second;
     }
 
 }

@@ -24,13 +24,20 @@
 package dev.hypera.chameleon.extension.objects;
 
 import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.extension.ChameleonExtensionDependency;
 import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
+import java.util.Collection;
+import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 
 public interface TestExtension extends ChameleonExtension {
 
     static @NotNull TestExtensionFactory<TestExtension> create(@NotNull ChameleonPlatformExtension extension) {
-        return new TestExtensionFactory<>(extension, TestExtension.class);
+        return create(extension, Collections.emptySet());
+    }
+
+    static @NotNull TestExtensionFactory<TestExtension> create(@NotNull ChameleonPlatformExtension extension, @NotNull Collection<ChameleonExtensionDependency> dependencies) {
+        return new TestExtensionFactory<>(extension, dependencies, TestExtension.class);
     }
 
     default @NotNull String greet(@NotNull String name) {

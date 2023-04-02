@@ -32,6 +32,7 @@ import dev.hypera.chameleon.extension.ChameleonExtensionFactory;
 import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
+import dev.hypera.chameleon.util.Pair;
 import dev.hypera.chameleon.util.Preconditions;
 import java.util.List;
 import java.util.function.Consumer;
@@ -76,7 +77,7 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
                 factory.getType().getSimpleName(), extension.getClass().getSimpleName()
             );
         }
-        this.extensions.put(factory.getType(), factory.create(this.platform));
+        this.extensions.put(factory.getType(), Pair.of(factory.create(this.platform), factory.getDependencies(this.platform)));
         return this;
     }
 
