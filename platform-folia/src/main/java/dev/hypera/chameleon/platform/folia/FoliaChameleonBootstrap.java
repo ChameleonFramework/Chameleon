@@ -27,11 +27,8 @@ import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.logger.ChameleonJavaLogger;
-import dev.hypera.chameleon.logger.ChameleonLogger;
-import dev.hypera.chameleon.platform.folia.extension.ChameleonFoliaExtension;
-import java.util.Collection;
+import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
+import dev.hypera.chameleon.platform.Platform;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Folia Chameleon bootstrap implementation.
  */
-public final class FoliaChameleonBootstrap extends ChameleonBootstrap<FoliaChameleon, ChameleonFoliaExtension<?, ?>> {
+public final class FoliaChameleonBootstrap extends ChameleonBootstrap<FoliaChameleon> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull JavaPlugin foliaPlugin;
@@ -47,6 +44,7 @@ public final class FoliaChameleonBootstrap extends ChameleonBootstrap<FoliaChame
 
     @Internal
     FoliaChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin foliaPlugin, @NotNull ChameleonPluginData pluginData) {
+        super(new ChameleonSlf4jLogger(foliaPlugin.getSLF4JLogger()), Platform.FOLIA);
         this.chameleonPlugin = chameleonPlugin;
         this.foliaPlugin = foliaPlugin;
         this.pluginData = pluginData;
@@ -54,14 +52,11 @@ public final class FoliaChameleonBootstrap extends ChameleonBootstrap<FoliaChame
 
     @Internal
     @Override
-    protected @NotNull FoliaChameleon loadInternal(@NotNull Collection<ChameleonExtension<?>> extensions) throws ChameleonInstantiationException {
-        return new FoliaChameleon(this.chameleonPlugin, extensions, this.foliaPlugin, this.pluginData);
-    }
-
-    @Internal
-    @Override
-    protected @NotNull ChameleonLogger createLogger() {
-        return new ChameleonJavaLogger(this.foliaPlugin.getLogger());
+    protected @NotNull FoliaChameleon loadInternal() throws ChameleonInstantiationException {
+        return new FoliaChameleon(
+            this.chameleonPlugin, this.foliaPlugin, this.pluginData,
+            this.eventBus, this.logger, this.extensions
+        );
     }
 
 }

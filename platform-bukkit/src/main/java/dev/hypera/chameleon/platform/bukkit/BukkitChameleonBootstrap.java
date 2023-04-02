@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Bukkit Chameleon bootstrap implementation.
  */
-final class BukkitChameleonBootstrap extends ChameleonBootstrap<BukkitChameleon> {
+public final class BukkitChameleonBootstrap extends ChameleonBootstrap<BukkitChameleon> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull JavaPlugin bukkitPlugin;
