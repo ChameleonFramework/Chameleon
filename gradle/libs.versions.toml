@@ -9,6 +9,7 @@ adventure-platform = "4.3.0"
 # Platforms
 platform-bukkit = "1.19-R0.1-SNAPSHOT"
 platform-bungeecord = "1.19-R0.1-SNAPSHOT"
+platform-folia = "1.19.4-R0.1-SNAPSHOT"
 platform-minestom = "aebf72de90"
 platform-nukkit = "1.0-SNAPSHOT"
 platform-sponge = "9.0.0"
@@ -55,6 +56,7 @@ adventure-platform-bungeecord = { module = "net.kyori:adventure-platform-bungeec
 # Platforms
 platform-bukkit = { module = "org.spigotmc:spigot-api", version.ref = "platform-bukkit" }
 platform-bungeecord = { module = "net.md-5:bungeecord-api", version.ref = "platform-bungeecord" }
+platform-folia = { module = "dev.folia:folia-api", version.ref = "platform-folia" }
 platform-minestom = { module = "com.github.Minestom:Minestom", version.ref = "platform-minestom" }
 platform-nukkit = { module = "cn.nukkit:nukkit", version.ref = "platform-nukkit" }
 platform-sponge = { module = "org.spongepowered:spongeapi", version.ref = "platform-sponge" }

@@ -28,6 +28,7 @@ import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.annotations.processing.generation.bukkit.BukkitGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.bungeecord.BungeeCordGenerator;
+import dev.hypera.chameleon.annotations.processing.generation.folia.FoliaGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.minestom.MinestomGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.nukkit.NukkitGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.sponge.SpongeGenerator;
@@ -48,7 +49,7 @@ import javax.lang.model.element.TypeElement;
  * Chameleon Annotation Processor.
  */
 @SupportedAnnotationTypes("dev.hypera.chameleon.annotations.Plugin")
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 public class ChameleonAnnotationProcessor extends AbstractProcessor {
 
     /**
@@ -79,6 +80,9 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
                         break;
                     case Platform.BUNGEECORD:
                         generator = new BungeeCordGenerator();
+                        break;
+                    case Platform.FOLIA:
+                        generator = new FoliaGenerator();
                         break;
                     case Platform.MINESTOM:
                         generator = new MinestomGenerator();

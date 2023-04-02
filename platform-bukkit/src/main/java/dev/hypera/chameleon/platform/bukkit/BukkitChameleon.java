@@ -48,13 +48,17 @@ import java.nio.file.Path;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Bukkit Chameleon implementation.
+ *
+ * <p>Not final to allow Folia implementation to extend this class.</p>
  */
-public final class BukkitChameleon extends Chameleon {
+@NonExtendable
+public class BukkitChameleon extends Chameleon {
 
     private final @NotNull JavaPlugin plugin;
     private final @NotNull BukkitPlatform platform = new BukkitPlatform();
@@ -66,7 +70,7 @@ public final class BukkitChameleon extends Chameleon {
     private @Nullable ChameleonAudienceProvider audienceProvider;
 
     @Internal
-    BukkitChameleon(
+    protected BukkitChameleon(
         @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
         @NotNull JavaPlugin bukkitPlugin,
         @NotNull ChameleonPluginData pluginData,
