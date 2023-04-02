@@ -71,6 +71,7 @@ public final class FoliaChameleon extends BukkitChameleon {
      * @return                Unsupported.
      */
     @Deprecated
+    @SuppressWarnings("unused")
     public static @NotNull BukkitChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin, @NotNull ChameleonPluginData pluginData) {
         throw new UnsupportedOperationException("Folia does not support Bukkit.");
     }
