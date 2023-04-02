@@ -21,47 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform;
+package dev.hypera.chameleon.platform.folia.platform;
 
-import org.jetbrains.annotations.ApiStatus.NonExtendable;
+import dev.hypera.chameleon.platform.PlatformPlugin;
+import dev.hypera.chameleon.platform.PluginManager;
+import dev.hypera.chameleon.platform.folia.platform.objects.FoliaPlugin;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a proxy or server platform.
+ * Folia plugin manager implementation.
  */
-@NonExtendable
-public interface Platform {
-
-    @NotNull String BUKKIT = "Bukkit";
-    @NotNull String BUNGEECORD = "BungeeCord";
-    @NotNull String FOLIA = "Folia";
-    @NotNull String MINESTOM = "Minestom";
-    @NotNull String NUKKIT = "Nukkit";
-    @NotNull String SPONGE = "Sponge";
-    @NotNull String VELOCITY = "Velocity";
+@Internal
+public final class FoliaPluginManager implements PluginManager {
 
     /**
-     * Get a unique identifier for this Platform.
-     * <p>This will return the common name of the API that is in use, e.g. "BungeeCord" or "Velocity".</p>
-     *
-     * @return Platform identifier.
+     * {@inheritDoc}
      */
-    @NotNull String getId();
+    @Override
+    public @NotNull Collection<PlatformPlugin> getPlugins() {
+        return Arrays.stream(Bukkit.getPluginManager().getPlugins())
+            .map(FoliaPlugin::new)
+            .collect(Collectors.toSet());
+    }
 
     /**
-     * Get the friendly name of this Platform.
-     * <p>This will return the name provided by the Platform, which may not match the name of the API that is in use.</p>
-     *
-     * @return Platform friendly name.
+     * {@inheritDoc}
      */
-    @NotNull String getName();
+    @Override
+    public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
+        return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name))
+            .map(FoliaPlugin::new);
+    }
 
     /**
-     * Get the version of this Platform.
-     * <p>This will return the version provided by the Platform.</p>
-     *
-     * @return Platform version.
+     * {@inheritDoc}
      */
-    @NotNull String getVersion();
+    @Override
+    public boolean isPluginEnabled(@NotNull String name) {
+        return Bukkit.getPluginManager().isPluginEnabled(name);
+    }
 
 }

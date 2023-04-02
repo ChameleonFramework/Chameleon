@@ -21,28 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
-    }
-}
+package dev.hypera.chameleon.platform.folia.extension;
 
-rootProject.name = "chameleon-parent"
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
+import dev.hypera.chameleon.extension.CustomPlatformExtension;
+import dev.hypera.chameleon.platform.folia.FoliaChameleon;
 
-sequenceOf(
-    "api",
-    "bom",
-    "annotations",
-    "example",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-folia",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-sponge",
-    "platform-velocity"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+/**
+ * Chameleon Folia extension.
+ *
+ * @param <T> Chameleon extension type.
+ * @param <C> Chameleon platform extension type.
+ */
+public abstract class ChameleonFoliaExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, FoliaChameleon> {
+
 }

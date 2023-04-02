@@ -38,9 +38,3 @@ dependencies {
 
     implementation(libs.gson)
 }
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
-    }
-}

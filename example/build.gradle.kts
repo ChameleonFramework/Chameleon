@@ -33,7 +33,7 @@ plugins {
  */
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(11))
         targetCompatibility = JavaVersion.VERSION_17
     }
 }
@@ -41,6 +41,7 @@ java {
 repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots/") // Required for BungeeCord support
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // Required for Bukkit support
+    maven("https://papermc.io/repo/repository/maven-public/") // Required for Folia support
     // maven("https://jitpack.io/") // Required for Minestom support
     maven("https://repo.spongepowered.org/maven/") // Required for Minestom/Sponge support
     maven("https://repo.opencollab.dev/main/") // Required for Nukkit support
@@ -60,6 +61,7 @@ dependencies {
     implementation(project(":chameleon-api")) // dev.hypera:chameleon-api
     implementation(project(":chameleon-platform-bukkit")) // dev.hypera:chameleon-platform-bukkit
     implementation(project(":chameleon-platform-bungeecord")) // dev.hypera:chameleon-platform-bungeecord
+    implementation(project(":chameleon-platform-folia")) // dev.hypera:chameleon-platform-folia
     implementation(project(":chameleon-platform-nukkit")) // dev.hypera:chameleon-platform-nukkit
     implementation(project(":chameleon-platform-minestom")) // dev.hypera:chameleon-platform-minestom
     implementation(project(":chameleon-platform-velocity")) // dev.hypera:chameleon-platform-velocity
@@ -79,7 +81,7 @@ tasks {
         mergeServiceFiles()
 
         /* IMPORTANT: Relocate all dependencies to avoid conflicts */
-        relocate("dev.hypera.chameleon", "dev.hypera.chameleon.example.lib.chameleon")
+        //relocate("dev.hypera.chameleon", "dev.hypera.chameleon.example.lib.chameleon") // Cannot relocate because example is in this package.
         relocate("net.kyori", "dev.hypera.chameleon.example.lib.kyori")
         relocate("com.google.gson", "dev.hypera.chameleon.example.lib.gson")
     }

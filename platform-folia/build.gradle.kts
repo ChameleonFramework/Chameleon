@@ -21,28 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
-    }
+plugins {
+    id("chameleon.common")
+    id("java-library")
 }
 
-rootProject.name = "chameleon-parent"
+repositories {
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven("https://repo.papermc.io/repository/maven-public/")
+}
 
-sequenceOf(
-    "api",
-    "bom",
-    "annotations",
-    "example",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-folia",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-sponge",
-    "platform-velocity"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+dependencies {
+    api(project(":chameleon-platform-bukkit"))
+    compileOnlyApi(libs.platform.folia)
 }

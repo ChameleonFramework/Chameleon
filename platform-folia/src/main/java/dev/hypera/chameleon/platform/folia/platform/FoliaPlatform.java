@@ -21,28 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-pluginManagement {
-    includeBuild("build-logic")
-    repositories {
-        gradlePluginPortal()
+package dev.hypera.chameleon.platform.folia.platform;
+
+import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.server.ServerPlatform;
+import org.bukkit.Bukkit;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Folia server platform implementation.
+ */
+@Internal
+public final class FoliaPlatform implements ServerPlatform {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getId() {
+        return Platform.FOLIA;
     }
-}
 
-rootProject.name = "chameleon-parent"
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return Bukkit.getName();
+    }
 
-sequenceOf(
-    "api",
-    "bom",
-    "annotations",
-    "example",
-    "platform-bukkit",
-    "platform-bungeecord",
-    "platform-folia",
-    "platform-minestom",
-    "platform-nukkit",
-    "platform-sponge",
-    "platform-velocity"
-).forEach {
-    include("chameleon-$it")
-    project(":chameleon-$it").projectDir = file(it)
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return Bukkit.getVersion();
+    }
+
 }
