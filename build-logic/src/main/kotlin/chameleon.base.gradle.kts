@@ -38,10 +38,16 @@ plugins {
 }
 
 val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+val requires17 = setOf(
+    "chameleon-example",
+    "chameleon-platform-folia",
+    "chameleon-platform-minestom",
+    "chameleon-platform-sponge",
+)
 
 indra {
     javaVersions {
-        if (project.name.contains("folia") || project.name.contains("minestom") || project.name.contains("sponge") || project.name.contains("example")) {
+        if (project.name in requires17) {
             target(17)
             testWith(17)
         } else {

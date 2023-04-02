@@ -47,6 +47,7 @@ import java.util.Collection;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,6 +55,7 @@ import org.jetbrains.annotations.Nullable;
  * Bukkit Chameleon implementation.
  * Not final to allow Folia implementation to extend this class.
  */
+@NonExtendable
 public class BukkitChameleon extends Chameleon {
 
     private final @NotNull JavaPlugin plugin;

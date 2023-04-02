@@ -66,9 +66,9 @@ public final class FoliaChameleon extends BukkitChameleon {
      * Unsupported.
      *
      * @param chameleonPlugin Unsupported.
-     * @param bukkitPlugin Unsupported.
-     * @param pluginData Unsupported.
-     * @return Unsupported.
+     * @param bukkitPlugin    Unsupported.
+     * @param pluginData      Unsupported.
+     * @return                Unsupported.
      */
     @Deprecated
     public static @NotNull BukkitChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin, @NotNull ChameleonPluginData pluginData) {
@@ -89,21 +89,35 @@ public final class FoliaChameleon extends BukkitChameleon {
         return new FoliaChameleonBootstrap(chameleonPlugin, foliaPlugin, pluginData);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Platform getPlatform() {
         return this.platform != null ? this.platform : super.getPlatform();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull PluginManager getPluginManager() {
         return this.pluginManager != null ? this.pluginManager : super.getPluginManager();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull Scheduler getScheduler() {
         return this.scheduler != null ? this.scheduler : super.getScheduler();
     }
 
+    /**
+     * Check if Folia is present.
+     *
+     * @return true if Folia is present.
+     */
     private static boolean isFolia() {
         try {
             // find a better class to use for this?
