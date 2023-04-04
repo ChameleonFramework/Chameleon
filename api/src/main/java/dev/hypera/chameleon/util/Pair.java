@@ -21,19 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.bukkit.extension;
+package dev.hypera.chameleon.util;
 
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import dev.hypera.chameleon.extension.CustomPlatformExtension;
-import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Chameleon Bukkit extension.
+ * Pair, stores two values together.
  *
- * @param <T> Chameleon extension type.
- * @param <C> Chameleon platform extension type.
+ * @param <A> First type.
+ * @param <B> Second type.
  */
-public abstract class ChameleonBukkitExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, BukkitChameleon> {
+@NonExtendable
+public interface Pair<A, B> {
+
+    /**
+     * Returns a new pair with the given values.
+     *
+     * @param first  First value.
+     * @param second Second value.
+     * @param <A>    First type.
+     * @param <B>    Second type.
+     *
+     * @return new pair.
+     */
+    static @NotNull <A, B> Pair<A, B> of(@NotNull A first, @NotNull B second) {
+        return new PairImpl<>(first, second);
+    }
+
+    /**
+     * Returns the first value.
+     *
+     * @return an optional containing the first value, if not null, otherwise an empty optional.
+     */
+    @NotNull A first();
+
+    /**
+     * Returns the second value.
+     *
+     * @return an optional containing the second value, if not null, otherwise an empty optional.
+     */
+    @NotNull B second();
 
 }

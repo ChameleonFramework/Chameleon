@@ -21,26 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@Suppress( // https://youtrack.jetbrains.com/issue/KTIJ-19369/
-    "DSL_SCOPE_VIOLATION",
-    "MISSING_DEPENDENCY_CLASS",
-    "UNRESOLVED_REFERENCE_WRONG_RECEIVER",
-    "FUNCTION_CALL_EXPECTED"
-)
-plugins {
-    alias(libs.plugins.indra.sonatype)
-}
+package dev.hypera.chameleon.util.graph;
 
-group = "dev.hypera"
-version = "0.15.0-SNAPSHOT"
-description = "Cross-platform Minecraft plugin framework"
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-indraSonatype {
-    useAlternateSonatypeOSSHost("s01")
-}
+import org.junit.jupiter.api.Test;
 
-subprojects {
-    repositories {
-        mavenCentral()
+final class EdgeTests {
+
+    @Test
+    void testEquality() {
+        Edge<Integer> edge = Edge.of(1, 2);
+        assertEquals(edge, edge);
+        assertNotEquals(null, edge);
+        assertNotEquals(edge, new Object());
+        assertEquals(Edge.of(1, 2), Edge.of(1, 2));
+        assertEquals(Edge.of("test", "test2"), Edge.of("test", "test2"));
+        assertNotEquals(Edge.of(1, 2), Edge.of(1, 3));
+        assertNotEquals(Edge.of(2, 3), Edge.of(1, 3));
     }
+
+    @Test
+    void testFlip() {
+        assertThat(Edge.of(1, 2).flip()).isEqualTo(Edge.of(2, 1));
+        assertThat(Edge.of("test", "test2").flip()).isEqualTo(Edge.of("test2", "test"));
+    }
+
 }

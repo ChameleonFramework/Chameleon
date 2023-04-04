@@ -21,26 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@Suppress( // https://youtrack.jetbrains.com/issue/KTIJ-19369/
-    "DSL_SCOPE_VIOLATION",
-    "MISSING_DEPENDENCY_CLASS",
-    "UNRESOLVED_REFERENCE_WRONG_RECEIVER",
-    "FUNCTION_CALL_EXPECTED"
-)
-plugins {
-    alias(libs.plugins.indra.sonatype)
-}
+package dev.hypera.chameleon.extension.objects;
 
-group = "dev.hypera"
-version = "0.15.0-SNAPSHOT"
-description = "Cross-platform Minecraft plugin framework"
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.extension.ChameleonExtensionDependency;
+import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
+import java.util.Collection;
+import java.util.Collections;
+import org.jetbrains.annotations.NotNull;
 
-indraSonatype {
-    useAlternateSonatypeOSSHost("s01")
-}
+public interface Test2Extension extends ChameleonExtension {
 
-subprojects {
-    repositories {
-        mavenCentral()
+    static @NotNull TestExtensionFactory<Test2Extension> create(@NotNull ChameleonPlatformExtension extension) {
+        return create(extension, Collections.emptySet());
     }
+
+    static @NotNull TestExtensionFactory<Test2Extension> create(@NotNull ChameleonPlatformExtension extension, @NotNull Collection<ChameleonExtensionDependency> dependencies) {
+        return new TestExtensionFactory<>(extension, dependencies, Test2Extension.class);
+    }
+
+    @NotNull String greet(@NotNull String name);
+
 }

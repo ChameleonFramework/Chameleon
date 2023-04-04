@@ -24,15 +24,17 @@
 package dev.hypera.chameleon.platform.sponge;
 
 import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.command.CommandManager;
+import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.logger.ChameleonLog4jLogger;
+import dev.hypera.chameleon.extension.ExtensionMap;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.sponge.adventure.SpongeAudienceProvider;
@@ -44,7 +46,6 @@ import dev.hypera.chameleon.platform.sponge.scheduler.SpongeScheduler;
 import dev.hypera.chameleon.platform.sponge.user.SpongeUserManager;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import java.nio.file.Path;
-import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.Sponge;
@@ -65,8 +66,15 @@ public final class SpongeChameleon extends Chameleon {
     private final @NotNull SpongeListener listener = new SpongeListener(this);
 
     @Internal
-    SpongeChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull SpongePlugin spongePlugin, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, extensions, pluginData, new ChameleonLog4jLogger(spongePlugin.getLogger()));
+    SpongeChameleon(
+        @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+        @NotNull SpongePlugin spongePlugin,
+        @NotNull ChameleonPluginData pluginData,
+        @NotNull EventBus eventBus,
+        @NotNull ChameleonLogger logger,
+        @NotNull ExtensionMap extensions
+    ) throws ChameleonInstantiationException {
+        super(chameleonPlugin, pluginData, eventBus, logger, extensions);
         this.plugin = spongePlugin;
     }
 
@@ -79,7 +87,7 @@ public final class SpongeChameleon extends Chameleon {
      *
      * @return new Sponge Chameleon bootstrap.
      */
-    public static @NotNull SpongeChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin, @NotNull ChameleonPluginData pluginData) {
+    public static @NotNull ChameleonBootstrap<SpongeChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin, @NotNull ChameleonPluginData pluginData) {
         return new SpongeChameleonBootstrap(chameleonPlugin, spongePlugin, pluginData);
     }
 

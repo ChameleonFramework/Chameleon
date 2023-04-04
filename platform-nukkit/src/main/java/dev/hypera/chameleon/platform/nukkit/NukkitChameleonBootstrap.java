@@ -28,18 +28,15 @@ import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.logger.ChameleonLogger;
-import dev.hypera.chameleon.platform.nukkit.extension.NukkitChameleonExtension;
+import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.nukkit.logger.ChameleonNukkitLogger;
-import java.util.Collection;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Nukkit Chameleon bootstrap implementation.
  */
-public final class NukkitChameleonBootstrap extends ChameleonBootstrap<NukkitChameleon, NukkitChameleonExtension<?, ?>> {
+final class NukkitChameleonBootstrap extends ChameleonBootstrap<NukkitChameleon> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull PluginBase nukkitPlugin;
@@ -47,27 +44,18 @@ public final class NukkitChameleonBootstrap extends ChameleonBootstrap<NukkitCha
 
     @Internal
     NukkitChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull ChameleonPluginData pluginData) {
+        super(new ChameleonNukkitLogger(nukkitPlugin.getLogger()), Platform.NUKKIT);
         this.chameleonPlugin = chameleonPlugin;
         this.nukkitPlugin = nukkitPlugin;
         this.pluginData = pluginData;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Internal
     @Override
-    protected @NotNull NukkitChameleon loadInternal(@NotNull Collection<ChameleonExtension<?>> extensions) throws ChameleonInstantiationException {
-        return new NukkitChameleon(this.chameleonPlugin, extensions, this.nukkitPlugin, this.pluginData);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Internal
-    @Override
-    protected @NotNull ChameleonLogger createLogger() {
-        return new ChameleonNukkitLogger(this.nukkitPlugin.getLogger());
+    protected @NotNull NukkitChameleon loadInternal() throws ChameleonInstantiationException {
+        return new NukkitChameleon(
+            this.chameleonPlugin, this.nukkitPlugin, this.pluginData,
+            this.eventBus, this.logger, this.extensions
+        );
     }
 
 }

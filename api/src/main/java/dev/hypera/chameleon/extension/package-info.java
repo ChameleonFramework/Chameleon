@@ -21,19 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.velocity.extension;
-
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import dev.hypera.chameleon.extension.CustomPlatformExtension;
-import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
-
 /**
- * Chameleon Velocity extension.
- *
- * @param <T> Chameleon extension type.
- * @param <C> Chameleon platform extension type.
+ * The extensions package provides a way to create custom libraries that expand Chameleon's core
+ * functionality. Extensions can leverage platform-specific APIs to create additional events and
+ * functions, increasing the possibilities for plugins built with Chameleon.
  */
-public abstract class VelocityChameleonExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, VelocityChameleon> {
-
-}
+package dev.hypera.chameleon.extension;

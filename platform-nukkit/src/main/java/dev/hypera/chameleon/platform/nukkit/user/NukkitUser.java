@@ -49,7 +49,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.title.Title.Times;
 import net.kyori.adventure.title.TitlePart;
-import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,7 +57,6 @@ import org.jetbrains.annotations.UnknownNullability;
 /**
  * Nukkit server user implementation.
  */
-@Internal
 public final class NukkitUser implements ServerUser {
 
     private final @NotNull Player player;
@@ -490,6 +488,15 @@ public final class NukkitUser implements ServerUser {
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
+    }
+
+    /**
+     * Get the Nukkit player for this user.
+     *
+     * @return Nukkit player.
+     */
+    public @NotNull Player getPlayer() {
+        return this.player;
     }
 
     private int convertGameModeToNukkit(@NotNull GameMode gameMode) {

@@ -23,10 +23,39 @@
  */
 package dev.hypera.chameleon.extension.objects;
 
-import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.extension.ChameleonExtensionDependency;
+import dev.hypera.chameleon.extension.ChameleonExtensionFactory;
 import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
+import java.util.Collection;
+import org.jetbrains.annotations.NotNull;
 
-// Has parent extension with invalid constructor
-public class TestInvalidPlatformExtension extends ChameleonPlatformExtension<TestInvalidExtension, TestPlatform, Chameleon> implements TestPlatform {
+public class TestExtensionFactory<T extends ChameleonExtension> implements ChameleonExtensionFactory<T> {
+
+    private final @NotNull ChameleonPlatformExtension extension;
+    private final @NotNull Collection<ChameleonExtensionDependency> dependencies;
+    private final @NotNull Class<T> type;
+
+    public TestExtensionFactory(@NotNull ChameleonPlatformExtension extension, @NotNull Collection<ChameleonExtensionDependency> dependencies, @NotNull Class<T> type) {
+        this.extension = extension;
+        this.dependencies = dependencies;
+        this.type = type;
+    }
+
+    @Override
+    public @NotNull ChameleonPlatformExtension create(@NotNull String platformId) throws ChameleonExtensionException {
+        return this.extension;
+    }
+
+    @Override
+    public @NotNull Collection<ChameleonExtensionDependency> getDependencies(@NotNull String platformId) {
+        return this.dependencies;
+    }
+
+    @Override
+    public @NotNull Class<T> getType() {
+        return this.type;
+    }
 
 }

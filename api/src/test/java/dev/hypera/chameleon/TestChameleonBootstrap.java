@@ -21,42 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.folia;
+package dev.hypera.chameleon;
 
-import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
-import dev.hypera.chameleon.platform.Platform;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import dev.hypera.chameleon.logger.DummyChameleonLogger;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Folia Chameleon bootstrap implementation.
- */
-public final class FoliaChameleonBootstrap extends ChameleonBootstrap<FoliaChameleon> {
+final class TestChameleonBootstrap extends ChameleonBootstrap<TestChameleon> {
 
-    private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
-    private final @NotNull JavaPlugin foliaPlugin;
-    private final @NotNull ChameleonPluginData pluginData;
-
-    @Internal
-    FoliaChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin foliaPlugin, @NotNull ChameleonPluginData pluginData) {
-        super(new ChameleonSlf4jLogger(foliaPlugin.getSLF4JLogger()), Platform.FOLIA);
-        this.chameleonPlugin = chameleonPlugin;
-        this.foliaPlugin = foliaPlugin;
-        this.pluginData = pluginData;
+    TestChameleonBootstrap() {
+        super(new DummyChameleonLogger(), TestChameleon.PLATFORM_ID);
     }
 
-    @Internal
     @Override
-    protected @NotNull FoliaChameleon loadInternal() throws ChameleonInstantiationException {
-        return new FoliaChameleon(
-            this.chameleonPlugin, this.foliaPlugin, this.pluginData,
-            this.eventBus, this.logger, this.extensions
-        );
+    protected @NotNull TestChameleon loadInternal() throws ChameleonInstantiationException {
+        return new TestChameleon(this.logger, this.eventBus, this.extensions);
     }
 
 }

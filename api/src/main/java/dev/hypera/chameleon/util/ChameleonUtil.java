@@ -23,7 +23,6 @@
  */
 package dev.hypera.chameleon.util;
 
-import java.lang.reflect.ParameterizedType;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -51,18 +50,6 @@ public final class ChameleonUtil {
      */
     public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
         return s == null ? defaultValue : s;
-    }
-
-    /**
-     * Get the class of a generic type.
-     *
-     * @param clazz   Class to get the generic type on.
-     * @param generic Generic type index.
-     *
-     * @return Generic type as a class.
-     */
-    public static @NotNull Class<?> getGenericTypeAsClass(@NotNull Class<?> clazz, int generic) {
-        return (Class<?>) ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[generic];
     }
 
 }

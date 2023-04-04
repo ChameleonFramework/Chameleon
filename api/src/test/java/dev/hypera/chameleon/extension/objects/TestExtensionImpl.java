@@ -23,14 +23,28 @@
  */
 package dev.hypera.chameleon.extension.objects;
 
-import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.event.EventBus;
+import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
+import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import org.jetbrains.annotations.NotNull;
 
-public class TestInvalidExtension extends ChameleonExtension<TestPlatform> {
+public class TestExtensionImpl implements ChameleonPlatformExtension, TestExtension {
 
-    // Invalid constructor
-    public TestInvalidExtension(@NotNull TestPlatform platform, @NotNull String shouldNotBeHere) {
-        super(platform);
+    @Override
+    public void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException {
+
+    }
+
+    @Override
+    public void load(@NotNull Chameleon chameleon) {
+
+    }
+
+    @Override
+    public @NotNull String greet(@NotNull String name) {
+        return String.format("こんにちは、%s!", name);
     }
 
 }

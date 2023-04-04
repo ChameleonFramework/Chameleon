@@ -23,42 +23,48 @@
  */
 package dev.hypera.chameleon.extension;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
-import dev.hypera.chameleon.logger.ChameleonLogger;
+import java.util.Collection;
+import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Chameleon platform extension.
- * <p>Classes implementing this interface must also implement {@code T}.</p>
+ * Chameleon extension factory.
  *
- * @see ChameleonExtension
+ * @param <T> Chameleon extension type.
  */
-public interface ChameleonPlatformExtension {
+public interface ChameleonExtensionFactory<T extends ChameleonExtension> {
 
     /**
-     * Extension init.
+     * Create an extension instance for the given platform.
+     * <p>Note that the returned ChameleonPlatformExtension <strong>must</strong> implement
+     * {@code T}.</p>
      *
-     * <p>This method will be called when the Extension is initialised by Chameleon, either before
-     * Chameleon is constructed, or when EventManager#loadExtension is called.</p>
+     * @param platformId Platform identifier to create the extension for. This identifier can be
+     *                   compared against known platform identifiers stored as constants in
+     *                   {@link dev.hypera.chameleon.platform.Platform}.
      *
-     * @param logger   Logger.
-     * @param eventBus Event bus.
+     * @return new extension instance.
+     * @throws ChameleonExtensionException if something goes wrong while creating the extension.
      */
-    void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException;
+    @NotNull ChameleonPlatformExtension create(@NotNull String platformId) throws ChameleonExtensionException;
 
     /**
-     * Extension load.
+     * Returns the dependencies this extension requires on the given platform.
      *
-     * <p>This method will be called when Chameleon has finished loading, or when
-     * EventManager#loadExtension is called after Chameleon has loaded.</p>
+     * @param platformId Platform identifier.
      *
-     * <p>If your extension is platform dependant, then you can cast {@code chameleon} to the
-     * platform Chameleon implementation, e.g. BukkitChameleon, BungeeCordChameleon, etc.</p>
-     *
-     * @param chameleon Chameleon instance.
+     * @return collection of dependencies.
      */
-    void load(@NotNull Chameleon chameleon);
+    default @NotNull Collection<ChameleonExtensionDependency> getDependencies(@NotNull String platformId) {
+        return Collections.emptySet();
+    }
+
+    /**
+     * Returns the class of the Chameleon extension implementation that this factory supports.
+     *
+     * @return Chameleon extension class.
+     */
+    @NotNull Class<T> getType();
 
 }

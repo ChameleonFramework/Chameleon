@@ -21,19 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.folia.extension;
+package dev.hypera.chameleon.extension.objects;
 
-import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.event.EventBus;
+import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
 import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import dev.hypera.chameleon.extension.CustomPlatformExtension;
-import dev.hypera.chameleon.platform.folia.FoliaChameleon;
+import dev.hypera.chameleon.logger.ChameleonLogger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * Chameleon Folia extension.
- *
- * @param <T> Chameleon extension type.
- * @param <C> Chameleon platform extension type.
- */
-public abstract class ChameleonFoliaExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, FoliaChameleon> {
+public final class TestCircularDetection2ExtensionImpl implements ChameleonPlatformExtension, TestCircularDetection2Extension {
+
+    private @Nullable ChameleonLogger logger;
+
+    @Override
+    public void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException {
+        this.logger = logger;
+    }
+
+    @Override
+    public void load(@NotNull Chameleon chameleon) {
+
+    }
+
+    @Override
+    public void test(@NotNull String name) {
+        if (this.logger == null) {
+            throw new IllegalStateException("extension has not been initialised yet");
+        }
+        this.logger.info("Hello, %s!", name);
+    }
 
 }

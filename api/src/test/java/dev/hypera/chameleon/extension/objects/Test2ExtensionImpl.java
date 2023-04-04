@@ -24,8 +24,35 @@
 package dev.hypera.chameleon.extension.objects;
 
 import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.event.EventBus;
+import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
 import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
+import dev.hypera.chameleon.logger.ChameleonLogger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class TestPlatformExtension extends ChameleonPlatformExtension<TestExtension, TestPlatform, Chameleon> implements TestPlatform {
+public final class Test2ExtensionImpl implements ChameleonPlatformExtension, Test2Extension {
+
+    private @Nullable Chameleon chameleon;
+
+    @Override
+    public void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException {
+
+    }
+
+    @Override
+    public void load(@NotNull Chameleon chameleon) {
+        this.chameleon = chameleon;
+    }
+
+    @Override
+    public @NotNull String greet(@NotNull String name) {
+        if (this.chameleon == null) {
+            throw new IllegalStateException("extension has not been loaded yet");
+        }
+
+        return this.chameleon.getExtensionManager().getExtension(TestExtension.class)
+            .orElseThrow(IllegalStateException::new).greet(name);
+    }
 
 }

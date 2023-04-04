@@ -21,30 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension.annotations;
+package dev.hypera.chameleon.util;
 
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import org.jetbrains.annotations.NotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Post loadable. Used to mark an extension as capable of being loaded after Chameleon.
- * <p>Warning: When an extension is "post loaded", the {@link ChameleonExtension#onPreLoad()} method
- * will <strong>not</strong> be called.</p>
- */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PostLoadable {
+import org.junit.jupiter.api.Test;
 
-    /**
-     * Get the platform extensions for this extension.
-     *
-     * @return platform extensions.
-     */
-    @NotNull Class<? extends ChameleonPlatformExtension<?, ?, ?>>[] value();
+final class ChameleonUtilTests {
+
+    @Test
+    void testGetOrDefault() {
+        assertEquals("test", ChameleonUtil.getOrDefault("test", "test2"));
+        assertEquals("test", ChameleonUtil.getOrDefault(null, "test"));
+    }
 
 }

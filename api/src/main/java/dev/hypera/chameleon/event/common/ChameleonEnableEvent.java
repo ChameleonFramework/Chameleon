@@ -21,44 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension;
+package dev.hypera.chameleon.event.common;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.event.EventBus;
-import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
-import dev.hypera.chameleon.logger.ChameleonLogger;
+import dev.hypera.chameleon.event.ChameleonEvent;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Chameleon platform extension.
- * <p>Classes implementing this interface must also implement {@code T}.</p>
- *
- * @see ChameleonExtension
+ * Chameleon enable event.
+ * <p>Dispatched when Chameleon#onLoad is called by the plugin.</p>
  */
-public interface ChameleonPlatformExtension {
+public final class ChameleonEnableEvent implements ChameleonEvent {
+
+    private final @NotNull Chameleon chameleon;
 
     /**
-     * Extension init.
-     *
-     * <p>This method will be called when the Extension is initialised by Chameleon, either before
-     * Chameleon is constructed, or when EventManager#loadExtension is called.</p>
-     *
-     * @param logger   Logger.
-     * @param eventBus Event bus.
-     */
-    void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException;
-
-    /**
-     * Extension load.
-     *
-     * <p>This method will be called when Chameleon has finished loading, or when
-     * EventManager#loadExtension is called after Chameleon has loaded.</p>
-     *
-     * <p>If your extension is platform dependant, then you can cast {@code chameleon} to the
-     * platform Chameleon implementation, e.g. BukkitChameleon, BungeeCordChameleon, etc.</p>
+     * ChameleonEnableEvent constructor.
+     * <p>This event is intended to be dispatched internally by Chameleon only.</p>
      *
      * @param chameleon Chameleon instance.
      */
-    void load(@NotNull Chameleon chameleon);
+    @Internal
+    public ChameleonEnableEvent(@NotNull Chameleon chameleon) {
+        this.chameleon = chameleon;
+    }
+
+    /**
+     * Get the Chameleon instance that triggered this event.
+     *
+     * @return Chameleon instance.
+     */
+    public @NotNull Chameleon chameleon() {
+        return this.chameleon;
+    }
 
 }

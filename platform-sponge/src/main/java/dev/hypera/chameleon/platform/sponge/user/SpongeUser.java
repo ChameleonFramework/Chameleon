@@ -36,6 +36,7 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
@@ -43,7 +44,6 @@ import org.spongepowered.api.network.channel.raw.RawDataChannel;
 /**
  * Sponge server user implementation.
  */
-@Internal
 public final class SpongeUser implements ServerUser, ForwardingAudience.Single {
 
     private final @NotNull ServerPlayer player;
@@ -155,6 +155,15 @@ public final class SpongeUser implements ServerUser, ForwardingAudience.Single {
     @Override
     public @NotNull Audience audience() {
         return this.audience;
+    }
+
+    /**
+     * Get the Sponge player for this user.
+     *
+     * @return Sponge player.
+     */
+    public @NotNull Player getPlayer() {
+        return this.player;
     }
 
     private @NotNull org.spongepowered.api.entity.living.player.gamemode.GameMode convertGameModeToSponge(@NotNull GameMode gameMode) {

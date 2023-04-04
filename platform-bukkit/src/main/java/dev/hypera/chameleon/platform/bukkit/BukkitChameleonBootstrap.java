@@ -27,11 +27,8 @@ import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extension.ChameleonExtension;
 import dev.hypera.chameleon.logger.ChameleonJavaLogger;
-import dev.hypera.chameleon.logger.ChameleonLogger;
-import dev.hypera.chameleon.platform.bukkit.extension.ChameleonBukkitExtension;
-import java.util.Collection;
+import dev.hypera.chameleon.platform.Platform;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Bukkit Chameleon bootstrap implementation.
  */
-public final class BukkitChameleonBootstrap extends ChameleonBootstrap<BukkitChameleon, ChameleonBukkitExtension<?, ?>> {
+public final class BukkitChameleonBootstrap extends ChameleonBootstrap<BukkitChameleon> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull JavaPlugin bukkitPlugin;
@@ -47,21 +44,18 @@ public final class BukkitChameleonBootstrap extends ChameleonBootstrap<BukkitCha
 
     @Internal
     BukkitChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin, @NotNull ChameleonPluginData pluginData) {
+        super(new ChameleonJavaLogger(bukkitPlugin.getLogger()), Platform.BUKKIT);
         this.chameleonPlugin = chameleonPlugin;
         this.bukkitPlugin = bukkitPlugin;
         this.pluginData = pluginData;
     }
 
-    @Internal
     @Override
-    protected @NotNull BukkitChameleon loadInternal(@NotNull Collection<ChameleonExtension<?>> extensions) throws ChameleonInstantiationException {
-        return new BukkitChameleon(this.chameleonPlugin, extensions, this.bukkitPlugin, this.pluginData);
-    }
-
-    @Internal
-    @Override
-    protected @NotNull ChameleonLogger createLogger() {
-        return new ChameleonJavaLogger(this.bukkitPlugin.getLogger());
+    protected @NotNull BukkitChameleon loadInternal() throws ChameleonInstantiationException {
+        return new BukkitChameleon(
+            this.chameleonPlugin, this.bukkitPlugin, this.pluginData,
+            this.eventBus, this.logger, this.extensions
+        );
     }
 
 }

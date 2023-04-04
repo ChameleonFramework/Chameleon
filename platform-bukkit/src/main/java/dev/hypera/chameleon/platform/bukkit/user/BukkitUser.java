@@ -43,7 +43,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Bukkit server user implementation.
  */
-@Internal
 public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
 
     private final @NotNull BukkitChameleon chameleon;
@@ -149,6 +148,15 @@ public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
     public void setGameMode(@NotNull GameMode gameMode) {
         Preconditions.checkNotNull("gameMode", gameMode);
         this.player.setGameMode(convertGameModeToBukkit(gameMode));
+    }
+
+    /**
+     * Get the Bukkit player for this user.
+     *
+     * @return Bukkit player.
+     */
+    public @NotNull Player getPlayer() {
+        return this.player;
     }
 
     /**

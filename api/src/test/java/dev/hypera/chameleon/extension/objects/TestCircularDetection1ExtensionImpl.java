@@ -21,19 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.sponge.extension;
+package dev.hypera.chameleon.extension.objects;
 
-import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.event.EventBus;
+import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
 import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import dev.hypera.chameleon.extension.CustomPlatformExtension;
-import dev.hypera.chameleon.platform.sponge.SpongeChameleon;
+import dev.hypera.chameleon.logger.ChameleonLogger;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * Chameleon Sponge extension.
- *
- * @param <T> Chameleon extension type.
- * @param <C> Chameleon platform extension type.
- */
-public abstract class SpongeChameleonExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, SpongeChameleon> {
+public final class TestCircularDetection1ExtensionImpl implements ChameleonPlatformExtension, TestCircularDetection1Extension {
+
+    @Override
+    public void init(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) throws ChameleonExtensionException {
+
+    }
+
+    @Override
+    public void load(@NotNull Chameleon chameleon) {
+
+    }
 
 }

@@ -23,6 +23,8 @@
  */
 package dev.hypera.chameleon.util;
 
+import java.util.Collection;
+import java.util.Objects;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +44,6 @@ public final class Preconditions {
     private Preconditions() {
 
     }
-
 
     /**
      * Ensures the expression is {@code true} to validate an argument.
@@ -147,7 +148,6 @@ public final class Preconditions {
         if (value == null) {
             throw new NullPointerException();
         }
-
         return value;
     }
 
@@ -166,7 +166,43 @@ public final class Preconditions {
         if (value == null) {
             throw new IllegalArgumentException(name.concat(" cannot be null"));
         }
+        return value;
+    }
 
+    /**
+     * Ensures that the given {@code value} is not null.
+     *
+     * @param name  Argument name, used in the exception message if {@code value} is null.
+     * @param value Argument value.
+     * @param <T>   Value type.
+     *
+     * @return {@code value}.
+     * @throws IllegalStateException if {@code value} is {@code null}.
+     */
+    @Contract("_, !null -> param2; _, null -> fail")
+    public static <T> @NotNull T checkNotNullState(@NotNull String name, @Nullable T value) {
+        if (value == null) {
+            throw new IllegalStateException(name.concat(" cannot be null"));
+        }
+        return value;
+    }
+
+    /**
+     * Ensures that the given {@code value} does not contain null.
+     *
+     * @param name  Argument name, used in the exception message if {@code value} contains null.
+     * @param value Argument value.
+     * @param <T>   Value type.
+     *
+     * @return {@code value}.
+     * @throws IllegalArgumentException if {@code value} contains {@code null}.
+     */
+    @Contract("_, !null -> param2; _, null -> fail")
+    public static <T> @NotNull Collection<T> checkNoneNull(@NotNull String name, @Nullable Collection<T> value) {
+        Preconditions.checkNotNull(name, value);
+        if (value.parallelStream().anyMatch(Objects::isNull)) {
+            throw new IllegalArgumentException(name.concat(" cannot contain null"));
+        }
         return value;
     }
 

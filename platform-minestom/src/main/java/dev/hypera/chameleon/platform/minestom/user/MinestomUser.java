@@ -40,7 +40,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Minestom server user implementation.
  */
-@Internal
 public final class MinestomUser implements ServerUser, ForwardingAudience.Single {
 
     private final @NotNull Player player;
@@ -153,6 +152,15 @@ public final class MinestomUser implements ServerUser, ForwardingAudience.Single
     @Override
     public @NotNull Audience audience() {
         return this.audience;
+    }
+
+    /**
+     * Get the Minestom player for this user.
+     *
+     * @return Minestom player.
+     */
+    public @NotNull Player getPlayer() {
+        return this.player;
     }
 
 }

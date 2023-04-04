@@ -23,10 +23,13 @@
  */
 package dev.hypera.chameleon.platform.folia;
 
+import com.google.errorprone.annotations.DoNotCall;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
+import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extension.ChameleonExtension;
+import dev.hypera.chameleon.extension.ExtensionMap;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
@@ -35,7 +38,6 @@ import dev.hypera.chameleon.platform.folia.platform.FoliaPlatform;
 import dev.hypera.chameleon.platform.folia.platform.FoliaPluginManager;
 import dev.hypera.chameleon.platform.folia.scheduler.FoliaScheduler;
 import dev.hypera.chameleon.scheduler.Scheduler;
-import java.util.Collection;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -54,12 +56,12 @@ public final class FoliaChameleon extends BukkitChameleon {
     private final @Nullable FoliaScheduler scheduler;
 
     @Internal
-    FoliaChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull JavaPlugin foliaPlugin, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, extensions, foliaPlugin, pluginData);
-        boolean isFolia = isFolia();
-        this.platform = isFolia ? new FoliaPlatform() : null;
-        this.pluginManager = isFolia ? new FoliaPluginManager() : null;
-        this.scheduler = isFolia ? new FoliaScheduler(this) : null;
+    FoliaChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin foliaPlugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull ExtensionMap extensions) throws ChameleonInstantiationException {
+        super(chameleonPlugin, foliaPlugin, pluginData, eventBus, logger, extensions);
+        boolean folia = isFolia();
+        this.platform = folia ? new FoliaPlatform() : null;
+        this.pluginManager = folia ? new FoliaPluginManager() : null;
+        this.scheduler = folia ? new FoliaScheduler(this) : null;
     }
 
     /**
@@ -68,8 +70,11 @@ public final class FoliaChameleon extends BukkitChameleon {
      * @param chameleonPlugin Unsupported.
      * @param bukkitPlugin    Unsupported.
      * @param pluginData      Unsupported.
-     * @return                Unsupported.
+     *
+     * @return Unsupported.
+     * @deprecated Not supported on Folia.
      */
+    @DoNotCall("Always throws java.lang.UnsupportedOperationException")
     @Deprecated
     @SuppressWarnings("unused")
     public static @NotNull BukkitChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin, @NotNull ChameleonPluginData pluginData) {

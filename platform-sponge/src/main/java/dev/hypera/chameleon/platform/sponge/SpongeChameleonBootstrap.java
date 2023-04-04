@@ -27,18 +27,15 @@ import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.extension.ChameleonExtension;
 import dev.hypera.chameleon.logger.ChameleonLog4jLogger;
-import dev.hypera.chameleon.logger.ChameleonLogger;
-import dev.hypera.chameleon.platform.sponge.extension.SpongeChameleonExtension;
-import java.util.Collection;
+import dev.hypera.chameleon.platform.Platform;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Sponge Chameleon bootstrap implementation.
  */
-public final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeChameleon, SpongeChameleonExtension<?, ?>> {
+final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeChameleon> {
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull SpongePlugin spongePlugin;
@@ -46,27 +43,15 @@ public final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeCha
 
     @Internal
     SpongeChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin, @NotNull ChameleonPluginData pluginData) {
+        super(new ChameleonLog4jLogger(spongePlugin.getLogger()), Platform.SPONGE);
         this.chameleonPlugin = chameleonPlugin;
         this.spongePlugin = spongePlugin;
         this.pluginData = pluginData;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Internal
     @Override
-    protected @NotNull SpongeChameleon loadInternal(@NotNull Collection<ChameleonExtension<?>> extensions) throws ChameleonInstantiationException {
-        return new SpongeChameleon(this.chameleonPlugin, extensions, this.spongePlugin, this.pluginData);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Internal
-    @Override
-    protected @NotNull ChameleonLogger createLogger() {
-        return new ChameleonLog4jLogger(this.spongePlugin.getLogger());
+    protected @NotNull SpongeChameleon loadInternal() throws ChameleonInstantiationException {
+        return new SpongeChameleon(this.chameleonPlugin, this.spongePlugin, this.pluginData, this.eventBus, this.logger, this.extensions);
     }
 
 }

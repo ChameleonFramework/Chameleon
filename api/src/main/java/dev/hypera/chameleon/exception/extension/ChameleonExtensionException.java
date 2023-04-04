@@ -24,7 +24,7 @@
 package dev.hypera.chameleon.exception.extension;
 
 import dev.hypera.chameleon.exception.ChameleonRuntimeException;
-
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Chameleon extension exception.
@@ -70,6 +70,18 @@ public class ChameleonExtensionException extends ChameleonRuntimeException {
 
     protected ChameleonExtensionException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    /**
+     * Returns a new Chameleon extension exception with the formatted message.
+     *
+     * @param message Message to format.
+     * @param args    Format args.
+     *
+     * @return created Chameleon extension exception.
+     */
+    public static @NotNull ChameleonExtensionException create(@NotNull String message, @NotNull Object... args) {
+        return new ChameleonExtensionException(String.format(message, args));
     }
 
 }

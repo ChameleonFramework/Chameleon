@@ -21,19 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.nukkit.extension;
+package dev.hypera.chameleon.util.graph;
 
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
-import dev.hypera.chameleon.extension.CustomPlatformExtension;
-import dev.hypera.chameleon.platform.nukkit.NukkitChameleon;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Chameleon Nukkit extension.
+ * An edge between two nodes.
  *
- * @param <T> Chameleon extension type.
- * @param <C> Chameleon platform extension type.
+ * @param <T> Node type.
  */
-public abstract class NukkitChameleonExtension<T extends ChameleonExtension<C>, C extends CustomPlatformExtension> extends ChameleonPlatformExtension<T, C, NukkitChameleon> {
+public interface Edge<T> {
+
+    /**
+     * Create a new edge between {@code source} and {@code target}.
+     *
+     * @param source Edge source.
+     * @param target Edge target.
+     * @param <T>    Node type.
+     *
+     * @return new edge.
+     */
+    static <T> @NotNull Edge<T> of(@NotNull T source, @NotNull T target) {
+        return new EdgeImpl<>(source, target);
+    }
+
+    /**
+     * Returns the source of this edge.
+     *
+     * @return edge source.
+     */
+    @NotNull T source();
+
+    /**
+     * Returns the target of this edge.
+     *
+     * @return edge target.
+     */
+    @NotNull T target();
+
+    /**
+     * Returns a new edge with the sources and targets of this edge, but reversed.
+     *
+     * @return flipped edge.
+     */
+    @NotNull Edge<T> flip();
 
 }

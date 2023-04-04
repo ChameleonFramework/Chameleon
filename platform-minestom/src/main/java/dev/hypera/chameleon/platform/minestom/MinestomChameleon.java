@@ -24,15 +24,17 @@
 package dev.hypera.chameleon.platform.minestom;
 
 import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.command.CommandManager;
+import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
-import dev.hypera.chameleon.extension.ChameleonExtension;
-import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
+import dev.hypera.chameleon.extension.ExtensionMap;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.minestom.adventure.MinestomAudienceProvider;
@@ -45,7 +47,6 @@ import dev.hypera.chameleon.platform.minestom.user.MinestomUserManager;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import dev.hypera.chameleon.user.UserManager;
 import java.nio.file.Path;
-import java.util.Collection;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -65,8 +66,15 @@ public final class MinestomChameleon extends Chameleon {
     private final @NotNull MinestomScheduler scheduler = new MinestomScheduler();
 
     @Internal
-    MinestomChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Collection<ChameleonExtension<?>> extensions, @NotNull Extension extension, @NotNull ChameleonPluginData pluginData) throws ChameleonInstantiationException {
-        super(chameleonPlugin, extensions, pluginData, new ChameleonSlf4jLogger(extension.getLogger()));
+    MinestomChameleon(
+        @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+        @NotNull Extension extension,
+        @NotNull ChameleonPluginData pluginData,
+        @NotNull EventBus eventBus,
+        @NotNull ChameleonLogger logger,
+        @NotNull ExtensionMap extensions
+    ) throws ChameleonInstantiationException {
+        super(chameleonPlugin, pluginData, eventBus, logger, extensions);
         this.extension = extension;
         new MinestomListener(this);
     }
@@ -80,7 +88,7 @@ public final class MinestomChameleon extends Chameleon {
      *
      * @return new Minestom Chameleon bootstrap.
      */
-    public static @NotNull MinestomChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull ChameleonPluginData pluginData) {
+    public static @NotNull ChameleonBootstrap<MinestomChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull ChameleonPluginData pluginData) {
         return new MinestomChameleonBootstrap(chameleonPlugin, extension, pluginData);
     }
 

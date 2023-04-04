@@ -21,26 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@Suppress( // https://youtrack.jetbrains.com/issue/KTIJ-19369/
-    "DSL_SCOPE_VIOLATION",
-    "MISSING_DEPENDENCY_CLASS",
-    "UNRESOLVED_REFERENCE_WRONG_RECEIVER",
-    "FUNCTION_CALL_EXPECTED"
-)
-plugins {
-    alias(libs.plugins.indra.sonatype)
-}
+package dev.hypera.chameleon.extension.objects;
 
-group = "dev.hypera"
-version = "0.15.0-SNAPSHOT"
-description = "Cross-platform Minecraft plugin framework"
+import dev.hypera.chameleon.extension.ChameleonExtension;
 
-indraSonatype {
-    useAlternateSonatypeOSSHost("s01")
-}
+public interface TestCircularDetection1Extension extends ChameleonExtension {
 
-subprojects {
-    repositories {
-        mavenCentral()
-    }
 }

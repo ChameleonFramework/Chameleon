@@ -43,7 +43,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Velocity proxy user implementation.
  */
-@Internal
 public final class VelocityUser implements ProxyUser, ForwardingAudience.Single {
 
     private final @NotNull VelocityChameleon chameleon;
@@ -167,6 +166,15 @@ public final class VelocityUser implements ProxyUser, ForwardingAudience.Single 
     @Override
     public @NotNull Audience audience() {
         return this.audience;
+    }
+
+    /**
+     * Get the Velocity player for this user.
+     *
+     * @return Velocity player.
+     */
+    public @NotNull Player getPlayer() {
+        return this.player;
     }
 
 }

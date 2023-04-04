@@ -23,55 +23,11 @@
  */
 package dev.hypera.chameleon.extension;
 
-import dev.hypera.chameleon.Chameleon;
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Extension.
  *
- * @param <T> Chameleon platform extension type.
+ * @see ChameleonPlatformExtension
  */
-public abstract class ChameleonExtension<T extends CustomPlatformExtension> {
-
-    protected final @NotNull T platform;
-
-    /**
-     * Chameleon extension constructor.
-     *
-     * @param platform Chameleon platform extension instance.
-     */
-    protected ChameleonExtension(@NotNull T platform) {
-        this.platform = platform;
-    }
-
-    /**
-     * Called before Chameleon is loaded.
-     */
-    public void onPreLoad() {
-
-    }
-
-    /**
-     * Called after Chameleon has loaded.
-     *
-     * @param chameleon Initialised Chameleon implementation.
-     */
-    public void onLoad(@NotNull Chameleon chameleon) {
-
-    }
-
-    /**
-     * Called when the platform plugin is enabled.
-     */
-    public void onEnable() {
-
-    }
-
-    /**
-     * Called when the platform plugin is disabled.
-     */
-    public void onDisable() {
-
-    }
+public interface ChameleonExtension {
 
 }

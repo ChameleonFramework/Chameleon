@@ -21,26 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@Suppress( // https://youtrack.jetbrains.com/issue/KTIJ-19369/
-    "DSL_SCOPE_VIOLATION",
-    "MISSING_DEPENDENCY_CLASS",
-    "UNRESOLVED_REFERENCE_WRONG_RECEIVER",
-    "FUNCTION_CALL_EXPECTED"
-)
-plugins {
-    alias(libs.plugins.indra.sonatype)
-}
+package dev.hypera.chameleon.util;
 
-group = "dev.hypera"
-version = "0.15.0-SNAPSHOT"
-description = "Cross-platform Minecraft plugin framework"
+import org.jetbrains.annotations.NotNull;
 
-indraSonatype {
-    useAlternateSonatypeOSSHost("s01")
-}
+/**
+ * Pair implementation.
+ *
+ * @param <A> First type.
+ * @param <B> Second type.
+ */
+final class PairImpl<A, B> implements Pair<A, B> {
 
-subprojects {
-    repositories {
-        mavenCentral()
+    private final @NotNull A first;
+    private final @NotNull B second;
+
+    PairImpl(@NotNull A first, @NotNull B second) {
+        this.first = first;
+        this.second = second;
     }
+
+    @Override
+    public @NotNull A first() {
+        return this.first;
+    }
+
+    @Override
+    public @NotNull B second() {
+        return this.second;
+    }
+
 }

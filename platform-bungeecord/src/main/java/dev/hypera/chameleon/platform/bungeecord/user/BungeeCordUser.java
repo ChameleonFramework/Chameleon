@@ -43,7 +43,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * BungeeCord proxy user implementation.
  */
-@Internal
 public final class BungeeCordUser implements ProxyUser, ForwardingAudience.Single {
 
     private final @NotNull Chameleon chameleon;
@@ -166,6 +165,15 @@ public final class BungeeCordUser implements ProxyUser, ForwardingAudience.Singl
     @Override
     public @NotNull Audience audience() {
         return this.audience;
+    }
+
+    /**
+     * Get the BungeeCord proxied player for this user.
+     *
+     * @return BungeeCord proxied player.
+     */
+    public @NotNull ProxiedPlayer getPlayer() {
+        return this.player;
     }
 
 }

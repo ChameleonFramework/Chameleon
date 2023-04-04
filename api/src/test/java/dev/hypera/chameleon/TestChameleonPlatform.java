@@ -21,11 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.extension;
+package dev.hypera.chameleon;
 
-/**
- * Custom platform extension.
- */
-public interface CustomPlatformExtension {
+import dev.hypera.chameleon.platform.Platform;
+import org.jetbrains.annotations.NotNull;
+
+public final class TestChameleonPlatform implements Platform {
+
+    /**
+     * Get a unique identifier for this Platform.
+     * <p>This will return the common name of the API that is in use, e.g. "BungeeCord" or
+     * "Velocity".</p>
+     *
+     * @return Platform identifier.
+     */
+    @Override
+    public @NotNull String getId() {
+        return TestChameleon.PLATFORM_ID;
+    }
+
+    /**
+     * Get the friendly name of this Platform.
+     * <p>This will return the name provided by the Platform, which may not match the name of the
+     * API that is in use.</p>
+     *
+     * @return Platform friendly name.
+     */
+    @Override
+    public @NotNull String getName() {
+        return "Test";
+    }
+
+    /**
+     * Get the version of this Platform.
+     * <p>This will return the version provided by the Platform.</p>
+     *
+     * @return Platform version.
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return Chameleon.getVersion() + "-" + Chameleon.getCommit();
+    }
 
 }

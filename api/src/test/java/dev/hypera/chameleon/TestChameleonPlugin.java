@@ -28,14 +28,14 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Dummy Chameleon plugin implementation.
  */
-public final class DummyChameleonPlugin extends ChameleonPlugin {
+public final class TestChameleonPlugin extends ChameleonPlugin {
 
     /**
      * Chameleon plugin constructor.
      *
      * @param chameleon Chameleon implementation.
      */
-    public DummyChameleonPlugin(@NotNull Chameleon chameleon) {
+    public TestChameleonPlugin(@NotNull Chameleon chameleon) {
         super(chameleon);
     }
 
