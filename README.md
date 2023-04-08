@@ -6,75 +6,122 @@
 </div>
 
 <div align="center">
-  <img alt="Stable version" src="https://img.shields.io/badge/Stable-N/A-%2317aaaa?style=for-the-badge">
-  <img alt="Latest version" src="https://img.shields.io/badge/dynamic/json?color=17aaaa&label=Latest&prefix=v&query=%24.version&url=https%3A%2F%2Frepo.hypera.dev%2Fapi%2Fmaven%2Flatest%2Fversion%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon-api&style=for-the-badge">
   <img alt="License" src="https://img.shields.io/badge/License-MIT-%2317aaaa?style=for-the-badge">
-  <img alt="Code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/main?style=for-the-badge&color=%2317aaaa">
+  <img alt="Code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/main?style=for-the-badge&color=%2317aaaa"><br />
+  <img alt="Latest release" src="https://img.shields.io/maven-central/v/dev.hypera/chameleon-api?color=%2317aaaa&label=Latest%20Release&style=for-the-badge">
+  <img alt="Latest version" src="https://img.shields.io/maven-metadata/v?color=%2317aaaa&label=Latest%20Snapshot&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fcontent%2Frepositories%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon-api%2Fmaven-metadata.xml&style=for-the-badge">
 </div>
+<br/>
+<details>
+  <summary>Table of Contents</summary>
+
+  * [What is Chameleon?](#what-is-chameleon)
+    * [Stability](#stability)
+    * [Supported Platforms](#supported-platforms)
+  * [Getting started](#getting-started)
+    * [Project structure](#project-structure)
+    * [Annotation-based platform class generator](#annotation-based-platform-class-generator)
+    * [Dependencies](#dependencies)
+      * [Java 11](#java-11)
+      * [Gradle (Kotlin)](#gradle-kotlin)
+      * [Gradle (Groovy)](#gradle-groovy)
+      * [Maven](#maven)
+  * [Contributing](#contributing)
+    * [Building](#building)
+    * [Contact](#contact)
+    * [License](#license)
+  * [Acknowledgements](#acknowledgements)
+    * [Supporters](#supporters)
+    * [Plugins](#plugins)
+</details>
 
 ## What is Chameleon?
-
-> **Warning** - This framework is currently considered unstable, however the authors use it in
-> production.  
-> Until a stable release is made, the codebase is subject to major/breaking changes without warning.
 
 Chameleon is a framework created to allow developers to easily create Minecraft plugins that work
 across multiple platforms.
 
+### Stability
+
+While still in its development phrase, Chameleon is being actively used by the authors in production.
+However, until a stable release is made, the codebase is subject to major and potentially breaking
+changes without warning.
+
+When we make a breaking change, we will try our best to change the version so that existing projects
+will not be affected until they update to a newer version.
+
+Use of the Chameleon Framework in production environments, or for any other purpose, is entirely at
+your own risk.
+
 ### Supported Platforms
 
-> **Know another platform we could support?**  
-> Let us know by creating a *feature request issue* or
-> sending a message in our [official Discord server](https://discord.hypera.dev/)!
+Chameleon supports a variety of platforms.
+Do you know of another platform that we could support? Let us know by creating a feature request
+issue or sending a message in our [official Discord server](https://discord.hypera.dev/)!
 
-> **Warning** - Platforms marked with *Unstable* often have breaking API changes and Chameleon may
-> stop working on newer versions. If you experience an issue using any platform, please create a
-> bug report, so we can resolve the issue.
+Please note that platforms marked as *Unstable* often experience breaking API changes that may
+impact the functionality of Chameleon. If you experience any issues with any of the platforms,
+please create a bug report, so we can address the issue.
 
- - **Bukkit** - `dev.hypera:chameleon-platform-bukkit`
- - **BungeeCord** - `dev.hypera:chameleon-platform-bungeecord`
- - *Fabric - `dev.hypera:chameleon-platform-fabric` *Coming soon**
- - *Forge - `dev.hypera:chameleon-platform-forge` *Coming soon**
- - **Minestom** - `dev.hypera:chameleon-platform-minestom` *Unstable*
- - **Nukkit** - `dev.hypera:chameleon-platform-nukkit`
- - **Sponge** - `dev.hypera:chameleon-platform-sponge` *Unstable*
- - **Velocity** - `dev.hypera:chameleon-platform-velocity`
+In the event that maintaining compatibility with a platform's API becomes unfeasible or for any
+other reason a platform is deemed no longer worth supporting, we reserve the right to discontinue
+support for the platform without prior notice.
+
+| Platform Name  | Dependency                                 | Status       |
+|----------------|--------------------------------------------|--------------|
+| **Bukkit**     | `dev.hypera:chameleon-platform-bukkit`     |              |
+| **BungeeCord** | `dev.hypera:chameleon-platform-bungeecord` |              |
+| Fabric         | `dev.hypera:chameleon-platform-fabric`     | Coming soon  |
+| **Folia**      | `dev.hypera:chameleon-platform-folia`      | Experimental |
+| Forge          | `dev.hypera:chameleon-platform-forge`      | Coming soon  |
+| **Minestom**   | `dev.hypera:chameleon-platform-minestom`   | Unstable     |
+| **Nukkit**     | `dev.hypera:chameleon-platform-nukkit`     |              |
+| **Sponge**     | `dev.hypera:chameleon-platform-sponge`     | Unstable     |
+| **Velocity**   | `dev.hypera:chameleon-platform-velocity`   |              |
 
 ## Getting started
 
-**Proper documentation is coming soon**.  
-**You can find an Example Chameleon project [here](example)**.  
-If you have any questions, feel free to ask in
-our [official Discord server](https://discord.hypera.dev/).
+We're currently working on Chameleon's documentation, and it will be available soon.
+In the meantime, you can check out our example project [here](example). If you have any questions,
+don't hesitate to ask us in our [official Discord server](https://discord.hypera.dev/)!
 
 ### Project structure
 
-- `chameleon-api` - Chameleon's API and core, most things happen here.
-- `chameleon-annotations` - Chameleon annotation-based platform class generator.
-- `chamleleon-example` - An example project for Chameleon.
-- `chameleon-platform-<name>` - Chameleon implementation for the named platform, supported:
-    - `bukkit`
-    - `bungeecord`
-    - `minestom`
-    - `nukkit`
-    - `sponge`
-    - `velocity`
+Chameleon is a modular system that allows you to choose which parts you want to use.
+Here are the key modules:
+
+- `chameleon-api` contains Chameleon's core API, most things happen here.
+- `chameleon-annotations` contains our annotation-based platform class generator, designed to make
+  using Chameleon as easy as possible.
+- `chameleon-platform-(name)` contains the implementation of Chameleon's API on the named platform.
+  You can see a full list of supported platforms [here](#supported-platforms).
+
+If you have any questions or concerns, please do not hesitate to reach out to us in our
+[official Discord server](https://discord.hypera.dev/).
 
 ### Annotation-based platform class generator
 
-`chameleon-annotations` can be used to automatically generate the main classes that each platform
-requires in-order to load the plugin then start Chameleon.  
-To use this, all you have to do is add the `chameleon-annotations` module as a compileOnly
-dependency and annotationProcessor (gradle) or provided dependency (maven) and add the `@Plugin`
-annotation to your ChameleonPlugin class.
+`chameleon-annotations` simplifies the process of generating the required classes for each platform
+to load and start Chameleon automatically.
 
-```java
-@Plugin(id = "myplugin", name = "MyPlugin")
-```
+To use this feature, add `dev.hypera:chameleon-annotations` as a compileOnly dependency and an
+annotationProcessor (Gradle) or as a provided dependency (Maven). Then, annotate your
+`ChameleonPlugin` class with `@Plugin` and provide some information about your plugin, that's it!
 
 ### Dependencies
 
-You can find the latest versions at the top of this file.
+![Latest Release](https://img.shields.io/maven-central/v/dev.hypera/chameleon-api?color=%2317aaaa&label=Latest%20Release&style=for-the-badge)
+![Latest Snapshot](https://img.shields.io/maven-metadata/v?color=%2317aaaa&label=Latest%20Snapshot&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fcontent%2Frepositories%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon-api%2Fmaven-metadata.xml&style=for-the-badge)
+
+#### Java 11
+
+Chameleon requires Java 11 as a minimum version. This is because Java 8 reached its end-of-life (EOL)
+in March 2022, which means that it will no longer receive public updates, leaving it vulnerable to
+security risks. Java 11 is the next long-term support (LTS) version, which means it will continue
+receiving public updates until at least September 2026 (Azul).
+
+In addition to security reasons, Java 11 brings significant improvements over Java 8, such as better
+performance, improved memory management, and new API features. Using Java 11 will help ensure that
+Chameleon runs smoothly and efficiently, providing a better use experience.
 
 #### Gradle (Kotlin)
 
@@ -90,7 +137,10 @@ repositories {
 dependencies {
     val chameleonVersion = "<version>"
     implementation("dev.hypera:chameleon-api:$chameleonVersion")
-    // Repeat the line below and replace <module> with the module you wish to use.
+
+    // Include the Chameleon implementation for each platform you wish to support.
+    // Replace (name) with the platform name, and repeat the next line for as many
+    // platforms as you wish.
     implementation("dev.hypera:chameleon-<module>:$chameleonVersion")
 
     // If you wish to use the automatic platform main class generation:
@@ -113,8 +163,11 @@ repositories {
 dependencies {
     def chameleonVersion = '<version>'
     implementation 'dev.hypera:chameleon-api:${chameleonVersion}'
-    // Repeat the line below and replace <module> with the module you wish to use.
-    implementation 'dev.hypera:chameleon-<module>:${chameleonVersion}'
+
+    // Include the Chameleon implementation for each platform you wish to support.
+    // Replace (name) with the platform name, and repeat the next line for as many
+    // platforms as you wish.
+    implementation 'dev.hypera:chameleon-platform-(name):${chameleonVersion}'
 
     // If you wish to use the automatic platform main class generation:
     compileOnly 'dev.hypera:chameleon-annotations:${chameleonVersion}'
@@ -143,14 +196,16 @@ dependencies {
       <artifactId>chameleon-api</artifactId>
       <version>${chameleon.version}</version>
   </dependency>
-  
-  <!-- Repeat the block below and replace 'MODULE' with the module you wish to use. -->
+
+  <!-- Include the Chameleon implementation for each platform you wish to support. -->
+  <!-- Replace (name) with the platform name, and repeat the next line for as many -->
+  <!-- platforms as you wish. -->
   <dependency>
       <groupId>dev.hypera</groupId>
-      <artifactId>chameleon-MODULE</artifactId>
+      <artifactId>chameleon-platform-(name)</artifactId>
       <version>${chameleon.version}</version>
   </dependency>
-  
+
   <!-- If you wish to use the automatic platform main class generation: -->
   <dependency>
       <groupId>dev.hypera</groupId>
@@ -163,7 +218,9 @@ dependencies {
 
 ## Contributing
 
-Please read [the Contributing guide](CONTRIBUTING.md).
+We welcome all contributions! If you have found something that you think you can improve, please
+feel free to contribute!  
+Please read our [Contributing guide](CONTRIBUTING.md) before creating a Pull Request or Issue :D
 
 ### Building
 
@@ -177,11 +234,21 @@ the `build` command.
 While the project can run on Java 8 or above, to build the project you will need Java 17 or above
 due to several platforms we support requiring modern versions of Java.
 
+### Contact
+
+You can contact us in our [official Discord server](https://discord.hypera.dev/) (faster) or by
+emailing us at [contact@hypera.dev](mailto:contact@hypera.dev). 
+
+You can report a security vulnerability in Chameleon by:
+- [Create a vulnerability report on our GitHub repository](https://github.com/ChameleonFramework/Chameleon/security/advisories/new).
+- Send an email to [security@hypera.dev](mailto:security@hypera.dev).
+
 ### License
 
-The contents of this repository is licensed under the [MIT License](LICENSE).
+Chameleon Framework is distributed under the terms of the [MIT License](LICENSE).  
+See [LICENSE](LICENSE) for more information.
 
-## Thank you
+## Acknowledgements
 
 This project was made possible by
 the [amazing people who have contributed](https://github.com/ChameleonFramework/Chameleon/graphs/contributors)
@@ -197,6 +264,7 @@ project.
 
 ### Plugins
 
-Plugins or resources that have been created using Chameleon.
+This is a list of plugins or resources that have been created using Chameleon.  
+If you have created something with Chameleon, you can create a pull request to add it to this list.
 
-- [UltraStaffChatPro](https://www.spigotmc.org/resources/80461/) v2.0.0+
+- [**UltraStaffChatPro**](https://www.spigotmc.org/resources/80461/) v2.0.0+

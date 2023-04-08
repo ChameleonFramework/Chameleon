@@ -1,11 +1,13 @@
-#  Chameleon Framework Authors
+#  The Chameleon Framework Authors
 #
 #  This is a list of entities who own copyright to portions of Chameleon's code.
-#  Please keep this list sorted alphabetically.
 #
-#  Acceptable formats:
-#    Organization Name
-#    My Name <myname@email.com>
+#  Acceptable formats for names in this file:
+#     Organisation Name
+#     Individual Name <email address>
+#     Individual Name <email address> <secondary email address>
+#
+#  Please keep this list sorted alphabetically.
 
 Joshua Sing <joshua@hypera.dev>
-SLLCoding <luisjk266@gmail.com>
+LooFifteen <luisjk266@gmail.com>
