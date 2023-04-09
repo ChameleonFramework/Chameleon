@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.platform.bukkit.platform;
 
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.server.GameMode;
 import dev.hypera.chameleon.platform.server.ServerPlatform;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -59,4 +60,42 @@ public final class BukkitPlatform implements ServerPlatform {
         return Bukkit.getVersion();
     }
 
+
+    /**
+     * Converts a chameleon {@link GameMode GameMode} to the corresponding bukkit {@link org.bukkit.GameMode org.bukkit.GameMode}.
+     *
+     * @param gameMode the chameleon {@link GameMode GameMode}
+     * @return the corresponding bukkit {@link org.bukkit.GameMode org.bukkit.GameMode}
+     */
+    public static org.bukkit.@NotNull GameMode convertGameModeToBukkit(@NotNull GameMode gameMode) {
+        switch (gameMode) {
+            case CREATIVE:
+                return org.bukkit.GameMode.CREATIVE;
+            case ADVENTURE:
+                return org.bukkit.GameMode.ADVENTURE;
+            case SPECTATOR:
+                return org.bukkit.GameMode.SPECTATOR;
+            default:
+                return org.bukkit.GameMode.SURVIVAL;
+        }
+    }
+
+    /**
+     * Converts a bukkit {@link org.bukkit.GameMode org.bukkit.GameMode} to the corresponding chameleon {@link GameMode GameMode}.
+     *
+     * @param gameMode the bukkit {@link org.bukkit.GameMode org.bukkit.GameMode}
+     * @return the corresponding chameleon {@link GameMode GameMode}
+     */
+    public static @NotNull GameMode convertGameModeToChameleon(org.bukkit.@NotNull GameMode gameMode) {
+        switch (gameMode) {
+            case CREATIVE:
+                return GameMode.CREATIVE;
+            case ADVENTURE:
+                return GameMode.ADVENTURE;
+            case SPECTATOR:
+                return GameMode.SPECTATOR;
+            default:
+                return GameMode.SURVIVAL;
+        }
+    }
 }

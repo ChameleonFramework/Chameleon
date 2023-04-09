@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.platform.bukkit.user;
 
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
+import dev.hypera.chameleon.platform.bukkit.platform.BukkitPlatform;
 import dev.hypera.chameleon.platform.server.GameMode;
 import dev.hypera.chameleon.user.ServerUser;
 import dev.hypera.chameleon.util.Preconditions;
@@ -138,7 +139,7 @@ public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
      */
     @Override
     public @NotNull GameMode getGameMode() {
-        return convertGameModeToChameleon(this.player.getGameMode());
+        return BukkitPlatform.convertGameModeToChameleon(this.player.getGameMode());
     }
 
     /**
@@ -147,7 +148,7 @@ public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
     @Override
     public void setGameMode(@NotNull GameMode gameMode) {
         Preconditions.checkNotNull("gameMode", gameMode);
-        this.player.setGameMode(convertGameModeToBukkit(gameMode));
+        this.player.setGameMode(BukkitPlatform.convertGameModeToBukkit(gameMode));
     }
 
     /**
@@ -168,31 +169,4 @@ public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
     public @NotNull Audience audience() {
         return this.audience;
     }
-
-    private @NotNull org.bukkit.GameMode convertGameModeToBukkit(@NotNull GameMode gameMode) {
-        switch (gameMode) {
-            case CREATIVE:
-                return org.bukkit.GameMode.CREATIVE;
-            case ADVENTURE:
-                return org.bukkit.GameMode.ADVENTURE;
-            case SPECTATOR:
-                return org.bukkit.GameMode.SPECTATOR;
-            default:
-                return org.bukkit.GameMode.SURVIVAL;
-        }
-    }
-
-    private @NotNull GameMode convertGameModeToChameleon(@NotNull org.bukkit.GameMode gameMode) {
-        switch (gameMode) {
-            case CREATIVE:
-                return GameMode.CREATIVE;
-            case ADVENTURE:
-                return GameMode.ADVENTURE;
-            case SPECTATOR:
-                return GameMode.SPECTATOR;
-            default:
-                return GameMode.SURVIVAL;
-        }
-    }
-
 }
