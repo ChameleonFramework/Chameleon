@@ -1,0 +1,15 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":semanticCommits",
+    ":semanticPrefixChore",
+    ":semanticCommitScope(deps)",
+    ":enableVulnerabilityAlerts"
+  ],
+  "labels": [
+    "type: dependencies"
+  ],
+  "assigneesFromCodeOwners": true,
+  "configMigration": true
+}
