@@ -23,8 +23,7 @@
     * [Annotation-based platform class generator](#annotation-based-platform-class-generator)
     * [Dependencies](#dependencies)
       * [Java 11](#java-11)
-      * [Gradle (Kotlin)](#gradle-kotlin)
-      * [Gradle (Groovy)](#gradle-groovy)
+      * [Gradle](#gradle)
       * [Maven](#maven)
   * [Contributing](#contributing)
     * [Building](#building)
@@ -32,7 +31,7 @@
     * [License](#license)
   * [Acknowledgements](#acknowledgements)
     * [Supporters](#supporters)
-    * [Plugins](#plugins)
+    * [Plugins using Chameleon](#plugins-using-chameleon)
 </details>
 
 ## What is Chameleon?
@@ -70,9 +69,9 @@ support for the platform without prior notice.
 |----------------|--------------------------------------------|--------------|
 | **Bukkit**     | `dev.hypera:chameleon-platform-bukkit`     |              |
 | **BungeeCord** | `dev.hypera:chameleon-platform-bungeecord` |              |
-| Fabric         | `dev.hypera:chameleon-platform-fabric`     | Coming soon  |
+| Fabric         | ~~`dev.hypera:chameleon-platform-fabric`~~ | Coming soon  |
 | **Folia**      | `dev.hypera:chameleon-platform-folia`      | Experimental |
-| Forge          | `dev.hypera:chameleon-platform-forge`      | Coming soon  |
+| Forge          | ~~`dev.hypera:chameleon-platform-forge`~~  | Coming soon  |
 | **Minestom**   | `dev.hypera:chameleon-platform-minestom`   | Unstable     |
 | **Nukkit**     | `dev.hypera:chameleon-platform-nukkit`     |              |
 | **Sponge**     | `dev.hypera:chameleon-platform-sponge`     | Unstable     |
@@ -123,7 +122,10 @@ In addition to security reasons, Java 11 brings significant improvements over Ja
 performance, improved memory management, and new API features. Using Java 11 will help ensure that
 Chameleon runs smoothly and efficiently, providing a better use experience.
 
-#### Gradle (Kotlin)
+#### Gradle
+
+<details>
+<summary>Kotlin DSL</summary>
 
 ```kotlin
 repositories {
@@ -135,21 +137,27 @@ repositories {
 }
 
 dependencies {
-    val chameleonVersion = "<version>"
-    implementation("dev.hypera:chameleon-api:$chameleonVersion")
+    // Import Chameleon's Bill of Materials to set the version for every other
+    // Chameleon dependency.
+    implementation(platform("dev.hypera:chameleon-bom:(VERSION)"))
+
+    // Include Chameleon's API
+    implementation("dev.hypera:chameleon-api")
 
     // Include the Chameleon implementation for each platform you wish to support.
     // Replace (name) with the platform name, and repeat the next line for as many
     // platforms as you wish.
-    implementation("dev.hypera:chameleon-<module>:$chameleonVersion")
+    implementation("dev.hypera:chameleon-platform-(name)")
 
     // If you wish to use the automatic platform main class generation:
-    compileOnly("dev.hypera:chameleon-annotations:$chameleonVersion")
-    annotationProcessor("dev.hypera:chameleon-annotations:$chameleonVersion")
+    compileOnly("dev.hypera:chameleon-annotations")
+    annotationProcessor("dev.hypera:chameleon-annotations")
 }
 ```
+</details>
 
-#### Gradle (Groovy)
+<details>
+<summary>Groovy DSL</summary>
 
 ```groovy
 repositories {
@@ -161,60 +169,86 @@ repositories {
 }
 
 dependencies {
-    def chameleonVersion = '<version>'
-    implementation 'dev.hypera:chameleon-api:${chameleonVersion}'
+    // Import Chameleon's Bill of Materials to set the version for every other
+    // Chameleon dependency.
+    implementation platform('dev.hypera:chameleon-bom:(VERSION)')
+
+    // Include Chameleon's API
+    implementation 'dev.hypera:chameleon-api'
 
     // Include the Chameleon implementation for each platform you wish to support.
     // Replace (name) with the platform name, and repeat the next line for as many
     // platforms as you wish.
-    implementation 'dev.hypera:chameleon-platform-(name):${chameleonVersion}'
+    implementation 'dev.hypera:chameleon-platform-(name)'
 
     // If you wish to use the automatic platform main class generation:
-    compileOnly 'dev.hypera:chameleon-annotations:${chameleonVersion}'
-    annotationProcessor 'dev.hypera:chameleon-annotations:${chameleonVersion}'
+    compileOnly 'dev.hypera:chameleon-annotations'
+    annotationProcessor 'dev.hypera:chameleon-annotations'
 }
 ```
+</details>
 
 #### Maven
 
+<details>
+<summary>Maven</summary>
+
 ```xml
-<properties>
-    <chameleon.version>VERSION</chameleon.version>
-</properties>
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-<repositories>
-  <!-- If using a snapshot: -->
-  <repository>
-      <id>sonatype-oss-s01</id>
-      <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-  </repository>
-</repositories>
+    <!-- ... -->
 
-<dependencies>
-  <dependency>
-      <groupId>dev.hypera</groupId>
-      <artifactId>chameleon-api</artifactId>
-      <version>${chameleon.version}</version>
-  </dependency>
-
-  <!-- Include the Chameleon implementation for each platform you wish to support. -->
-  <!-- Replace (name) with the platform name, and repeat the next line for as many -->
-  <!-- platforms as you wish. -->
-  <dependency>
-      <groupId>dev.hypera</groupId>
-      <artifactId>chameleon-platform-(name)</artifactId>
-      <version>${chameleon.version}</version>
-  </dependency>
-
-  <!-- If you wish to use the automatic platform main class generation: -->
-  <dependency>
-      <groupId>dev.hypera</groupId>
-      <artifactId>chameleon-annotations</artifactId>
-      <version>${chameleon.version}</version>
-      <scope>provided</scope>
-  </dependency>
-</dependencies>
+    <repositories>
+      <!-- If using a snapshot: -->
+      <repository>
+        <id>sonatype-oss-s01</id>
+        <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+      </repository>
+    </repositories>
+    
+    <dependencyManagement>
+      <dependencies>
+        <!-- Import Chameleon's Bill of Materials to set the version for every other -->
+        <!-- Chameleon dependency. -->
+        <dependency>
+          <groupId>dev.hypera</groupId>
+          <artifactId>chameleon-bom</artifactId>
+          <version>(VERSION)</version>
+          <type>pom</type>
+          <scope>import</scope>
+        </dependency>
+      </dependencies>
+    </dependencyManagement>
+    
+    <dependencies>
+      <!-- Include Chameleon's API -->
+      <dependency>
+        <groupId>dev.hypera</groupId>
+        <artifactId>chameleon-api</artifactId>
+      </dependency>
+    
+      <!-- Include the Chameleon implementation for each platform you wish to support. -->
+      <!-- Replace (name) with the platform name, and repeat the next line for as many -->
+      <!-- platforms as you wish. -->
+      <dependency>
+        <groupId>dev.hypera</groupId>
+        <artifactId>chameleon-platform-(name)</artifactId>
+      </dependency>
+    
+      <!-- If you wish to use the automatic platform main class generation: -->
+      <dependency>
+        <groupId>dev.hypera</groupId>
+        <artifactId>chameleon-annotations</artifactId>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
+</project>
 ```
+</details>
 
 ## Contributing
 
@@ -224,15 +258,16 @@ Please read our [Contributing guide](CONTRIBUTING.md) before creating a Pull Req
 
 ### Building
 
-You can build this project by running `./gradlew build` in the project root directory.
-If you have Gradle 7.0+ installed, you can simply run the `gradle build` command in the project root
-directory.
+To build this project, execute <kbd>./gradlew build</kbd> in the project root directory.
+If you have Gradle 8.0+ installed, you can alternatively execute <kbd>gradle build</kbd> in the
+project root directory.
 
-To publish the built artifacts to your local maven repository, add `publishToMavenLocal` after
-the `build` command.
+To publish the built artifacts to your local maven repository, add `publishToMavenLocal` to the end
+of the build command, e.g. <kbd>./gradlew build publishToMavenLocal</kbd>
 
-While the project can run on Java 8 or above, to build the project you will need Java 17 or above
-due to several platforms we support requiring modern versions of Java.
+It is important to note that while the projects created with Chameleon can run on Java 11 or above,
+you will need Java 17 or newer to build Chameleon. This is due to several supported platforms
+requiring modern versions of Java.
 
 ### Contact
 
@@ -246,25 +281,31 @@ You can report a security vulnerability in Chameleon by:
 ### License
 
 Chameleon Framework is distributed under the terms of the [MIT License](LICENSE).  
-See [LICENSE](LICENSE) for more information.
+For further details, please refer to the [LICENSE](LICENSE) file.
 
 ## Acknowledgements
 
-This project was made possible by
-the [amazing people who have contributed](https://github.com/ChameleonFramework/Chameleon/graphs/contributors)
-and the people who have supported us in other ways whether it be providing feedback or donating to
-the developers.
+We are extremely grateful to the
+[amazing individuals who have contributed to this project](https://github.com/ChameleonFramework/Chameleon/graphs/contributors),
+as well as those who have supported us by providing valuable feedback and donations.
+
+We would also like to thank all the individuals and companies who have supported us in sustaining
+this project. We are grateful for their valuable contributions that have enabled us to continue to
+improve Chameleon.
+
+Please note that the individuals and companies listed under the "Supporters" section are
+independent of this project, and their inclusion should not be interpreted as an endorsement or
+affiliation.
 
 ### Supporters
 
-People and companies who have donated or provided us with something that aids us in continuing this
-project.  
 <a href="https://jb.gg/OpenSourceSupport"><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_square.svg" alt="JetBrains" height="82"/></a>
 <a href="https://www.macstadium.com/"><img src="https://uploads-ssl.webflow.com/5ac3c046c82724970fc60918/5c019d917bba312af7553b49_MacStadium-developerlogo.png" alt="MacStadium" height="82"/></a>
 
-### Plugins
+### Plugins using Chameleon
 
-This is a list of plugins or resources that have been created using Chameleon.  
-If you have created something with Chameleon, you can create a pull request to add it to this list.
+We are thrilled to showcase some of the amazing plugins and resources that have been created using
+Chameleon! If you have created something using Chameleon that you think deserves to be on this list,
+don't hesitate to create a pull request to add it here! We would love to see what you have created.
 
-- [**UltraStaffChatPro**](https://www.spigotmc.org/resources/80461/) v2.0.0+
+ - [**UltraStaffChatPro**](https://www.spigotmc.org/resources/80461/) v2.0.0+
