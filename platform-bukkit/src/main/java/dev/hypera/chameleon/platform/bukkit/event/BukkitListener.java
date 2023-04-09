@@ -26,13 +26,16 @@ package dev.hypera.chameleon.platform.bukkit.event;
 import dev.hypera.chameleon.event.common.UserChatEvent;
 import dev.hypera.chameleon.event.common.UserConnectEvent;
 import dev.hypera.chameleon.event.common.UserDisconnectEvent;
+import dev.hypera.chameleon.event.server.ServerUserGameModeChangeEvent;
 import dev.hypera.chameleon.event.server.ServerUserKickEvent;
 import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
+import dev.hypera.chameleon.platform.bukkit.platform.BukkitPlatform;
 import dev.hypera.chameleon.user.User;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -121,4 +124,17 @@ public final class BukkitListener implements Listener {
             ));
     }
 
+    /**
+     * Platform server user gamemode change event handler.
+     *
+     * @param event Platform event.
+     */
+    @EventHandler
+    public void onPlayerGameModeChangeEvent(@NotNull PlayerGameModeChangeEvent event) {
+        this.chameleon.getEventBus()
+            .dispatch(new ServerUserGameModeChangeEvent(
+                this.chameleon.getUserManager().wrap(event.getPlayer()),
+                BukkitPlatform.convertGameModeToChameleon(event.getNewGameMode())
+            ));
+    }
 }
