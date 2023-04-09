@@ -299,8 +299,9 @@ affiliation.
 
 ### Supporters
 
-<a href="https://jb.gg/OpenSourceSupport"><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_square.svg" alt="JetBrains" height="82"/></a>
-<a href="https://www.macstadium.com/"><img src="https://uploads-ssl.webflow.com/5ac3c046c82724970fc60918/5c019d917bba312af7553b49_MacStadium-developerlogo.png" alt="MacStadium" height="82"/></a>
+<a href="https://jb.gg/OpenSourceSupport">
+    <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains" height="128"/>
+</a>
 
 ### Plugins using Chameleon
 
