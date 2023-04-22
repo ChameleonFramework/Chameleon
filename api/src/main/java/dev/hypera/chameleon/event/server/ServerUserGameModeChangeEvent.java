@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Server user gamemode change event, dispatched when a users gamemode changes.
+ * <p>Note that this {@code ServerUserEvent} is <strong>not</strong> supported on Minestom.</p>
  */
 public final class ServerUserGameModeChangeEvent implements ServerUserEvent {
 
