@@ -36,7 +36,7 @@ build-test-logger = "3.2.0"
 build-errorprone = "2.18.0"
 build-errorprone-plugin = "3.1.0"
 build-nullaway = "0.10.10"
-build-nullaway-plugin = "1.5.0"
+build-nullaway-plugin = "1.6.0"
 
 # Test
 test-junit-bom = "5.9.3"
