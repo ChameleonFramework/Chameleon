@@ -27,11 +27,14 @@ import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.util.Preconditions;
 import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 /**
  * Minestom Chameleon bootstrap implementation.
@@ -44,7 +47,7 @@ final class MinestomChameleonBootstrap extends ChameleonBootstrap<MinestomChamel
 
     @Internal
     MinestomChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull ChameleonPluginData pluginData) {
-        super(new ChameleonSlf4jLogger(extension.getLogger()), Platform.MINESTOM);
+        super(createLogger(extension), Platform.MINESTOM);
         this.chameleonPlugin = chameleonPlugin;
         this.extension = extension;
         this.pluginData = pluginData;
@@ -56,6 +59,15 @@ final class MinestomChameleonBootstrap extends ChameleonBootstrap<MinestomChamel
             this.chameleonPlugin, this.extension, this.pluginData,
             this.eventBus, this.logger, this.extensions
         );
+    }
+
+    private static @NotNull ChameleonLogger createLogger(@NotNull Extension extension) {
+        Preconditions.checkNotNull("extension", extension);
+        try {
+            return new ChameleonSlf4jLogger((Logger) Extension.class.getMethod("getLogger").invoke(extension));
+        } catch (ReflectiveOperationException ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
 }
