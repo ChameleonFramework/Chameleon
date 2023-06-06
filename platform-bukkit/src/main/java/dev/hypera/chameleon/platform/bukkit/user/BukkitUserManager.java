@@ -65,7 +65,9 @@ public final class BukkitUserManager implements UserManager {
      */
     @Override
     public @NotNull ConsoleUser getConsole() {
-        if (this.consoleUser == null) this.consoleUser = new BukkitConsoleUser(this.chameleon);
+        if (this.consoleUser == null) {
+            this.consoleUser = new BukkitConsoleUser(this.chameleon);
+        }
         return this.consoleUser;
     }
 

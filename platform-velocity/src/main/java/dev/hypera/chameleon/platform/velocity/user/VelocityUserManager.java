@@ -37,6 +37,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Velocity user manager implementation.
@@ -45,8 +46,8 @@ import org.jetbrains.annotations.NotNull;
 public final class VelocityUserManager implements UserManager {
 
     private final @NotNull VelocityChameleon chameleon;
-    private final @NotNull VelocityConsoleUser consoleUser;
     private final @NotNull PlayerReflection playerReflection;
+    private @Nullable VelocityConsoleUser consoleUser;
 
     /**
      * Velocity user manager constructor.
@@ -56,12 +57,7 @@ public final class VelocityUserManager implements UserManager {
     @Internal
     public VelocityUserManager(@NotNull VelocityChameleon chameleon) {
         this.chameleon = chameleon;
-        CommandSource consoleSource = this.chameleon.getPlatformPlugin().getServer()
-            .getConsoleCommandSource();
-        this.consoleUser = new VelocityConsoleUser(consoleSource,
-            this.chameleon.getAdventureMapper().createReflectedAudience(consoleSource));
-        this.playerReflection = new PlayerReflection(this.chameleon.getAdventureMapper()
-            .getComponentMapper());
+        this.playerReflection = new PlayerReflection(this.chameleon.getAdventureMapper().getComponentMapper());
     }
 
     /**
@@ -76,6 +72,11 @@ public final class VelocityUserManager implements UserManager {
      */
     @Override
     public @NotNull ConsoleUser getConsole() {
+        if (this.consoleUser == null) {
+            CommandSource consoleSource = this.chameleon.getPlatformPlugin().getServer().getConsoleCommandSource();
+            this.consoleUser = new VelocityConsoleUser(consoleSource,
+                    this.chameleon.getAdventureMapper().createReflectedAudience(consoleSource));
+        }
         return this.consoleUser;
     }
 
