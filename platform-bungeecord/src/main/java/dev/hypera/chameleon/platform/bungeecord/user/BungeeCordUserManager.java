@@ -65,7 +65,9 @@ public final class BungeeCordUserManager implements UserManager {
      */
     @Override
     public @NotNull ConsoleUser getConsole() {
-        if (this.consoleUser == null) this.consoleUser = new BungeeCordConsoleUser(this.chameleon);
+        if (this.consoleUser == null) {
+            this.consoleUser = new BungeeCordConsoleUser(this.chameleon);
+        }
         return this.consoleUser;
     }
 

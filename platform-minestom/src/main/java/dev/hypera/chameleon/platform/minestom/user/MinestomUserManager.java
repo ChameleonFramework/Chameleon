@@ -38,6 +38,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Minestom user manager implementation.
@@ -46,8 +47,8 @@ import org.jetbrains.annotations.NotNull;
 public final class MinestomUserManager implements UserManager {
 
     private final @NotNull MinestomChameleon chameleon;
-    private final @NotNull MinestomConsoleUser consoleUser;
     private final @NotNull PlayerReflection playerReflection;
+    private @Nullable MinestomConsoleUser consoleUser;
 
     /**
      * Minestom user manager constructor.
@@ -57,8 +58,6 @@ public final class MinestomUserManager implements UserManager {
     @Internal
     public MinestomUserManager(@NotNull MinestomChameleon chameleon) {
         this.chameleon = chameleon;
-        this.consoleUser = new MinestomConsoleUser(this.chameleon.getAdventureMapper()
-            .createReflectedAudience(MinecraftServer.getCommandManager().getConsoleSender()));
         this.playerReflection = new PlayerReflection(this.chameleon.getAdventureMapper()
             .getComponentMapper());
     }
@@ -75,6 +74,10 @@ public final class MinestomUserManager implements UserManager {
      */
     @Override
     public @NotNull ConsoleUser getConsole() {
+        if (this.consoleUser == null) {
+            this.consoleUser = new MinestomConsoleUser(this.chameleon.getAdventureMapper()
+                    .createReflectedAudience(MinecraftServer.getCommandManager().getConsoleSender()));
+        }
         return this.consoleUser;
     }
 

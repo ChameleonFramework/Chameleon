@@ -35,6 +35,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.service.permission.Subject;
@@ -45,8 +46,8 @@ import org.spongepowered.api.service.permission.Subject;
 public final class SpongeUserManager implements UserManager {
 
     private final @NotNull SpongeChameleon chameleon;
-    private final @NotNull SpongeConsoleUser consoleUser;
     private final @NotNull PlayerReflection playerReflection;
+    private @Nullable SpongeConsoleUser consoleUser;
 
     /**
      * Sponge user manager constructor.
@@ -55,8 +56,6 @@ public final class SpongeUserManager implements UserManager {
      */
     public SpongeUserManager(@NotNull SpongeChameleon chameleon) {
         this.chameleon = chameleon;
-        this.consoleUser = new SpongeConsoleUser(this.chameleon.getAdventureMapper()
-            .createReflectedAudience(Sponge.game().systemSubject()));
         this.playerReflection = new PlayerReflection(this.chameleon.getAdventureMapper()
             .getComponentMapper());
     }
@@ -73,6 +72,10 @@ public final class SpongeUserManager implements UserManager {
      */
     @Override
     public @NotNull ConsoleUser getConsole() {
+        if (this.consoleUser == null) {
+            this.consoleUser = new SpongeConsoleUser(this.chameleon.getAdventureMapper()
+                    .createReflectedAudience(Sponge.game().systemSubject()));
+        }
         return this.consoleUser;
     }
 
