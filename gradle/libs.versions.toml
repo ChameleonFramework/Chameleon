@@ -7,7 +7,7 @@ adventure = "4.13.0"
 adventure-platform = "4.3.0"
 
 # Platforms
-platform-bukkit = "1.19-R0.1-SNAPSHOT"
+platform-bukkit = "1.20-R0.1-SNAPSHOT"
 platform-bungeecord = "1.19-R0.1-SNAPSHOT"
 platform-folia = "1.19.4-R0.1-SNAPSHOT"
 platform-minestom = "aebf72de90"
