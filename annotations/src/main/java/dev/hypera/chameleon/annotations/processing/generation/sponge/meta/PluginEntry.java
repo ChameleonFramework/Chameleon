@@ -27,6 +27,7 @@ import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.platform.Platform;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -97,7 +98,7 @@ final class PluginEntry {
                 throw new IllegalArgumentException("@PlatformDependency must contain version for Sponge support");
             }
 
-            this.id = dependency.name().toLowerCase();
+            this.id = dependency.name().toLowerCase(Locale.ROOT);
             this.version = dependency.version();
         }
 

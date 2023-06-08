@@ -41,6 +41,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.Objects;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
@@ -148,7 +149,7 @@ public class VelocityGenerator extends Generator {
 
         for (Dependency dependency : data.dependencies()) {
             AnnotationSpec dependencyAnnotationSpec = AnnotationSpec.builder(clazz("com.velocitypowered.api.plugin", "Dependency"))
-                .addMember("id", "$S", dependency.name().toLowerCase())
+                .addMember("id", "$S", dependency.name().toLowerCase(Locale.ROOT))
                 .addMember("optional", "$L", dependency.soft()).build();
 
             pluginAnnotationSpecBuilder.addMember("dependencies", "$L", dependencyAnnotationSpec);
