@@ -48,9 +48,16 @@ import javax.lang.model.element.TypeElement;
 /**
  * Chameleon Annotation Processor.
  */
-@SupportedAnnotationTypes("dev.hypera.chameleon.annotations.Plugin")
-@SupportedSourceVersion(SourceVersion.RELEASE_11)
+@SupportedAnnotationTypes({ "dev.hypera.chameleon.annotations.Plugin" })
 public class ChameleonAnnotationProcessor extends AbstractProcessor {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.latestSupported();
+    }
 
     /**
      * {@inheritDoc}
@@ -58,7 +65,6 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
     @Override
     public synchronized boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Plugin.class);
-
         if (!elements.isEmpty()) {
             if (elements.size() > 1) {
                 throw new ChameleonAnnotationException("@Plugin cannot be used more than once");

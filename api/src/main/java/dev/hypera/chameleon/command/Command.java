@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import net.kyori.adventure.text.Component;
@@ -71,7 +72,8 @@ public abstract class Command {
             if (names.length < 1) {
                 Preconditions.checkState(
                     getClass().isAnnotationPresent(CommandHandler.class),
-                    "Classes extending Command must entier be annotated with" + "@CommandHandler or provide names in the constructor"
+                    "Classes extending Command must either be annotated with " +
+                        "@CommandHandler or provide names in the constructor"
                 );
 
                 names = getClass().getAnnotation(CommandHandler.class).value().split("\\|");
@@ -159,7 +161,7 @@ public abstract class Command {
     @Internal
     public final boolean executeSubCommand(@NotNull Context context, @NotNull String command) {
         Optional<SubCommand> subCommand = this.subCommands.stream()
-            .filter(c -> c.getNames().stream().anyMatch(n -> command.toLowerCase().matches(n)))
+            .filter(c -> c.getNames().stream().anyMatch(n -> command.toLowerCase(Locale.ROOT).matches(n)))
             .findFirst();
         if (subCommand.isPresent()) {
             subCommand.get().execute(context, this);
