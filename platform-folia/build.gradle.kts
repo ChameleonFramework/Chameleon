@@ -32,6 +32,8 @@ repositories {
 }
 
 dependencies {
-    api(project(":chameleon-platform-bukkit"))
+    api(project(":chameleon-platform-bukkit")) {
+        exclude("org.spigotmc", "spigot-api")
+    }
     compileOnlyApi(libs.platform.folia)
 }
