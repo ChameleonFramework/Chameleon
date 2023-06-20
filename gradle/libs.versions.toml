@@ -3,17 +3,17 @@ version = "1.0"
 
 [versions]
 # Adventure
-adventure = "4.13.0"
+adventure = "4.14.0"
 adventure-platform = "4.3.0"
 
 # Platforms
-platform-bukkit = "1.19-R0.1-SNAPSHOT"
-platform-bungeecord = "1.19-R0.1-SNAPSHOT"
-platform-folia = "1.19.4-R0.1-SNAPSHOT"
-platform-minestom = "aebf72de90"
+platform-bukkit = "1.20.1-R0.1-SNAPSHOT"
+platform-bungeecord = "1.20-R0.1-SNAPSHOT"
+platform-folia = "1.20.1-R0.1-SNAPSHOT"
+platform-minestom = "954e8b3915"
 platform-nukkit = "1.0-SNAPSHOT"
 platform-sponge = "9.0.0"
-platform-velocity = "3.1.1"
+platform-velocity = "3.2.0-SNAPSHOT"
 
 # File formats
 gson = "2.10.1"
