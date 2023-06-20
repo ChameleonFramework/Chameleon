@@ -41,7 +41,7 @@ build-nullaway-plugin = "1.6.0"
 # Test
 test-junit-bom = "5.9.3"
 test-truth = "1.1.4"
-test-mockito-bom = "5.3.1"
+test-mockito-bom = "5.4.0"
 
 
 [libraries]
