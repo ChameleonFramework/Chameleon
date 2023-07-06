@@ -30,7 +30,7 @@ log4j = "2.20.0"
 annotations = "24.0.1"
 
 # Build
-build-indra = "3.1.1"
+build-indra = "3.1.2"
 build-blossom = "1.3.1"
 build-test-logger = "3.2.0"
 build-errorprone = "2.20.0"
