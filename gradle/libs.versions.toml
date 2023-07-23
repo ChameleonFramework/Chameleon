@@ -39,7 +39,7 @@ build-nullaway = "0.10.11"
 build-nullaway-plugin = "1.6.0"
 
 # Test
-test-junit-bom = "5.9.3"
+test-junit-bom = "5.10.0"
 test-truth = "1.1.5"
 test-mockito-bom = "5.4.0"
 
