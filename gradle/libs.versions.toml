@@ -8,7 +8,7 @@ adventure-platform = "4.3.0"
 
 # Platforms
 platform-bukkit = "1.20.1-R0.1-SNAPSHOT"
-platform-bungeecord = "1.20-R0.1-SNAPSHOT"
+platform-bungeecord = "1.20-R0.2-SNAPSHOT"
 platform-folia = "1.20.1-R0.1-SNAPSHOT"
 platform-minestom = "954e8b3915"
 platform-nukkit = "1.0-SNAPSHOT"
