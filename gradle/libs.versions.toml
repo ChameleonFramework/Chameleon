@@ -17,7 +17,7 @@ platform-velocity = "3.2.0-SNAPSHOT"
 
 # File formats
 gson = "2.10.1"
-yaml = "2.0"
+yaml = "2.1"
 
 # Code generation
 javapoet = "1.13.0"
