@@ -27,6 +27,7 @@ import dev.hypera.chameleon.platform.PlatformPlugin;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.sponge.platform.plugin.SpongePlugin;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -53,7 +54,7 @@ public final class SpongePluginManager implements PluginManager {
      */
     @Override
     public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
-        return Sponge.pluginManager().plugin(name.toLowerCase()).map(SpongePlugin::new);
+        return Sponge.pluginManager().plugin(name.toLowerCase(Locale.ROOT)).map(SpongePlugin::new);
     }
 
     /**
@@ -61,7 +62,7 @@ public final class SpongePluginManager implements PluginManager {
      */
     @Override
     public boolean isPluginEnabled(@NotNull String name) {
-        return Sponge.pluginManager().plugin(name.toLowerCase()).isPresent();
+        return Sponge.pluginManager().plugin(name.toLowerCase(Locale.ROOT)).isPresent();
     }
 
 }

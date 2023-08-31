@@ -26,7 +26,6 @@ package dev.hypera.chameleon.platform.minestom;
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.command.CommandManager;
@@ -69,12 +68,11 @@ public final class MinestomChameleon extends Chameleon {
     MinestomChameleon(
         @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
         @NotNull Extension extension,
-        @NotNull ChameleonPluginData pluginData,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, pluginData, eventBus, logger, extensions);
+        super(chameleonPlugin, eventBus, logger, extensions);
         this.extension = extension;
         new MinestomListener(this);
     }
@@ -84,12 +82,11 @@ public final class MinestomChameleon extends Chameleon {
      *
      * @param chameleonPlugin Chameleon plugin to be loaded.
      * @param extension       Minestom Extension instance.
-     * @param pluginData      Chameleon plugin data.
      *
      * @return new Minestom Chameleon bootstrap.
      */
-    public static @NotNull ChameleonBootstrap<MinestomChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull ChameleonPluginData pluginData) {
-        return new MinestomChameleonBootstrap(chameleonPlugin, extension, pluginData);
+    public static @NotNull ChameleonBootstrap<MinestomChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension) {
+        return new MinestomChameleonBootstrap(chameleonPlugin, extension);
     }
 
     /**

@@ -25,7 +25,6 @@ package dev.hypera.chameleon.platform.minestom;
 
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
@@ -43,20 +42,18 @@ final class MinestomChameleonBootstrap extends ChameleonBootstrap<MinestomChamel
 
     private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull Extension extension;
-    private final @NotNull ChameleonPluginData pluginData;
 
     @Internal
-    MinestomChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension, @NotNull ChameleonPluginData pluginData) {
+    MinestomChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Extension extension) {
         super(createLogger(extension), Platform.MINESTOM);
         this.chameleonPlugin = chameleonPlugin;
         this.extension = extension;
-        this.pluginData = pluginData;
     }
 
     @Override
     protected @NotNull MinestomChameleon loadInternal() throws ChameleonInstantiationException {
         return new MinestomChameleon(
-            this.chameleonPlugin, this.extension, this.pluginData,
+            this.chameleonPlugin, this.extension,
             this.eventBus, this.logger, this.extensions
         );
     }

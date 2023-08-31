@@ -10,8 +10,8 @@ address security vulnerabilities that affect the most recent version of this fra
 
 | Version             | Supported          |
 |---------------------|--------------------|
-| `0.15.0-SNAPSHOT`   | :white_check_mark: |
-| < `0.15.0-SNAPSHOT` | :x:                |
+| `0.16.0-SNAPSHOT`   | :white_check_mark: |
+| < `0.16.0-SNAPSHOT` | :x:                |
 
 ### Reporting a Vulnerability
 

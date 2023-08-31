@@ -28,6 +28,7 @@ import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityPlugin;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -67,7 +68,7 @@ public final class VelocityPluginManager implements PluginManager {
     @Override
     public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
         return this.chameleon.getPlatformPlugin().getServer().getPluginManager()
-            .getPlugin(name.toLowerCase()).map(VelocityPlugin::new);
+            .getPlugin(name.toLowerCase(Locale.ROOT)).map(VelocityPlugin::new);
     }
 
     /**
@@ -76,7 +77,7 @@ public final class VelocityPluginManager implements PluginManager {
     @Override
     public boolean isPluginEnabled(@NotNull String name) {
         return this.chameleon.getPlatformPlugin().getServer().getPluginManager()
-            .isLoaded(name.toLowerCase());
+            .isLoaded(name.toLowerCase(Locale.ROOT));
     }
 
 }

@@ -60,13 +60,4 @@ public abstract class ChameleonPlugin {
      */
     public abstract void onDisable();
 
-    /**
-     * Get Chameleon plugin data.
-     *
-     * @return the stored Chameleon plugin data.
-     */
-    public final @NotNull ChameleonPluginData getData() {
-        return this.chameleon.getData();
-    }
-
 }
