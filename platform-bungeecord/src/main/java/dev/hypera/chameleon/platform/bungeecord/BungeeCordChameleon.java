@@ -26,7 +26,6 @@ package dev.hypera.chameleon.platform.bungeecord;
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
@@ -66,12 +65,11 @@ public final class BungeeCordChameleon extends Chameleon {
     BungeeCordChameleon(
         @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
         @NotNull Plugin bungeePlugin,
-        @NotNull ChameleonPluginData pluginData,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, pluginData, eventBus, logger, extensions);
+        super(chameleonPlugin, eventBus, logger, extensions);
         this.plugin = bungeePlugin;
         this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);
         ProxyServer.getInstance().getPluginManager().registerListener(bungeePlugin, new BungeeCordListener(this));
@@ -82,12 +80,11 @@ public final class BungeeCordChameleon extends Chameleon {
      *
      * @param chameleonPlugin Chameleon plugin to be loaded.
      * @param bungeePlugin    BungeeCord plugin instance.
-     * @param pluginData      Chameleon plugin data.
      *
      * @return new BungeeCord Chameleon boostrap.
      */
-    public static @NotNull ChameleonBootstrap<BungeeCordChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin, @NotNull ChameleonPluginData pluginData) {
-        return new BungeeCordChameleonBootstrap(chameleonPlugin, bungeePlugin, pluginData);
+    public static @NotNull ChameleonBootstrap<BungeeCordChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin) {
+        return new BungeeCordChameleonBootstrap(chameleonPlugin, bungeePlugin);
     }
 
     /**

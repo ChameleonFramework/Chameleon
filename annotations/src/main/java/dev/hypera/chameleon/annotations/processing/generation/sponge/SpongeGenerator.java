@@ -85,9 +85,8 @@ public class SpongeGenerator extends Generator {
             .addStatement("this.$N = $N", PLUGIN_CONTAINER_VAR, PLUGIN_CONTAINER_VAR)
             .addStatement("this.$N = $N", LOGGER_VAR, LOGGER_VAR)
             .beginControlFlow("try")
-            .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", CHAMELEON_VAR,
-                spongeChameleon, plugin, "pluginData")
+            .addStatement("this.$N = $T.create($T.class, this).load()", CHAMELEON_VAR,
+                spongeChameleon, plugin)
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
             .addStatement("this.$N.error(\"An error occurred while loading Chameleon\", $N)", LOGGER_VAR, "ex")
             .addStatement("throw new $T($N)", clazz("dev.hypera.chameleon.exception", "ChameleonRuntimeException"), "ex")

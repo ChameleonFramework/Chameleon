@@ -26,7 +26,6 @@ package dev.hypera.chameleon.platform.sponge;
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.command.CommandManager;
@@ -69,12 +68,11 @@ public final class SpongeChameleon extends Chameleon {
     SpongeChameleon(
         @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
         @NotNull SpongePlugin spongePlugin,
-        @NotNull ChameleonPluginData pluginData,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, pluginData, eventBus, logger, extensions);
+        super(chameleonPlugin, eventBus, logger, extensions);
         this.plugin = spongePlugin;
     }
 
@@ -83,12 +81,11 @@ public final class SpongeChameleon extends Chameleon {
      *
      * @param chameleonPlugin Chameleon plugin to be loaded.
      * @param spongePlugin    Sponge plugin instance.
-     * @param pluginData      Chameleon plugin data.
      *
      * @return new Sponge Chameleon bootstrap.
      */
-    public static @NotNull ChameleonBootstrap<SpongeChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin, @NotNull ChameleonPluginData pluginData) {
-        return new SpongeChameleonBootstrap(chameleonPlugin, spongePlugin, pluginData);
+    public static @NotNull ChameleonBootstrap<SpongeChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin) {
+        return new SpongeChameleonBootstrap(chameleonPlugin, spongePlugin);
     }
 
     /**

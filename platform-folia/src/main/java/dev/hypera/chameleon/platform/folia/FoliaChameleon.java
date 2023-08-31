@@ -25,7 +25,6 @@ package dev.hypera.chameleon.platform.folia;
 
 import com.google.errorprone.annotations.DoNotCall;
 import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ExtensionMap;
@@ -56,8 +55,14 @@ public final class FoliaChameleon extends BukkitChameleon {
     private final @Nullable FoliaScheduler scheduler;
 
     @Internal
-    FoliaChameleon(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin foliaPlugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull ExtensionMap extensions) throws ChameleonInstantiationException {
-        super(chameleonPlugin, foliaPlugin, pluginData, eventBus, logger, extensions);
+    FoliaChameleon(
+        @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+        @NotNull JavaPlugin foliaPlugin,
+        @NotNull EventBus eventBus,
+        @NotNull ChameleonLogger logger,
+        @NotNull ExtensionMap extensions
+    ) throws ChameleonInstantiationException {
+        super(chameleonPlugin, foliaPlugin, eventBus, logger, extensions);
         boolean folia = isFolia();
         this.platform = folia ? new FoliaPlatform() : null;
         this.pluginManager = folia ? new FoliaPluginManager() : null;
@@ -69,7 +74,6 @@ public final class FoliaChameleon extends BukkitChameleon {
      *
      * @param chameleonPlugin Unsupported.
      * @param bukkitPlugin    Unsupported.
-     * @param pluginData      Unsupported.
      *
      * @return Unsupported.
      * @deprecated Not supported on Folia.
@@ -77,7 +81,7 @@ public final class FoliaChameleon extends BukkitChameleon {
     @DoNotCall("Always throws java.lang.UnsupportedOperationException")
     @Deprecated
     @SuppressWarnings("unused")
-    public static @NotNull BukkitChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin, @NotNull ChameleonPluginData pluginData) {
+    public static @NotNull BukkitChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin) {
         throw new UnsupportedOperationException("Folia does not support Bukkit.");
     }
 
@@ -86,13 +90,12 @@ public final class FoliaChameleon extends BukkitChameleon {
      *
      * @param chameleonPlugin Chameleon plugin to be loaded.
      * @param foliaPlugin     Folia JavaPlugin instance.
-     * @param pluginData      Chameleon plugin data.
      *
      * @return new Folia Chameleon bootstrap.
      */
     @Experimental
-    public static @NotNull FoliaChameleonBootstrap createFoliaBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin foliaPlugin, @NotNull ChameleonPluginData pluginData) {
-        return new FoliaChameleonBootstrap(chameleonPlugin, foliaPlugin, pluginData);
+    public static @NotNull FoliaChameleonBootstrap createFoliaBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin foliaPlugin) {
+        return new FoliaChameleonBootstrap(chameleonPlugin, foliaPlugin);
     }
 
     /**

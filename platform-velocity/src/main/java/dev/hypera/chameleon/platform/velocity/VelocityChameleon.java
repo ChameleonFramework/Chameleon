@@ -26,7 +26,6 @@ package dev.hypera.chameleon.platform.velocity;
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.command.CommandManager;
@@ -67,12 +66,11 @@ public final class VelocityChameleon extends Chameleon {
     VelocityChameleon(
         @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
         @NotNull VelocityPlugin velocityPlugin,
-        @NotNull ChameleonPluginData pluginData,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, pluginData, eventBus, logger, extensions);
+        super(chameleonPlugin, eventBus, logger, extensions);
         this.plugin = velocityPlugin;
     }
 
@@ -81,12 +79,11 @@ public final class VelocityChameleon extends Chameleon {
      *
      * @param chameleonPlugin Chameleon plugin to be loaded.
      * @param velocityPlugin  Velocity plugin instance.
-     * @param pluginData      Chameleon plugin data.
      *
      * @return new Velocity Chameleon bootstrap.
      */
-    public static @NotNull ChameleonBootstrap<VelocityChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin, @NotNull ChameleonPluginData pluginData) {
-        return new VelocityChameleonBootstrap(chameleonPlugin, velocityPlugin, pluginData);
+    public static @NotNull ChameleonBootstrap<VelocityChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin) {
+        return new VelocityChameleonBootstrap(chameleonPlugin, velocityPlugin);
     }
 
     /**

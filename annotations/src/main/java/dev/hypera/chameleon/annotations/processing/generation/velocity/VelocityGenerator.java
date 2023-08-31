@@ -92,9 +92,8 @@ public class VelocityGenerator extends Generator {
             .addStatement(SET_STATEMENT, LOGGER_VAR, LOGGER_VAR)
             .addStatement(SET_STATEMENT, DATA_DIRECTORY_VAR, DATA_DIRECTORY_VAR)
             .beginControlFlow("try")
-            .addStatement(createPluginData(data))
-            .addStatement("this.$N = $T.create($T.class, this, $N).load()", CHAMELEON_VAR,
-                velocityChameleon, plugin, "pluginData")
+            .addStatement("this.$N = $T.create($T.class, this).load()", CHAMELEON_VAR,
+                velocityChameleon, plugin)
             .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
             .addStatement("this.$N.error(\"An error occurred while loading Chameleon\", $N)", LOGGER_VAR, "ex")
             .addStatement("throw new $T($N)", clazz("dev.hypera.chameleon.exception", "ChameleonRuntimeException"), "ex")

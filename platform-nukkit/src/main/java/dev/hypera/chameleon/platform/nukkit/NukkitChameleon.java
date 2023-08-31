@@ -28,7 +28,6 @@ import cn.nukkit.plugin.PluginBase;
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.ChameleonPluginData;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
@@ -66,12 +65,11 @@ public final class NukkitChameleon extends Chameleon {
     NukkitChameleon(
         @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
         @NotNull PluginBase nukkitPlugin,
-        @NotNull ChameleonPluginData pluginData,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, pluginData, eventBus, logger, extensions);
+        super(chameleonPlugin, eventBus, logger, extensions);
         this.plugin = nukkitPlugin;
     }
 
@@ -80,12 +78,11 @@ public final class NukkitChameleon extends Chameleon {
      *
      * @param chameleonPlugin Chameleon plugin to load.
      * @param nukkitPlugin    Nukkit PluginBase instance.
-     * @param pluginData      Chameleon plugin data.
      *
      * @return new Nukkit Chameleon bootstrap.
      */
-    public static @NotNull ChameleonBootstrap<NukkitChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin, @NotNull ChameleonPluginData pluginData) {
-        return new NukkitChameleonBootstrap(chameleonPlugin, nukkitPlugin, pluginData);
+    public static @NotNull ChameleonBootstrap<NukkitChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin) {
+        return new NukkitChameleonBootstrap(chameleonPlugin, nukkitPlugin);
     }
 
     /**

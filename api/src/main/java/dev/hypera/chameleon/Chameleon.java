@@ -56,12 +56,11 @@ public abstract class Chameleon {
     private final @NotNull ChameleonLogger internalLogger;
 
     private final @NotNull ChameleonPlugin plugin;
-    private final @NotNull ChameleonPluginData pluginData;
     private final @NotNull EventBus eventBus;
     private final @NotNull ExtensionManager extensionManager;
 
     @Internal
-    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull ChameleonPluginData pluginData, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull ExtensionMap extensions) throws ChameleonInstantiationException {
+    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull ExtensionMap extensions) throws ChameleonInstantiationException {
         Preconditions.checkNotNull("plugin", plugin);
         Preconditions.checkNotNull("pluginData", plugin);
         Preconditions.checkNotNull("eventBus", eventBus);
@@ -72,7 +71,6 @@ public abstract class Chameleon {
             this.logger = logger;
             this.internalLogger = new ChameleonInternalLogger(logger);
             this.plugin = plugin.getConstructor(Chameleon.class).newInstance(this);
-            this.pluginData = pluginData;
             this.eventBus = eventBus;
             this.extensionManager = new ExtensionManagerImpl(this, extensions);
         } catch (Exception ex) {
@@ -112,15 +110,6 @@ public abstract class Chameleon {
      */
     public final @NotNull ChameleonPlugin getPlugin() {
         return this.plugin;
-    }
-
-    /**
-     * Get the plugin data.
-     *
-     * @return the plugin data.
-     */
-    public final @NotNull ChameleonPluginData getData() {
-        return this.pluginData;
     }
 
     /**
