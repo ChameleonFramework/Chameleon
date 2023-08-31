@@ -91,6 +91,7 @@ This allows the Git history to be more readable and also allows us to generate c
  - `events`, when modifying a file that is related to events.
  - `examples`, when modifying an example.
  - `extensions`, when modifying a file that is related to extensions.
+ - `folia`, when modifying a file inside the `platform-folia` module.
  - `minestom`, when modifying a file inside the `platform-minestom` module.
  - `nukkit`, when modifying a file inside the `platform-nukkit` module.
  - `scheduling`, when modifying a file that is related to scheduling.
