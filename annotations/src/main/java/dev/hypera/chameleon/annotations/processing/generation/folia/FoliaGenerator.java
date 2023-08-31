@@ -68,7 +68,7 @@ public final class FoliaGenerator extends Generator {
     public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @Nullable TypeElement bootstrap, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
         MethodSpec.Builder constructorSpecBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC);
-        // FIXME: replace with #addBootstrap once we can call #create on FoliaChameleon
+        // Replace with #addBootstrap once we can call #create on FoliaChameleon
         if (bootstrap == null) {
             // Default bootstrap, MyPlugin::new (chameleon -> new MyPlugin(chameleon))
             constructorSpecBuilder.addStatement(

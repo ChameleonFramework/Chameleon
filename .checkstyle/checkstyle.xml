@@ -302,7 +302,7 @@
 
         <!-- https://checkstyle.org/config_misc.html#TodoComment -->
         <module name="TodoComment">
-            <property name="format" value="(TODO)"/>
+            <property name="format" value="(TODO)|(FIXME)"/>
         </module>
 
         <!-- https://checkstyle.org/config_whitespace.html#TypecastParenPad -->
