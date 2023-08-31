@@ -23,18 +23,36 @@
  */
 package dev.hypera.chameleon;
 
-import dev.hypera.chameleon.logger.DummyChameleonLogger;
+import dev.hypera.chameleon.event.EventBus;
+import dev.hypera.chameleon.logger.ChameleonLogger;
+import org.jetbrains.annotations.ApiStatus.OverrideOnly;
 import org.jetbrains.annotations.NotNull;
 
-final class TestChameleonBootstrap extends ChameleonBootstrap<TestChameleon> {
+/**
+ * Chameleon plugin bootstrap.
+ */
+@OverrideOnly
+@FunctionalInterface
+public interface ChameleonPluginBootstrap {
 
-    TestChameleonBootstrap() {
-        super(TestChameleon.PLATFORM_ID, TestChameleonPlugin::new, new DummyChameleonLogger());
+    /**
+     * Called before Chameleon is loaded, allowing you to load certain parts of the plugin
+     * beforehand.
+     *
+     * @param logger   Logger.
+     * @param eventBus Event bus.
+     */
+    default void bootstrap(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) {
+
     }
 
-    @Override
-    protected @NotNull TestChameleon loadPlatform() {
-        return new TestChameleon(this.pluginBootstrap, this.logger, this.eventBus, this.extensions);
-    }
+    /**
+     * Returns an instantiated plugin main class.
+     *
+     * @param chameleon Chameleon instance.
+     *
+     * @return new plugin instance.
+     */
+    @NotNull ChameleonPlugin createPlugin(@NotNull Chameleon chameleon);
 
 }

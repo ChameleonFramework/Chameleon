@@ -32,7 +32,6 @@ import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.annotations.utils.MapBuilder;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.platform.Platform;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -48,6 +47,7 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -67,17 +67,14 @@ public class NukkitGenerator extends Generator {
      * @throws ChameleonAnnotationException if something goes wrong while creating the files.
      */
     @Override
-    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
-        MethodSpec loadSpec = MethodSpec.methodBuilder("onLoad")
-            .addAnnotation(Override.class)
-            .addModifiers(Modifier.PUBLIC)
-            .beginControlFlow("try")
-            .addStatement("this.$N = $T.create($T.class, this).load()", CHAMELEON_VAR, clazz("dev.hypera.chameleon.platform.nukkit", "NukkitChameleon"), plugin)
-            .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
-            .addStatement("getLogger().error(\"An error occurred while loading Chameleon\", $N)", "ex")
-            .addStatement("throw new $T($N)", clazz("dev.hypera.chameleon.exception", "ChameleonRuntimeException"), "ex")
-            .endControlFlow()
-            .build();
+    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @Nullable TypeElement bootstrap, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
+        MethodSpec loadSpec = addBootstrap(
+            MethodSpec.methodBuilder("onLoad")
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PUBLIC),
+            clazz("dev.hypera.chameleon.platform.nukkit", "NukkitChameleon"),
+            plugin, bootstrap
+        ).build();
 
         MethodSpec enableSpec = MethodSpec.methodBuilder("onEnable")
             .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.example.command;
+package dev.hypera.example.command;
 
 import dev.hypera.chameleon.command.Command;
 import dev.hypera.chameleon.command.annotations.CommandHandler;
@@ -29,9 +29,9 @@ import dev.hypera.chameleon.command.annotations.Permission;
 import dev.hypera.chameleon.command.annotations.SubCommandHandler;
 import dev.hypera.chameleon.command.context.Context;
 import dev.hypera.chameleon.command.objects.Condition;
-import dev.hypera.chameleon.example.event.ExampleCustomEvent;
 import dev.hypera.chameleon.platform.PlatformTarget;
 import dev.hypera.chameleon.user.User;
+import dev.hypera.example.event.ExampleCustomEvent;
 import java.util.Collections;
 import java.util.List;
 import net.kyori.adventure.text.Component;
@@ -49,7 +49,7 @@ public class ExampleCommand extends Command {
      * Example command constructor.
      */
     public ExampleCommand() {
-        setPermissionErrorMessage(Component.text("No permission.", NamedTextColor.RED));
+        setPermissionErrorMessage(Component.text("You do not have permission to execute this command.", NamedTextColor.RED));
         setConditions(Condition.of(
             c -> c.getSender() instanceof User,
             Component.text("This command can only be used in-game.", NamedTextColor.RED)

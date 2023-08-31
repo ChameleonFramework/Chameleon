@@ -21,48 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.adventure.mapper;
+package dev.hypera.chameleon;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import dev.hypera.chameleon.TestChameleon;
-import org.junit.jupiter.api.BeforeAll;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-final class AdventureMapperTests {
+final class ChameleonBuildPlaceholdersTests {
 
-    private static AdventureMapper mapper;
-
-    @BeforeAll
-    static void setup() {
-        mapper = new AdventureMapper(new TestChameleon());
+    @Test
+    void versionIsPresent() {
+        Assertions.assertNotEquals(placeholder("version"), Chameleon.getVersion());
     }
 
     @Test
-    void testLoad() {
-        // Load the mapper and make sure it cannot be loaded again.
-        assertDoesNotThrow(mapper::load);
-        assertTrue(mapper.isLoaded());
-        assertThrows(IllegalStateException.class, mapper::load);
+    void gitBranchIsPresent() {
+        assertNotEquals(placeholder("gitBranch"), Chameleon.getBranch());
+    }
 
-        // Make sure all mappers aren't null.
-        assertNotNull(mapper.getChameleon());
-        assertNotNull(mapper.getComponentMapper());
-        assertNotNull(mapper.getBookMapper());
-        assertNotNull(mapper.getBossBarMapper());
-        assertNotNull(mapper.getKeyMapper());
-        assertNotNull(mapper.getChatTypeMapper());
-        assertNotNull(mapper.getBoundMapper());
-        assertNotNull(mapper.getIdentityMapper());
-        assertNotNull(mapper.getPointerMapper());
-        assertNotNull(mapper.getSignatureMapper());
-        assertNotNull(mapper.getSoundMapper());
-        assertNotNull(mapper.getSoundStopMapper());
-        assertNotNull(mapper.getTimesMapper());
-        assertNotNull(mapper.getTitlePartMapper());
+    @Test
+    void gitCommitHashIsPresent() {
+        assertNotEquals(placeholder("gitCommitHash"), Chameleon.getCommitHash());
+    }
+
+    @Test
+    void buildTimeIsPresent() {
+        assertDoesNotThrow(() -> {
+            assertNotNull(Chameleon.getBuildTime());
+        });
+    }
+
+    private @NotNull String placeholder(@NotNull String s) {
+        return String.format("@%s@", s);
     }
 
 }

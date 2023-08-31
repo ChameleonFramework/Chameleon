@@ -27,7 +27,6 @@ import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.event.EventBusImpl;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.logger.DummyChameleonLogger;
@@ -48,10 +47,8 @@ public final class TestChameleon extends Chameleon {
 
     /**
      * Dummy Chameleon implementation constructor.
-     *
-     * @throws ChameleonInstantiationException if something goes wrong whilst starting.
      */
-    public TestChameleon() throws ChameleonInstantiationException {
+    public TestChameleon() {
         this(new DummyChameleonLogger());
     }
 
@@ -59,24 +56,26 @@ public final class TestChameleon extends Chameleon {
      * Dummy Chameleon implementation constructor.
      *
      * @param logger Logger.
-     *
-     * @throws ChameleonInstantiationException if something goes wrong whilst starting.
      */
-    public TestChameleon(@NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
-        this(logger, new EventBusImpl(logger), new ExtensionMap());
+    public TestChameleon(@NotNull ChameleonLogger logger) {
+        this(TestChameleonPlugin::new, logger, new EventBusImpl(logger), new ExtensionMap());
     }
 
     /**
      * Dummy Chameleon implementation constructor.
      *
-     * @param logger     Logger.
-     * @param eventBus   Event bus.
-     * @param extensions Extensions.
-     *
-     * @throws ChameleonInstantiationException if something goes wrong whilst starting.
+     * @param pluginBootstrap Chameleon plugin bootstrap.
+     * @param logger          Logger.
+     * @param eventBus        Event bus.
+     * @param extensions      Extensions.
      */
-    public TestChameleon(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus, @NotNull ExtensionMap extensions) throws ChameleonInstantiationException {
-        super(TestChameleonPlugin.class, eventBus, logger, extensions);
+    public TestChameleon(
+        @NotNull ChameleonPluginBootstrap pluginBootstrap,
+        @NotNull ChameleonLogger logger,
+        @NotNull EventBus eventBus,
+        @NotNull ExtensionMap extensions
+    ) {
+        super(pluginBootstrap, eventBus, logger, extensions);
     }
 
     public static @NotNull ChameleonBootstrap<TestChameleon> create() {
@@ -135,7 +134,7 @@ public final class TestChameleon extends Chameleon {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Path getDataFolder() {
+    public @NotNull Path getDataDirectory() {
         throw new UnsupportedOperationException("unsupported");
     }
 

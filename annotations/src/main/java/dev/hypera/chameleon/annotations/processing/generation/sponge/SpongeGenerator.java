@@ -36,7 +36,6 @@ import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.annotations.processing.generation.sponge.meta.SerializedPluginMetadata;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -49,6 +48,7 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Sponge plugin main class and 'META-INF/sponge_plugins.json' description file generator.
@@ -72,26 +72,21 @@ public class SpongeGenerator extends Generator {
      * @throws ChameleonAnnotationException if something goes wrong while creating the files.
      */
     @Override
-    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
+    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @Nullable TypeElement bootstrap, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
         ClassName spongeChameleon = clazz("dev.hypera.chameleon.platform.sponge", "SpongeChameleon");
         ClassName pluginContainer = clazz("org.spongepowered.plugin", "PluginContainer");
         ClassName logger = clazz("org.apache.logging.log4j", "Logger");
 
-        MethodSpec constructorSpec = MethodSpec.constructorBuilder()
-            .addAnnotation(clazz("com.google.inject", "Inject"))
-            .addModifiers(Modifier.PUBLIC)
-            .addParameter(ParameterSpec.builder(pluginContainer, PLUGIN_CONTAINER_VAR).build())
-            .addParameter(ParameterSpec.builder(logger, LOGGER_VAR).build())
-            .addStatement("this.$N = $N", PLUGIN_CONTAINER_VAR, PLUGIN_CONTAINER_VAR)
-            .addStatement("this.$N = $N", LOGGER_VAR, LOGGER_VAR)
-            .beginControlFlow("try")
-            .addStatement("this.$N = $T.create($T.class, this).load()", CHAMELEON_VAR,
-                spongeChameleon, plugin)
-            .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
-            .addStatement("this.$N.error(\"An error occurred while loading Chameleon\", $N)", LOGGER_VAR, "ex")
-            .addStatement("throw new $T($N)", clazz("dev.hypera.chameleon.exception", "ChameleonRuntimeException"), "ex")
-            .endControlFlow()
-            .build();
+        MethodSpec constructorSpec = addBootstrap(
+            MethodSpec.constructorBuilder()
+                .addAnnotation(clazz("com.google.inject", "Inject"))
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(ParameterSpec.builder(pluginContainer, PLUGIN_CONTAINER_VAR).build())
+                .addParameter(ParameterSpec.builder(logger, LOGGER_VAR).build())
+                .addStatement("this.$N = $N", PLUGIN_CONTAINER_VAR, PLUGIN_CONTAINER_VAR)
+                .addStatement("this.$N = $N", LOGGER_VAR, LOGGER_VAR),
+            spongeChameleon, plugin, bootstrap
+        ).build();
 
         MethodSpec startingEngineEventSpec = MethodSpec.methodBuilder("onStartingEngineEvent")
             .addAnnotation(clazz("org.spongepowered.api.event", "Listener"))

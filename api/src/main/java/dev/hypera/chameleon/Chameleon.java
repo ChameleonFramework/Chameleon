@@ -29,7 +29,6 @@ import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.event.common.ChameleonDisableEvent;
 import dev.hypera.chameleon.event.common.ChameleonEnableEvent;
 import dev.hypera.chameleon.event.common.ChameleonLoadEvent;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ExtensionManager;
 import dev.hypera.chameleon.extension.ExtensionManagerImpl;
 import dev.hypera.chameleon.extension.ExtensionMap;
@@ -41,6 +40,7 @@ import dev.hypera.chameleon.scheduler.Scheduler;
 import dev.hypera.chameleon.user.UserManager;
 import dev.hypera.chameleon.util.Preconditions;
 import java.nio.file.Path;
+import java.time.Instant;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,7 +50,9 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Chameleon {
 
     private static final @NotNull String VERSION = "@version@";
-    private static final @NotNull String COMMIT = "@commit@";
+    private static final @NotNull String GIT_BRANCH = "@gitBranch@";
+    private static final @NotNull String GIT_COMMIT_HASH = "@gitCommitHash@";
+    private static final @NotNull String BUILD_TIME = "@buildTime@";
 
     private final @NotNull ChameleonLogger logger;
     private final @NotNull ChameleonLogger internalLogger;
@@ -60,22 +62,22 @@ public abstract class Chameleon {
     private final @NotNull ExtensionManager extensionManager;
 
     @Internal
-    protected Chameleon(@NotNull Class<? extends ChameleonPlugin> plugin, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull ExtensionMap extensions) throws ChameleonInstantiationException {
-        Preconditions.checkNotNull("plugin", plugin);
-        Preconditions.checkNotNull("pluginData", plugin);
+    protected Chameleon(
+        @NotNull ChameleonPluginBootstrap pluginBootstrap,
+        @NotNull EventBus eventBus,
+        @NotNull ChameleonLogger logger,
+        @NotNull ExtensionMap extensions
+    ) {
+        Preconditions.checkNotNull("pluginBootstrap", pluginBootstrap);
         Preconditions.checkNotNull("eventBus", eventBus);
         Preconditions.checkNotNull("logger", logger);
         Preconditions.checkNotNull("extensions", extensions);
 
-        try {
-            this.logger = logger;
-            this.internalLogger = new ChameleonInternalLogger(logger);
-            this.plugin = plugin.getConstructor(Chameleon.class).newInstance(this);
-            this.eventBus = eventBus;
-            this.extensionManager = new ExtensionManagerImpl(this, extensions);
-        } catch (Exception ex) {
-            throw new ChameleonInstantiationException("Failed to initialise instance of " + plugin.getCanonicalName(), ex);
-        }
+        this.logger = logger;
+        this.internalLogger = new ChameleonInternalLogger(logger);
+        this.plugin = pluginBootstrap.createPlugin(this);
+        this.eventBus = eventBus;
+        this.extensionManager = new ExtensionManagerImpl(this, extensions);
     }
 
     /**
@@ -104,27 +106,27 @@ public abstract class Chameleon {
 
 
     /**
-     * Get the plugin.
+     * Returns the plugin.
      *
-     * @return the plugin.
+     * @return plugin.
      */
     public final @NotNull ChameleonPlugin getPlugin() {
         return this.plugin;
     }
 
     /**
-     * Get the logger instance.
+     * Returns the plugin logger.
      *
-     * @return the logger instance.
+     * @return plugin logger.
      */
     public final @NotNull ChameleonLogger getLogger() {
         return this.logger;
     }
 
     /**
-     * Get an internal logger instance for use by Chameleon.
-     * <p>This should <strong>not</strong> be used outside of Chameleon and is only intended to be
-     * used for debugging and error reporting by Chameleon.</p>
+     * Returns an internal logger instance for use by Chameleon.
+     * <p><strong>This must not be used outside of Chameleon and is only intended to be
+     * used for debugging and error reporting by Chameleon.</strong></p>
      *
      * @return the internal logger instance.
      */
@@ -134,89 +136,116 @@ public abstract class Chameleon {
     }
 
     /**
-     * Get the event bus.
+     * Returns the event bus.
      *
-     * @return the event bus.
+     * @return event bus.
      */
     public final @NotNull EventBus getEventBus() {
         return this.eventBus;
     }
 
     /**
-     * Get the extension manager.
+     * Returns the extension manager.
      *
-     * @return the extension manager.
+     * @return extension manager.
      */
     public final @NotNull ExtensionManager getExtensionManager() {
         return this.extensionManager;
     }
 
     /**
-     * Get the audience provider.
+     * Returns the audience provider.
      *
-     * @return the audience provider.
+     * @return audience provider.
      */
     public abstract @NotNull ChameleonAudienceProvider getAdventure();
 
     /**
-     * Get the platform.
+     * Returns the platform.
      *
-     * @return the platform.
+     * @return platform.
      */
     public abstract @NotNull Platform getPlatform();
 
     /**
-     * Get the command manager.
+     * Returns the command manager.
      *
-     * @return the command manager.
+     * @return command manager.
      */
     public abstract @NotNull CommandManager getCommandManager();
 
     /**
-     * Get the plugin manager.
+     * Returns the plugin manager.
      *
-     * @return the plugin manager.
+     * @return plugin manager.
      */
     public abstract @NotNull PluginManager getPluginManager();
 
     /**
-     * Get the user manager.
+     * Returns the user manager.
      *
-     * @return the user manager.
+     * @return user manager.
      */
     public abstract @NotNull UserManager getUserManager();
 
     /**
-     * Get the scheduler.
+     * Returns the scheduler.
      *
-     * @return the scheduler.
+     * @return scheduler.
      */
     public abstract @NotNull Scheduler getScheduler();
 
     /**
-     * Get the plugin data folder.
+     * Returns the plugin data directory.
      *
-     * @return plugin data folder.
+     * @return plugin data directory.
      */
-    public abstract @NotNull Path getDataFolder();
+    public abstract @NotNull Path getDataDirectory();
 
 
     /**
-     * Get the current Chameleon version.
+     * Returns the current version of Chameleon.
      *
-     * @return the current Chameleon version.
+     * @return current version.
      */
     public static @NotNull String getVersion() {
         return VERSION;
     }
 
     /**
-     * Get the current Chameleon commit.
+     * Returns the Git branch Chameleon was built from.
      *
-     * @return the current Chameleon commit.
+     * @return branch.
      */
-    public static @NotNull String getCommit() {
-        return COMMIT;
+    public static @NotNull String getBranch() {
+        return GIT_BRANCH;
+    }
+
+    /**
+     * Returns the SHA-1 hash of the Git commit Chameleon was built from.
+     *
+     * @return commit hash.
+     */
+    public static @NotNull String getCommitHash() {
+        return GIT_COMMIT_HASH;
+    }
+
+    /**
+     * Returns the shortened SHA-1 hash of the Git commit Chameleon was built from.
+     *
+     * @return shortened commit hash.
+     */
+    public static @NotNull String getShortCommitHash() {
+        return GIT_COMMIT_HASH.substring(0, 7);
+    }
+
+    /**
+     * Returns the time Chameleon was built.
+     *
+     * @return build time.
+     */
+    public static @NotNull Instant getBuildTime() {
+        return Instant.parse(BUILD_TIME);
     }
 
 }

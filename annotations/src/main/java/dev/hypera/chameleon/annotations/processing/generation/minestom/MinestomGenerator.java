@@ -32,7 +32,6 @@ import com.squareup.javapoet.TypeSpec;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -44,6 +43,7 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Minestom extension main class and 'extension.json' description file generator.
@@ -63,16 +63,12 @@ public class MinestomGenerator extends Generator {
      * @throws ChameleonAnnotationException if something goes wrong while creating the files.
      */
     @Override
-    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
-        MethodSpec constructorSpec = MethodSpec.constructorBuilder()
-            .addModifiers(Modifier.PUBLIC)
-            .beginControlFlow("try")
-            .addStatement("this.$N = $T.create($T.class, this).load()", CHAMELEON_VAR, clazz("dev.hypera.chameleon.platform.minestom", "MinestomChameleon"), plugin)
-            .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
-            .addStatement("getLogger().error(\"An error occurred while loading Chameleon\", $N)", "ex")
-            .addStatement("throw new $T($N)", clazz("dev.hypera.chameleon.exception", "ChameleonRuntimeException"), "ex")
-            .endControlFlow()
-            .build();
+    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @Nullable TypeElement bootstrap, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
+        MethodSpec constructorSpec = addBootstrap(
+            MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC),
+            clazz("dev.hypera.chameleon.platform.minestom", "MinestomChameleon"),
+            plugin, bootstrap
+        ).build();
 
         MethodSpec initializeSpec = MethodSpec.methodBuilder("initialize")
             .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)

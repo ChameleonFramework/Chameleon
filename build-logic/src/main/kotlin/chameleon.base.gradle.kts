@@ -24,13 +24,14 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import net.ltgt.gradle.errorprone.errorprone
 import net.ltgt.gradle.nullaway.nullaway
+import org.apache.tools.ant.filters.ReplaceTokens
+import java.time.Instant
 
 plugins {
     id("net.kyori.indra")
     id("net.kyori.indra.git")
     id("net.kyori.indra.checkstyle")
     id("net.kyori.indra.licenser.spotless")
-    id("net.kyori.blossom")
 
     id("com.adarshr.test-logger")
     id("net.ltgt.errorprone")
@@ -65,15 +66,26 @@ testlogger {
     theme = ThemeType.MOCHA_PARALLEL
 }
 
-blossom {
-    replaceToken("@version@", rootProject.version)
-    replaceToken("@commit@", indraGit.commit()?.name?.substring(0, 7) ?: "unknown")
-}
-
 dependencies {
     errorprone(libs.findLibrary("build-errorprone-core").get())
     errorprone(libs.findLibrary("build-nullaway-core").get())
     compileOnly(libs.findLibrary("build-errorprone-annotations").get())
+}
+
+tasks.create<Sync>("processSources") {
+    from(java.sourceSets["main"].java)
+    filter(ReplaceTokens::class, mapOf("tokens" to mapOf(
+        "version" to rootProject.version,
+        "gitBranch" to (indraGit.branchName() ?: "unknown"),
+        "gitCommitHash" to (indraGit.commit()?.name ?: "unknown"),
+        "buildTime" to Instant.now().toString(),
+    )))
+    into("$buildDir/src")
+}
+
+tasks.compileJava {
+    dependsOn(tasks.getByName("processSources"))
+    source = tasks.getByName("processSources").outputs.files.asFileTree
 }
 
 tasks.withType<JavaCompile>().configureEach {

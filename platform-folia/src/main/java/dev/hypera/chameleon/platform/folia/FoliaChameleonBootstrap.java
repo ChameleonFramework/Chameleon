@@ -24,8 +24,7 @@
 package dev.hypera.chameleon.platform.folia;
 
 import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
 import dev.hypera.chameleon.platform.Platform;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,21 +36,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class FoliaChameleonBootstrap extends ChameleonBootstrap<FoliaChameleon> {
 
-    private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull JavaPlugin foliaPlugin;
 
     @Internal
-    FoliaChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin foliaPlugin) {
-        super(new ChameleonSlf4jLogger(foliaPlugin.getSLF4JLogger()), Platform.FOLIA);
-        this.chameleonPlugin = chameleonPlugin;
+    FoliaChameleonBootstrap(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull JavaPlugin foliaPlugin) {
+        super(Platform.FOLIA, pluginBootstrap, new ChameleonSlf4jLogger(foliaPlugin.getSLF4JLogger()));
         this.foliaPlugin = foliaPlugin;
     }
 
     @Internal
     @Override
-    protected @NotNull FoliaChameleon loadInternal() throws ChameleonInstantiationException {
+    protected @NotNull FoliaChameleon loadPlatform() {
         return new FoliaChameleon(
-            this.chameleonPlugin, this.foliaPlugin,
+            this.pluginBootstrap, this.foliaPlugin,
             this.eventBus, this.logger, this.extensions
         );
     }

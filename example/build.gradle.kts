@@ -80,8 +80,11 @@ tasks {
         archiveFileName.set(String.format("%s-%s.jar", project.name, rootProject.version))
         mergeServiceFiles()
 
-        /* IMPORTANT: Relocate all dependencies to avoid conflicts */
-        //relocate("dev.hypera.chameleon", "dev.hypera.chameleon.example.lib.chameleon") // Cannot relocate because example is in this package.
+        /*
+         * IMPORTANT: Relocate all dependencies to avoid conflicts
+         * Relocated Adventure will work on all platforms due to special handling inside Chameleon.
+         */
+        relocate("dev.hypera.chameleon", "dev.hypera.chameleon.example.lib.chameleon")
         relocate("net.kyori", "dev.hypera.chameleon.example.lib.kyori")
         relocate("com.google.gson", "dev.hypera.chameleon.example.lib.gson")
     }

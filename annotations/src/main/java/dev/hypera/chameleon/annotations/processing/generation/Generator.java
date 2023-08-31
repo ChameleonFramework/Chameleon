@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.annotations.processing.generation;
 
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import dev.hypera.chameleon.annotations.Plugin;
@@ -32,6 +33,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Platform main class generator.
@@ -45,13 +47,14 @@ public abstract class Generator {
     /**
      * Generate main class and any required files.
      *
-     * @param data   Plugin data.
-     * @param plugin Chameleon plugin main class.
-     * @param env    Processing environment.
+     * @param data      Plugin data.
+     * @param plugin    Chameleon plugin main class.
+     * @param bootstrap Chameleon plugin bootstrap.
+     * @param env       Processing environment.
      *
      * @throws ChameleonAnnotationException if something goes wrong while generating the files.
      */
-    public abstract void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException;
+    public abstract void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @Nullable TypeElement bootstrap, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException;
 
     protected @NotNull ParameterizedTypeName generic(@NotNull ClassName clazz, @NotNull TypeName... arguments) {
         return ParameterizedTypeName.get(clazz, arguments);
@@ -59,6 +62,20 @@ public abstract class Generator {
 
     protected @NotNull ClassName clazz(@NotNull String p, @NotNull String n) {
         return ClassName.get(p, n);
+    }
+
+    protected @NotNull MethodSpec.Builder addBootstrap(@NotNull MethodSpec.Builder builder, @NotNull ClassName clazz, @NotNull TypeElement plugin, @Nullable TypeElement bootstrap) {
+        if (bootstrap == null) {
+            // Default bootstrap, MyPlugin::new (chameleon -> new MyPlugin(chameleon))
+            return builder.addStatement(
+                "this.$N = $T.create($T::new, this).load()",
+                CHAMELEON_VAR, clazz, plugin
+            );
+        }
+        return builder.addStatement(
+            "this.$N = $T.create(new $T(), this).load()",
+            CHAMELEON_VAR, clazz, bootstrap
+        );
     }
 
 }

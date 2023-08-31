@@ -24,8 +24,7 @@
 package dev.hypera.chameleon.platform.bukkit;
 
 import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.logger.ChameleonJavaLogger;
 import dev.hypera.chameleon.platform.Platform;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,20 +36,18 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BukkitChameleonBootstrap extends ChameleonBootstrap<BukkitChameleon> {
 
-    private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull JavaPlugin bukkitPlugin;
 
     @Internal
-    BukkitChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin bukkitPlugin) {
-        super(new ChameleonJavaLogger(bukkitPlugin.getLogger()), Platform.BUKKIT);
-        this.chameleonPlugin = chameleonPlugin;
+    BukkitChameleonBootstrap(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull JavaPlugin bukkitPlugin) {
+        super(Platform.BUKKIT, pluginBootstrap, new ChameleonJavaLogger(bukkitPlugin.getLogger()));
         this.bukkitPlugin = bukkitPlugin;
     }
 
     @Override
-    protected @NotNull BukkitChameleon loadInternal() throws ChameleonInstantiationException {
+    protected @NotNull BukkitChameleon loadPlatform() {
         return new BukkitChameleon(
-            this.chameleonPlugin, this.bukkitPlugin,
+            this.pluginBootstrap, this.bukkitPlugin,
             this.eventBus, this.logger, this.extensions
         );
     }

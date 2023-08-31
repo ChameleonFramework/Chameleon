@@ -21,54 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.exception.instantiation;
+package dev.hypera.example.event;
 
-import dev.hypera.chameleon.exception.ChameleonException;
+import dev.hypera.chameleon.event.ChameleonEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Chameleon instantiation exception.
+ * An example custom event.
  */
-public class ChameleonInstantiationException extends ChameleonException {
+public final class ExampleCustomEvent implements ChameleonEvent {
 
-    private static final long serialVersionUID = 9018432641876465954L;
-
-    /**
-     * Chameleon instantiation exception constructor.
-     */
-    public ChameleonInstantiationException() {
-        super();
-    }
+    private final @NotNull String name;
 
     /**
-     * Chameleon instantiation exception constructor.
+     * Example custom event constructor.
      *
-     * @param message Exception message.
+     * @param name Name.
      */
-    public ChameleonInstantiationException(String message) {
-        super(message);
+    public ExampleCustomEvent(@NotNull String name) {
+        this.name = name;
     }
 
     /**
-     * Chameleon instantiation exception constructor.
+     * Get the name.
      *
-     * @param message Exception message.
-     * @param cause   Exception cause.
+     * @return the name.
      */
-    public ChameleonInstantiationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    /**
-     * Chameleon instantiation exception constructor.
-     *
-     * @param cause Exception cause.
-     */
-    public ChameleonInstantiationException(Throwable cause) {
-        super(cause);
-    }
-
-    protected ChameleonInstantiationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public @NotNull String getName() {
+        return this.name;
     }
 
 }

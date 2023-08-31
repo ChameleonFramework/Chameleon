@@ -26,7 +26,6 @@ package dev.hypera.chameleon;
 import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.event.EventBusImpl;
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ChameleonExtension;
 import dev.hypera.chameleon.extension.ChameleonExtensionFactory;
 import dev.hypera.chameleon.extension.ChameleonPlatformExtension;
@@ -35,7 +34,6 @@ import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.util.Pair;
 import dev.hypera.chameleon.util.Preconditions;
 import java.util.List;
-import java.util.function.Consumer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,15 +45,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class ChameleonBootstrap<T extends Chameleon> {
 
-    private @NotNull Consumer<ChameleonLogger> preLoad = l -> {};
-    protected final @NotNull ChameleonLogger logger;
     private final @NotNull String platform;
+    protected final @NotNull ChameleonPluginBootstrap pluginBootstrap;
+    protected final @NotNull ChameleonLogger logger;
     protected final @NotNull EventBus eventBus;
     protected final @NotNull ExtensionMap extensions = new ExtensionMap();
 
-    protected ChameleonBootstrap(@NotNull ChameleonLogger logger, @NotNull String platform) {
-        this.logger = logger;
+    protected ChameleonBootstrap(@NotNull String platform, @NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull ChameleonLogger logger) {
         this.platform = platform;
+        this.pluginBootstrap = pluginBootstrap;
+        this.logger = logger;
         this.eventBus = new EventBusImpl(logger);
     }
 
@@ -82,35 +81,21 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
     }
 
     /**
-     * Set preload handler.
-     *
-     * @param preLoad Preload handler.
-     *
-     * @return {@code this}.
-     */
-    @Contract("_ -> this")
-    public final @NotNull ChameleonBootstrap<T> onPreLoad(@NotNull Consumer<ChameleonLogger> preLoad) {
-        Preconditions.checkNotNull("preLoad", preLoad);
-        this.preLoad = preLoad;
-        return this;
-    }
-
-    /**
      * Load Chameleon implementation.
      *
      * @return Chameleon implementation instance.
-     * @throws ChameleonInstantiationException if something goes wrong while loading the Chameleon
-     *                                         implementation.
      */
     @Contract("-> new")
-    public final @NotNull T load() throws ChameleonInstantiationException {
-        // Run preload and initialise extensions.
-        this.preLoad.accept(this.logger);
+    public final @NotNull T load() {
+        // Run the plugin bootstrap
+        this.pluginBootstrap.bootstrap(this.logger, this.eventBus);
+
+        // Sort and initialise extensions
         List<ChameleonPlatformExtension> sortedExtensions = this.extensions.loadSort();
         sortedExtensions.forEach(ext -> ext.init(this.logger, this.eventBus));
 
         // Load Chameleon
-        T chameleon = loadInternal();
+        T chameleon = loadPlatform();
         chameleon.onLoad();
 
         // Load extensions
@@ -118,6 +103,6 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
         return chameleon;
     }
 
-    protected abstract @NotNull T loadInternal() throws ChameleonInstantiationException;
+    protected abstract @NotNull T loadPlatform();
 
 }

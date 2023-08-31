@@ -35,7 +35,6 @@ import static org.mockito.Mockito.verify;
 
 import dev.hypera.chameleon.TestChameleon;
 import dev.hypera.chameleon.exception.extension.ChameleonExtensionException;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.objects.Test2Extension;
 import dev.hypera.chameleon.extension.objects.Test2ExtensionImpl;
 import dev.hypera.chameleon.extension.objects.TestExtension;
@@ -53,7 +52,7 @@ final class ExtensionTests {
     private @NotNull TestExtensionFactory<TestExtension> factory = spy(TestExtension.create(spy(new TestExtensionImpl())));
 
     @BeforeEach
-    void setup() throws ChameleonInstantiationException {
+    void setup() {
         this.chameleon = new TestChameleon();
         this.factory = spy(TestExtension.create(spy(new TestExtensionImpl())));
     }
@@ -88,7 +87,7 @@ final class ExtensionTests {
     }
 
     @Test
-    void testBootstrapLoad() throws ChameleonInstantiationException {
+    void testBootstrapLoad() {
         // Create a new Chameleon bootstrap with the extension and load it.
         TestChameleon testChameleon = TestChameleon.create().withExtension(this.factory).load();
 

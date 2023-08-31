@@ -23,41 +23,26 @@
  */
 package dev.hypera.chameleon;
 
-import dev.hypera.chameleon.util.Preconditions;
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Chameleon plugin.
  */
-public abstract class ChameleonPlugin {
-
-    protected final @NotNull Chameleon chameleon;
-
-    /**
-     * Chameleon plugin constructor.
-     *
-     * @param chameleon Chameleon implementation.
-     */
-    protected ChameleonPlugin(@NotNull Chameleon chameleon) {
-        Preconditions.checkNotNull("chameleon", chameleon);
-        this.chameleon = chameleon;
-    }
+public interface ChameleonPlugin {
 
     /**
      * Called after Chameleon has been loaded.
      */
-    public void onLoad() {
+    default void onLoad() {
 
     }
 
     /**
      * Called when the platform plugin is enabled.
      */
-    public abstract void onEnable();
+    void onEnable();
 
     /**
      * Called when the platform plugin is disabled.
      */
-    public abstract void onDisable();
+    void onDisable();
 
 }

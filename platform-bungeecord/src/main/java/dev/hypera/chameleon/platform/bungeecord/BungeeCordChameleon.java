@@ -24,12 +24,10 @@
 package dev.hypera.chameleon.platform.bungeecord;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
@@ -63,28 +61,28 @@ public final class BungeeCordChameleon extends Chameleon {
 
     @Internal
     BungeeCordChameleon(
-        @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+        @NotNull ChameleonPluginBootstrap pluginBootstrap,
         @NotNull Plugin bungeePlugin,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
-    ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, eventBus, logger, extensions);
+    ) {
+        super(pluginBootstrap, eventBus, logger, extensions);
         this.plugin = bungeePlugin;
         this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);
         ProxyServer.getInstance().getPluginManager().registerListener(bungeePlugin, new BungeeCordListener(this));
     }
 
     /**
-     * Create a new BungeeCord Chameleon bootstrap instance.
+     * Returns a new BungeeCord Chameleon bootstrap instance.
      *
-     * @param chameleonPlugin Chameleon plugin to be loaded.
+     * @param pluginBootstrap Chameleon plugin bootstrap.
      * @param bungeePlugin    BungeeCord plugin instance.
      *
      * @return new BungeeCord Chameleon boostrap.
      */
-    public static @NotNull ChameleonBootstrap<BungeeCordChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin) {
-        return new BungeeCordChameleonBootstrap(chameleonPlugin, bungeePlugin);
+    public static @NotNull BungeeCordChameleonBootstrap create(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull Plugin bungeePlugin) {
+        return new BungeeCordChameleonBootstrap(pluginBootstrap, bungeePlugin);
     }
 
     /**
@@ -140,7 +138,7 @@ public final class BungeeCordChameleon extends Chameleon {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Path getDataFolder() {
+    public @NotNull Path getDataDirectory() {
         return this.plugin.getDataFolder().toPath().toAbsolutePath();
     }
 

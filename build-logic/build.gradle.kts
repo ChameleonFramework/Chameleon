@@ -33,7 +33,6 @@ dependencies {
     implementation(libs.build.indra.common)
     implementation(libs.build.indra.publishing)
     implementation(libs.build.indra.licenser.spotless)
-    implementation(libs.build.blossom)
     implementation(libs.build.test.logger)
     implementation(libs.build.errorprone.plugin)
     implementation(libs.build.nullaway.plugin)
