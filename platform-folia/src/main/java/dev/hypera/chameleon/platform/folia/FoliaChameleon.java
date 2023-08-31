@@ -123,16 +123,15 @@ public final class FoliaChameleon extends BukkitChameleon {
     }
 
     /**
-     * Check if Folia is present.
+     * Returns whether this server is a Folia server.
      *
-     * @return true if Folia is present.
+     * @return {@code true} if this server is a Folia server.
      */
     private static boolean isFolia() {
         try {
-            // find a better class to use for this?
-            Class.forName("io.papermc.paper.threadedregions.scheduler.AsyncScheduler");
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
             return true;
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException ex) {
             return false;
         }
     }
