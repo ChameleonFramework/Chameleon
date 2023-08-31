@@ -98,6 +98,16 @@ public interface PlatformTarget extends Predicate<Platform> {
     }
 
     /**
+     * Create a new platform target that matches Folia.
+     *
+     * @return new platform target.
+     */
+    @Contract(pure = true)
+    static @NotNull PlatformTarget folia() {
+        return id(Platform.FOLIA, true);
+    }
+
+    /**
      * Create a new platform target that matches Minestom.
      *
      * @return new platform target.
