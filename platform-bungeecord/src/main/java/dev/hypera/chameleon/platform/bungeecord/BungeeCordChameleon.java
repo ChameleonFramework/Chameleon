@@ -23,7 +23,6 @@
  */
 package dev.hypera.chameleon.platform.bungeecord;
 
-import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
@@ -33,6 +32,7 @@ import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationExcept
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bungeecord.adventure.BungeeCordAudienceProvider;
 import dev.hypera.chameleon.platform.bungeecord.command.BungeeCordCommandManager;
@@ -51,9 +51,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * BungeeCord Chameleon implementation.
  */
-public final class BungeeCordChameleon extends Chameleon {
+public final class BungeeCordChameleon extends PlatformChameleon<Plugin> {
 
-    private final @NotNull Plugin plugin;
     private final @NotNull ChameleonAudienceProvider audienceProvider;
     private final @NotNull BungeeCordPlatform platform = new BungeeCordPlatform(this);
     private final @NotNull BungeeCordCommandManager commandManager = new BungeeCordCommandManager(this);
@@ -69,8 +68,7 @@ public final class BungeeCordChameleon extends Chameleon {
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, eventBus, logger, extensions);
-        this.plugin = bungeePlugin;
+        super(chameleonPlugin, bungeePlugin, eventBus, logger, extensions);
         this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);
         ProxyServer.getInstance().getPluginManager().registerListener(bungeePlugin, new BungeeCordListener(this));
     }
@@ -142,15 +140,6 @@ public final class BungeeCordChameleon extends Chameleon {
     @Override
     public @NotNull Path getDataFolder() {
         return this.plugin.getDataFolder().toPath().toAbsolutePath();
-    }
-
-    /**
-     * Get the stored platform Plugin.
-     *
-     * @return stored platform Plugin.
-     */
-    public @NotNull Plugin getPlatformPlugin() {
-        return this.plugin;
     }
 
 }

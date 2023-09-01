@@ -21,21 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon;
+package dev.hypera.chameleon.platform.objects;
 
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.logger.DummyChameleonLogger;
+import dev.hypera.chameleon.platform.proxy.ProxyPlatform;
+import dev.hypera.chameleon.platform.proxy.Server;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
-final class TestChameleonBootstrap extends ChameleonBootstrap<TestChameleon> {
+public class NotTestProxyPlatform implements ProxyPlatform {
 
-    TestChameleonBootstrap() {
-        super(new DummyChameleonLogger(), TestChameleon.PLATFORM_ID);
+    @Override
+    public @NotNull String getId() {
+        return "NotTestProxy";
     }
 
     @Override
-    protected @NotNull TestChameleon loadInternal() throws ChameleonInstantiationException {
-        return new TestChameleon(this.logger, 0, this.eventBus, this.extensions);
+    public @NotNull String getName() {
+        return "NotTestProxy";
+    }
+
+    @Override
+    public @NotNull String getVersion() {
+        return "@version@";
+    }
+
+    @Override
+    public @NotNull Collection<Server> getServers() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public @NotNull Optional<Server> getServer(@NotNull String name) {
+        return Optional.empty();
     }
 
 }

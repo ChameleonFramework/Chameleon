@@ -21,21 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon;
+package dev.hypera.chameleon.platform;
 
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.logger.DummyChameleonLogger;
+import dev.hypera.chameleon.extension.ExtensionMap;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import org.jetbrains.annotations.NotNull;
 
-final class TestChameleonBootstrap extends ChameleonBootstrap<TestChameleon> {
+/**
+ * Platform Chameleon provides access to the platform plugin.
+ * <p><strong>This class is designed for use inside Chameleon platform implementations only. This
+ * API is subject to change and use will not be supported.</strong></p>
+ *
+ * @param <P> Platform plugin type.
+ */
+public abstract class PlatformChameleon<P> extends Chameleon {
 
-    TestChameleonBootstrap() {
-        super(new DummyChameleonLogger(), TestChameleon.PLATFORM_ID);
+    protected final @NotNull P plugin;
+
+    protected PlatformChameleon(
+        @NotNull Class<? extends ChameleonPlugin> plugin,
+        @NotNull P platformPlugin,
+        @NotNull EventBus eventBus,
+        @NotNull ChameleonLogger logger,
+        @NotNull ExtensionMap extensions
+    ) throws ChameleonInstantiationException {
+        super(plugin, eventBus, logger, extensions);
+        this.plugin = platformPlugin;
     }
 
-    @Override
-    protected @NotNull TestChameleon loadInternal() throws ChameleonInstantiationException {
-        return new TestChameleon(this.logger, 0, this.eventBus, this.extensions);
+    /**
+     * Returns the underlying platform plugin.
+     *
+     * @return platform plugin.
+     */
+    public final @NotNull P getPlatformPlugin() {
+        return this.plugin;
     }
 
 }

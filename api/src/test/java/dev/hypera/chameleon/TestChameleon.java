@@ -32,6 +32,7 @@ import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.logger.DummyChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import dev.hypera.chameleon.user.UserManager;
@@ -41,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Dummy Chameleon implementation.
  */
-public final class TestChameleon extends Chameleon {
+public final class TestChameleon extends PlatformChameleon<Object> {
 
     public static final @NotNull String PLATFORM_ID = "Test";
     private final @NotNull Platform platform = new TestChameleonPlatform();
@@ -58,25 +59,49 @@ public final class TestChameleon extends Chameleon {
     /**
      * Dummy Chameleon implementation constructor.
      *
-     * @param logger Logger.
+     * @param platformPlugin Platform plugin instance.
      *
      * @throws ChameleonInstantiationException if something goes wrong whilst starting.
      */
-    public TestChameleon(@NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
-        this(logger, new EventBusImpl(logger), new ExtensionMap());
+    public TestChameleon(@NotNull Object platformPlugin) throws ChameleonInstantiationException {
+        this(new DummyChameleonLogger(), platformPlugin);
     }
 
     /**
      * Dummy Chameleon implementation constructor.
      *
-     * @param logger     Logger.
-     * @param eventBus   Event bus.
-     * @param extensions Extensions.
+     * @param logger Logger.
+     * @param platformPlugin Platform plugin instance.
      *
      * @throws ChameleonInstantiationException if something goes wrong whilst starting.
      */
-    public TestChameleon(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus, @NotNull ExtensionMap extensions) throws ChameleonInstantiationException {
-        super(TestChameleonPlugin.class, eventBus, logger, extensions);
+    public TestChameleon(@NotNull ChameleonLogger logger, @NotNull Object platformPlugin) throws ChameleonInstantiationException {
+        this(logger, platformPlugin, new EventBusImpl(logger), new ExtensionMap());
+    }
+
+    /**
+     * Dummy Chameleon implementation constructor.
+     *
+     * @param logger Logger.
+     *
+     * @throws ChameleonInstantiationException if something goes wrong whilst starting.
+     */
+    public TestChameleon(@NotNull ChameleonLogger logger) throws ChameleonInstantiationException {
+        this(logger, 0, new EventBusImpl(logger), new ExtensionMap());
+    }
+
+    /**
+     * Dummy Chameleon implementation constructor.
+     *
+     * @param logger         Logger.
+     * @param platformPlugin Platform plugin.
+     * @param eventBus       Event bus.
+     * @param extensions     Extensions.
+     *
+     * @throws ChameleonInstantiationException if something goes wrong whilst starting.
+     */
+    public TestChameleon(@NotNull ChameleonLogger logger, @NotNull Object platformPlugin, @NotNull EventBus eventBus, @NotNull ExtensionMap extensions) throws ChameleonInstantiationException {
+        super(TestChameleonPlugin.class, platformPlugin, eventBus, logger, extensions);
     }
 
     public static @NotNull ChameleonBootstrap<TestChameleon> create() {

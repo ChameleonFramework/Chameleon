@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
  * Folia platform plugin implementation.
  */
 @Internal
+@SuppressWarnings({ "UnstableApiUsage" })
 public final class FoliaPlugin implements PlatformPlugin {
 
     private final @NotNull Plugin plugin;

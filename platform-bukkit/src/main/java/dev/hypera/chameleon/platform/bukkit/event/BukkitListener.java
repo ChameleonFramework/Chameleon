@@ -23,11 +23,12 @@
  */
 package dev.hypera.chameleon.platform.bukkit.event;
 
+import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.event.common.UserChatEvent;
 import dev.hypera.chameleon.event.common.UserConnectEvent;
 import dev.hypera.chameleon.event.common.UserDisconnectEvent;
 import dev.hypera.chameleon.event.server.ServerUserKickEvent;
-import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
+import dev.hypera.chameleon.platform.bukkit.user.BukkitUserManager;
 import dev.hypera.chameleon.user.User;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.event.EventHandler;
@@ -45,16 +46,19 @@ import org.jetbrains.annotations.NotNull;
 @Internal
 public final class BukkitListener implements Listener {
 
-    private final @NotNull BukkitChameleon chameleon;
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull BukkitUserManager userManager;
 
     /**
      * Bukkit listener constructor.
      *
-     * @param chameleon Bukkit Chameleon implementation.
+     * @param chameleon   Bukkit Chameleon implementation.
+     * @param userManager Bukkit user manager implementation.
      */
     @Internal
-    public BukkitListener(@NotNull BukkitChameleon chameleon) {
+    public BukkitListener(@NotNull Chameleon chameleon, @NotNull BukkitUserManager userManager) {
         this.chameleon = chameleon;
+        this.userManager = userManager;
     }
 
     /**
@@ -64,7 +68,7 @@ public final class BukkitListener implements Listener {
      */
     @EventHandler
     public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
-        User user = this.chameleon.getUserManager().wrap(event.getPlayer());
+        User user = this.userManager.wrap(event.getPlayer());
         UserConnectEvent chameleonEvent = new UserConnectEvent(user, false);
 
         this.chameleon.getEventBus().dispatch(chameleonEvent);
@@ -81,7 +85,7 @@ public final class BukkitListener implements Listener {
     @EventHandler
     public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
         UserChatEvent chameleonEvent = new UserChatEvent(
-            this.chameleon.getUserManager().wrap(event.getPlayer()),
+            this.userManager.wrap(event.getPlayer()),
             event.getMessage(), event.isCancelled()
         );
         this.chameleon.getEventBus().dispatch(chameleonEvent);
@@ -103,7 +107,7 @@ public final class BukkitListener implements Listener {
     @EventHandler
     public void onPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
         this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(
-            this.chameleon.getUserManager().wrap(event.getPlayer())
+            this.userManager.wrap(event.getPlayer())
         ));
     }
 
@@ -114,11 +118,10 @@ public final class BukkitListener implements Listener {
      */
     @EventHandler
     public void onPlayerKickEvent(@NotNull PlayerKickEvent event) {
-        this.chameleon.getEventBus()
-            .dispatch(new ServerUserKickEvent(
-                this.chameleon.getUserManager().wrap(event.getPlayer()),
-                LegacyComponentSerializer.legacySection().deserialize(event.getReason())
-            ));
+        this.chameleon.getEventBus().dispatch(new ServerUserKickEvent(
+            this.userManager.wrap(event.getPlayer()),
+            LegacyComponentSerializer.legacySection().deserialize(event.getReason())
+        ));
     }
 
 }

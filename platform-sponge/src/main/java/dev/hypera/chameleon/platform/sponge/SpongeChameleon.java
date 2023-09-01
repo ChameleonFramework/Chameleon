@@ -23,7 +23,6 @@
  */
 package dev.hypera.chameleon.platform.sponge;
 
-import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
@@ -35,6 +34,7 @@ import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.sponge.adventure.SpongeAudienceProvider;
 import dev.hypera.chameleon.platform.sponge.command.SpongeCommandManager;
@@ -52,7 +52,7 @@ import org.spongepowered.api.Sponge;
 /**
  * Sponge Chameleon implementation.
  */
-public final class SpongeChameleon extends Chameleon {
+public final class SpongeChameleon extends PlatformChameleon<SpongePlugin> {
 
     private final @NotNull SpongePlugin plugin;
     private final @NotNull AdventureMapper adventureMapper = new AdventureMapper(this);
@@ -72,7 +72,7 @@ public final class SpongeChameleon extends Chameleon {
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, eventBus, logger, extensions);
+        super(chameleonPlugin, spongePlugin, eventBus, logger, extensions);
         this.plugin = spongePlugin;
     }
 
@@ -167,16 +167,6 @@ public final class SpongeChameleon extends Chameleon {
     @Override
     public @NotNull Path getDataFolder() {
         return this.plugin.getDataDirectory();
-    }
-
-
-    /**
-     * Get the stored Sponge plugin.
-     *
-     * @return the stored Sponge plugin.
-     */
-    public @NotNull SpongePlugin getPlatformPlugin() {
-        return this.plugin;
     }
 
 }
