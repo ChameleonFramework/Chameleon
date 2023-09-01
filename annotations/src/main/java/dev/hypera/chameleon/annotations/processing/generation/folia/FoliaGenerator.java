@@ -65,7 +65,6 @@ public final class FoliaGenerator extends Generator {
      * @throws ChameleonAnnotationException if something goes wrong while creating the files.
      */
     @Override
-
     public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @Nullable TypeElement bootstrap, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
         MethodSpec constructorSpec = addBootstrap(
             MethodSpec.constructorBuilder()
