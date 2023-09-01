@@ -84,9 +84,9 @@ tasks {
          * IMPORTANT: Relocate all dependencies to avoid conflicts
          * Relocated Adventure will work on all platforms due to special handling inside Chameleon.
          */
-        relocate("dev.hypera.chameleon", "dev.hypera.chameleon.example.lib.chameleon")
-        relocate("net.kyori", "dev.hypera.chameleon.example.lib.kyori")
-        relocate("com.google.gson", "dev.hypera.chameleon.example.lib.gson")
+        relocate("dev.hypera.chameleon", "dev.hypera.example.lib.chameleon")
+        relocate("net.kyori", "dev.hypera.example.lib.kyori")
+        relocate("com.google.gson", "dev.hypera.example.lib.gson")
     }
 
     jar {
