@@ -57,7 +57,7 @@ import org.jetbrains.annotations.NotNull;
     version = "@version@", // @version@ is replaced by Gradle at build time.
     description = "An example cross-platform plugin built with the Chameleon Framework!",
     url = "https://github.com/ChameleonFramework/Chameleon/",
-    authors = {"Joshua Sing", "SLLCoding"},
+    authors = {"Joshua Sing", "LooFifteen"},
     dependencies = {
         @Dependency(
             name = "LuckPerms",
