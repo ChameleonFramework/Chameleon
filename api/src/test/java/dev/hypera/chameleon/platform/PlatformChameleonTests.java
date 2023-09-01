@@ -21,21 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon;
+package dev.hypera.chameleon.platform;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import dev.hypera.chameleon.TestChameleon;
 import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
-import dev.hypera.chameleon.logger.DummyChameleonLogger;
-import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Test;
 
-final class TestChameleonBootstrap extends ChameleonBootstrap<TestChameleon> {
+final class PlatformChameleonTests {
 
-    TestChameleonBootstrap() {
-        super(new DummyChameleonLogger(), TestChameleon.PLATFORM_ID);
-    }
-
-    @Override
-    protected @NotNull TestChameleon loadInternal() throws ChameleonInstantiationException {
-        return new TestChameleon(this.logger, 0, this.eventBus, this.extensions);
+    @Test
+    void testPlatformPlugin() throws ChameleonInstantiationException {
+        // Make sure PlatformChameleon stores and returns the platform plugin correctly.
+        TestChameleon chameleon = new TestChameleon(123);
+        assertEquals(123, chameleon.getPlatformPlugin());
     }
 
 }
