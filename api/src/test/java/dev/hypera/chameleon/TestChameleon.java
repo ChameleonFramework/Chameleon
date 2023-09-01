@@ -84,10 +84,11 @@ public final class TestChameleon extends PlatformChameleon<Object> {
     /**
      * Dummy Chameleon implementation constructor.
      *
-     * @param logger         Logger.
-     * @param platformPlugin Platform plugin.
-     * @param eventBus       Event bus.
-     * @param extensions     Extensions.
+     * @param pluginBootstrap Chameleon plugin bootstrap.
+     * @param logger          Logger.
+     * @param platformPlugin  Platform plugin.
+     * @param eventBus        Event bus.
+     * @param extensions      Extensions.
      */
     public TestChameleon(
         @NotNull ChameleonPluginBootstrap pluginBootstrap,

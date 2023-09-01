@@ -26,13 +26,12 @@ package dev.hypera.chameleon.platform;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import dev.hypera.chameleon.TestChameleon;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import org.junit.jupiter.api.Test;
 
 final class PlatformChameleonTests {
 
     @Test
-    void testPlatformPlugin() throws ChameleonInstantiationException {
+    void testPlatformPlugin() {
         // Make sure PlatformChameleon stores and returns the platform plugin correctly.
         TestChameleon chameleon = new TestChameleon(123);
         assertEquals(123, chameleon.getPlatformPlugin());
