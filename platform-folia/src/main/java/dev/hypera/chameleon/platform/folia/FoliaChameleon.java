@@ -23,19 +23,30 @@
  */
 package dev.hypera.chameleon.platform.folia;
 
-import com.google.errorprone.annotations.DoNotCall;
 import dev.hypera.chameleon.ChameleonPluginBootstrap;
+import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
+import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
-import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
-import dev.hypera.chameleon.platform.bukkit.BukkitChameleonBootstrap;
+import dev.hypera.chameleon.platform.bukkit.adventure.BukkitAudienceProvider;
+import dev.hypera.chameleon.platform.bukkit.command.BukkitCommandManager;
+import dev.hypera.chameleon.platform.bukkit.event.BukkitListener;
+import dev.hypera.chameleon.platform.bukkit.platform.BukkitPlatform;
+import dev.hypera.chameleon.platform.bukkit.platform.BukkitPluginManager;
+import dev.hypera.chameleon.platform.bukkit.scheduler.BukkitScheduler;
+import dev.hypera.chameleon.platform.bukkit.user.BukkitUserManager;
 import dev.hypera.chameleon.platform.folia.platform.FoliaPlatform;
 import dev.hypera.chameleon.platform.folia.platform.FoliaPluginManager;
 import dev.hypera.chameleon.platform.folia.scheduler.FoliaScheduler;
 import dev.hypera.chameleon.scheduler.Scheduler;
+import dev.hypera.chameleon.user.UserManager;
+import dev.hypera.chameleon.util.Preconditions;
+import java.nio.file.Path;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -45,13 +56,16 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Folia Chameleon implementation.
  */
-// We need to extend BukkitChameleon because all Bukkit managers require an instance of it to instantiate. Once this is solved, this can be made its own class.
 @Experimental
-public final class FoliaChameleon extends BukkitChameleon {
+public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
 
-    private final @Nullable FoliaPlatform platform;
-    private final @Nullable FoliaPluginManager pluginManager;
-    private final @Nullable FoliaScheduler scheduler;
+    private final @NotNull Platform platform;
+    private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this);
+    private final @NotNull CommandManager commandManager = new BukkitCommandManager(this, this.userManager);
+    private final @NotNull PluginManager pluginManager;
+    private final @NotNull Scheduler scheduler;
+
+    private @Nullable ChameleonAudienceProvider audienceProvider;
 
     @Internal
     FoliaChameleon(
@@ -63,26 +77,9 @@ public final class FoliaChameleon extends BukkitChameleon {
     ) {
         super(pluginBootstrap, foliaPlugin, eventBus, logger, extensions);
         boolean folia = isFolia();
-        this.platform = folia ? new FoliaPlatform() : null;
-        this.pluginManager = folia ? new FoliaPluginManager() : null;
-        this.scheduler = folia ? new FoliaScheduler(this) : null;
-    }
-
-    /**
-     * Unsupported.
-     *
-     * @param pluginBootstrap Unsupported.
-     * @param bukkitPlugin    Unsupported.
-     *
-     * @return Unsupported.
-     * @see #createFoliaBootstrap(ChameleonPluginBootstrap, JavaPlugin)
-     * @deprecated Not supported on Folia.
-     */
-    @DoNotCall("Always throws java.lang.UnsupportedOperationException")
-    @Deprecated
-    @SuppressWarnings("unused")
-    public static @NotNull BukkitChameleonBootstrap create(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull JavaPlugin bukkitPlugin) {
-        throw new UnsupportedOperationException("Folia does not support Bukkit.");
+        this.platform = folia ? new FoliaPlatform() : new BukkitPlatform();
+        this.pluginManager = folia ? new FoliaPluginManager() : new BukkitPluginManager();
+        this.scheduler = folia ? new FoliaScheduler(this) : new BukkitScheduler(this);
     }
 
     /**
@@ -94,7 +91,7 @@ public final class FoliaChameleon extends BukkitChameleon {
      * @return new Folia Chameleon bootstrap.
      */
     @Experimental
-    public static @NotNull FoliaChameleonBootstrap createFoliaBootstrap(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull JavaPlugin foliaPlugin) {
+    public static @NotNull FoliaChameleonBootstrap create(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull JavaPlugin foliaPlugin) {
         return new FoliaChameleonBootstrap(pluginBootstrap, foliaPlugin);
     }
 
@@ -102,8 +99,48 @@ public final class FoliaChameleon extends BukkitChameleon {
      * {@inheritDoc}
      */
     @Override
+    public void onEnable() {
+        this.audienceProvider = new BukkitAudienceProvider(this.userManager, super.plugin);
+        Bukkit.getPluginManager().registerEvents(new BukkitListener(this, this.userManager), super.plugin);
+        super.onEnable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onDisable() {
+        if (this.audienceProvider != null) {
+            this.audienceProvider.close();
+        }
+        super.onDisable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull ChameleonAudienceProvider getAdventure() {
+        Preconditions.checkState(
+            this.audienceProvider != null, "Chameleon has not been loaded"
+        );
+        return this.audienceProvider;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public @NotNull Platform getPlatform() {
-        return this.platform != null ? this.platform : super.getPlatform();
+        return this.platform;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull CommandManager getCommandManager() {
+        return this.commandManager;
     }
 
     /**
@@ -111,7 +148,15 @@ public final class FoliaChameleon extends BukkitChameleon {
      */
     @Override
     public @NotNull PluginManager getPluginManager() {
-        return this.pluginManager != null ? this.pluginManager : super.getPluginManager();
+        return this.pluginManager;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull UserManager getUserManager() {
+        return this.userManager;
     }
 
     /**
@@ -119,7 +164,15 @@ public final class FoliaChameleon extends BukkitChameleon {
      */
     @Override
     public @NotNull Scheduler getScheduler() {
-        return this.scheduler != null ? this.scheduler : super.getScheduler();
+        return this.scheduler;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Path getDataDirectory() {
+        return this.plugin.getDataFolder().toPath().toAbsolutePath();
     }
 
     /**

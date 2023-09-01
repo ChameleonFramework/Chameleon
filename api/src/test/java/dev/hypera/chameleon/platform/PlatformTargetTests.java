@@ -26,6 +26,8 @@ package dev.hypera.chameleon.platform;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import dev.hypera.chameleon.platform.objects.DummyPlatform;
+import dev.hypera.chameleon.platform.objects.NotTestProxyPlatform;
 import dev.hypera.chameleon.platform.objects.TestProxyPlatform;
 import dev.hypera.chameleon.platform.objects.TestServerPlatform;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +36,7 @@ import org.junit.jupiter.api.Test;
 final class PlatformTargetTests {
 
     private static final @NotNull Platform PROXY_PLATFORM = new TestProxyPlatform();
+    private static final @NotNull Platform NOT_PROXY_PLATFORM = new NotTestProxyPlatform();
     private static final @NotNull Platform SERVER_PLATFORM = new TestServerPlatform();
 
     @Test
@@ -61,7 +64,42 @@ final class PlatformTargetTests {
     }
 
     @Test
-    void testIds() {
+    void testBukkit() {
+        assertTrue(PlatformTarget.bukkit().test(DummyPlatform.of(Platform.BUKKIT)));
+    }
+
+    @Test
+    void testBungeeCord() {
+        assertTrue(PlatformTarget.bungeeCord().test(DummyPlatform.of(Platform.BUNGEECORD)));
+    }
+
+    @Test
+    void testFolia() {
+        assertTrue(PlatformTarget.folia().test(DummyPlatform.of(Platform.FOLIA)));
+    }
+
+    @Test
+    void testMinestom() {
+        assertTrue(PlatformTarget.minestom().test(DummyPlatform.of(Platform.MINESTOM)));
+    }
+
+    @Test
+    void testNukkit() {
+        assertTrue(PlatformTarget.nukkit().test(DummyPlatform.of(Platform.NUKKIT)));
+    }
+
+    @Test
+    void testSponge() {
+        assertTrue(PlatformTarget.sponge().test(DummyPlatform.of(Platform.SPONGE)));
+    }
+
+    @Test
+    void testVelocity() {
+        assertTrue(PlatformTarget.velocity().test(DummyPlatform.of(Platform.VELOCITY)));
+    }
+
+    @Test
+    void testId() {
         assertTrue(PlatformTarget.id("TestProxy").test(PROXY_PLATFORM));
         assertFalse(PlatformTarget.id("TestProxy").test(SERVER_PLATFORM));
         assertTrue(PlatformTarget.id("TestServer").test(SERVER_PLATFORM));
@@ -70,6 +108,45 @@ final class PlatformTargetTests {
         assertFalse(PlatformTarget.id("testserver").test(PROXY_PLATFORM));
         assertFalse(PlatformTarget.id("neither").test(SERVER_PLATFORM));
         assertFalse(PlatformTarget.id("neither").test(PROXY_PLATFORM));
+
+        // Strict (case-sensitive)
+        assertTrue(PlatformTarget.id("TestProxy", true).test(PROXY_PLATFORM));
+        assertFalse(PlatformTarget.id("testproxy", true).test(PROXY_PLATFORM));
+        assertTrue(PlatformTarget.id("TestServer", true).test(SERVER_PLATFORM));
+        assertFalse(PlatformTarget.id("testserver", true).test(SERVER_PLATFORM));
+        assertFalse(PlatformTarget.id("neither", true).test(PROXY_PLATFORM));
+        assertFalse(PlatformTarget.id("neither", true).test(SERVER_PLATFORM));
+    }
+
+    @Test
+    void testAnd() {
+        PlatformTarget proxyAndTestProxy = PlatformTarget.proxy()
+            .and(PlatformTarget.id("TestProxy"));
+        assertTrue(proxyAndTestProxy.test(PROXY_PLATFORM));
+        assertFalse(proxyAndTestProxy.test(NOT_PROXY_PLATFORM));
+        assertFalse(proxyAndTestProxy.test(SERVER_PLATFORM));
+        assertFalse(proxyAndTestProxy.test(DummyPlatform.of(Platform.BUKKIT)));
+    }
+
+    @Test
+    void testOr() {
+        PlatformTarget bukkitOrBungee = PlatformTarget.bukkit().or(PlatformTarget.bungeeCord());
+        assertTrue(bukkitOrBungee.test(DummyPlatform.of(Platform.BUKKIT)));
+        assertTrue(bukkitOrBungee.test(DummyPlatform.of(Platform.BUNGEECORD)));
+        assertFalse(bukkitOrBungee.test(DummyPlatform.of(Platform.MINESTOM)));
+        assertFalse(bukkitOrBungee.test(DummyPlatform.of(Platform.VELOCITY)));
+    }
+
+    @Test
+    void testNegate() {
+        PlatformTarget notMinestom = PlatformTarget.minestom().negate();
+        assertFalse(notMinestom.test(DummyPlatform.of(Platform.MINESTOM)));
+        assertTrue(notMinestom.test(PROXY_PLATFORM));
+        assertTrue(notMinestom.test(DummyPlatform.of(Platform.VELOCITY)));
+
+        PlatformTarget notProxy = PlatformTarget.proxy().negate();
+        assertFalse(notProxy.test(PROXY_PLATFORM));
+        assertTrue(notProxy.test(SERVER_PLATFORM));
     }
 
 }

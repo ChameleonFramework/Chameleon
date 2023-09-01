@@ -23,7 +23,6 @@
  */
 package dev.hypera.chameleon.platform.sponge;
 
-import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
@@ -33,6 +32,7 @@ import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.sponge.adventure.SpongeAudienceProvider;
 import dev.hypera.chameleon.platform.sponge.command.SpongeCommandManager;
@@ -50,9 +50,8 @@ import org.spongepowered.api.Sponge;
 /**
  * Sponge Chameleon implementation.
  */
-public final class SpongeChameleon extends Chameleon {
+public final class SpongeChameleon extends PlatformChameleon<SpongePlugin> {
 
-    private final @NotNull SpongePlugin plugin;
     private final @NotNull AdventureMapper adventureMapper = new AdventureMapper(this);
     private final @NotNull SpongeAudienceProvider audienceProvider = new SpongeAudienceProvider(this);
     private final @NotNull SpongePlatform platform = new SpongePlatform();
@@ -70,8 +69,7 @@ public final class SpongeChameleon extends Chameleon {
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) {
-        super(pluginBootstrap, eventBus, logger, extensions);
-        this.plugin = spongePlugin;
+        super(pluginBootstrap, spongePlugin, eventBus, logger, extensions);
     }
 
     /**
@@ -165,16 +163,6 @@ public final class SpongeChameleon extends Chameleon {
     @Override
     public @NotNull Path getDataDirectory() {
         return this.plugin.getDataDirectory();
-    }
-
-
-    /**
-     * Get the stored Sponge plugin.
-     *
-     * @return the stored Sponge plugin.
-     */
-    public @NotNull SpongePlugin getPlatformPlugin() {
-        return this.plugin;
     }
 
 }

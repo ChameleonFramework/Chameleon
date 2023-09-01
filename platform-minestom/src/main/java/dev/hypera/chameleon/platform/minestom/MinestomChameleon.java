@@ -23,7 +23,6 @@
  */
 package dev.hypera.chameleon.platform.minestom;
 
-import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
@@ -33,6 +32,7 @@ import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.minestom.adventure.MinestomAudienceProvider;
 import dev.hypera.chameleon.platform.minestom.command.MinestomCommandManager;
@@ -51,9 +51,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Minestom Chameleon implementation.
  */
-public final class MinestomChameleon extends Chameleon {
+public final class MinestomChameleon extends PlatformChameleon<Extension> {
 
-    private final @NotNull Extension extension;
     private final @NotNull AdventureMapper adventureMapper = new AdventureMapper(this);
     private final @NotNull MinestomUserManager userManager = new MinestomUserManager(this);
     private final @NotNull MinestomAudienceProvider audienceProvider = new MinestomAudienceProvider(this);
@@ -70,8 +69,7 @@ public final class MinestomChameleon extends Chameleon {
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) {
-        super(pluginBootstrap, eventBus, logger, extensions);
-        this.extension = extension;
+        super(pluginBootstrap, extension, eventBus, logger, extensions);
         new MinestomListener(this);
     }
 
@@ -164,16 +162,7 @@ public final class MinestomChameleon extends Chameleon {
      */
     @Override
     public @NotNull Path getDataDirectory() {
-        return this.extension.getDataDirectory();
-    }
-
-    /**
-     * Returns the stored Minestom Extension instance.
-     *
-     * @return stored Extension instance.
-     */
-    public @NotNull Extension getPlatformPlugin() {
-        return this.extension;
+        return getPlatformPlugin().getDataDirectory();
     }
 
 }

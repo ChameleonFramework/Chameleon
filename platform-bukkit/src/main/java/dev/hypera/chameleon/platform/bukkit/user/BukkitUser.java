@@ -23,7 +23,7 @@
  */
 package dev.hypera.chameleon.platform.bukkit.user;
 
-import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.server.GameMode;
 import dev.hypera.chameleon.user.ServerUser;
 import dev.hypera.chameleon.util.Preconditions;
@@ -37,6 +37,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +46,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
 
-    private final @NotNull BukkitChameleon chameleon;
+    private final @NotNull PlatformChameleon<JavaPlugin> chameleon;
     private final @NotNull Player player;
     private final @NotNull Audience audience;
 
@@ -56,7 +57,7 @@ public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
      * @param player    Player to be wrapped.
      */
     @Internal
-    public BukkitUser(@NotNull BukkitChameleon chameleon, @NotNull Player player) {
+    public BukkitUser(@NotNull PlatformChameleon<JavaPlugin> chameleon, @NotNull Player player) {
         this.chameleon = chameleon;
         this.player = player;
         this.audience = chameleon.getAdventure().player(player.getUniqueId());

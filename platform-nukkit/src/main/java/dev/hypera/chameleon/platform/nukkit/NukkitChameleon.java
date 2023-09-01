@@ -25,7 +25,6 @@ package dev.hypera.chameleon.platform.nukkit;
 
 import cn.nukkit.Server;
 import cn.nukkit.plugin.PluginBase;
-import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
@@ -33,6 +32,7 @@ import dev.hypera.chameleon.event.EventBus;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.nukkit.adventure.NukkitAudienceProvider;
 import dev.hypera.chameleon.platform.nukkit.command.NukkitCommandManager;
@@ -49,9 +49,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Nukkit Chameleon implementation.
  */
-public final class NukkitChameleon extends Chameleon {
+public final class NukkitChameleon extends PlatformChameleon<PluginBase> {
 
-    private final @NotNull PluginBase plugin;
     private final @NotNull NukkitAudienceProvider audienceProvider = new NukkitAudienceProvider(this);
     private final @NotNull NukkitPlatform platform = new NukkitPlatform();
     private final @NotNull NukkitCommandManager commandManager = new NukkitCommandManager(this);
@@ -67,8 +66,7 @@ public final class NukkitChameleon extends Chameleon {
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) {
-        super(pluginBootstrap, eventBus, logger, extensions);
-        this.plugin = nukkitPlugin;
+        super(pluginBootstrap, nukkitPlugin, eventBus, logger, extensions);
     }
 
     /**
@@ -148,16 +146,6 @@ public final class NukkitChameleon extends Chameleon {
     @Override
     public @NotNull Path getDataDirectory() {
         return this.plugin.getDataFolder().toPath();
-    }
-
-
-    /**
-     * Returns the stored Nukkit PluginBase.
-     *
-     * @return the stored Nukkit PluginBase.
-     */
-    public @NotNull PluginBase getPlatformPlugin() {
-        return this.plugin;
     }
 
 }

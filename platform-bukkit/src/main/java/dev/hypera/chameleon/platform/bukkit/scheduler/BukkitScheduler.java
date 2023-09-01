@@ -23,11 +23,12 @@
  */
 package dev.hypera.chameleon.platform.bukkit.scheduler;
 
-import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.scheduler.Schedule;
 import dev.hypera.chameleon.scheduler.ScheduledTask;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +40,7 @@ import org.jetbrains.annotations.NotNull;
 public final class BukkitScheduler extends Scheduler {
 
     private static final int CRAFT_NO_REPEATING = -1;
-    private final @NotNull BukkitChameleon chameleon;
+    private final @NotNull PlatformChameleon<JavaPlugin> chameleon;
 
     /**
      * Bukkit scheduler constructor.
@@ -47,7 +48,7 @@ public final class BukkitScheduler extends Scheduler {
      * @param chameleon Bukkit Chameleon implementation.
      */
     @Internal
-    public BukkitScheduler(@NotNull BukkitChameleon chameleon) {
+    public BukkitScheduler(@NotNull PlatformChameleon<JavaPlugin> chameleon) {
         this.chameleon = chameleon;
     }
 

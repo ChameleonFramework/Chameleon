@@ -21,20 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon;
+package dev.hypera.chameleon.platform.objects;
 
-import dev.hypera.chameleon.logger.DummyChameleonLogger;
+import dev.hypera.chameleon.platform.Platform;
 import org.jetbrains.annotations.NotNull;
 
-final class TestChameleonBootstrap extends ChameleonBootstrap<TestChameleon> {
+/**
+ * Dummy platform implementation.
+ */
+public final class DummyPlatform implements Platform {
 
-    TestChameleonBootstrap() {
-        super(TestChameleon.PLATFORM_ID, TestChameleonPlugin::new, new DummyChameleonLogger());
+    private final @NotNull String id;
+
+    private DummyPlatform(@NotNull String id) {
+        this.id = id;
     }
 
+    /**
+     * Returns a new dummy platform with the given ID.
+     *
+     * @param id Platform ID.
+     *
+     * @return new dummy platform.
+     */
+    public static @NotNull DummyPlatform of(@NotNull String id) {
+        return new DummyPlatform(id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected @NotNull TestChameleon loadPlatform() {
-        return new TestChameleon(this.pluginBootstrap, this.logger, 0, this.eventBus, this.extensions);
+    public @NotNull String getId() {
+        return this.id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getName() {
+        return this.id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull String getVersion() {
+        return "@version@";
     }
 
 }

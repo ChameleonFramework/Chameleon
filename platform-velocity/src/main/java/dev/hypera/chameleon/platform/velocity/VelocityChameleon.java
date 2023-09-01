@@ -23,7 +23,6 @@
  */
 package dev.hypera.chameleon.platform.velocity;
 
-import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
@@ -33,6 +32,7 @@ import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.velocity.adventure.VelocityAudienceProvider;
 import dev.hypera.chameleon.platform.velocity.command.VelocityCommandManager;
@@ -49,9 +49,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Velocity Chameleon implementation.
  */
-public final class VelocityChameleon extends Chameleon {
+public final class VelocityChameleon extends PlatformChameleon<VelocityPlugin> {
 
-    private final @NotNull VelocityPlugin plugin;
     private final @NotNull AdventureMapper adventureMapper = new AdventureMapper(this);
     private final @NotNull VelocityAudienceProvider audienceProvider = new VelocityAudienceProvider(this);
     private final @NotNull VelocityCommandManager commandManager = new VelocityCommandManager(this);
@@ -68,8 +67,7 @@ public final class VelocityChameleon extends Chameleon {
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) {
-        super(pluginBootstrap, eventBus, logger, extensions);
-        this.plugin = velocityPlugin;
+        super(pluginBootstrap, velocityPlugin, eventBus, logger, extensions);
     }
 
     /**
@@ -168,15 +166,6 @@ public final class VelocityChameleon extends Chameleon {
     @Override
     public @NotNull Path getDataDirectory() {
         return this.plugin.getDataDirectory();
-    }
-
-    /**
-     * Get the stored Velocity plugin instance.
-     *
-     * @return stored plugin instance.
-     */
-    public @NotNull VelocityPlugin getPlatformPlugin() {
-        return this.plugin;
     }
 
 }

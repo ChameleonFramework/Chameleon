@@ -65,22 +65,14 @@ public final class FoliaGenerator extends Generator {
      * @throws ChameleonAnnotationException if something goes wrong while creating the files.
      */
     @Override
+
     public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @Nullable TypeElement bootstrap, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
-        MethodSpec.Builder constructorSpecBuilder = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PUBLIC);
-        // Replace with #addBootstrap once we can call #create on FoliaChameleon
-        if (bootstrap == null) {
-            // Default bootstrap, MyPlugin::new (chameleon -> new MyPlugin(chameleon))
-            constructorSpecBuilder.addStatement(
-                "this.$N = $T.createFoliaBootstrap($T::new, this).load()",
-                CHAMELEON_VAR, clazz("dev.hypera.chameleon.platform.folia", "FoliaChameleon"), plugin
-            );
-        } else {
-            constructorSpecBuilder.addStatement(
-                "this.$N = $T.createFoliaBootstrap(new $T(), this).load()",
-                CHAMELEON_VAR, clazz("dev.hypera.chameleon.platform.folia", "FoliaChameleon"), bootstrap
-            );
-        }
+        MethodSpec constructorSpec = addBootstrap(
+            MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC),
+            clazz("dev.hypera.chameleon.platform.folia", "FoliaChameleon"),
+            plugin, bootstrap
+        ).build();
 
         MethodSpec enableSpec = MethodSpec.methodBuilder("onEnable")
             .addAnnotation(Override.class).addModifiers(Modifier.PUBLIC)
@@ -94,7 +86,7 @@ public final class FoliaGenerator extends Generator {
             .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
             .superclass(clazz("org.bukkit.plugin.java", "JavaPlugin"))
             .addField(FieldSpec.builder(clazz("dev.hypera.chameleon.platform.folia", "FoliaChameleon"), CHAMELEON_VAR, Modifier.PRIVATE).build())
-            .addMethod(constructorSpecBuilder.build())
+            .addMethod(constructorSpec)
             .addMethod(enableSpec)
             .addMethod(disableSpec)
             .build();
