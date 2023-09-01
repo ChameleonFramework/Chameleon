@@ -23,9 +23,10 @@
  */
 package dev.hypera.chameleon.platform.bukkit.command;
 
+import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.command.Command;
 import dev.hypera.chameleon.command.context.ContextImpl;
-import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
+import dev.hypera.chameleon.platform.bukkit.user.BukkitUserManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,19 +40,26 @@ import org.jetbrains.annotations.NotNull;
 @Internal
 public final class BukkitCommand extends org.bukkit.command.Command {
 
-    private final @NotNull BukkitChameleon chameleon;
+    private final @NotNull Chameleon chameleon;
+    private final @NotNull BukkitUserManager userManager;
     private final @NotNull Command command;
 
     /**
      * Bukkit command constructor.
      *
-     * @param chameleon Bukkit Chameleon implementation.
-     * @param command   Command to be wrapped.
+     * @param chameleon   Bukkit Chameleon implementation.
+     * @param userManager Bukkit user manager implementation.
+     * @param command     Command to be wrapped.
      */
     @Internal
-    public BukkitCommand(@NotNull BukkitChameleon chameleon, @NotNull Command command) {
+    public BukkitCommand(
+        @NotNull Chameleon chameleon,
+        @NotNull BukkitUserManager userManager,
+        @NotNull Command command
+    ) {
         super(command.getName(), "", "", new ArrayList<>(command.getAliases()));
         this.chameleon = chameleon;
+        this.userManager = userManager;
         this.command = command;
     }
 
@@ -61,11 +69,11 @@ public final class BukkitCommand extends org.bukkit.command.Command {
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
         if (args.length < 1 || this.command.executeSubCommand(new ContextImpl(
-            this.chameleon.getUserManager().wrap(sender), this.chameleon,
+            this.userManager.wrap(sender), this.chameleon,
             Arrays.copyOfRange(args, 1, args.length)), args[0]
         )) {
             this.command.executeCommand(new ContextImpl(
-                this.chameleon.getUserManager().wrap(sender),
+                this.userManager.wrap(sender),
                 this.chameleon, args
             ));
         }
@@ -79,7 +87,7 @@ public final class BukkitCommand extends org.bukkit.command.Command {
     @Override
     public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
         return new ArrayList<>(this.command.tabComplete(new ContextImpl(
-            this.chameleon.getUserManager().wrap(sender),
+            this.userManager.wrap(sender),
             this.chameleon, args
         )));
     }

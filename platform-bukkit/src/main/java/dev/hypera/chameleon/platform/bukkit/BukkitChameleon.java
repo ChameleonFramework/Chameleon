@@ -23,7 +23,6 @@
  */
 package dev.hypera.chameleon.platform.bukkit;
 
-import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPlugin;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
@@ -33,6 +32,7 @@ import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationExcept
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bukkit.adventure.BukkitAudienceProvider;
 import dev.hypera.chameleon.platform.bukkit.command.BukkitCommandManager;
@@ -42,6 +42,7 @@ import dev.hypera.chameleon.platform.bukkit.platform.BukkitPluginManager;
 import dev.hypera.chameleon.platform.bukkit.scheduler.BukkitScheduler;
 import dev.hypera.chameleon.platform.bukkit.user.BukkitUserManager;
 import dev.hypera.chameleon.scheduler.Scheduler;
+import dev.hypera.chameleon.user.UserManager;
 import dev.hypera.chameleon.util.Preconditions;
 import java.nio.file.Path;
 import org.bukkit.Bukkit;
@@ -53,31 +54,27 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Bukkit Chameleon implementation.
- *
- * <p>Not final to allow Folia implementation to extend this class.</p>
  */
 @NonExtendable
-public class BukkitChameleon extends Chameleon {
+public final class BukkitChameleon extends PlatformChameleon<JavaPlugin> {
 
-    private final @NotNull JavaPlugin plugin;
     private final @NotNull BukkitPlatform platform = new BukkitPlatform();
-    private final @NotNull BukkitCommandManager commandManager = new BukkitCommandManager(this);
-    private final @NotNull BukkitPluginManager pluginManager = new BukkitPluginManager();
     private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this);
+    private final @NotNull BukkitCommandManager commandManager = new BukkitCommandManager(this, this.userManager);
+    private final @NotNull BukkitPluginManager pluginManager = new BukkitPluginManager();
     private final @NotNull BukkitScheduler scheduler = new BukkitScheduler(this);
 
     private @Nullable ChameleonAudienceProvider audienceProvider;
 
     @Internal
-    protected BukkitChameleon(
+    BukkitChameleon(
         @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
         @NotNull JavaPlugin bukkitPlugin,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
     ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, eventBus, logger, extensions);
-        this.plugin = bukkitPlugin;
+        super(chameleonPlugin, bukkitPlugin, eventBus, logger, extensions);
     }
 
     /**
@@ -97,8 +94,8 @@ public class BukkitChameleon extends Chameleon {
      */
     @Override
     public void onEnable() {
-        this.audienceProvider = new BukkitAudienceProvider(this, this.plugin);
-        Bukkit.getPluginManager().registerEvents(new BukkitListener(this), this.plugin);
+        this.audienceProvider = new BukkitAudienceProvider(this.userManager, super.plugin);
+        Bukkit.getPluginManager().registerEvents(new BukkitListener(this, this.userManager), super.plugin);
         super.onEnable();
     }
 
@@ -107,7 +104,9 @@ public class BukkitChameleon extends Chameleon {
      */
     @Override
     public void onDisable() {
-        this.getAdventure().close();
+        if (this.audienceProvider != null) {
+            this.audienceProvider.close();
+        }
         super.onDisable();
     }
 
@@ -150,7 +149,7 @@ public class BukkitChameleon extends Chameleon {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull BukkitUserManager getUserManager() {
+    public @NotNull UserManager getUserManager() {
         return this.userManager;
     }
 
@@ -168,15 +167,6 @@ public class BukkitChameleon extends Chameleon {
     @Override
     public @NotNull Path getDataFolder() {
         return this.plugin.getDataFolder().toPath().toAbsolutePath();
-    }
-
-    /**
-     * Get stored platform JavaPlugin.
-     *
-     * @return stored JavaPlugin.
-     */
-    public @NotNull JavaPlugin getPlatformPlugin() {
-        return this.plugin;
     }
 
 }

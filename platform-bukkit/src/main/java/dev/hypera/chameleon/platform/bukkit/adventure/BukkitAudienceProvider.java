@@ -24,7 +24,7 @@
 package dev.hypera.chameleon.platform.bukkit.adventure;
 
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
+import dev.hypera.chameleon.platform.bukkit.user.BukkitUserManager;
 import dev.hypera.chameleon.user.ChatUser;
 import dev.hypera.chameleon.util.Preconditions;
 import java.util.UUID;
@@ -43,18 +43,18 @@ import org.jetbrains.annotations.NotNull;
 @Internal
 public final class BukkitAudienceProvider implements ChameleonAudienceProvider {
 
-    private final @NotNull BukkitChameleon chameleon;
+    private final @NotNull BukkitUserManager userManager;
     private final @NotNull BukkitAudiences adventure;
 
     /**
      * Bukkit audience provider constructor.
      *
-     * @param chameleon Chameleon implementation.
-     * @param plugin    Plugin instance.
+     * @param userManager Bukkit user manager implementation.
+     * @param plugin      Plugin instance.
      */
     @Internal
-    public BukkitAudienceProvider(@NotNull BukkitChameleon chameleon, @NotNull JavaPlugin plugin) {
-        this.chameleon = chameleon;
+    public BukkitAudienceProvider(@NotNull BukkitUserManager userManager, @NotNull JavaPlugin plugin) {
+        this.userManager = userManager;
         this.adventure = BukkitAudiences.create(plugin);
     }
 
@@ -114,7 +114,7 @@ public final class BukkitAudienceProvider implements ChameleonAudienceProvider {
     @Override
     public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
         Preconditions.checkNotNull("filter", filter);
-        return this.adventure.filter(c -> filter.test(this.chameleon.getUserManager().wrap(c)));
+        return this.adventure.filter(c -> filter.test(this.userManager.wrap(c)));
     }
 
     /**

@@ -57,8 +57,8 @@ public final class FoliaScheduler extends Scheduler {
         AsyncScheduler scheduler = Bukkit.getAsyncScheduler();
         long period = repeat.toMillis();
         io.papermc.paper.threadedregions.scheduler.ScheduledTask foliaTask = period > 0
-                ? scheduler.runAtFixedRate(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toMillis(), period, TimeUnit.MILLISECONDS)
-                : scheduler.runDelayed(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toMillis(), TimeUnit.MILLISECONDS);
+            ? scheduler.runAtFixedRate(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toMillis(), period, TimeUnit.MILLISECONDS)
+            : scheduler.runDelayed(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toMillis(), TimeUnit.MILLISECONDS);
 
         return foliaTask::cancel;
     }
@@ -68,8 +68,8 @@ public final class FoliaScheduler extends Scheduler {
         GlobalRegionScheduler scheduler = Bukkit.getGlobalRegionScheduler();
         long period = repeat.toTicks();
         io.papermc.paper.threadedregions.scheduler.ScheduledTask foliaTask = period > 0
-                ? scheduler.runAtFixedRate(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toTicks(), period)
-                : scheduler.runDelayed(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toTicks());
+            ? scheduler.runAtFixedRate(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toTicks(), period)
+            : scheduler.runDelayed(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toTicks());
 
         return foliaTask::cancel;
     }

@@ -23,7 +23,7 @@
  */
 package dev.hypera.chameleon.platform.bukkit.user;
 
-import dev.hypera.chameleon.platform.bukkit.BukkitChameleon;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.user.ChatUser;
 import dev.hypera.chameleon.user.ConsoleUser;
 import dev.hypera.chameleon.user.ServerUser;
@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,8 +47,7 @@ import org.jetbrains.annotations.Nullable;
 @Internal
 public final class BukkitUserManager implements UserManager {
 
-    private final @NotNull BukkitChameleon chameleon;
-
+    private final @NotNull PlatformChameleon<JavaPlugin> chameleon;
     private @Nullable BukkitConsoleUser consoleUser;
 
     /**
@@ -56,7 +56,7 @@ public final class BukkitUserManager implements UserManager {
      * @param chameleon Bukkit Chameleon implementation.
      */
     @Internal
-    public BukkitUserManager(@NotNull BukkitChameleon chameleon) {
+    public BukkitUserManager(@NotNull PlatformChameleon<JavaPlugin> chameleon) {
         this.chameleon = chameleon;
     }
 
