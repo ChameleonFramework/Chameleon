@@ -54,7 +54,6 @@ import org.spongepowered.api.Sponge;
  */
 public final class SpongeChameleon extends PlatformChameleon<SpongePlugin> {
 
-    private final @NotNull SpongePlugin plugin;
     private final @NotNull AdventureMapper adventureMapper = new AdventureMapper(this);
     private final @NotNull SpongeAudienceProvider audienceProvider = new SpongeAudienceProvider(this);
     private final @NotNull SpongePlatform platform = new SpongePlatform();
@@ -73,7 +72,6 @@ public final class SpongeChameleon extends PlatformChameleon<SpongePlugin> {
         @NotNull ExtensionMap extensions
     ) throws ChameleonInstantiationException {
         super(chameleonPlugin, spongePlugin, eventBus, logger, extensions);
-        this.plugin = spongePlugin;
     }
 
     /**

@@ -108,16 +108,6 @@ public interface PlatformTarget extends Predicate<Platform> {
     }
 
     /**
-     * Create a new platform target that matches Minestom.
-     *
-     * @return new platform target.
-     */
-    @Contract(pure = true)
-    static @NotNull PlatformTarget minestom() {
-        return id(Platform.MINESTOM, true);
-    }
-
-    /**
      * Create a new platform target that matches Nukkit.
      *
      * @return new platform target.
