@@ -38,7 +38,6 @@ import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.adventure.matches.BossBarMatcher;
 import dev.hypera.chameleon.adventure.matches.BoundMatcher;
 import dev.hypera.chameleon.adventure.matches.SignatureMatcher;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
@@ -74,7 +73,7 @@ final class ReflectedAudienceTests {
     private Audience reflectedAudience;
 
     @BeforeAll
-    static void loadAdventureMapper() throws ChameleonInstantiationException {
+    static void loadAdventureMapper() {
         adventureMapper = new AdventureMapper(new TestChameleon());
         assertDoesNotThrow(adventureMapper::load);
     }

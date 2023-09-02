@@ -108,4 +108,4 @@ If you have spotted a problem or mistake in someone else's pull request, feel fr
 ## Supporting the authors
 If you wish to support this project in a way other than reporting bugs, suggesting ideas, or contributing code, the authors accept donations via GitHub Sponsors and Ko-fi, these donations go towards allowing the authors to spend more time working on this project, or paying for infrastructure for the author's personal projects.
  - [Joshua (joshuasing)](https://github.com/sponsors/joshuasing)
- - [Luis (SLLCoding)](https://ko-fi.com/SLLCoding)
+ - [Luis (LooFifteen)](https://ko-fi.com/loofifteen)

@@ -24,8 +24,7 @@
 package dev.hypera.chameleon.platform.bungeecord;
 
 import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.logger.ChameleonJavaLogger;
 import dev.hypera.chameleon.platform.Platform;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -35,21 +34,22 @@ import org.jetbrains.annotations.NotNull;
 /**
  * BungeeCord Chameleon bootstrap implementation.
  */
-final class BungeeCordChameleonBootstrap extends ChameleonBootstrap<BungeeCordChameleon> {
+public final class BungeeCordChameleonBootstrap extends ChameleonBootstrap<BungeeCordChameleon> {
 
-    private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull Plugin bungeePlugin;
 
     @Internal
-    BungeeCordChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull Plugin bungeePlugin) {
-        super(new ChameleonJavaLogger(bungeePlugin.getLogger()), Platform.BUNGEECORD);
-        this.chameleonPlugin = chameleonPlugin;
+    BungeeCordChameleonBootstrap(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull Plugin bungeePlugin) {
+        super(Platform.BUNGEECORD, pluginBootstrap, new ChameleonJavaLogger(bungeePlugin.getLogger()));
         this.bungeePlugin = bungeePlugin;
     }
 
     @Override
-    protected @NotNull BungeeCordChameleon loadInternal() throws ChameleonInstantiationException {
-        return new BungeeCordChameleon(this.chameleonPlugin, this.bungeePlugin, this.eventBus, this.logger, this.extensions);
+    protected @NotNull BungeeCordChameleon loadPlatform() {
+        return new BungeeCordChameleon(
+            this.pluginBootstrap, this.bungeePlugin,
+            this.eventBus, this.logger, this.extensions
+        );
     }
 
 }

@@ -21,26 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@Suppress( // https://youtrack.jetbrains.com/issue/KTIJ-19369/
-    "DSL_SCOPE_VIOLATION",
-    "MISSING_DEPENDENCY_CLASS",
-    "UNRESOLVED_REFERENCE_WRONG_RECEIVER",
-    "FUNCTION_CALL_EXPECTED"
-)
-plugins {
-    alias(libs.plugins.indra.sonatype)
-}
+package dev.hypera.chameleon;
 
-group = "dev.hypera"
-version = "0.17.0-SNAPSHOT"
-description = "Cross-platform Minecraft plugin framework"
+import dev.hypera.chameleon.event.EventBus;
+import dev.hypera.chameleon.logger.ChameleonLogger;
+import org.jetbrains.annotations.ApiStatus.OverrideOnly;
+import org.jetbrains.annotations.NotNull;
 
-indraSonatype {
-    useAlternateSonatypeOSSHost("s01")
-}
+/**
+ * Chameleon plugin bootstrap.
+ */
+@OverrideOnly
+@FunctionalInterface
+public interface ChameleonPluginBootstrap {
 
-subprojects {
-    repositories {
-        mavenCentral()
+    /**
+     * Called before Chameleon is loaded, allowing you to load certain parts of the plugin
+     * beforehand.
+     *
+     * @param logger   Logger.
+     * @param eventBus Event bus.
+     */
+    default void bootstrap(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) {
+
     }
+
+    /**
+     * Returns an instantiated plugin main class.
+     *
+     * @param chameleon Chameleon instance.
+     *
+     * @return new plugin instance.
+     */
+    @NotNull ChameleonPlugin createPlugin(@NotNull Chameleon chameleon);
+
 }

@@ -21,34 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.example.event;
+package dev.hypera.example;
 
-import dev.hypera.chameleon.event.ChameleonEvent;
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
+import dev.hypera.chameleon.event.EventBus;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * An example custom event.
+ * Example Chameleon plugin bootstrap.
+ *
+ * <p>Plugin bootstraps can be used to provide custom parameters to your plugin's constructor, or
+ * load certain parts of your plugin before Chameleon is loaded.</p>
  */
-public final class ExampleCustomEvent implements ChameleonEvent {
+public final class ChameleonExampleBootstrap implements ChameleonPluginBootstrap {
 
-    private final @NotNull String name;
-
-    /**
-     * Example custom event constructor.
-     *
-     * @param name Name.
-     */
-    public ExampleCustomEvent(@NotNull String name) {
-        this.name = name;
+    @Override
+    public void bootstrap(@NotNull ChameleonLogger logger, @NotNull EventBus eventBus) {
+        logger.info("Bootstrapping Chameleon example plugin...");
     }
 
-    /**
-     * Get the name.
-     *
-     * @return the name.
-     */
-    public @NotNull String getName() {
-        return this.name;
+    @Override
+    public @NotNull ChameleonPlugin createPlugin(@NotNull Chameleon chameleon) {
+        return new ChameleonExample(chameleon);
     }
 
 }

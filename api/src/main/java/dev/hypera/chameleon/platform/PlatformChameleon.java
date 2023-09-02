@@ -24,9 +24,8 @@
 package dev.hypera.chameleon.platform;
 
 import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.event.EventBus;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import org.jetbrains.annotations.NotNull;
@@ -43,13 +42,13 @@ public abstract class PlatformChameleon<P> extends Chameleon {
     protected final @NotNull P plugin;
 
     protected PlatformChameleon(
-        @NotNull Class<? extends ChameleonPlugin> plugin,
+        @NotNull ChameleonPluginBootstrap pluginBootstrap,
         @NotNull P platformPlugin,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
-    ) throws ChameleonInstantiationException {
-        super(plugin, eventBus, logger, extensions);
+    ) {
+        super(pluginBootstrap, eventBus, logger, extensions);
         this.plugin = platformPlugin;
     }
 

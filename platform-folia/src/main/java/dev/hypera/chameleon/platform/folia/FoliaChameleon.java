@@ -23,11 +23,10 @@
  */
 package dev.hypera.chameleon.platform.folia;
 
-import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
@@ -70,13 +69,13 @@ public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
 
     @Internal
     FoliaChameleon(
-        @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+        @NotNull ChameleonPluginBootstrap pluginBootstrap,
         @NotNull JavaPlugin foliaPlugin,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
-    ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, foliaPlugin, eventBus, logger, extensions);
+    ) {
+        super(pluginBootstrap, foliaPlugin, eventBus, logger, extensions);
         boolean folia = isFolia();
         this.platform = folia ? new FoliaPlatform() : new BukkitPlatform();
         this.pluginManager = folia ? new FoliaPluginManager() : new BukkitPluginManager();
@@ -84,16 +83,16 @@ public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
     }
 
     /**
-     * Create a new Folia Chameleon bootstrap instance.
+     * Returns a new Folia Chameleon bootstrap instance.
      *
-     * @param chameleonPlugin Chameleon plugin to be loaded.
+     * @param pluginBootstrap Chameleon plugin bootstrap.
      * @param foliaPlugin     Folia JavaPlugin instance.
      *
      * @return new Folia Chameleon bootstrap.
      */
     @Experimental
-    public static @NotNull FoliaChameleonBootstrap create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull JavaPlugin foliaPlugin) {
-        return new FoliaChameleonBootstrap(chameleonPlugin, foliaPlugin);
+    public static @NotNull FoliaChameleonBootstrap create(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull JavaPlugin foliaPlugin) {
+        return new FoliaChameleonBootstrap(pluginBootstrap, foliaPlugin);
     }
 
     /**
@@ -172,7 +171,7 @@ public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Path getDataFolder() {
+    public @NotNull Path getDataDirectory() {
         return this.plugin.getDataFolder().toPath().toAbsolutePath();
     }
 

@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Dummy Chameleon plugin implementation.
  */
-public final class TestChameleonPlugin extends ChameleonPlugin {
+public final class TestChameleonPlugin implements ChameleonPlugin {
 
     /**
      * Chameleon plugin constructor.
@@ -36,7 +36,7 @@ public final class TestChameleonPlugin extends ChameleonPlugin {
      * @param chameleon Chameleon implementation.
      */
     public TestChameleonPlugin(@NotNull Chameleon chameleon) {
-        super(chameleon);
+        // Nothing to do
     }
 
     /**

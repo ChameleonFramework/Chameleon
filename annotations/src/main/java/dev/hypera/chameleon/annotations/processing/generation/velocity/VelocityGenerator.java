@@ -36,7 +36,6 @@ import dev.hypera.chameleon.annotations.Dependency;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -49,6 +48,7 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Velocity plugin main class and 'velocity-plugin.json' description file generator.
@@ -74,31 +74,26 @@ public class VelocityGenerator extends Generator {
      * @throws ChameleonAnnotationException if something goes wrong while creating the files.
      */
     @Override
-    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
+    public void generate(@NotNull Plugin data, @NotNull TypeElement plugin, @Nullable TypeElement bootstrap, @NotNull ProcessingEnvironment env) throws ChameleonAnnotationException {
         ClassName velocityChameleon = clazz("dev.hypera.chameleon.platform.velocity", "VelocityChameleon");
         ClassName proxyServer = clazz("com.velocitypowered.api.proxy", "ProxyServer");
         ClassName logger = clazz("org.slf4j", "Logger");
         ClassName path = clazz("java.nio.file", "Path");
 
-        MethodSpec constructorSpec = MethodSpec.constructorBuilder()
-            .addAnnotation(clazz("com.google.inject", "Inject"))
-            .addModifiers(Modifier.PUBLIC)
-            .addParameter(ParameterSpec.builder(logger, LOGGER_VAR).build())
-            .addParameter(ParameterSpec.builder(proxyServer, PROXY_SERVER_VAR).build())
-            .addParameter(ParameterSpec.builder(path, DATA_DIRECTORY_VAR)
-                .addAnnotation(clazz("com.velocitypowered.api.plugin.annotation", "DataDirectory"))
-                .build())
-            .addStatement(SET_STATEMENT, PROXY_SERVER_VAR, PROXY_SERVER_VAR)
-            .addStatement(SET_STATEMENT, LOGGER_VAR, LOGGER_VAR)
-            .addStatement(SET_STATEMENT, DATA_DIRECTORY_VAR, DATA_DIRECTORY_VAR)
-            .beginControlFlow("try")
-            .addStatement("this.$N = $T.create($T.class, this).load()", CHAMELEON_VAR,
-                velocityChameleon, plugin)
-            .nextControlFlow("catch ($T ex)", ChameleonInstantiationException.class)
-            .addStatement("this.$N.error(\"An error occurred while loading Chameleon\", $N)", LOGGER_VAR, "ex")
-            .addStatement("throw new $T($N)", clazz("dev.hypera.chameleon.exception", "ChameleonRuntimeException"), "ex")
-            .endControlFlow()
-            .build();
+        MethodSpec constructorSpec = addBootstrap(
+            MethodSpec.constructorBuilder()
+                .addAnnotation(clazz("com.google.inject", "Inject"))
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(ParameterSpec.builder(logger, LOGGER_VAR).build())
+                .addParameter(ParameterSpec.builder(proxyServer, PROXY_SERVER_VAR).build())
+                .addParameter(ParameterSpec.builder(path, DATA_DIRECTORY_VAR)
+                    .addAnnotation(clazz("com.velocitypowered.api.plugin.annotation", "DataDirectory"))
+                    .build())
+                .addStatement(SET_STATEMENT, PROXY_SERVER_VAR, PROXY_SERVER_VAR)
+                .addStatement(SET_STATEMENT, LOGGER_VAR, LOGGER_VAR)
+                .addStatement(SET_STATEMENT, DATA_DIRECTORY_VAR, DATA_DIRECTORY_VAR),
+            velocityChameleon, plugin, bootstrap
+        ).build();
 
         MethodSpec initEventSpec = MethodSpec.methodBuilder("onProxyInitialization")
             .addAnnotation(clazz("com.velocitypowered.api.event", "Subscribe"))

@@ -23,19 +23,18 @@
  */
 package dev.hypera.chameleon;
 
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.logger.DummyChameleonLogger;
 import org.jetbrains.annotations.NotNull;
 
 final class TestChameleonBootstrap extends ChameleonBootstrap<TestChameleon> {
 
     TestChameleonBootstrap() {
-        super(new DummyChameleonLogger(), TestChameleon.PLATFORM_ID);
+        super(TestChameleon.PLATFORM_ID, TestChameleonPlugin::new, new DummyChameleonLogger());
     }
 
     @Override
-    protected @NotNull TestChameleon loadInternal() throws ChameleonInstantiationException {
-        return new TestChameleon(this.logger, 0, this.eventBus, this.extensions);
+    protected @NotNull TestChameleon loadPlatform() {
+        return new TestChameleon(this.pluginBootstrap, this.logger, 0, this.eventBus, this.extensions);
     }
 
 }

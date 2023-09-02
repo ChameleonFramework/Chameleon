@@ -23,13 +23,11 @@
  */
 package dev.hypera.chameleon.platform.velocity;
 
-import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
@@ -63,25 +61,25 @@ public final class VelocityChameleon extends PlatformChameleon<VelocityPlugin> {
 
     @Internal
     VelocityChameleon(
-        @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+        @NotNull ChameleonPluginBootstrap pluginBootstrap,
         @NotNull VelocityPlugin velocityPlugin,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
-    ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, velocityPlugin, eventBus, logger, extensions);
+    ) {
+        super(pluginBootstrap, velocityPlugin, eventBus, logger, extensions);
     }
 
     /**
-     * Create a new Velocity Chameleon bootstrap instance.
+     * Returns a new Velocity Chameleon bootstrap instance.
      *
-     * @param chameleonPlugin Chameleon plugin to be loaded.
+     * @param pluginBootstrap Chameleon plugin bootstrap.
      * @param velocityPlugin  Velocity plugin instance.
      *
      * @return new Velocity Chameleon bootstrap.
      */
-    public static @NotNull ChameleonBootstrap<VelocityChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin) {
-        return new VelocityChameleonBootstrap(chameleonPlugin, velocityPlugin);
+    public static @NotNull VelocityChameleonBootstrap create(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull VelocityPlugin velocityPlugin) {
+        return new VelocityChameleonBootstrap(pluginBootstrap, velocityPlugin);
     }
 
     /**
@@ -166,7 +164,7 @@ public final class VelocityChameleon extends PlatformChameleon<VelocityPlugin> {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Path getDataFolder() {
+    public @NotNull Path getDataDirectory() {
         return this.plugin.getDataDirectory();
     }
 

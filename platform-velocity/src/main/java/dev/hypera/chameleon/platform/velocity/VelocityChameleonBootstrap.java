@@ -24,8 +24,7 @@
 package dev.hypera.chameleon.platform.velocity;
 
 import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPlugin;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
 import dev.hypera.chameleon.platform.Platform;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -34,22 +33,20 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Velocity Chameleon bootstrap implementation.
  */
-final class VelocityChameleonBootstrap extends ChameleonBootstrap<VelocityChameleon> {
+public final class VelocityChameleonBootstrap extends ChameleonBootstrap<VelocityChameleon> {
 
-    private final @NotNull Class<? extends ChameleonPlugin> chameleonPlugin;
     private final @NotNull VelocityPlugin velocityPlugin;
 
     @Internal
-    VelocityChameleonBootstrap(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull VelocityPlugin velocityPlugin) {
-        super(new ChameleonSlf4jLogger(velocityPlugin.getLogger()), Platform.VELOCITY);
-        this.chameleonPlugin = chameleonPlugin;
+    VelocityChameleonBootstrap(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull VelocityPlugin velocityPlugin) {
+        super(Platform.VELOCITY, pluginBootstrap, new ChameleonSlf4jLogger(velocityPlugin.getLogger()));
         this.velocityPlugin = velocityPlugin;
     }
 
     @Override
-    protected @NotNull VelocityChameleon loadInternal() throws ChameleonInstantiationException {
+    protected @NotNull VelocityChameleon loadPlatform() {
         return new VelocityChameleon(
-            this.chameleonPlugin, this.velocityPlugin,
+            this.pluginBootstrap, this.velocityPlugin,
             this.eventBus, this.logger, this.extensions
         );
     }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.example;
+package dev.hypera.example;
 
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPlugin;
@@ -31,13 +31,13 @@ import dev.hypera.chameleon.event.EventSubscriber;
 import dev.hypera.chameleon.event.EventSubscriptionPriority;
 import dev.hypera.chameleon.event.common.UserConnectEvent;
 import dev.hypera.chameleon.event.common.UserDisconnectEvent;
-import dev.hypera.chameleon.example.command.ExampleCommand;
-import dev.hypera.chameleon.example.event.ExampleCustomEvent;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PlatformPlugin;
 import dev.hypera.chameleon.scheduler.Schedule;
 import dev.hypera.chameleon.scheduler.Task;
+import dev.hypera.example.command.ExampleCommand;
+import dev.hypera.example.event.ExampleCustomEvent;
 import java.time.Duration;
 import java.time.Instant;
 import net.kyori.adventure.text.Component;
@@ -46,32 +46,41 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Example Chameleon plugin.
+ *
+ * <p>This example uses the annotation-based platform class generator. This is not required, and
+ * you can manually create each platform class, which gives you a lot more control over
+ * platform-specific features.</p>
  */
 @Plugin(
-        id = "chameleon-example",
-        name = "ChameleonExample",
-        version = "@version@", // @version@ is replaced by Gradle.
-        description = "An example cross-platform plugin built with the Chameleon Framework!",
-        url = "https://github.com/ChameleonFramework/Chameleon/",
-        authors = {"Joshua Sing", "SLLCoding"},
-        dependencies = {
-            @Dependency(
-                name = "LuckPerms",
-                soft = true,
-                platforms = { Platform.BUKKIT, Platform.FOLIA }
-            )
-        },
-        platforms = {
-            Platform.BUKKIT,
-            Platform.BUNGEECORD,
-            Platform.FOLIA,
-            Platform.NUKKIT,
-            Platform.SPONGE,
-            Platform.VELOCITY
-        } // If this is empty, all platforms will be supported.
+    id = "chameleon-example",
+    name = "ChameleonExample",
+    version = "@version@", // @version@ is replaced by Gradle at build time.
+    description = "An example cross-platform plugin built with the Chameleon Framework!",
+    url = "https://github.com/ChameleonFramework/Chameleon/",
+    authors = { "Joshua Sing", "LooFifteen" },
+    dependencies = {
+        @Dependency(
+            name = "LuckPerms",
+            soft = true,
+            platforms = { Platform.BUKKIT, Platform.FOLIA }
+        )
+    },
+    platforms = { // If this is empty, all platforms will be supported.
+        Platform.BUKKIT,
+        Platform.BUNGEECORD,
+        Platform.FOLIA,
+        Platform.NUKKIT,
+        Platform.SPONGE,
+        Platform.VELOCITY
+    },
+    // You can use custom bootstraps to initialise your plugin.
+    // If you do not provide one here, the default one will be used, and a public constructor with
+    // a single Chameleon parameter will be required.
+    bootstrap = ChameleonExampleBootstrap.class
 )
-public final class ChameleonExample extends ChameleonPlugin {
+public final class ChameleonExample implements ChameleonPlugin {
 
+    private final @NotNull Chameleon chameleon;
     private final @NotNull ChameleonLogger logger;
 
     /**
@@ -80,7 +89,7 @@ public final class ChameleonExample extends ChameleonPlugin {
      * @param chameleon Chameleon implementation.
      */
     public ChameleonExample(@NotNull Chameleon chameleon) {
-        super(chameleon);
+        this.chameleon = chameleon;
         this.logger = chameleon.getLogger();
     }
 
@@ -93,18 +102,19 @@ public final class ChameleonExample extends ChameleonPlugin {
         this.logger.info("Starting...");
 
         /* Commands */
-        chameleon.getCommandManager().register(new ExampleCommand());
+        this.chameleon.getCommandManager().register(new ExampleCommand());
 
         /* Events */
         // User connect event
-        chameleon.getEventBus().subscribe(UserConnectEvent.class, event ->
-            event.getUser().sendMessage(Component.text(
-                "Welcome to my server!", NamedTextColor.GREEN
-            ))
-        );
+        this.chameleon.getEventBus().subscribe(UserConnectEvent.class, event -> {
+            event.getUser().sendMessage(Component.text("Welcome to my server!", NamedTextColor.GREEN));
+
+            // Dispatch a custom event
+            this.chameleon.getEventBus().dispatch(new ExampleCustomEvent(event.getUser().getName()));
+        });
 
         // User connect event with an expiry after of 1 and HIGH priority.
-        chameleon.getEventBus().subscribe(EventSubscriber.builder(UserConnectEvent.class)
+        this.chameleon.getEventBus().subscribe(EventSubscriber.builder(UserConnectEvent.class)
             .expireAfter(1).handler(event ->
                 event.getUser().sendMessage(Component.text(
                     "Welcome, you're the first person to join since the last restart!",
@@ -113,26 +123,26 @@ public final class ChameleonExample extends ChameleonPlugin {
             ).priority(EventSubscriptionPriority.HIGH).build());
 
         // User disconnect event
-        chameleon.getEventBus().subscribe(UserDisconnectEvent.class, event ->
+        this.chameleon.getEventBus().subscribe(UserDisconnectEvent.class, event ->
             this.logger.info("%s left the server", event.getUser().getName())
         );
 
         // Custom event
-        chameleon.getEventBus().subscribe(ExampleCustomEvent.class, event ->
+        this.chameleon.getEventBus().subscribe(ExampleCustomEvent.class, event ->
             this.logger.info("Received example custom event! Hello, %s!", event.getName())
         );
 
         /* Scheduling */
-        chameleon.getScheduler().schedule(Task.builder(() ->
+        this.chameleon.getScheduler().schedule(Task.builder(() ->
             this.logger.info("This plugin has been running for 10 seconds!")
         ).delay(Schedule.seconds(10)).build());
 
-        chameleon.getScheduler().schedule(Task.builder(() ->
+        this.chameleon.getScheduler().schedule(Task.builder(() ->
             this.logger.info("This task will run twice!")
         ).delay(Schedule.seconds(2)).repeat(Schedule.seconds(5)).cancelAfter(2).build());
 
         /* Plugin Management */
-        for (PlatformPlugin plugin : chameleon.getPluginManager().getPlugins()) {
+        for (PlatformPlugin plugin : this.chameleon.getPluginManager().getPlugins()) {
             this.logger.info("Found plugin %s v%s", plugin.getName(), plugin.getVersion());
         }
 
@@ -142,8 +152,8 @@ public final class ChameleonExample extends ChameleonPlugin {
         );
         this.logger.info(
             "Running on %s (%s) v%s with Chameleon v%s!",
-            chameleon.getPlatform().getName(), chameleon.getPlatform().getId(),
-            chameleon.getPlatform().getVersion(), Chameleon.getVersion()
+            this.chameleon.getPlatform().getName(), this.chameleon.getPlatform().getId(),
+            this.chameleon.getPlatform().getVersion(), Chameleon.getVersion()
         );
     }
 

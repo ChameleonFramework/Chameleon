@@ -25,12 +25,10 @@ package dev.hypera.chameleon.platform.nukkit;
 
 import cn.nukkit.Server;
 import cn.nukkit.plugin.PluginBase;
-import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
@@ -62,25 +60,25 @@ public final class NukkitChameleon extends PlatformChameleon<PluginBase> {
 
     @Internal
     NukkitChameleon(
-        @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+        @NotNull ChameleonPluginBootstrap pluginBootstrap,
         @NotNull PluginBase nukkitPlugin,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
-    ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, nukkitPlugin, eventBus, logger, extensions);
+    ) {
+        super(pluginBootstrap, nukkitPlugin, eventBus, logger, extensions);
     }
 
     /**
-     * Create a new Nukkit Chameleon bootstrap instance.
+     * Returns a new Nukkit Chameleon bootstrap instance.
      *
-     * @param chameleonPlugin Chameleon plugin to load.
+     * @param pluginBootstrap Chameleon plugin bootstrap.
      * @param nukkitPlugin    Nukkit PluginBase instance.
      *
      * @return new Nukkit Chameleon bootstrap.
      */
-    public static @NotNull ChameleonBootstrap<NukkitChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull PluginBase nukkitPlugin) {
-        return new NukkitChameleonBootstrap(chameleonPlugin, nukkitPlugin);
+    public static @NotNull NukkitChameleonBootstrap create(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull PluginBase nukkitPlugin) {
+        return new NukkitChameleonBootstrap(pluginBootstrap, nukkitPlugin);
     }
 
     /**
@@ -146,7 +144,7 @@ public final class NukkitChameleon extends PlatformChameleon<PluginBase> {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Path getDataFolder() {
+    public @NotNull Path getDataDirectory() {
         return this.plugin.getDataFolder().toPath();
     }
 

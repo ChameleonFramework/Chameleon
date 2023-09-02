@@ -23,6 +23,7 @@
  */
 package dev.hypera.chameleon.annotations;
 
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -58,7 +59,7 @@ public @interface Plugin {
     @NotNull String version();
 
     /**
-     * The plugin's description, generally a short explaination of what the plugin is used for.
+     * The plugin's description, generally a short explanation of what the plugin is used for.
      *
      * @return the plugin's description, or an empty string.
      */
@@ -93,5 +94,14 @@ public @interface Plugin {
      * @return the platforms this plugin can run on.
      */
     @NotNull String[] platforms() default {};
+
+    /**
+     * Returns the plugin bootstrap to use when bootstrapping Chameleon.
+     * <p><strong>If this is not provided, the annotated class must have a public constructor with a
+     * single Chameleon parameter.</strong></p>
+     *
+     * @return plugin bootstrap class.
+     */
+    @NotNull Class<? extends ChameleonPluginBootstrap> bootstrap() default ChameleonPluginBootstrap.class;
 
 }

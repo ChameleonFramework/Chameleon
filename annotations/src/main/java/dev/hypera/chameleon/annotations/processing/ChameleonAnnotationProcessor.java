@@ -23,6 +23,8 @@
  */
 package dev.hypera.chameleon.annotations.processing;
 
+import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.annotations.Plugin;
 import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
 import dev.hypera.chameleon.annotations.processing.generation.Generator;
@@ -33,15 +35,23 @@ import dev.hypera.chameleon.annotations.processing.generation.nukkit.NukkitGener
 import dev.hypera.chameleon.annotations.processing.generation.sponge.SpongeGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.velocity.VelocityGenerator;
 import dev.hypera.chameleon.platform.Platform;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Chameleon Annotation Processor.
@@ -74,8 +84,12 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
             }
 
             TypeElement plugin = (TypeElement) element;
-
             Plugin data = plugin.getAnnotation(Plugin.class);
+
+            // Plugin bootstrap
+            TypeElement pluginBootstrap = retrieveBootstrap(plugin);
+
+            // Platform "main class" generation
             for (String platform : data.platforms()) {
                 Generator generator;
                 switch (platform) {
@@ -98,14 +112,71 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
                         generator = new VelocityGenerator();
                         break;
                     default:
-                        throw new IllegalStateException("Invalid platform: " + platform);
+                        throw new IllegalStateException("Invalid or unknown platform: " + platform);
                 }
 
-                generator.generate(data, plugin, processingEnv);
+                generator.generate(data, plugin, pluginBootstrap, processingEnv);
             }
         }
 
         return false;
+    }
+
+    private @Nullable TypeElement retrieveBootstrap(@NotNull TypeElement plugin) {
+        TypeMirror bootstrapMirror = getBootstrapFromAnnotation(plugin);
+        TypeElement bootstrapElement = bootstrapMirror != null ?
+            (TypeElement) this.processingEnv.getTypeUtils().asElement(bootstrapMirror) : null;
+        if (bootstrapElement != null && !bootstrapElement.toString().equals(ChameleonPluginBootstrap.class.getName())) {
+            return bootstrapElement;
+        }
+        checkDefaultBootstrapConstructorPresent(plugin);
+        return null;
+    }
+
+    private void checkDefaultBootstrapConstructorPresent(@NotNull TypeElement plugin) {
+        // A plugin bootstrap class was not provided, make sure there is a public
+        // constructor that has a single Chameleon parameter.
+        Optional<ExecutableElement> constructor = plugin.getEnclosedElements()
+            .parallelStream()
+            .filter(e -> e.getKind() == ElementKind.CONSTRUCTOR && e.getModifiers().contains(Modifier.PUBLIC))
+            .map(e -> (ExecutableElement) e)
+            .filter(e -> e.getParameters().size() == 1)
+            .filter(e -> this.processingEnv.getTypeUtils().asElement(e.getParameters().get(0).asType()).toString().equals(Chameleon.class.getName()))
+            .findAny();
+        if (constructor.isEmpty()) {
+            throw new ChameleonAnnotationException(
+                "If a plugin bootstrap is not provided to @Plugin, the annotated class must have a constructor with a single Chameleon parameter."
+            );
+        }
+    }
+
+    /**
+     * Returns the bootstrap class type mirror from the Plugin annotation.
+     *
+     * @param typeElement Type element to read annotation on.
+     *
+     * @return bootstrap type mirror, if found, otherwise {@code null}.
+     */
+    private @Nullable TypeMirror getBootstrapFromAnnotation(@NotNull TypeElement typeElement) {
+        AnnotationMirror mirror = getPluginAnnotationMirror(typeElement);
+        if (mirror == null) {
+            return null;
+        }
+        for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : mirror.getElementValues().entrySet()) {
+            if (entry.getKey().getSimpleName().toString().equals("bootstrap")) {
+                return (TypeMirror) entry.getValue().getValue();
+            }
+        }
+        return null;
+    }
+
+    private @Nullable AnnotationMirror getPluginAnnotationMirror(@NotNull TypeElement typeElement) {
+        for (AnnotationMirror mirror : typeElement.getAnnotationMirrors()) {
+            if (mirror.getAnnotationType().toString().equals(Plugin.class.getName())) {
+                return mirror;
+            }
+        }
+        return null;
     }
 
 }

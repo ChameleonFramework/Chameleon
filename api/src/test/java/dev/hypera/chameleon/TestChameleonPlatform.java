@@ -60,7 +60,7 @@ public final class TestChameleonPlatform implements Platform {
      */
     @Override
     public @NotNull String getVersion() {
-        return Chameleon.getVersion() + "-" + Chameleon.getCommit();
+        return Chameleon.getVersion() + "-" + Chameleon.getShortCommitHash();
     }
 
 }

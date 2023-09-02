@@ -23,13 +23,11 @@
  */
 package dev.hypera.chameleon.platform.sponge;
 
-import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPlugin;
+import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
 import dev.hypera.chameleon.adventure.mapper.AdventureMapper;
 import dev.hypera.chameleon.command.CommandManager;
 import dev.hypera.chameleon.event.EventBus;
-import dev.hypera.chameleon.exception.instantiation.ChameleonInstantiationException;
 import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
 import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
@@ -65,25 +63,25 @@ public final class SpongeChameleon extends PlatformChameleon<SpongePlugin> {
 
     @Internal
     SpongeChameleon(
-        @NotNull Class<? extends ChameleonPlugin> chameleonPlugin,
+        @NotNull ChameleonPluginBootstrap pluginBootstrap,
         @NotNull SpongePlugin spongePlugin,
         @NotNull EventBus eventBus,
         @NotNull ChameleonLogger logger,
         @NotNull ExtensionMap extensions
-    ) throws ChameleonInstantiationException {
-        super(chameleonPlugin, spongePlugin, eventBus, logger, extensions);
+    ) {
+        super(pluginBootstrap, spongePlugin, eventBus, logger, extensions);
     }
 
     /**
-     * Create a new Sponge Chameleon bootstrap instance.
+     * Returns a new Sponge Chameleon bootstrap instance.
      *
-     * @param chameleonPlugin Chameleon plugin to be loaded.
+     * @param pluginBootstrap Chameleon plugin bootstrap.
      * @param spongePlugin    Sponge plugin instance.
      *
      * @return new Sponge Chameleon bootstrap.
      */
-    public static @NotNull ChameleonBootstrap<SpongeChameleon> create(@NotNull Class<? extends ChameleonPlugin> chameleonPlugin, @NotNull SpongePlugin spongePlugin) {
-        return new SpongeChameleonBootstrap(chameleonPlugin, spongePlugin);
+    public static @NotNull SpongeChameleonBootstrap create(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull SpongePlugin spongePlugin) {
+        return new SpongeChameleonBootstrap(pluginBootstrap, spongePlugin);
     }
 
     /**
@@ -163,7 +161,7 @@ public final class SpongeChameleon extends PlatformChameleon<SpongePlugin> {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Path getDataFolder() {
+    public @NotNull Path getDataDirectory() {
         return this.plugin.getDataDirectory();
     }
 
