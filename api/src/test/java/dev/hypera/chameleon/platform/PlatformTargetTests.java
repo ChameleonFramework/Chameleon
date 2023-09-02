@@ -79,11 +79,6 @@ final class PlatformTargetTests {
     }
 
     @Test
-    void testMinestom() {
-        assertTrue(PlatformTarget.minestom().test(DummyPlatform.of(Platform.MINESTOM)));
-    }
-
-    @Test
     void testNukkit() {
         assertTrue(PlatformTarget.nukkit().test(DummyPlatform.of(Platform.NUKKIT)));
     }
@@ -133,16 +128,16 @@ final class PlatformTargetTests {
         PlatformTarget bukkitOrBungee = PlatformTarget.bukkit().or(PlatformTarget.bungeeCord());
         assertTrue(bukkitOrBungee.test(DummyPlatform.of(Platform.BUKKIT)));
         assertTrue(bukkitOrBungee.test(DummyPlatform.of(Platform.BUNGEECORD)));
-        assertFalse(bukkitOrBungee.test(DummyPlatform.of(Platform.MINESTOM)));
+        assertFalse(bukkitOrBungee.test(DummyPlatform.of(Platform.SPONGE)));
         assertFalse(bukkitOrBungee.test(DummyPlatform.of(Platform.VELOCITY)));
     }
 
     @Test
     void testNegate() {
-        PlatformTarget notMinestom = PlatformTarget.minestom().negate();
-        assertFalse(notMinestom.test(DummyPlatform.of(Platform.MINESTOM)));
-        assertTrue(notMinestom.test(PROXY_PLATFORM));
-        assertTrue(notMinestom.test(DummyPlatform.of(Platform.VELOCITY)));
+        PlatformTarget notBukkit = PlatformTarget.bukkit().negate();
+        assertFalse(notBukkit.test(DummyPlatform.of(Platform.BUKKIT)));
+        assertTrue(notBukkit.test(PROXY_PLATFORM));
+        assertTrue(notBukkit.test(DummyPlatform.of(Platform.VELOCITY)));
 
         PlatformTarget notProxy = PlatformTarget.proxy().negate();
         assertFalse(notProxy.test(PROXY_PLATFORM));

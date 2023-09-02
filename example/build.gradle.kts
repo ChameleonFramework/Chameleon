@@ -28,8 +28,11 @@ plugins {
 }
 
 /*
- * Minestom requires Java 17. If you want your plugin to work on Java 8+ you'll
- * need to keep your source code compatible with Java 8, and it should work fine.
+ * Chameleon requires Java 11. Additionally, Folia and Sponge support requires Java 17.
+ * If you wish to support Folia and/or Sponge, you must target Java 17.
+ *
+ * If you want your plugin to work with Java 11+, you must keep your source code
+ * compatible with Java 11.
  */
 java {
     toolchain {
@@ -42,19 +45,9 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots/") // Required for BungeeCord support
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // Required for Bukkit support
     maven("https://papermc.io/repo/repository/maven-public/") // Required for Folia support
-    // maven("https://jitpack.io/") // Required for Minestom support
-    maven("https://repo.spongepowered.org/maven/") // Required for Minestom/Sponge support
+    maven("https://repo.spongepowered.org/maven/") // Required for Sponge support
     maven("https://repo.opencollab.dev/main/") // Required for Nukkit support
     maven("https://repo.papermc.io/repository/maven-public/") // Required for Velocity support
-
-    // Due to JitPack deleting old versions of Minestom, which breaks Chameleon
-    // builds, we have decided to start mirroring certain JitPack artifacts to
-    // our Maven repository and caching them so that if JitPack does delete an
-    // artifact, we have a copy of it to keep builds running until we get the
-    // chance to update the dependency.
-    //
-    // If you wish to use JitPack, uncomment the JitPack repository at line 42.
-    maven("https://repo.hypera.dev/mirror/")
 }
 
 dependencies {
@@ -63,7 +56,6 @@ dependencies {
     implementation(project(":chameleon-platform-bungeecord")) // dev.hypera:chameleon-platform-bungeecord
     implementation(project(":chameleon-platform-folia")) // dev.hypera:chameleon-platform-folia
     implementation(project(":chameleon-platform-nukkit")) // dev.hypera:chameleon-platform-nukkit
-    implementation(project(":chameleon-platform-minestom")) // dev.hypera:chameleon-platform-minestom
     implementation(project(":chameleon-platform-velocity")) // dev.hypera:chameleon-platform-velocity
     implementation(project(":chameleon-platform-sponge")) // dev.hypera:chameleon-platform-sponge
 

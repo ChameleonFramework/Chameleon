@@ -29,7 +29,6 @@ import dev.hypera.chameleon.annotations.processing.generation.Generator;
 import dev.hypera.chameleon.annotations.processing.generation.bukkit.BukkitGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.bungeecord.BungeeCordGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.folia.FoliaGenerator;
-import dev.hypera.chameleon.annotations.processing.generation.minestom.MinestomGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.nukkit.NukkitGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.sponge.SpongeGenerator;
 import dev.hypera.chameleon.annotations.processing.generation.velocity.VelocityGenerator;
@@ -88,9 +87,6 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
                         break;
                     case Platform.FOLIA:
                         generator = new FoliaGenerator();
-                        break;
-                    case Platform.MINESTOM:
-                        generator = new MinestomGenerator();
                         break;
                     case Platform.NUKKIT:
                         generator = new NukkitGenerator();
