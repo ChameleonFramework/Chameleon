@@ -80,8 +80,7 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
             }
 
             Element element = elements.iterator().next();
-            if (!element.getKind().equals(ElementKind.CLASS) || element.getModifiers()
-                .contains(Modifier.ABSTRACT)) {
+            if (element.getKind() != ElementKind.CLASS || element.getModifiers().contains(Modifier.ABSTRACT)) {
                 throw new ChameleonAnnotationException("@Plugin cannot be used on abstract classes");
             }
 
@@ -143,7 +142,7 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
         // constructor that has a single Chameleon parameter.
         Optional<ExecutableElement> constructor = plugin.getEnclosedElements()
             .parallelStream()
-            .filter(e -> e.getKind().equals(ElementKind.CONSTRUCTOR) && e.getModifiers().contains(Modifier.PUBLIC))
+            .filter(e -> e.getKind() == ElementKind.CONSTRUCTOR && e.getModifiers().contains(Modifier.PUBLIC))
             .map(e -> (ExecutableElement) e)
             .filter(e -> e.getParameters().size() == 1)
             .filter(e -> this.processingEnv.getTypeUtils().asElement(e.getParameters().get(0).asType()).toString().equals(Chameleon.class.getName()))
