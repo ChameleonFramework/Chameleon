@@ -107,11 +107,12 @@ public final class ChameleonExample implements ChameleonPlugin {
 
         /* Events */
         // User connect event
-        this.chameleon.getEventBus().subscribe(UserConnectEvent.class, event ->
-            event.getUser().sendMessage(Component.text(
-                "Welcome to my server!", NamedTextColor.GREEN
-            ))
-        );
+        this.chameleon.getEventBus().subscribe(UserConnectEvent.class, event -> {
+            event.getUser().sendMessage(Component.text("Welcome to my server!", NamedTextColor.GREEN));
+
+            // Dispatch a custom event
+            this.chameleon.getEventBus().dispatch(new ExampleCustomEvent(event.getUser().getName()));
+        });
 
         // User connect event with an expiry after of 1 and HIGH priority.
         this.chameleon.getEventBus().subscribe(EventSubscriber.builder(UserConnectEvent.class)
