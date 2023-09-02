@@ -69,7 +69,6 @@ import org.jetbrains.annotations.NotNull;
         Platform.BUKKIT,
         Platform.BUNGEECORD,
         Platform.FOLIA,
-        Platform.MINESTOM,
         Platform.NUKKIT,
         Platform.SPONGE,
         Platform.VELOCITY

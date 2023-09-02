@@ -38,7 +38,6 @@ sequenceOf(
     "platform-bukkit",
     "platform-bungeecord",
     "platform-folia",
-    "platform-minestom",
     "platform-nukkit",
     "platform-sponge",
     "platform-velocity"

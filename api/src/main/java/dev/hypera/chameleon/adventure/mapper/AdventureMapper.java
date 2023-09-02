@@ -36,9 +36,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Adventure mapper.
  *
- * <p>Because Minestom, Sponge and Velocity natively use Adventure, we cannot use a relocated
- * version of Adventure without there being problems. To get around this we map the relocated
- * Adventure objects to platform objects using reflection.</p>
+ * <p>Because Sponge and Velocity natively use Adventure, we cannot use a relocated version of
+ * Adventure without there being problems. To get around this we map the relocated Adventure objects
+ * to platform objects using reflection.</p>
  */
 @Experimental
 public final class AdventureMapper {

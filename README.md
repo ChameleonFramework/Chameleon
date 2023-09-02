@@ -72,10 +72,22 @@ support for the platform without prior notice.
 | Fabric         | ~~`dev.hypera:chameleon-platform-fabric`~~ | Coming soon  |
 | **Folia**      | `dev.hypera:chameleon-platform-folia`      | Experimental |
 | Forge          | ~~`dev.hypera:chameleon-platform-forge`~~  | Coming soon  |
-| **Minestom**   | `dev.hypera:chameleon-platform-minestom`   | Unstable     |
 | **Nukkit**     | `dev.hypera:chameleon-platform-nukkit`     |              |
 | **Sponge**     | `dev.hypera:chameleon-platform-sponge`     | Unstable     |
 | **Velocity**   | `dev.hypera:chameleon-platform-velocity`   |              |
+
+#### Discontinued Platform Support
+
+Chameleon attempts to maintain support for a wide range of platforms. However, there are times when
+we must discontinue support for certain platforms. The decision to drop support for a platform is
+typically made when maintaining support the platform becomes too challenging, or when the platform
+becomes obsolete (or has been surpassed).
+
+Below is a list of platforms that Chameleon no longer supports:
+
+| Platform Name | Dependency                               | Last version      | Related Issues                                                     |
+|---------------|------------------------------------------|-------------------|--------------------------------------------------------------------|
+| **Minestom**  | `dev.hypera:chameleon-platform-minestom` | `0.16.0-SNAPSHOT` | [#268](https://github.com/ChameleonFramework/Chameleon/issues/268) |
 
 ## Getting started
 
