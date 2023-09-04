@@ -23,7 +23,7 @@ jobs:
     permissions: read-all
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Validate Gradle wrapper"
         uses: gradle/wrapper-validation-action@v1
@@ -40,7 +40,7 @@ jobs:
       fail-fast: false
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Set up JDK ${{ env.JAVA_VERSION }}"
         uses: actions/setup-java@v3
