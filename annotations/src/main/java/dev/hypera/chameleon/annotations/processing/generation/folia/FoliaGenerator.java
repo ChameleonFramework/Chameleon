@@ -114,7 +114,7 @@ public final class FoliaGenerator extends Generator {
                 .add("authors", data.authors())
                 .add("website", data.url())
                 .add("dependencies", Arrays.stream(data.dependencies())
-                        .filter(d -> (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.FOLIA)))
+                        .filter(d -> d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.FOLIA))
                         .map(d -> new MapBuilder<String, Object>()
                                 .add("name", d.name())
                                 .add("required", !d.soft())

@@ -48,6 +48,8 @@ import org.jetbrains.annotations.NotNull;
 @Internal
 public final class VelocityListener {
 
+    private static final int MINECRAFT_PROTOCOL_1_19_1 = 760;
+
     private final @NotNull VelocityChameleon chameleon;
 
     /**
@@ -126,7 +128,7 @@ public final class VelocityListener {
     }
 
     private boolean catchChatModification(@NotNull Player player, boolean cancel) {
-        if (player.getProtocolVersion().getProtocol() >= 760) {
+        if (player.getProtocolVersion().getProtocol() >= MINECRAFT_PROTOCOL_1_19_1) {
             this.chameleon.getInternalLogger().error(
                 "Failed to %s a chat message for a player using 1.19.1 or above, doing so "
                     + "may result in Velocity throwing an exception and the sender being disconnected.",
