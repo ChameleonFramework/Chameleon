@@ -127,7 +127,7 @@ public final class VelocityListener {
     }
 
     private boolean catchChatModification(@NotNull Player player, boolean cancel) {
-        if (player.getProtocolVersion().getProtocol() >= ProtocolVersion.MINECRAFT_1_19_1.getProtocol()) {
+        if (player.getProtocolVersion().compareTo(ProtocolVersion.MINECRAFT_1_19_1) >= 0) {
             this.chameleon.getInternalLogger().error(
                 "Failed to %s a chat message for a player using 1.19.1 or above, doing so "
                     + "may result in Velocity throwing an exception and the sender being disconnected.",
