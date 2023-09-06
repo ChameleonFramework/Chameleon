@@ -217,6 +217,8 @@ public final class AudienceReflection {
      * @param source      Identity to be mapped and sent to the audience.
      * @param component   Component to be mapped and sent to the audience.
      * @param messageType MessageType to be mapped and sent to the audience.
+     *
+     * @deprecated Deprecated by Adventure.
      */
     @Deprecated
     public void sendMessage(@NotNull Object audience, @NotNull Identity source, @NotNull Component component, @NotNull net.kyori.adventure.audience.MessageType messageType) {

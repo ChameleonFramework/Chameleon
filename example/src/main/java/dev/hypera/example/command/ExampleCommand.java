@@ -75,8 +75,8 @@ public class ExampleCommand extends Command {
     @Permission("example.test")
     @SubCommandHandler("sub|test")
     public void test(@NotNull Context context) {
-        String name = (context.getArgs().length > 0 ? context.getArgs()[0]
-            : context.getSender().getName());
+        String name = context.getArgs().length > 0 ? context.getArgs()[0]
+            : context.getSender().getName();
 
         // Send 'Hello, <name>!' to the person who executed the command.
         context.getSender().sendMessage(Component.text("Hello, " + name + "!"));
