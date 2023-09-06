@@ -86,7 +86,8 @@ public final class BukkitListener implements Listener {
     public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
         UserChatEvent chameleonEvent = new UserChatEvent(
             this.userManager.wrap(event.getPlayer()),
-            event.getMessage(), event.isCancelled()
+            event.getMessage(), event.isCancelled(),
+            true, true
         );
         this.chameleon.getEventBus().dispatch(chameleonEvent);
 
