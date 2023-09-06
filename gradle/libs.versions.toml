@@ -11,7 +11,7 @@ platform-bukkit = "1.20.1-R0.1-SNAPSHOT"
 platform-bungeecord = "1.20-R0.2-SNAPSHOT"
 platform-folia = "1.20.1-R0.1-SNAPSHOT"
 platform-nukkit = "1.0-SNAPSHOT"
-platform-sponge = "9.0.0"
+platform-sponge = "10.0.0"
 platform-velocity = "3.2.0-SNAPSHOT"
 
 # File formats
