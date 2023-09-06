@@ -29,6 +29,7 @@ import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent.ChatResult;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
+import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.hypera.chameleon.event.common.UserChatEvent;
@@ -47,8 +48,6 @@ import org.jetbrains.annotations.NotNull;
  */
 @Internal
 public final class VelocityListener {
-
-    private static final int MINECRAFT_PROTOCOL_1_19_1 = 760;
 
     private final @NotNull VelocityChameleon chameleon;
 
@@ -128,7 +127,7 @@ public final class VelocityListener {
     }
 
     private boolean catchChatModification(@NotNull Player player, boolean cancel) {
-        if (player.getProtocolVersion().getProtocol() >= MINECRAFT_PROTOCOL_1_19_1) {
+        if (player.getProtocolVersion().getProtocol() >= ProtocolVersion.MINECRAFT_1_19_1.getProtocol()) {
             this.chameleon.getInternalLogger().error(
                 "Failed to %s a chat message for a player using 1.19.1 or above, doing so "
                     + "may result in Velocity throwing an exception and the sender being disconnected.",
