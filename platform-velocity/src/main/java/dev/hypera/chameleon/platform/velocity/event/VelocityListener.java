@@ -29,7 +29,6 @@ import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent.ChatResult;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
-import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.hypera.chameleon.event.common.UserChatEvent;
 import dev.hypera.chameleon.event.common.UserConnectEvent;
@@ -83,19 +82,22 @@ public final class VelocityListener {
      */
     @Subscribe
     public void onChatEvent(@NotNull PlayerChatEvent event) {
+        boolean immutable = event.getPlayer().getProtocolVersion().getProtocol() >= 760;
         UserChatEvent chameleonEvent = new UserChatEvent(
             this.chameleon.getUserManager().wrap(event.getPlayer()),
             event.getMessage(),
-            !event.getResult().isAllowed()
+            !event.getResult().isAllowed(),
+            immutable, immutable
         );
         this.chameleon.getEventBus().dispatch(chameleonEvent);
 
-        if (!event.getMessage().equals(chameleonEvent.getMessage()) &&
-            catchChatModification(event.getPlayer(), false)) {
+        if (immutable) {
+            return;
+        }
+        if (!event.getMessage().equals(chameleonEvent.getMessage())) {
             event.setResult(ChatResult.message(chameleonEvent.getMessage()));
         }
-
-        if (chameleonEvent.isCancelled() && catchChatModification(event.getPlayer(), true)) {
+        if (chameleonEvent.isCancelled()) {
             event.setResult(ChatResult.denied());
         }
     }
@@ -123,26 +125,6 @@ public final class VelocityListener {
             event.getPreviousServer().map(this::wrap).orElse(null),
             wrap(event.getServer())
         ));
-    }
-
-    private boolean catchChatModification(@NotNull Player player, boolean cancel) {
-        if (player.getProtocolVersion().getProtocol() >= 760) {
-            this.chameleon.getInternalLogger().error(
-                "Failed to %s a chat message for a player using 1.19.1 or above, doing so "
-                    + "may result in Velocity throwing an exception and the sender being disconnected.",
-                cancel ? "cancel" : "modify"
-            );
-            this.chameleon.getInternalLogger().error(
-                "This IS NOT a bug, but rather an intentional change in Velocity caused by"
-                    + "changes in Minecraft 1.19.1."
-            );
-            this.chameleon.getInternalLogger().error(
-                "See https://github.com/PaperMC/Velocity/issues/804 for more information."
-            );
-            return false;
-        } else {
-            return true;
-        }
     }
 
     private @NotNull Server wrap(@NotNull RegisteredServer server) {

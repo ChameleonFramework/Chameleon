@@ -82,7 +82,8 @@ public final class NukkitListener implements Listener {
     public void onPlayerChatEvent(@NotNull PlayerChatEvent event) {
         UserChatEvent chameleonEvent = new UserChatEvent(
             this.chameleon.getUserManager().wrap(event.getPlayer()),
-            event.getMessage(), event.isCancelled()
+            event.getMessage(), event.isCancelled(),
+            true, true
         );
         this.chameleon.getEventBus().dispatch(chameleonEvent);
 

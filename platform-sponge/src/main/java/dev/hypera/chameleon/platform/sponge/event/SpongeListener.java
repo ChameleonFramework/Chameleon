@@ -107,7 +107,10 @@ public final class SpongeListener {
             }
 
             UserChatEvent chameleonEvent = new UserChatEvent(
-                this.chameleon.getUserManager().wrap(sender), serialized, event.isCancelled());
+                this.chameleon.getUserManager().wrap(sender),
+                serialized, event.isCancelled(),
+                true, true
+            );
             this.chameleon.getEventBus().dispatch(chameleonEvent);
 
             if (!serialized.equals(chameleonEvent.getMessage())) {

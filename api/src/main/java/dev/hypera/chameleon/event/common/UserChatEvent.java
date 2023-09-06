@@ -34,24 +34,30 @@ public final class UserChatEvent extends AbstractCancellable implements UserEven
 
     private final @NotNull User user;
     private @NotNull String message;
+    private final boolean cancellable;
+    private final boolean modifiable;
 
     /**
      * User chat event constructor.
      *
-     * @param user      User that sent the message.
-     * @param message   Message that the user attempted to send.
-     * @param cancelled Whether this event is cancelled.
+     * @param user        User that sent the message.
+     * @param message     Message that the user attempted to send.
+     * @param cancelled   Whether this event is cancelled.
+     * @param cancellable Whether this event can be cancelled on this platform.
+     * @param modifiable  Whether this event can be modified on this platform.
      */
-    public UserChatEvent(@NotNull User user, @NotNull String message, boolean cancelled) {
+    public UserChatEvent(@NotNull User user, @NotNull String message, boolean cancelled, boolean cancellable, boolean modifiable) {
         super(cancelled);
         this.user = user;
         this.message = message;
+        this.cancellable = cancellable;
+        this.modifiable = modifiable;
     }
 
     /**
-     * Get the user who sent this message.
+     * Returns the user who sent this message.
      *
-     * @return the user who sent this message.
+     * @return message sender.
      */
     @Override
     public @NotNull User getUser() {
@@ -59,23 +65,59 @@ public final class UserChatEvent extends AbstractCancellable implements UserEven
     }
 
     /**
-     * Get the message that was sent.
+     * Returns the message that was sent.
      *
-     * @return the message.
+     * @return message.
      */
     public @NotNull String getMessage() {
         return this.message;
     }
 
     /**
-     * Sets the message that was sent.
-     * <p>Due to recent Minecraft changes and the addition of signed message, this may not work
-     * properly on all platforms and versions.</p>
+     * Changes the chat message.
+     * <p>Due to changes in Minecraft 1.19.1+, some platforms no longer support modifying the chat
+     * message. If the current platform does not support changing the chat message, no changes will
+     * be made.</p>
      *
-     * @param message New message that will be sent.
+     * @param message New message.
      */
     public void setMessage(@NotNull String message) {
+        if (!this.modifiable) {
+            return;
+        }
         this.message = message;
+    }
+
+    /**
+     * Returns whether this event can be cancelled.
+     * <p>Due to changes in Minecraft 1.19.1+, some platforms no longer support cancelling signed
+     * chat packets. If the current platform does not support cancelling this event, this will
+     * return {@code false}.</p>
+     *
+     * <p>If this method returns {@code false}, but the event is cancelled, the event will not be
+     * cancelled on the platform to prevent problems from occurring.</p>
+     *
+     * @return {@code true} if this chat event can be cancelled on the underlying platform,
+     *     otherwise {@code false}.
+     */
+    public boolean isCancellable() {
+        return this.cancellable;
+    }
+
+    /**
+     * Returns whether this event can be modified.
+     * <p>Due to changes in Minecraft 1.19.1+, some platforms no longer support modifying the chat
+     * message. If the current platform does not support changing the chat message for this event,
+     * this will return {@code false}.</p>
+     *
+     * <p>If this method returns {@code false}, but the chat message is modified, the event's chat
+     * message will not be changed on the platform to prevent problems from occurring.</p>
+     *
+     * @return {@code true} if this chat event can be modified on the underlying platform, otherwise
+     *     {@code false}.
+     */
+    public boolean isModifiable() {
+        return this.modifiable;
     }
 
 }
