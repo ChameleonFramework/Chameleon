@@ -23,8 +23,8 @@
  */
 package dev.hypera.chameleon.event.common;
 
-import dev.hypera.chameleon.event.cancellable.AbstractCancellable;
-import dev.hypera.chameleon.event.cancellable.Cancellable;
+import dev.hypera.chameleon.event.AbstractCancellable;
+import dev.hypera.chameleon.event.Cancellable;
 import dev.hypera.chameleon.user.User;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus.Internal;

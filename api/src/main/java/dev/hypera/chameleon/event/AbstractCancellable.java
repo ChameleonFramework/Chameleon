@@ -21,39 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.event.cancellable;
+package dev.hypera.chameleon.event;
 
 /**
- * Cancellable.
+ * An abstract implementation of {@link Cancellable}.
  */
-public interface Cancellable {
+public abstract class AbstractCancellable implements Cancellable {
+
+    private boolean cancelled;
 
     /**
-     * Cancel the event.
+     * Abstract cancellable constructor.
+     *
+     * @param cancelled Whether this event is cancelled.
      */
-    default void cancel() {
-        setCancelled(true);
+    protected AbstractCancellable(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 
     /**
-     * Uncancel the event.
+     * {@inheritDoc}
      */
-    default void uncancel() {
-        setCancelled(false);
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 
     /**
-     * Set cancelled.
-     *
-     * @param cancelled {@code true} if the event is cancelled, otherwise {@code false}.
+     * {@inheritDoc}
      */
-    void setCancelled(boolean cancelled);
-
-    /**
-     * Whether this event is cancelled.
-     *
-     * @return {@code true} if the event is cancelled, otherwise {@code false}.
-     */
-    boolean isCancelled();
+    @Override
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
 
 }
