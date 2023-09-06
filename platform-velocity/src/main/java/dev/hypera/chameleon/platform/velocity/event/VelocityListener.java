@@ -29,6 +29,7 @@ import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent.ChatResult;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
+import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.hypera.chameleon.event.common.UserChatEvent;
 import dev.hypera.chameleon.event.common.UserConnectEvent;
@@ -83,7 +84,8 @@ public final class VelocityListener {
      */
     @Subscribe
     public void onChatEvent(@NotNull PlayerChatEvent event) {
-        boolean immutable = event.getPlayer().getProtocolVersion().getProtocol() >= 760;
+        boolean immutable = event.getPlayer().getProtocolVersion()
+            .compareTo(ProtocolVersion.MINECRAFT_1_19_1) >= 0;
         UserChatEvent chameleonEvent = new UserChatEvent(
             this.chameleon.getUserManager().wrap(event.getPlayer()),
             event.getMessage(),
