@@ -30,10 +30,6 @@ import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent.ChatResult;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.network.ProtocolVersion;
-<<<<<<< HEAD
-=======
-import com.velocitypowered.api.proxy.Player;
->>>>>>> main
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.hypera.chameleon.event.common.UserChatEvent;
 import dev.hypera.chameleon.event.common.UserConnectEvent;
