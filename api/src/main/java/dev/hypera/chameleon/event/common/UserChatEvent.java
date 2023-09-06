@@ -82,9 +82,6 @@ public final class UserChatEvent extends AbstractCancellable implements UserEven
      * @param message New message.
      */
     public void setMessage(@NotNull String message) {
-        if (!this.modifiable) {
-            return;
-        }
         this.message = message;
     }
 

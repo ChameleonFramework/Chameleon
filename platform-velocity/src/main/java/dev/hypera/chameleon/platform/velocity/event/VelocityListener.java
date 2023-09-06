@@ -38,6 +38,7 @@ import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityServer;
 import dev.hypera.chameleon.user.User;
+import dev.hypera.chameleon.util.PlatformEventUtil;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -91,13 +92,21 @@ public final class VelocityListener {
         );
         this.chameleon.getEventBus().dispatch(chameleonEvent);
 
-        if (immutable) {
-            return;
-        }
+        // Event message modification
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {
+            if (immutable) {
+                PlatformEventUtil.logChatModificationFailure(this.chameleon.getInternalLogger());
+                return;
+            }
             event.setResult(ChatResult.message(chameleonEvent.getMessage()));
         }
-        if (chameleonEvent.isCancelled()) {
+
+        // Event cancellation
+        if (chameleonEvent.isCancelled() && event.getResult().isAllowed()) {
+            if (immutable) {
+                PlatformEventUtil.logChatCancellationFailure(this.chameleon.getInternalLogger());
+                return;
+            }
             event.setResult(ChatResult.denied());
         }
     }
