@@ -31,9 +31,7 @@ dependencies {
     api(libs.adventure.textSerializer.legacy)
     api(libs.adventure.textSerializer.gson)
     api(libs.adventure.platform.api)
-
     compileOnly(libs.slf4j)
     compileOnly(libs.log4j) // Scary...
-
     compileOnlyApi(libs.annotations)
 }

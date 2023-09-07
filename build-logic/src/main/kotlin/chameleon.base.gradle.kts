@@ -46,6 +46,7 @@ val requires17 = setOf(
 )
 
 indra {
+    checkstyle(libs.findVersion("checkstyle").get().toString())
     javaVersions {
         if (project.name in requires17) {
             target(17)
@@ -71,6 +72,12 @@ dependencies {
     compileOnly(libs.findLibrary("build-errorprone-annotations").get())
 }
 
+configurations {
+    testCompileClasspath {
+        exclude(group = "junit")
+    }
+}
+
 tasks.create<Sync>("processSources") {
     from(java.sourceSets["main"].java)
     filter(ReplaceTokens::class, mapOf("tokens" to mapOf(
@@ -79,7 +86,7 @@ tasks.create<Sync>("processSources") {
         "gitCommitHash" to (indraGit.commit()?.name ?: "unknown"),
         "buildTime" to Instant.now().toString(),
     )))
-    into("$buildDir/src")
+    into(layout.buildDirectory.dir("src"))
 }
 
 tasks.compileJava {
