@@ -30,6 +30,7 @@ import dev.hypera.chameleon.event.server.ServerUserKickEvent;
 import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
 import dev.hypera.chameleon.platform.sponge.SpongeChameleon;
 import dev.hypera.chameleon.user.ServerUser;
+import dev.hypera.chameleon.util.PlatformEventUtil;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -37,10 +38,8 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.living.player.KickPlayerEvent;
-import org.spongepowered.api.event.filter.IsCancelled;
 import org.spongepowered.api.event.message.PlayerChatEvent;
 import org.spongepowered.api.event.network.ServerSideConnectionEvent;
-import org.spongepowered.api.util.Tristate;
 
 /**
  * Sponge listener.
@@ -92,7 +91,6 @@ public final class SpongeListener {
      * @param event Platform event.
      */
     @Listener
-    @IsCancelled(Tristate.UNDEFINED)
     public void onChatEvent(@NotNull PlayerChatEvent event) {
         ServerPlayer sender = (ServerPlayer) event.cause().first(Player.class).orElse(null);
         if (sender != null) {
@@ -108,8 +106,8 @@ public final class SpongeListener {
 
             UserChatEvent chameleonEvent = new UserChatEvent(
                 this.chameleon.getUserManager().wrap(sender),
-                serialized, event.isCancelled(),
-                true, true
+                serialized, false,
+                false, true
             );
             this.chameleon.getEventBus().dispatch(chameleonEvent);
 
@@ -121,7 +119,7 @@ public final class SpongeListener {
             }
 
             if (chameleonEvent.isCancelled()) {
-                event.setCancelled(true);
+                PlatformEventUtil.logChatCancellationFailure(this.chameleon.getInternalLogger());
             }
         }
     }
