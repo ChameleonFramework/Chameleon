@@ -23,7 +23,6 @@
  */
 package dev.hypera.chameleon.event;
 
-import dev.hypera.chameleon.event.cancellable.Cancellable;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.util.Preconditions;
 import java.util.ArrayList;

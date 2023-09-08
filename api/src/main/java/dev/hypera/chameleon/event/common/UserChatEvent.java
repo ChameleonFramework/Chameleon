@@ -23,7 +23,7 @@
  */
 package dev.hypera.chameleon.event.common;
 
-import dev.hypera.chameleon.event.cancellable.AbstractCancellable;
+import dev.hypera.chameleon.event.AbstractCancellable;
 import dev.hypera.chameleon.user.User;
 import org.jetbrains.annotations.NotNull;
 

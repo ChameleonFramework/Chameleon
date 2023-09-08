@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import dev.hypera.chameleon.event.cancellable.AbstractCancellable;
 import dev.hypera.chameleon.logger.DummyChameleonLogger;
 import org.junit.jupiter.api.Test;
 
