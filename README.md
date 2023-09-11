@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/ChameleonFramework/Chameleon">
-    <img alt="Chameleon Logo" src="https://i.hypera.dev/assets/chameleon@750x150.png" />
+    <img alt="Chameleon Logo" src="https://assets.hypera.dev/chameleon@750x150.png" />
   </a>
   <p><strong>Cross-platform Minecraft plugin framework</strong></p>
 </div>

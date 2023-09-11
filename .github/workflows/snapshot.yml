@@ -1,0 +1,48 @@
+# GitHub Actions workflow to publish unstable snapshots.
+# Snapshots are published from the 'main' branch, and should always be considered
+# unstable and unfit for production usage.
+name: "Snapshot"
+on:
+  push:
+    branches: [ "main" ]
+
+concurrency:
+  group: "snapshot-${{ github.ref_name }}"
+  cancel-in-progress: true
+
+jobs:
+  # Snapshots (built from 'main' branch)
+  snapshot:
+    name: "Snapshot"
+    runs-on: "ubuntu-latest"
+    permissions:
+      contents: read
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Set up JDK ${{ env.JAVA_VERSION }}"
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17" # Use latest LTS
+          distribution: "adopt" # Adoptium
+
+      - name: "Validate version"
+        run: |
+          if ! grep -q 'version = ".*-SNAPSHOT"' build.gradle.kts; then
+            echo "Release version detected, refusing to publish from main branch..."
+            exit 1
+          fi
+          echo "Snapshot version detected"
+
+      - name: "Publish artifacts"
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: "publish"
+        env:
+          ORG_GRADLE_PROJECT_hyperaSigningKey: "${{ secrets.GPG_PRIVATE_KEY }}"
+          ORG_GRADLE_PROJECT_hyperaSigningPassword: "${{ secrets.GPG_PASSPHRASE }}"
+          ORG_GRADLE_PROJECT_sonatypeUsername: "${{ secrets.SONATYPE_USERNAME }}"
+          ORG_GRADLE_PROJECT_sonatypePassword: "${{ secrets.SONATYPE_PASSWORD }}"
+          ORG_GRADLE_PROJECT_hyperaSnapshotsUsername: "${{ secrets.HYPERA_SNAPSHOTS_USERNAME }}"
+          ORG_GRADLE_PROJECT_hyperaSnapshotsPassword: "${{ secrets.HYPERA_SNAPSHOTS_PASSWORD }}"

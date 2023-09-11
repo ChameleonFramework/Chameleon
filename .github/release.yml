@@ -1,28 +1,29 @@
 changelog:
   exclude:
+    labels:
+      - "type: dependencies"
   categories:
-    - title: "Breaking changes :warning:"
+    - title: "⚠️ Breaking changes"
       labels:
         - "status: breaking"
-    - title: "Additions :sparkles:"
+    - title: "✨ Additions"
       labels:
         - "type: feature"
-        - "type: enhancement"
-    - title: "Bug fixes :bug:"
+    - title: "🐛 Fixes"
       labels:
         - "type: bug: fix"
-    - title: "Improvements :wrench:"
+    - title: "🔧 Improvements"
       labels:
+        - "type: enhancement"
         - "type: refactor"
-    - title: "Documentation :book:"
+        - "type: performance"
+        - "type: removal"
+    - title: "📖 Documentation"
       labels:
         - "type: documentation"
-    - title: "Test coverage :test_tube:"
+    - title: "🧪 Test coverage"
       labels:
         - "type: test"
-    - title: "Dependency updates"
-      labels:
-        - "type: dependencies"
-    - title: "Other"
+    - title: "⚙️ Other"
       labels:
         - "*"
