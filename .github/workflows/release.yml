@@ -9,12 +9,18 @@ concurrency:
   group: "release-${{ github.ref_name }}"
   cancel-in-progress: true
 
+env:
+  JAVA_VERSION: 17 # Use latest LTS
+
 jobs:
+  # Releases (published from 'releases/<major>' branches)
   release:
     name: "Release"
     runs-on: "ubuntu-latest"
     permissions:
       contents: write # 'write' is required to create a release
+    environment:
+      name: "release"
     steps:
       - name: "Checkout repository"
         uses: actions/checkout@v4
@@ -22,8 +28,8 @@ jobs:
       - name: "Set up JDK ${{ env.JAVA_VERSION }}"
         uses: actions/setup-java@v3
         with:
-          java-version: "17" # Use latest LTS
-          distribution: "adopt" # Adoptium
+          java-version: "${{ env.JAVA_VERSION }}"
+          distribution: "temurin" # Adoptium
 
       - name: "Validate version"
         id: version
