@@ -36,6 +36,7 @@ dependencies {
     testImplementation(libs.findLibrary("test-junit-api").get())
     testImplementation(libs.findLibrary("test-junit-engine").get())
     testImplementation(libs.findLibrary("test-junit-params").get())
+    testRuntimeOnly(libs.findLibrary("test-junit-launcher").get())
 
     /* Truth */
     testImplementation(libs.findLibrary("test-truth").get())
@@ -60,7 +61,7 @@ tasks {
             html.required.set(true)
             csv.required.set(false)
             xml.required.set(true)
-            xml.outputLocation.set(buildDir.resolve("reports/jacoco/report.xml"))
+            xml.outputLocation.set(layout.buildDirectory.dir("reports/jacoco").get().file("report.xml"))
         }
     }
 }

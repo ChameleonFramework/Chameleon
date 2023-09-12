@@ -27,14 +27,12 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":chameleon-api"))
+    implementation(projects.chameleonApi)
     implementation(libs.javapoet)
-
     implementation(libs.yaml) {
         exclude(group = "joda-time", module = "joda-time")
         exclude(group = "junit", module = "joda-time")
         exclude(group = "org.apache", module = "velocity")
     }
-
     implementation(libs.gson)
 }

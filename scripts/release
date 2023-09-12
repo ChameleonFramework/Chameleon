@@ -1,3 +1,4 @@
+#!/bin/sh
 #
 # This file is a part of the Chameleon Framework, licensed under the MIT License.
 #
@@ -22,12 +23,39 @@
 # SOFTWARE.
 #
 
-# Project
-forceSign=true
+# Chameleon release automation script
+# This script releases the current version of Chameleon.
+#
+# Usage: NEXT_VERSION=x.x.x release
+#
+# This script is used by the maintainers to create release versions of Chameleon.
+# Users and contributors will not need to use this script.
+#
+# This script assumes that you have a ChameleonFramework/Chameleon repository remote
+# with the name "origin".
 
-# Gradle
-org.gradle.jvmargs=-Xmx4G
-org.gradle.parallel=true
-org.gradle.daemon=true
-org.gradle.configureondemand=true
-org.gradle.caching=true
+# Make sure NEXT_VERSION is set
+if [ -z "${NEXT_VERSION:+1}" ]; then
+  echo "NEXT_VERSION must be set"
+  exit 1
+fi
+
+# Checkout main and check up-to-date
+git checkout main
+git pull origin main
+
+# Remove '-SNAPSHOT' from version
+VERSION="$(grep -oP '(?<=version = \").*(?=-SNAPSHOT\")' build.gradle.kts)"
+sed -i "s/$VERSION-SNAPSHOT/$VERSION/g" build.gradle.kts
+
+# Create release commit and push to release branch
+git commit -am "release: $VERSION"
+VERSION_MAJOR="$(echo "$VERSION" | awk '{split($0,v,"."); print v[1]}')"
+git push origin "main:releases/$VERSION_MAJOR"
+
+# Bump version to the next version
+sed -i "s/$VERSION/$NEXT_VERSION-SNAPSHOT/g" build.gradle.kts
+
+# Commit and push to main branch
+git commit -am "chore: bump version to $NEXT_VERSION-SNAPSHOT"
+git push origin main

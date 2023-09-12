@@ -1,0 +1,89 @@
+# GitHub Actions workflow to publish releases.
+# Releases are published from the 'releases/<major>' branches.
+name: "Release"
+on:
+  push:
+    branches: [ "releases/**" ]
+
+concurrency:
+  group: "release-${{ github.ref_name }}"
+  cancel-in-progress: true
+
+env:
+  JAVA_VERSION: 17 # Use latest LTS
+
+jobs:
+  validate:
+    name: "Validate"
+    runs-on: "ubuntu-latest"
+    permissions:
+      contents: read
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Validate Gradle wrapper"
+        uses: gradle/wrapper-validation-action@v1
+
+  # Releases (published from 'releases/<major>' branches)
+  release:
+    name: "Release"
+    runs-on: "ubuntu-latest"
+    needs: ["validate"]
+    permissions:
+      contents: write # 'write' is required to create a release
+    environment:
+      name: "release"
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Set up JDK ${{ env.JAVA_VERSION }}"
+        uses: actions/setup-java@v3
+        with:
+          java-version: "${{ env.JAVA_VERSION }}"
+          distribution: "temurin" # Adoptium
+
+      - name: "Validate version"
+        id: version
+        # This script extracts the current version, prevents releasing '-SNAPSHOT'
+        # versions, and determines the version type (stability), e.g.
+        #  1.0.0 = stable, 1.1.0-rc.1 = unstable, 0.1.0 = unstable
+        run: |
+          # Extract version
+          VERSION="$(grep -oP '(?<=version = \").*(?=\")' build.gradle.kts)"
+          # Prevent releasing '-SNAPSHOT' versions
+          if echo "$VERSION" | grep -q 'SNAPSHOT'; then
+            echo "Detected snapshot version, refusing to release..."
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          # Determine version type
+          TYPE=unstable
+          if echo "$VERSION" | grep -Eq '^[1-9][0-9]*\.[0-9]+\.[0-9]+$'; then
+            TYPE=stable
+          fi
+          echo "type=$TYPE" >> "$GITHUB_OUTPUT"
+          echo "Detected $TYPE version"
+
+      - name: "Publish artifacts"
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: "publish closeAndReleaseSonatypeStagingRepository"
+        env:
+          ORG_GRADLE_PROJECT_hyperaSigningKey: "${{ secrets.GPG_PRIVATE_KEY }}"
+          ORG_GRADLE_PROJECT_hyperaSigningPassword: "${{ secrets.GPG_PASSPHRASE }}"
+          ORG_GRADLE_PROJECT_sonatypeUsername: "${{ secrets.SONATYPE_USERNAME }}"
+          ORG_GRADLE_PROJECT_sonatypePassword: "${{ secrets.SONATYPE_PASSWORD }}"
+          ORG_GRADLE_PROJECT_hyperaReleasesUsername: "${{ secrets.HYPERA_RELEASES_USERNAME }}"
+          ORG_GRADLE_PROJECT_hyperaReleasesPassword: "${{ secrets.HYPERA_RELEASES_PASSWORD }}"
+
+      - name: "Create GitHub release"
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "Chameleon v${{ steps.version.outputs.version }}"
+          tag_name: "v${{ steps.version.outputs.version }}"
+          prerelease: ${{ steps.version.outputs.type == 'unstable' }}
+          target_commitish: "${{ github.ref_name }}"
+          generate_release_notes: true
+          token: "${{ secrets.HYPERA_BOT_TOKEN }}"

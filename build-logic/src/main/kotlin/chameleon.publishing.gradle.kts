@@ -33,6 +33,7 @@ indra {
         ci(true)
     }
 
+    signWithKeyFromPrefixedProperties("hypera")
     publishReleasesTo("hyperaReleases", "https://repo.hypera.dev/releases")
     publishSnapshotsTo("hyperaSnapshots", "https://repo.hypera.dev/snapshots")
 
@@ -49,15 +50,15 @@ indra {
                 developer {
                     id.set("joshuasing")
                     name.set("Joshua Sing")
-                    timezone.set("Australia/Melbourne")
                     email.set("joshua@hypera.dev")
+                    timezone.set("Australia/Melbourne")
                 }
 
                 developer {
                     id.set("LooFifteen")
                     name.set("Luis")
+                    email.set("luis@lu15.dev")
                     timezone.set("Europe/London")
-                    email.set("luisjk266@gmail.com")
                 }
             }
         }

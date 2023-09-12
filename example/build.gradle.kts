@@ -51,16 +51,16 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":chameleon-api")) // dev.hypera:chameleon-api
-    implementation(project(":chameleon-platform-bukkit")) // dev.hypera:chameleon-platform-bukkit
-    implementation(project(":chameleon-platform-bungeecord")) // dev.hypera:chameleon-platform-bungeecord
-    implementation(project(":chameleon-platform-folia")) // dev.hypera:chameleon-platform-folia
-    implementation(project(":chameleon-platform-nukkit")) // dev.hypera:chameleon-platform-nukkit
-    implementation(project(":chameleon-platform-velocity")) // dev.hypera:chameleon-platform-velocity
-    implementation(project(":chameleon-platform-sponge")) // dev.hypera:chameleon-platform-sponge
+    implementation(projects.chameleonApi) // dev.hypera:chameleon-api
+    implementation(projects.chameleonPlatformBukkit) // dev.hypera:chameleon-platform-bukkit
+    implementation(projects.chameleonPlatformBungeecord) // dev.hypera:chameleon-platform-bungeecord
+    implementation(projects.chameleonPlatformFolia) // dev.hypera:chameleon-platform-folia
+    implementation(projects.chameleonPlatformNukkit) // dev.hypera:chameleon-platform-nukkit
+    implementation(projects.chameleonPlatformVelocity) // dev.hypera:chameleon-platform-velocity
+    implementation(projects.chameleonPlatformSponge) // dev.hypera:chameleon-platform-sponge
 
-    compileOnly(project(":chameleon-annotations")) // dev.hypera:chameleon-annotations
-    annotationProcessor(project(":chameleon-annotations")) // dev.hypera:chameleon-annotations
+    compileOnly(projects.chameleonAnnotations) // dev.hypera:chameleon-annotations
+    annotationProcessor(projects.chameleonAnnotations) // dev.hypera:chameleon-annotations
 }
 
 tasks {
