@@ -55,7 +55,7 @@ jobs:
           echo "Snapshot version detected"
 
       - name: "Publish artifacts"
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@ef76a971e2fa3f867b617efd72f2fbd72cf6f8bc # v2
         with:
           arguments: "publish"
         env:
