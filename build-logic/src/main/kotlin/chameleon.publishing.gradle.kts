@@ -57,7 +57,7 @@ indra {
                 developer {
                     id.set("LooFifteen")
                     name.set("Luis")
-                    email.set("luisjk266@gmail.com")
+                    email.set("luis@lu15.dev")
                     timezone.set("Europe/London")
                 }
             }
