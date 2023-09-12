@@ -7,7 +7,8 @@
 
 <div align="center">
   <img alt="License" src="https://img.shields.io/badge/License-MIT-%2317aaaa?style=for-the-badge">
-  <img alt="Code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/main?style=for-the-badge&color=%2317aaaa"><br />
+  <img alt="Code quality" src="https://img.shields.io/codefactor/grade/github/ChameleonFramework/Chameleon/main?style=for-the-badge&color=%2317aaaa">
+  <img alt="Test coverage" src="https://img.shields.io/codecov/c/github/ChameleonFramework/Chameleon?style=for-the-badge&color=%2317aaaa" /><br/>
   <img alt="Latest release" src="https://img.shields.io/maven-central/v/dev.hypera/chameleon-api?color=%2317aaaa&label=Latest%20Release&style=for-the-badge">
   <img alt="Latest version" src="https://img.shields.io/maven-metadata/v?color=%2317aaaa&label=Latest%20Snapshot&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fcontent%2Frepositories%2Fsnapshots%2Fdev%2Fhypera%2Fchameleon-api%2Fmaven-metadata.xml&style=for-the-badge">
 </div>
