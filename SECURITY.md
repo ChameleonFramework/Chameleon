@@ -8,10 +8,10 @@ Vulnerabilities discovered.
 We provide security patches for the latest release of Chameleon. This means that we will only
 address security vulnerabilities that affect the most recent version of this framework.
 
-| Version             | Supported          |
-|---------------------|--------------------|
-| `0.18.0-SNAPSHOT`   | :white_check_mark: |
-| < `0.18.0-SNAPSHOT` | :x:                |
+| Version    | Supported          |
+|------------|--------------------|
+| `0.18.x`   | :white_check_mark: |
+| < `0.18.x` | :x:                |
 
 ### Reporting a Vulnerability
 
