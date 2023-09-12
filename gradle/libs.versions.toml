@@ -7,7 +7,7 @@ adventure = "4.14.0"
 adventure-platform = "4.3.0"
 
 # Platforms
-bukkit = "1.20.1-R0.1-SNAPSHOT"
+bukkit = "1.20.1-experimental-SNAPSHOT"
 bungeecord = "1.20-R0.2-SNAPSHOT"
 folia = "1.20.1-R0.1-SNAPSHOT"
 nukkit = "1.0-SNAPSHOT"
