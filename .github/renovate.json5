@@ -19,4 +19,11 @@
   semanticCommits: 'enabled',
   semanticCommitType: 'chore',
   semanticCommitScope: 'deps',
+  packageRules: [
+    {
+      // Ignore Spigot API experimental snapshots
+      matchPackageNames: ['org.spigotmc:spigot-api'],
+      allowedVersions: '!/\\-experimental\\-SNAPSHOT$/',
+    },
+  ],
 }
