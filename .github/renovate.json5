@@ -4,7 +4,7 @@
     'config:recommended',
     ':disableRateLimiting',
     'helpers:pinGitHubActionDigests',
-    ':enableVulnerabilityAlerts',
+    ':enableVulnerabilityAlerts'
   ],
   assigneesFromCodeOwners: true,
   configMigration: true,
@@ -14,9 +14,16 @@
   commitMessageExtra: 'to {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}{{prettyNewMajor}}{{else}}{{#if isSingleVersion}}{{prettyNewVersion}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigestShort}}}{{/if}}{{/if}}{{/if}}{{/if}}',
   commitMessageSuffix: '',
   labels: [
-    'type: dependencies',
+    'type: dependencies'
   ],
   semanticCommits: 'enabled',
   semanticCommitType: 'chore',
   semanticCommitScope: 'deps',
+  packageRules: [
+    {
+      // Ignore Spigot API experimental snapshots
+      matchPackageNames: ['org.spigotmc:spigot-api'],
+      allowedVersions: '!/\\-experimental\\-SNAPSHOT$/',
+    },
+  ],
 }
