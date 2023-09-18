@@ -142,6 +142,7 @@ Additionally, commit message lines should not exceed 100 characters.
 - `extensions`, when modifying a file that is related to extensions.
 - `folia`, when modifying a file inside the `platform-folia` module.
 - `nukkit`, when modifying a file inside the `platform-nukkit` module.
+- `platform`, when modifying a file inside the `platform-api` module.
 - `scheduling`, when modifying a file that is related to scheduling.
 - `scripts`, when modifying a file inside the `scripts` directory.
 - `sponge`, when modifying a file inside the `platform-sponge` module.

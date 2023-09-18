@@ -34,7 +34,7 @@ final class TestChameleonBootstrap extends ChameleonBootstrap<TestChameleon> {
 
     @Override
     protected @NotNull TestChameleon loadPlatform() {
-        return new TestChameleon(this.pluginBootstrap, this.logger, 0, this.eventBus, this.extensions);
+        return new TestChameleon(this.pluginBootstrap, this.logger, this.eventBus, this.extensions);
     }
 
 }

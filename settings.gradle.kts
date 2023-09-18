@@ -41,6 +41,7 @@ sequenceOf(
     "bom",
     "annotations",
     "example",
+    "platform-api",
     "platform-bukkit",
     "platform-bungeecord",
     "platform-folia",

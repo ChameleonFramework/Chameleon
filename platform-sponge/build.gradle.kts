@@ -32,6 +32,7 @@ repositories {
 
 dependencies {
     compileOnlyApi(projects.chameleonApi)
+    compileOnlyApi(projects.chameleonPlatformApi)
     compileOnlyApi(libs.platform.sponge) {
         exclude(module = "configurate-*")
     }

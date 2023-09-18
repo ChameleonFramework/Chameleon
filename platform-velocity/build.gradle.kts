@@ -32,5 +32,6 @@ repositories {
 
 dependencies {
     compileOnlyApi(projects.chameleonApi)
+    compileOnlyApi(projects.chameleonPlatformApi)
     compileOnlyApi(libs.platform.velocity)
 }

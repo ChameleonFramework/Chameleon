@@ -31,7 +31,6 @@ import dev.hypera.chameleon.extension.ExtensionMap;
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.logger.DummyChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import dev.hypera.chameleon.user.UserManager;
@@ -41,7 +40,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Dummy Chameleon implementation.
  */
-public final class TestChameleon extends PlatformChameleon<Object> {
+public final class TestChameleon extends Chameleon {
 
     public static final @NotNull String PLATFORM_ID = "Test";
     private final @NotNull Platform platform = new TestChameleonPlatform();
@@ -56,29 +55,10 @@ public final class TestChameleon extends PlatformChameleon<Object> {
     /**
      * Dummy Chameleon implementation constructor.
      *
-     * @param platformPlugin Platform plugin instance.
-     */
-    public TestChameleon(@NotNull Object platformPlugin) {
-        this(new DummyChameleonLogger(), platformPlugin);
-    }
-
-    /**
-     * Dummy Chameleon implementation constructor.
-     *
-     * @param logger Logger.
-     * @param platformPlugin Platform plugin instance.
-     */
-    public TestChameleon(@NotNull ChameleonLogger logger, @NotNull Object platformPlugin) {
-        this(TestChameleonPlugin::new, logger, platformPlugin, new EventBusImpl(logger), new ExtensionMap());
-    }
-
-    /**
-     * Dummy Chameleon implementation constructor.
-     *
      * @param logger Logger.
      */
     public TestChameleon(@NotNull ChameleonLogger logger) {
-        this(TestChameleonPlugin::new, logger, 0, new EventBusImpl(logger), new ExtensionMap());
+        this(TestChameleonPlugin::new, logger, new EventBusImpl(logger), new ExtensionMap());
     }
 
     /**
@@ -86,18 +66,16 @@ public final class TestChameleon extends PlatformChameleon<Object> {
      *
      * @param pluginBootstrap Chameleon plugin bootstrap.
      * @param logger          Logger.
-     * @param platformPlugin  Platform plugin.
      * @param eventBus        Event bus.
      * @param extensions      Extensions.
      */
     public TestChameleon(
         @NotNull ChameleonPluginBootstrap pluginBootstrap,
         @NotNull ChameleonLogger logger,
-        @NotNull Object platformPlugin,
         @NotNull EventBus eventBus,
         @NotNull ExtensionMap extensions
     ) {
-        super(pluginBootstrap, platformPlugin, eventBus, logger, extensions);
+        super(pluginBootstrap, eventBus, logger, extensions);
     }
 
     public static @NotNull ChameleonBootstrap<TestChameleon> create() {
