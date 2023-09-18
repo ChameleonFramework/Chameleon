@@ -31,7 +31,7 @@ jobs:
     runs-on: "ubuntu-latest"
     needs: ["validate"]
     permissions:
-      contents: write # 'write' is required to create a release
+      contents: read
     environment:
       name: "release"
     steps:
