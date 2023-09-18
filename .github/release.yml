@@ -2,6 +2,7 @@ changelog:
   exclude:
     labels:
       - "type: dependencies"
+      - "area: ci"
   categories:
     - title: "⚠️ Breaking changes"
       labels:
