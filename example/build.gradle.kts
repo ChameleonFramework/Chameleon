@@ -51,14 +51,34 @@ repositories {
 }
 
 dependencies {
+    // Chameleon API
     implementation(projects.chameleonApi) // dev.hypera:chameleon-api
-    implementation(projects.chameleonPlatformBukkit) // dev.hypera:chameleon-platform-bukkit
-    implementation(projects.chameleonPlatformBungeecord) // dev.hypera:chameleon-platform-bungeecord
-    implementation(projects.chameleonPlatformFolia) // dev.hypera:chameleon-platform-folia
-    implementation(projects.chameleonPlatformNukkit) // dev.hypera:chameleon-platform-nukkit
-    implementation(projects.chameleonPlatformVelocity) // dev.hypera:chameleon-platform-velocity
-    implementation(projects.chameleonPlatformSponge) // dev.hypera:chameleon-platform-sponge
 
+    // Bukkit support
+    implementation(projects.chameleonPlatformBukkit) // dev.hypera:chameleon-platform-bukkit
+    compileOnly(libs.platform.bukkit) // org.spigotmc:spigot-api
+
+    // BungeeCord support
+    implementation(projects.chameleonPlatformBungeecord) // dev.hypera:chameleon-platform-bungeecord
+    compileOnly(libs.platform.bungeecord) // net.md-5:bungeecord-api
+
+    // Folia support
+    implementation(projects.chameleonPlatformFolia) // dev.hypera:chameleon-platform-folia
+    compileOnly(libs.platform.folia) // dev.folia:folia-api
+
+    // Nukkit support
+    implementation(projects.chameleonPlatformNukkit) // dev.hypera:chameleon-platform-nukkit
+    compileOnly(libs.platform.nukkit) // cn.nukkit:nukkit
+
+    // Sponge support
+    implementation(projects.chameleonPlatformSponge) // dev.hypera:chameleon-platform-sponge
+    compileOnly(libs.platform.sponge) // org.spongepowered:spongeapi
+
+    // Velocity support
+    implementation(projects.chameleonPlatformVelocity) // dev.hypera:chameleon-platform-velocity
+    compileOnly(libs.platform.velocity) // com.velocitypowered:velocity-api
+
+    // Annotation-based platform "main class" and manifest generation
     compileOnly(projects.chameleonAnnotations) // dev.hypera:chameleon-annotations
     annotationProcessor(projects.chameleonAnnotations) // dev.hypera:chameleon-annotations
 }

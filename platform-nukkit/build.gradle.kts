@@ -31,7 +31,6 @@ repositories {
 }
 
 dependencies {
-    compileOnlyApi(projects.chameleonApi)
-    compileOnlyApi(projects.chameleonPlatformApi)
-    compileOnlyApi(libs.platform.nukkit)
+    api(projects.chameleonPlatformApi)
+    compileOnly(libs.platform.nukkit)
 }

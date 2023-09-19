@@ -27,5 +27,5 @@ plugins {
 }
 
 dependencies {
-    compileOnlyApi(projects.chameleonApi)
+    api(projects.chameleonApi)
 }

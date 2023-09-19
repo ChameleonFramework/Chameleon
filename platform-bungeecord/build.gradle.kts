@@ -31,8 +31,7 @@ repositories {
 }
 
 dependencies {
-    compileOnlyApi(projects.chameleonApi)
-    compileOnlyApi(projects.chameleonPlatformApi)
-    compileOnlyApi(libs.platform.bungeecord)
+    api(projects.chameleonPlatformApi)
+    compileOnly(libs.platform.bungeecord)
     implementation(libs.adventure.platform.bungeecord)
 }
