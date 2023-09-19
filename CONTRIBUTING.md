@@ -148,6 +148,9 @@ Additionally, commit message lines should not exceed 100 characters.
 - `users`, when modifying a file that is related to users.
 - `velocity`, when modifying a file inside the `platform-velocity` module.
 
+When using the type `ci`, workflow names (`.github/workflows/` files, excluding extensions) may be
+used as the scope.
+
 #### Code review
 
 We have strict guidelines for merging pull requests to maintain code quality, and to prevent future
