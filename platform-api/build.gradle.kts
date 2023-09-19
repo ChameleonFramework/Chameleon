@@ -21,20 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform;
+plugins {
+    id("chameleon.common")
+    id("java-library")
+}
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import dev.hypera.chameleon.TestChameleon;
-import org.junit.jupiter.api.Test;
-
-final class PlatformChameleonTests {
-
-    @Test
-    void testPlatformPlugin() {
-        // Make sure PlatformChameleon stores and returns the platform plugin correctly.
-        TestChameleon chameleon = new TestChameleon(123);
-        assertEquals(123, chameleon.getPlatformPlugin());
-    }
-
+dependencies {
+    compileOnlyApi(projects.chameleonApi)
 }
