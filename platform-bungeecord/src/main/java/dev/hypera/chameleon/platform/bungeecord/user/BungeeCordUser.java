@@ -23,9 +23,10 @@
  */
 package dev.hypera.chameleon.platform.bungeecord.user;
 
-import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platform.bungeecord.platform.objects.BungeeCordServer;
 import dev.hypera.chameleon.platform.proxy.Server;
+import dev.hypera.chameleon.platform.user.PlatformUser;
 import dev.hypera.chameleon.user.ProxyUser;
 import dev.hypera.chameleon.util.Preconditions;
 import java.net.SocketAddress;
@@ -43,9 +44,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * BungeeCord proxy user implementation.
  */
-public final class BungeeCordUser implements ProxyUser, ForwardingAudience.Single {
+public final class BungeeCordUser extends PlatformUser<ProxiedPlayer> implements ProxyUser, ForwardingAudience.Single {
 
-    private final @NotNull Chameleon chameleon;
+    private final @NotNull BungeeCordChameleon chameleon;
     private final @NotNull ProxiedPlayer player;
     private final @NotNull Audience audience;
 
@@ -56,7 +57,7 @@ public final class BungeeCordUser implements ProxyUser, ForwardingAudience.Singl
      * @param player    ProxiedPlayer to be wrapped.
      */
     @Internal
-    public BungeeCordUser(@NotNull Chameleon chameleon, @NotNull ProxiedPlayer player) {
+    BungeeCordUser(@NotNull BungeeCordChameleon chameleon, @NotNull ProxiedPlayer player) {
         this.chameleon = chameleon;
         this.player = player;
         this.audience = chameleon.getAdventure().player(player.getUniqueId());
@@ -172,6 +173,7 @@ public final class BungeeCordUser implements ProxyUser, ForwardingAudience.Singl
      *
      * @return BungeeCord proxied player.
      */
+    @Override
     public @NotNull ProxiedPlayer getPlayer() {
         return this.player;
     }

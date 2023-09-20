@@ -27,6 +27,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import dev.hypera.chameleon.adventure.ReflectedAudience;
 import dev.hypera.chameleon.platform.proxy.Server;
+import dev.hypera.chameleon.platform.user.PlatformUser;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityServer;
 import dev.hypera.chameleon.user.ProxyUser;
@@ -43,7 +44,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Velocity proxy user implementation.
  */
-public final class VelocityUser implements ProxyUser, ForwardingAudience.Single {
+public final class VelocityUser extends PlatformUser<Player> implements ProxyUser, ForwardingAudience.Single {
 
     private final @NotNull VelocityChameleon chameleon;
     private final @NotNull Player player;
@@ -59,7 +60,12 @@ public final class VelocityUser implements ProxyUser, ForwardingAudience.Single 
      * @param playerReflection Player reflection instance.
      */
     @Internal
-    VelocityUser(@NotNull VelocityChameleon chameleon, @NotNull Player player, @NotNull ReflectedAudience audience, @NotNull PlayerReflection playerReflection) {
+    VelocityUser(
+        @NotNull VelocityChameleon chameleon,
+        @NotNull Player player,
+        @NotNull ReflectedAudience audience,
+        @NotNull PlayerReflection playerReflection
+    ) {
         this.chameleon = chameleon;
         this.player = player;
         this.audience = audience;
@@ -173,6 +179,7 @@ public final class VelocityUser implements ProxyUser, ForwardingAudience.Single 
      *
      * @return Velocity player.
      */
+    @Override
     public @NotNull Player getPlayer() {
         return this.player;
     }

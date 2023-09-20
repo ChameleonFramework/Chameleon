@@ -25,6 +25,7 @@ package dev.hypera.chameleon.platform.sponge.user;
 
 import dev.hypera.chameleon.adventure.ReflectedAudience;
 import dev.hypera.chameleon.platform.server.GameMode;
+import dev.hypera.chameleon.platform.user.PlatformUser;
 import dev.hypera.chameleon.user.ServerUser;
 import java.net.SocketAddress;
 import java.util.Optional;
@@ -36,7 +37,6 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
@@ -44,7 +44,7 @@ import org.spongepowered.api.network.channel.raw.RawDataChannel;
 /**
  * Sponge server user implementation.
  */
-public final class SpongeUser implements ServerUser, ForwardingAudience.Single {
+public final class SpongeUser extends PlatformUser<ServerPlayer> implements ServerUser, ForwardingAudience.Single {
 
     private final @NotNull ServerPlayer player;
     private final @NotNull ReflectedAudience audience;
@@ -162,7 +162,8 @@ public final class SpongeUser implements ServerUser, ForwardingAudience.Single {
      *
      * @return Sponge player.
      */
-    public @NotNull Player getPlayer() {
+    @Override
+    public @NotNull ServerPlayer getPlayer() {
         return this.player;
     }
 

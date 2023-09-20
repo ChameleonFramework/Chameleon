@@ -25,6 +25,7 @@ package dev.hypera.chameleon.util;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,7 +53,7 @@ public final class Preconditions {
      *
      * @throws IllegalArgumentException if {@code expression} is {@code false}.
      */
-    @Contract(value = "true -> _; false -> fail")
+    @Contract("false -> fail")
     public static void checkArgument(boolean expression) {
         if (!expression) {
             throw new IllegalArgumentException();
@@ -67,7 +68,7 @@ public final class Preconditions {
      *
      * @throws IllegalArgumentException if {@code expression} is {@code false}.
      */
-    @Contract(value = "true, _ -> _; false, _ -> fail")
+    @Contract("false, _ -> fail")
     public static void checkArgument(boolean expression, @NotNull String message) {
         if (!expression) {
             throw new IllegalArgumentException(message);
@@ -83,7 +84,7 @@ public final class Preconditions {
      *
      * @throws IllegalArgumentException if {@code expression} is {@code false}.
      */
-    @Contract(value = "true, _, _ -> _; false, _, _ -> fail")
+    @Contract("false, _, _ -> fail")
     public static void checkArgument(boolean expression, @NotNull String messageFormat, @NotNull Object... messageArgs) {
         if (!expression) {
             throw new IllegalArgumentException(String.format(messageFormat, messageArgs));
@@ -97,6 +98,7 @@ public final class Preconditions {
      *
      * @throws IllegalStateException if {@code expression} is {@code false}.
      */
+    @Contract("false -> fail")
     public static void checkState(boolean expression) {
         if (!expression) {
             throw new IllegalStateException();
@@ -111,7 +113,7 @@ public final class Preconditions {
      *
      * @throws IllegalStateException if {@code expression} is {@code false}.
      */
-    @Contract(value = "true, _ -> _; false, _ -> fail")
+    @Contract("false, _ -> fail")
     public static void checkState(boolean expression, @NotNull String message) {
         if (!expression) {
             throw new IllegalStateException(message);
@@ -127,7 +129,7 @@ public final class Preconditions {
      *
      * @throws IllegalStateException if {@code expression} is {@code false}.
      */
-    @Contract(value = "true, _, _ -> _; false, _, _ -> fail")
+    @Contract("false, _, _ -> fail")
     public static void checkState(boolean expression, @NotNull String messageFormat, @NotNull Object... messageArgs) {
         if (!expression) {
             throw new IllegalStateException(String.format(messageFormat, messageArgs));
@@ -135,7 +137,7 @@ public final class Preconditions {
     }
 
     /**
-     * Ensures that the given {@code value} is not null.
+     * Ensures the given {@code value} is not null.
      *
      * @param value Argument value.
      * @param <T>   Value type.
@@ -152,7 +154,7 @@ public final class Preconditions {
     }
 
     /**
-     * Ensures that the given {@code value} is not null.
+     * Ensures the given {@code value} is not null.
      *
      * @param name  Argument name, used in the exception message if {@code value} is null.
      * @param value Argument value.
@@ -170,7 +172,7 @@ public final class Preconditions {
     }
 
     /**
-     * Ensures that the given {@code value} is not null.
+     * Ensures the given {@code value} is not null.
      *
      * @param name  Argument name, used in the exception message if {@code value} is null.
      * @param value Argument value.
@@ -188,7 +190,40 @@ public final class Preconditions {
     }
 
     /**
-     * Ensures that the given {@code value} does not contain null.
+     * Ensures the given {@code value} is not null or empty.
+     *
+     * @param value Argument value.
+     *
+     * @return {@code value}.
+     * @throws IllegalArgumentException if {@code value} is {@code null} or empty.
+     */
+    @Contract("!null -> param1; null -> fail")
+    public static @NotNull String checkNotNullOrEmpty(@Nullable String value) {
+        if (value == null || value.isEmpty()) {
+            throw new IllegalArgumentException("cannot be null or empty");
+        }
+        return value;
+    }
+
+    /**
+     * Ensures the given {@code value} is not null or empty.
+     *
+     * @param name  Argument name.
+     * @param value Argument value.
+     *
+     * @return {@code value}.
+     * @throws IllegalArgumentException if {@code value} is {@code null} or empty.
+     */
+    @Contract("_, !null -> param2; _, null -> fail")
+    public static @NotNull String checkNotNullOrEmpty(@NotNull String name, @Nullable String value) {
+        if (value == null || value.isEmpty()) {
+            throw new IllegalArgumentException(name.concat(" cannot be null or empty"));
+        }
+        return value;
+    }
+
+    /**
+     * Ensures the given {@code value} does not contain null.
      *
      * @param name  Argument name, used in the exception message if {@code value} contains null.
      * @param value Argument value.
@@ -202,6 +237,24 @@ public final class Preconditions {
         Preconditions.checkNotNull(name, value);
         if (value.parallelStream().anyMatch(Objects::isNull)) {
             throw new IllegalArgumentException(name.concat(" cannot contain null"));
+        }
+        return value;
+    }
+
+    /**
+     * Ensures the given {@code value} matches the given pattern.
+     *
+     * @param name  Argument name.
+     * @param regex RegEx pattern to match against.
+     * @param value Argument value.
+     *
+     * @return {@code value}.
+     * @throws IllegalArgumentException if the given {@code value} does not match the given pattern.
+     */
+    @Contract("_, _, _ -> param3")
+    public static @NotNull String checkMatches(@NotNull String name, @NotNull Pattern regex, @NotNull String value) {
+        if (!regex.matcher(value).matches()) {
+            throw new IllegalArgumentException(name.concat(" must match ").concat(regex.pattern()));
         }
         return value;
     }

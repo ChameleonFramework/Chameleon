@@ -25,29 +25,19 @@ package dev.hypera.chameleon.platform.velocity.user;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
+import dev.hypera.chameleon.platform.user.PlatformUserManager;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
-import dev.hypera.chameleon.user.ChatUser;
 import dev.hypera.chameleon.user.ConsoleUser;
-import dev.hypera.chameleon.user.ProxyUser;
-import dev.hypera.chameleon.user.User;
-import dev.hypera.chameleon.user.UserManager;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Velocity user manager implementation.
  */
-@Internal
-public final class VelocityUserManager implements UserManager {
+public final class VelocityUserManager extends PlatformUserManager<Player, VelocityUser> {
 
     private final @NotNull VelocityChameleon chameleon;
     private final @NotNull PlayerReflection playerReflection;
-    private @Nullable VelocityConsoleUser consoleUser;
 
     /**
      * Velocity user manager constructor.
@@ -71,59 +61,22 @@ public final class VelocityUserManager implements UserManager {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull ConsoleUser getConsole() {
-        if (this.consoleUser == null) {
-            CommandSource consoleSource = this.chameleon.getPlatformPlugin().getServer().getConsoleCommandSource();
-            this.consoleUser = new VelocityConsoleUser(consoleSource,
-                    this.chameleon.getAdventureMapper().createReflectedAudience(consoleSource));
-        }
-        return this.consoleUser;
+    protected @NotNull ConsoleUser createConsoleUser() {
+        CommandSource consoleSource = this.chameleon.getPlatformPlugin().getServer().getConsoleCommandSource();
+        return new VelocityConsoleUser(consoleSource,
+            this.chameleon.getAdventureMapper().createReflectedAudience(consoleSource));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Collection<User> getUsers() {
-        return this.chameleon.getPlatformPlugin().getServer().getAllPlayers()
-            .stream().map(this::wrap).collect(Collectors.toSet());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Optional<User> getUserById(@NotNull UUID id) {
-        return this.chameleon.getPlatformPlugin().getServer().getPlayer(id).map(this::wrap);
-    }
-
-    /**
-     * Wrap a Velocity Player.
-     *
-     * @param player Player to wrap.
-     *
-     * @return user wrapping the given player.
-     */
-    @Internal
-    public @NotNull ProxyUser wrap(@NotNull Player player) {
-        return new VelocityUser(this.chameleon, player, this.chameleon.getAdventureMapper()
-            .createReflectedAudience(player), this.playerReflection);
-    }
-
-    /**
-     * Wrap a command source.
-     *
-     * @param source Command source to wrap.
-     *
-     * @return user wrapping the given command source.
-     */
-    @Internal
-    public @NotNull ChatUser wrap(@NotNull CommandSource source) {
-        if (source instanceof Player) {
-            return wrap((Player) source);
-        } else {
-            return getConsole();
-        }
+    protected @NotNull VelocityUser createUser(@NotNull Player player) {
+        return new VelocityUser(
+            this.chameleon, player,
+            this.chameleon.getAdventureMapper().createReflectedAudience(player),
+            this.playerReflection
+        );
     }
 
 }

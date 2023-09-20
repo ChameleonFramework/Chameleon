@@ -23,6 +23,7 @@
  */
 package dev.hypera.chameleon.user;
 
+import dev.hypera.chameleon.meta.MetadataHolder;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>This could represent a connected Minecraft player, or the platform's console.</p>
  */
 @NonExtendable
-public interface ChatUser extends Audience, PermissionHolder {
+public interface ChatUser extends Audience, PermissionHolder, MetadataHolder {
 
     /**
      * Get the name of this user.

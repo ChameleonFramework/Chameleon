@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.platform.sponge.user;
 
 import dev.hypera.chameleon.adventure.ReflectedAudience;
+import dev.hypera.chameleon.platform.user.PlatformChatUser;
 import dev.hypera.chameleon.user.ConsoleUser;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -35,7 +36,7 @@ import org.spongepowered.api.Sponge;
  * Sponge console user implementation.
  */
 @Internal
-public final class SpongeConsoleUser implements ConsoleUser, ForwardingAudience.Single {
+public final class SpongeConsoleUser extends PlatformChatUser implements ConsoleUser, ForwardingAudience.Single {
 
     private final @NotNull ReflectedAudience audience;
 

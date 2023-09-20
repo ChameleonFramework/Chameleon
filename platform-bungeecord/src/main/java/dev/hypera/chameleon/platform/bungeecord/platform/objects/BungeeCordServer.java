@@ -23,8 +23,7 @@
  */
 package dev.hypera.chameleon.platform.bungeecord.platform.objects;
 
-import dev.hypera.chameleon.Chameleon;
-import dev.hypera.chameleon.platform.bungeecord.user.BungeeCordUser;
+import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.user.ProxyUser;
 import java.net.SocketAddress;
@@ -40,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 @Internal
 public final class BungeeCordServer implements Server {
 
-    private final @NotNull Chameleon chameleon;
+    private final @NotNull BungeeCordChameleon chameleon;
     private final @NotNull ServerInfo server;
 
     /**
@@ -50,7 +49,7 @@ public final class BungeeCordServer implements Server {
      * @param server    ServerInfo instance.
      */
     @Internal
-    public BungeeCordServer(@NotNull Chameleon chameleon, @NotNull ServerInfo server) {
+    public BungeeCordServer(@NotNull BungeeCordChameleon chameleon, @NotNull ServerInfo server) {
         this.chameleon = chameleon;
         this.server = server;
     }
@@ -77,7 +76,9 @@ public final class BungeeCordServer implements Server {
      */
     @Override
     public @NotNull Set<ProxyUser> getPlayers() {
-        return this.server.getPlayers().stream().map(p -> new BungeeCordUser(this.chameleon, p)).collect(Collectors.toSet());
+        return this.server.getPlayers().stream()
+            .map(p -> this.chameleon.getUserManager().wrapUser(p))
+            .map(p -> (ProxyUser) p).collect(Collectors.toSet());
     }
 
     /**

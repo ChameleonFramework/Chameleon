@@ -34,14 +34,13 @@ import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bungeecord.adventure.BungeeCordAudienceProvider;
 import dev.hypera.chameleon.platform.bungeecord.command.BungeeCordCommandManager;
-import dev.hypera.chameleon.platform.bungeecord.event.BungeeCordListener;
+import dev.hypera.chameleon.platform.bungeecord.event.BungeeCordEventDispatcher;
 import dev.hypera.chameleon.platform.bungeecord.platform.BungeeCordPlatform;
 import dev.hypera.chameleon.platform.bungeecord.platform.BungeeCordPluginManager;
 import dev.hypera.chameleon.platform.bungeecord.scheduler.BungeeCordScheduler;
 import dev.hypera.chameleon.platform.bungeecord.user.BungeeCordUserManager;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import java.nio.file.Path;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -51,12 +50,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BungeeCordChameleon extends PlatformChameleon<Plugin> {
 
-    private final @NotNull ChameleonAudienceProvider audienceProvider;
     private final @NotNull BungeeCordPlatform platform = new BungeeCordPlatform(this);
     private final @NotNull BungeeCordCommandManager commandManager = new BungeeCordCommandManager(this);
     private final @NotNull BungeeCordPluginManager pluginManager = new BungeeCordPluginManager();
     private final @NotNull BungeeCordUserManager userManager = new BungeeCordUserManager(this);
     private final @NotNull BungeeCordScheduler scheduler = new BungeeCordScheduler(this);
+    private final @NotNull BungeeCordAudienceProvider audienceProvider = new BungeeCordAudienceProvider(this.userManager);
+    private final @NotNull BungeeCordEventDispatcher eventDispatcher = new BungeeCordEventDispatcher(this);
 
     @Internal
     BungeeCordChameleon(
@@ -67,8 +67,6 @@ public final class BungeeCordChameleon extends PlatformChameleon<Plugin> {
         @NotNull ExtensionMap extensions
     ) {
         super(pluginBootstrap, bungeePlugin, eventBus, logger, extensions);
-        this.audienceProvider = new BungeeCordAudienceProvider(this, bungeePlugin);
-        ProxyServer.getInstance().getPluginManager().registerListener(bungeePlugin, new BungeeCordListener(this));
     }
 
     /**
@@ -81,6 +79,27 @@ public final class BungeeCordChameleon extends PlatformChameleon<Plugin> {
      */
     public static @NotNull BungeeCordChameleonBootstrap create(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull Plugin bungeePlugin) {
         return new BungeeCordChameleonBootstrap(pluginBootstrap, bungeePlugin);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onEnable() {
+        this.audienceProvider.init(this.plugin);
+        this.eventDispatcher.registerListeners();
+        super.onEnable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onDisable() {
+        super.onDisable();
+        this.audienceProvider.close();
+        this.eventDispatcher.unregisterListeners();
+        this.userManager.close();
     }
 
     /**

@@ -34,9 +34,9 @@ import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
-import dev.hypera.chameleon.platform.sponge.adventure.SpongeAudienceProvider;
+import dev.hypera.chameleon.platform.adventure.StandaloneAudienceProvider;
 import dev.hypera.chameleon.platform.sponge.command.SpongeCommandManager;
-import dev.hypera.chameleon.platform.sponge.event.SpongeListener;
+import dev.hypera.chameleon.platform.sponge.event.SpongeEventDispatcher;
 import dev.hypera.chameleon.platform.sponge.platform.SpongePlatform;
 import dev.hypera.chameleon.platform.sponge.platform.SpongePluginManager;
 import dev.hypera.chameleon.platform.sponge.scheduler.SpongeScheduler;
@@ -45,7 +45,6 @@ import dev.hypera.chameleon.scheduler.Scheduler;
 import java.nio.file.Path;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.api.Sponge;
 
 /**
  * Sponge Chameleon implementation.
@@ -53,13 +52,13 @@ import org.spongepowered.api.Sponge;
 public final class SpongeChameleon extends PlatformChameleon<SpongePlugin> {
 
     private final @NotNull AdventureMapper adventureMapper = new AdventureMapper(this);
-    private final @NotNull SpongeAudienceProvider audienceProvider = new SpongeAudienceProvider(this);
     private final @NotNull SpongePlatform platform = new SpongePlatform();
     private final @NotNull SpongeCommandManager commandManager = new SpongeCommandManager(this);
     private final @NotNull SpongePluginManager pluginManager = new SpongePluginManager();
+    private final @NotNull SpongeEventDispatcher eventDispatcher = new SpongeEventDispatcher(this);
     private final @NotNull SpongeUserManager userManager = new SpongeUserManager(this);
     private final @NotNull SpongeScheduler scheduler = new SpongeScheduler(this);
-    private final @NotNull SpongeListener listener = new SpongeListener(this);
+    private final @NotNull ChameleonAudienceProvider audienceProvider = new StandaloneAudienceProvider(this.userManager);
 
     @Internal
     SpongeChameleon(
@@ -92,12 +91,30 @@ public final class SpongeChameleon extends PlatformChameleon<SpongePlugin> {
         try {
             this.adventureMapper.load();
             this.userManager.load();
-            this.listener.load();
         } catch (ReflectiveOperationException ex) {
             throw new ChameleonReflectiveException(ex);
         }
-        Sponge.eventManager().registerListeners(this.plugin.getPluginContainer(), this.listener);
         super.onLoad();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onEnable() {
+        this.eventDispatcher.registerListeners();
+        super.onEnable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onDisable() {
+        super.onDisable();
+        this.audienceProvider.close();
+        this.eventDispatcher.unregisterListeners();
+        this.userManager.close();
     }
 
     /**

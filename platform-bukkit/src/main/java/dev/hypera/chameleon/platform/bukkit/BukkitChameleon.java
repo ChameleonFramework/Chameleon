@@ -34,21 +34,18 @@ import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bukkit.adventure.BukkitAudienceProvider;
 import dev.hypera.chameleon.platform.bukkit.command.BukkitCommandManager;
-import dev.hypera.chameleon.platform.bukkit.event.BukkitListener;
+import dev.hypera.chameleon.platform.bukkit.event.BukkitEventDispatcher;
 import dev.hypera.chameleon.platform.bukkit.platform.BukkitPlatform;
 import dev.hypera.chameleon.platform.bukkit.platform.BukkitPluginManager;
 import dev.hypera.chameleon.platform.bukkit.scheduler.BukkitScheduler;
 import dev.hypera.chameleon.platform.bukkit.user.BukkitUserManager;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import dev.hypera.chameleon.user.UserManager;
-import dev.hypera.chameleon.util.Preconditions;
 import java.nio.file.Path;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Bukkit Chameleon implementation.
@@ -57,12 +54,12 @@ import org.jetbrains.annotations.Nullable;
 public final class BukkitChameleon extends PlatformChameleon<JavaPlugin> {
 
     private final @NotNull BukkitPlatform platform = new BukkitPlatform();
-    private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this);
+    private final @NotNull BukkitEventDispatcher eventDispatcher = new BukkitEventDispatcher(this);
+    private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this, this.eventDispatcher);
     private final @NotNull BukkitCommandManager commandManager = new BukkitCommandManager(this, this.userManager);
     private final @NotNull BukkitPluginManager pluginManager = new BukkitPluginManager();
-    private final @NotNull BukkitScheduler scheduler = new BukkitScheduler(this);
-
-    private @Nullable ChameleonAudienceProvider audienceProvider;
+    private final @NotNull BukkitScheduler scheduler = new BukkitScheduler(this.plugin);
+    private final @NotNull BukkitAudienceProvider audienceProvider = new BukkitAudienceProvider(this.userManager);
 
     @Internal
     BukkitChameleon(
@@ -92,8 +89,8 @@ public final class BukkitChameleon extends PlatformChameleon<JavaPlugin> {
      */
     @Override
     public void onEnable() {
-        this.audienceProvider = new BukkitAudienceProvider(this.userManager, super.plugin);
-        Bukkit.getPluginManager().registerEvents(new BukkitListener(this, this.userManager), super.plugin);
+        this.audienceProvider.init(this.plugin);
+        this.eventDispatcher.registerListeners();
         super.onEnable();
     }
 
@@ -102,10 +99,10 @@ public final class BukkitChameleon extends PlatformChameleon<JavaPlugin> {
      */
     @Override
     public void onDisable() {
-        if (this.audienceProvider != null) {
-            this.audienceProvider.close();
-        }
         super.onDisable();
+        this.audienceProvider.close();
+        this.eventDispatcher.unregisterListeners();
+        this.userManager.close();
     }
 
     /**
@@ -113,9 +110,6 @@ public final class BukkitChameleon extends PlatformChameleon<JavaPlugin> {
      */
     @Override
     public @NotNull ChameleonAudienceProvider getAdventure() {
-        Preconditions.checkState(
-            this.audienceProvider != null, "Chameleon has not been loaded"
-        );
         return this.audienceProvider;
     }
 

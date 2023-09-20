@@ -34,7 +34,7 @@ import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
 import dev.hypera.chameleon.platform.bukkit.adventure.BukkitAudienceProvider;
 import dev.hypera.chameleon.platform.bukkit.command.BukkitCommandManager;
-import dev.hypera.chameleon.platform.bukkit.event.BukkitListener;
+import dev.hypera.chameleon.platform.bukkit.event.BukkitEventDispatcher;
 import dev.hypera.chameleon.platform.bukkit.platform.BukkitPlatform;
 import dev.hypera.chameleon.platform.bukkit.platform.BukkitPluginManager;
 import dev.hypera.chameleon.platform.bukkit.scheduler.BukkitScheduler;
@@ -44,14 +44,11 @@ import dev.hypera.chameleon.platform.folia.platform.FoliaPluginManager;
 import dev.hypera.chameleon.platform.folia.scheduler.FoliaScheduler;
 import dev.hypera.chameleon.scheduler.Scheduler;
 import dev.hypera.chameleon.user.UserManager;
-import dev.hypera.chameleon.util.Preconditions;
 import java.nio.file.Path;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Folia Chameleon implementation.
@@ -60,12 +57,12 @@ import org.jetbrains.annotations.Nullable;
 public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
 
     private final @NotNull Platform platform;
-    private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this);
+    private final @NotNull BukkitEventDispatcher eventDispatcher = new BukkitEventDispatcher(this);
+    private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this, this.eventDispatcher);
     private final @NotNull CommandManager commandManager = new BukkitCommandManager(this, this.userManager);
     private final @NotNull PluginManager pluginManager;
     private final @NotNull Scheduler scheduler;
-
-    private @Nullable ChameleonAudienceProvider audienceProvider;
+    private final @NotNull BukkitAudienceProvider audienceProvider = new BukkitAudienceProvider(this.userManager);
 
     @Internal
     FoliaChameleon(
@@ -79,7 +76,7 @@ public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
         boolean folia = isFolia();
         this.platform = folia ? new FoliaPlatform() : new BukkitPlatform();
         this.pluginManager = folia ? new FoliaPluginManager() : new BukkitPluginManager();
-        this.scheduler = folia ? new FoliaScheduler(this) : new BukkitScheduler(this);
+        this.scheduler = folia ? new FoliaScheduler(foliaPlugin) : new BukkitScheduler(foliaPlugin);
     }
 
     /**
@@ -100,8 +97,8 @@ public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
      */
     @Override
     public void onEnable() {
-        this.audienceProvider = new BukkitAudienceProvider(this.userManager, super.plugin);
-        Bukkit.getPluginManager().registerEvents(new BukkitListener(this, this.userManager), super.plugin);
+        this.audienceProvider.init(this.plugin);
+        this.eventDispatcher.registerListeners();
         super.onEnable();
     }
 
@@ -110,10 +107,10 @@ public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
      */
     @Override
     public void onDisable() {
-        if (this.audienceProvider != null) {
-            this.audienceProvider.close();
-        }
         super.onDisable();
+        this.audienceProvider.close();
+        this.eventDispatcher.unregisterListeners();
+        this.userManager.close();
     }
 
     /**
@@ -121,9 +118,6 @@ public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
      */
     @Override
     public @NotNull ChameleonAudienceProvider getAdventure() {
-        Preconditions.checkState(
-            this.audienceProvider != null, "Chameleon has not been loaded"
-        );
         return this.audienceProvider;
     }
 

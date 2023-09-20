@@ -25,6 +25,7 @@ package dev.hypera.chameleon.platform.bukkit.user;
 
 import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.server.GameMode;
+import dev.hypera.chameleon.platform.user.PlatformUser;
 import dev.hypera.chameleon.user.ServerUser;
 import dev.hypera.chameleon.util.Preconditions;
 import java.net.SocketAddress;
@@ -42,9 +43,9 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Bukkit server user implementation.
+ * Bukkit server user.
  */
-public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
+public final class BukkitUser extends PlatformUser<Player> implements ServerUser, ForwardingAudience.Single {
 
     private final @NotNull PlatformChameleon<JavaPlugin> chameleon;
     private final @NotNull Player player;
@@ -57,7 +58,7 @@ public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
      * @param player    Player to be wrapped.
      */
     @Internal
-    public BukkitUser(@NotNull PlatformChameleon<JavaPlugin> chameleon, @NotNull Player player) {
+    BukkitUser(@NotNull PlatformChameleon<JavaPlugin> chameleon, @NotNull Player player) {
         this.chameleon = chameleon;
         this.player = player;
         this.audience = chameleon.getAdventure().player(player.getUniqueId());
@@ -152,16 +153,17 @@ public final class BukkitUser implements ServerUser, ForwardingAudience.Single {
     }
 
     /**
-     * Get the Bukkit player for this user.
+     * Returns the Bukkit player for this user.
      *
      * @return Bukkit player.
      */
+    @Override
     public @NotNull Player getPlayer() {
         return this.player;
     }
 
     /**
-     * Get the audience for this user.
+     * Returns the audience for this user.
      *
      * @return audience.
      */

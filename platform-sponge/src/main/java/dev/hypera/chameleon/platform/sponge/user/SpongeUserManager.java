@@ -24,18 +24,11 @@
 package dev.hypera.chameleon.platform.sponge.user;
 
 import dev.hypera.chameleon.platform.sponge.SpongeChameleon;
+import dev.hypera.chameleon.platform.user.PlatformUserManager;
 import dev.hypera.chameleon.user.ChatUser;
 import dev.hypera.chameleon.user.ConsoleUser;
-import dev.hypera.chameleon.user.ServerUser;
-import dev.hypera.chameleon.user.User;
-import dev.hypera.chameleon.user.UserManager;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.service.permission.Subject;
@@ -43,17 +36,17 @@ import org.spongepowered.api.service.permission.Subject;
 /**
  * Sponge user manager implementation.
  */
-public final class SpongeUserManager implements UserManager {
+public final class SpongeUserManager extends PlatformUserManager<ServerPlayer, SpongeUser> {
 
     private final @NotNull SpongeChameleon chameleon;
     private final @NotNull PlayerReflection playerReflection;
-    private @Nullable SpongeConsoleUser consoleUser;
 
     /**
      * Sponge user manager constructor.
      *
      * @param chameleon Sponge Chameleon implementation.
      */
+    @Internal
     public SpongeUserManager(@NotNull SpongeChameleon chameleon) {
         this.chameleon = chameleon;
         this.playerReflection = new PlayerReflection(this.chameleon.getAdventureMapper()
@@ -71,57 +64,36 @@ public final class SpongeUserManager implements UserManager {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull ConsoleUser getConsole() {
-        if (this.consoleUser == null) {
-            this.consoleUser = new SpongeConsoleUser(this.chameleon.getAdventureMapper()
-                    .createReflectedAudience(Sponge.game().systemSubject()));
-        }
-        return this.consoleUser;
+    protected @NotNull ConsoleUser createConsoleUser() {
+        return new SpongeConsoleUser(this.chameleon.getAdventureMapper()
+            .createReflectedAudience(Sponge.game().systemSubject()));
     }
 
     /**
-     * {@inheritDoc}
+     * Returns an implementation of user for the given platform user.
+     *
+     * @param player Platform player.
+     *
+     * @return user.
      */
     @Override
-    public @NotNull Set<User> getUsers() {
-        return Sponge.server().onlinePlayers().stream().map(this::wrap).collect(Collectors.toSet());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Optional<User> getUserById(@NotNull UUID uniqueId) {
-        return Sponge.server().player(uniqueId).map(this::wrap);
-    }
-
-    /**
-     * Wrap a Sponge Player.
-     *
-     * @param player Player to wrap.
-     *
-     * @return user wrapping the given player.
-     */
-    @Internal
-    public @NotNull ServerUser wrap(@NotNull ServerPlayer player) {
+    protected @NotNull SpongeUser createUser(@NotNull ServerPlayer player) {
         return new SpongeUser(player, this.chameleon.getAdventureMapper()
             .createReflectedAudience(player), this.playerReflection);
     }
 
     /**
-     * Wrap a subject.
-     *
-     * @param subject Subject to wrap.
-     *
-     * @return user wrapping the given subject.
+     * {@inheritDoc}
      */
-    @Internal
-    public @NotNull ChatUser wrap(@NotNull Subject subject) {
-        if (subject instanceof ServerPlayer) {
-            return wrap((ServerPlayer) subject);
-        } else {
+    @Override
+    public @NotNull ChatUser wrap(@NotNull Object obj) {
+        if (obj instanceof ServerPlayer) {
+            return getUserOrThrow(((ServerPlayer) obj).uniqueId());
+        }
+        if (obj instanceof Subject) {
             return getConsole();
         }
+        throw new IllegalArgumentException("cannot return a chat user representing the given object");
     }
 
 }

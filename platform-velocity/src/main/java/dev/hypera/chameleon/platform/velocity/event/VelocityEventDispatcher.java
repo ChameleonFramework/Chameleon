@@ -35,9 +35,11 @@ import dev.hypera.chameleon.event.common.UserChatEvent;
 import dev.hypera.chameleon.event.common.UserConnectEvent;
 import dev.hypera.chameleon.event.common.UserDisconnectEvent;
 import dev.hypera.chameleon.event.proxy.ProxyUserSwitchEvent;
+import dev.hypera.chameleon.platform.event.PlatformEventDispatcher;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityServer;
+import dev.hypera.chameleon.user.ProxyUser;
 import dev.hypera.chameleon.user.User;
 import dev.hypera.chameleon.util.PlatformEventUtil;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -47,7 +49,7 @@ import org.jetbrains.annotations.NotNull;
  * Velocity listener.
  */
 @Internal
-public final class VelocityListener {
+public final class VelocityEventDispatcher extends PlatformEventDispatcher {
 
     private final @NotNull VelocityChameleon chameleon;
 
@@ -57,8 +59,24 @@ public final class VelocityListener {
      * @param chameleon Velocity Chameleon implementation.
      */
     @Internal
-    public VelocityListener(@NotNull VelocityChameleon chameleon) {
+    public VelocityEventDispatcher(@NotNull VelocityChameleon chameleon) {
+        super(chameleon.getEventBus());
         this.chameleon = chameleon;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void registerListeners() {
+        this.chameleon.getPlatformPlugin().getServer().getEventManager()
+            .register(this.chameleon.getPlatformPlugin(), this);
+    }
+
+    @Override
+    public void unregisterListeners() {
+        this.chameleon.getPlatformPlugin().getServer().getEventManager()
+            .unregisterListener(this.chameleon.getPlatformPlugin(), this);
     }
 
     /**
@@ -68,7 +86,7 @@ public final class VelocityListener {
      */
     @Subscribe
     public void onPostLoginEvent(@NotNull PostLoginEvent event) {
-        User user = this.chameleon.getUserManager().wrap(event.getPlayer());
+        User user = this.chameleon.getUserManager().wrapUser(event.getPlayer());
         UserConnectEvent chameleonEvent = new UserConnectEvent(user, false);
 
         this.chameleon.getEventBus().dispatch(chameleonEvent);
@@ -87,7 +105,7 @@ public final class VelocityListener {
         boolean immutable = event.getPlayer().getProtocolVersion()
             .compareTo(ProtocolVersion.MINECRAFT_1_19_1) >= 0;
         UserChatEvent chameleonEvent = new UserChatEvent(
-            this.chameleon.getUserManager().wrap(event.getPlayer()),
+            this.chameleon.getUserManager().wrapUser(event.getPlayer()),
             event.getMessage(),
             !event.getResult().isAllowed(),
             immutable, immutable
@@ -121,7 +139,7 @@ public final class VelocityListener {
     @Subscribe
     public void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
         this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(
-            this.chameleon.getUserManager().wrap(event.getPlayer())));
+            this.chameleon.getUserManager().wrapUser(event.getPlayer())));
     }
 
     /**
@@ -132,7 +150,7 @@ public final class VelocityListener {
     @Subscribe
     public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
         this.chameleon.getEventBus().dispatch(new ProxyUserSwitchEvent(
-            this.chameleon.getUserManager().wrap(event.getPlayer()),
+            (ProxyUser) this.chameleon.getUserManager().wrapUser(event.getPlayer()),
             event.getPreviousServer().map(this::wrap).orElse(null),
             wrap(event.getServer())
         ));
