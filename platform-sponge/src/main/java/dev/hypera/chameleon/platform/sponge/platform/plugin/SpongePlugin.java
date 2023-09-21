@@ -116,7 +116,7 @@ public final class SpongePlugin implements PlatformPlugin {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Path getDataFolder() {
+    public @NotNull Path getDataDirectory() {
         // This is probably the best we can do
         return Sponge.game().gameDirectory().resolve("mods")
             .resolve(this.plugin.metadata().id());
