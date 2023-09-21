@@ -87,11 +87,11 @@ public interface PlatformPlugin {
     @NotNull Collection<String> getSoftDependencies();
 
     /**
-     * Get the data folder of this plugin.
+     * Get the data directory of this plugin.
      *
-     * @return data folder.
+     * @return data directory.
      */
-    @NotNull Path getDataFolder();
+    @NotNull Path getDataDirectory();
 
     /**
      * Attempt to enable this plugin.

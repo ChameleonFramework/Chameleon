@@ -114,7 +114,7 @@ public final class BungeeCordPlugin implements PlatformPlugin {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Path getDataFolder() {
+    public @NotNull Path getDataDirectory() {
         return this.plugin.getDataFolder().toPath().toAbsolutePath();
     }
 

@@ -117,7 +117,7 @@ public final class VelocityPlugin implements PlatformPlugin {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Path getDataFolder() {
+    public @NotNull Path getDataDirectory() {
         return Paths.get("plugins", this.plugin.getDescription().getId());
     }
 
