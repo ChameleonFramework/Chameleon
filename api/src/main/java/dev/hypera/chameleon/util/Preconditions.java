@@ -43,7 +43,7 @@ import org.jetbrains.annotations.Nullable;
 public final class Preconditions {
 
     private Preconditions() {
-
+        throw new UnsupportedOperationException("Preconditions is a utility class and cannot be instantiated");
     }
 
     /**
