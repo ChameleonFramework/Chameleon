@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.util;
+package dev.hypera.chameleon.platform.util;
 
 import dev.hypera.chameleon.logger.ChameleonLogger;
 import org.jetbrains.annotations.ApiStatus.Internal;

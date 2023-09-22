@@ -27,9 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import java.util.Collections;
+import java.util.regex.Pattern;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 final class PreconditionsTests {
+
+    private static final @NotNull Pattern TEST_PATTERN = Pattern.compile("value[0-9]?");
 
     @Test
     void checkArgument() {
@@ -39,9 +43,9 @@ final class PreconditionsTests {
         assertThrowsExactly(IllegalArgumentException.class, () ->
             Preconditions.checkArgument(false));
         assertThrowsExactly(IllegalArgumentException.class, () ->
-            Preconditions.checkArgument(false, "test"), "test");
+            Preconditions.checkArgument(false, "test"));
         assertThrowsExactly(IllegalArgumentException.class, () ->
-            Preconditions.checkArgument(false, "Hello, %s!", "world"), "Hello, world!");
+            Preconditions.checkArgument(false, "Hello, %s!", "world"));
     }
 
     @Test
@@ -52,31 +56,55 @@ final class PreconditionsTests {
         assertThrowsExactly(IllegalStateException.class, () ->
             Preconditions.checkState(false));
         assertThrowsExactly(IllegalStateException.class, () ->
-            Preconditions.checkState(false, "test"), "test");
+            Preconditions.checkState(false, "test"));
         assertThrowsExactly(IllegalStateException.class, () ->
-            Preconditions.checkState(false, "Hello, %s!", "world"), "Hello, world!");
+            Preconditions.checkState(false, "Hello, %s!", "world"));
     }
 
     @Test
     void checkNotNull() {
         assertDoesNotThrow(() -> Preconditions.checkNotNull("value"));
-        assertDoesNotThrow(() -> Preconditions.checkNotNull("value", "test"));
-        assertDoesNotThrow(() -> Preconditions.checkNotNullState("value", "test"));
+        assertDoesNotThrow(() -> Preconditions.checkNotNull("test", "value"));
+        assertDoesNotThrow(() -> Preconditions.checkNotNullState("test", "value"));
         assertThrowsExactly(NullPointerException.class, () ->
             Preconditions.checkNotNull(null));
         assertThrowsExactly(IllegalArgumentException.class, () ->
-            Preconditions.checkNotNull("test", null), "test");
+            Preconditions.checkNotNull("test", null));
         assertThrowsExactly(IllegalStateException.class, () ->
-            Preconditions.checkNotNullState("test", null), "test");
+            Preconditions.checkNotNullState("test", null));
+    }
+
+    @Test
+    void checkNotNullOrEmpty() {
+        assertDoesNotThrow(() -> Preconditions.checkNotNullOrEmpty("value"));
+        assertDoesNotThrow(() -> Preconditions.checkNotNullOrEmpty("test", "value"));
+        assertThrowsExactly(IllegalArgumentException.class, () ->
+            Preconditions.checkNotNullOrEmpty(null));
+        assertThrowsExactly(IllegalArgumentException.class, () ->
+            Preconditions.checkNotNullOrEmpty(""));
+        assertThrowsExactly(IllegalArgumentException.class, () ->
+            Preconditions.checkNotNullOrEmpty("test", null));
+        assertThrowsExactly(IllegalArgumentException.class, () ->
+            Preconditions.checkNotNullOrEmpty("test", ""));
     }
 
     @Test
     void checkNoneNull() {
         assertDoesNotThrow(() -> Preconditions.checkNoneNull("test", Collections.emptySet()));
         assertThrowsExactly(IllegalArgumentException.class, () ->
-            Preconditions.checkNoneNull("test", null), "test cannot be null");
+            Preconditions.checkNoneNull("test", null));
         assertThrowsExactly(IllegalArgumentException.class, () ->
-            Preconditions.checkNoneNull("test", Collections.singleton(null)), "test cannot contain null");
+            Preconditions.checkNoneNull("test", Collections.singleton(null)));
+    }
+
+    @Test
+    void checkMatches() {
+        assertDoesNotThrow(() -> Preconditions.checkMatches("test", TEST_PATTERN, "value"));
+        assertDoesNotThrow(() -> Preconditions.checkMatches("test", TEST_PATTERN, "value2"));
+        assertThrowsExactly(IllegalArgumentException.class, () ->
+            Preconditions.checkMatches("test", TEST_PATTERN, null));
+        assertThrowsExactly(IllegalArgumentException.class, () ->
+            Preconditions.checkMatches("test", TEST_PATTERN, "notvalue"));
     }
 
 }

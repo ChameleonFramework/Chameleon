@@ -37,11 +37,11 @@ import dev.hypera.chameleon.event.common.UserDisconnectEvent;
 import dev.hypera.chameleon.event.proxy.ProxyUserSwitchEvent;
 import dev.hypera.chameleon.platform.event.PlatformEventDispatcher;
 import dev.hypera.chameleon.platform.proxy.Server;
+import dev.hypera.chameleon.platform.util.PlatformEventUtil;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityServer;
 import dev.hypera.chameleon.user.ProxyUser;
 import dev.hypera.chameleon.user.User;
-import dev.hypera.chameleon.util.PlatformEventUtil;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 

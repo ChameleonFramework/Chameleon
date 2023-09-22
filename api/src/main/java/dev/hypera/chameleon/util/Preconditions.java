@@ -251,8 +251,9 @@ public final class Preconditions {
      * @return {@code value}.
      * @throws IllegalArgumentException if the given {@code value} does not match the given pattern.
      */
-    @Contract("_, _, _ -> param3")
-    public static @NotNull String checkMatches(@NotNull String name, @NotNull Pattern regex, @NotNull String value) {
+    @Contract("_, _, null -> fail; _, _, _ -> param3")
+    public static @NotNull String checkMatches(@NotNull String name, @NotNull Pattern regex, @Nullable String value) {
+        Preconditions.checkNotNull(name, value);
         if (!regex.matcher(value).matches()) {
             throw new IllegalArgumentException(name.concat(" must match ").concat(regex.pattern()));
         }

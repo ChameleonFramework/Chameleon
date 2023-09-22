@@ -48,9 +48,7 @@ final class MetadataKeyImpl<V> implements MetadataKey<V> {
 
     MetadataKeyImpl(@NotNull Class<V> type, @NotNull String namespace, @NotNull String value) {
         Preconditions.checkNotNull("type", type);
-        Preconditions.checkNotNullOrEmpty("namespace", namespace);
         Preconditions.checkMatches("namespace", NAMESPACE_PATTERN, namespace);
-        Preconditions.checkNotNullOrEmpty("value", value);
         Preconditions.checkMatches("value", VALUE_PATTERN, value);
         this.type = type;
         this.namespace = namespace;
