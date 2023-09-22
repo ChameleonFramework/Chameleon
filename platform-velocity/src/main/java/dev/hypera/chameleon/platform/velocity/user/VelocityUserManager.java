@@ -24,6 +24,9 @@
 package dev.hypera.chameleon.platform.velocity.user;
 
 import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.event.PostOrder;
+import com.velocitypowered.api.event.connection.DisconnectEvent;
+import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.proxy.Player;
 import dev.hypera.chameleon.platform.user.PlatformUserManager;
 import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
@@ -48,6 +51,14 @@ public final class VelocityUserManager extends PlatformUserManager<Player, Veloc
     public VelocityUserManager(@NotNull VelocityChameleon chameleon) {
         this.chameleon = chameleon;
         this.playerReflection = new PlayerReflection(this.chameleon.getAdventureMapper().getComponentMapper());
+        chameleon.getPlatformPlugin().getServer().getEventManager().register(
+            chameleon.getPlatformPlugin(), PostLoginEvent.class, PostOrder.EARLY,
+            event -> addUser(event.getPlayer().getUniqueId(), event.getPlayer())
+        );
+        chameleon.getPlatformPlugin().getServer().getEventManager().register(
+            chameleon.getPlatformPlugin(), DisconnectEvent.class, PostOrder.LATE,
+            event -> removeUser(event.getPlayer().getUniqueId())
+        );
     }
 
     /**
