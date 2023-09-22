@@ -1,7 +1,5 @@
 ### IntelliJ
 .idea/
-!.idea/codeStyles
-!.idea/runConfigurations
 !.idea/copyright
 *.iml
 *.ipr
