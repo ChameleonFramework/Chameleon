@@ -31,6 +31,9 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+import org.spongepowered.api.event.EventListenerRegistration;
+import org.spongepowered.api.event.Order;
+import org.spongepowered.api.event.network.ServerSideConnectionEvent;
 import org.spongepowered.api.service.permission.Subject;
 
 /**
@@ -51,6 +54,18 @@ public final class SpongeUserManager extends PlatformUserManager<ServerPlayer, S
         this.chameleon = chameleon;
         this.playerReflection = new PlayerReflection(this.chameleon.getAdventureMapper()
             .getComponentMapper());
+        Sponge.eventManager().registerListener(
+            EventListenerRegistration.builder(ServerSideConnectionEvent.Join.class)
+                .plugin(chameleon.getPlatformPlugin().getPluginContainer())
+                .listener(event -> addUser(event.player().uniqueId(), event.player()))
+                .order(Order.EARLY).build()
+        );
+        Sponge.eventManager().registerListener(
+            EventListenerRegistration.builder(ServerSideConnectionEvent.Disconnect.class)
+                .plugin(chameleon.getPlatformPlugin().getPluginContainer())
+                .listener(event -> removeUser(event.player().uniqueId()))
+                .order(Order.LATE).build()
+        );
     }
 
     /**
