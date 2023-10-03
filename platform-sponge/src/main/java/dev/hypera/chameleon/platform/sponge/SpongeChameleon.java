@@ -102,8 +102,8 @@ public final class SpongeChameleon extends PlatformChameleon<SpongePlugin> {
      */
     @Override
     public void onEnable() {
-        this.eventDispatcher.registerListeners();
         this.userManager.registerListeners();
+        this.eventDispatcher.registerListeners();
         super.onEnable();
     }
 
