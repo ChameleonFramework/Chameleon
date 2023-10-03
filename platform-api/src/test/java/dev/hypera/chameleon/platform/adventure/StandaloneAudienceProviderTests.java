@@ -38,7 +38,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
-final class StandaloneAudienceProviderTests {
+final class StandaloneAudienceProviderTests implements AudienceProviderTests {
 
     private static final @NotNull MetadataKey<Boolean> TEST = MetadataKey.bool("test");
 
@@ -46,21 +46,24 @@ final class StandaloneAudienceProviderTests {
     private final @NotNull StandaloneAudienceProvider audienceProvider = new StandaloneAudienceProvider(this.userManager);
 
     @Test
-    void testAll() {
+    @Override
+    public void testAll() {
         // #all() should return a non-null non-empty Audience
         assertNotNull(this.audienceProvider.all());
         assertNotEquals(Audience.empty(), this.audienceProvider.all());
     }
 
     @Test
-    void testConsole() {
+    @Override
+    public void testConsole() {
         // #console() should return a non-null non-empty Audience
         assertNotNull(this.audienceProvider.console());
         assertNotEquals(Audience.empty(), this.audienceProvider.console());
     }
 
     @Test
-    void testPlayers() {
+    @Override
+    public void testPlayers() {
         // Add two random users
         this.userManager.addTestUser(UUID.randomUUID());
         this.userManager.addTestUser(UUID.randomUUID());
@@ -72,7 +75,8 @@ final class StandaloneAudienceProviderTests {
     }
 
     @Test
-    void testPlayer() {
+    @Override
+    public void testPlayer() {
         // Add a random user
         UUID id = UUID.randomUUID();
         this.userManager.addTestUser(id);
@@ -88,7 +92,8 @@ final class StandaloneAudienceProviderTests {
     }
 
     @Test
-    void testFilter() {
+    @Override
+    public void testFilter() {
         // Add one user with TEST=true and one without
         UUID id = UUID.randomUUID();
         this.userManager.addTestUser(id);
@@ -104,7 +109,8 @@ final class StandaloneAudienceProviderTests {
     }
 
     @Test
-    void testPermission() {
+    @Override
+    public void testPermission() {
         // Add one user that will return true in PermissionHolder#hasPermission(String), and another
         // user that will return false
         this.userManager.addTestUser(UUID.randomUUID());
@@ -119,7 +125,8 @@ final class StandaloneAudienceProviderTests {
     }
 
     @Test
-    void testWorld() {
+    @Override
+    public void testWorld() {
         // #world(Key) should currently return #all()
         // When worlds are implemented for ServerUsers, this behaviour should be changed to filter
         // all online server users correctly.
@@ -127,7 +134,8 @@ final class StandaloneAudienceProviderTests {
     }
 
     @Test
-    void testServer() {
+    @Override
+    public void testServer() {
         // Add random users, one on the server "test", one with a null server, one non-proxy user
         this.userManager.addTestUser(new PlatformPlayer(UUID.randomUUID(), "Bob", false, "test"));
         this.userManager.addTestUser(new PlatformPlayer(UUID.randomUUID(), "Alice", false, "test2"));
@@ -143,13 +151,15 @@ final class StandaloneAudienceProviderTests {
     }
 
     @Test
-    void testFlattener() {
+    @Override
+    public void testFlattener() {
         // #flattener() should return a non-null (normally basic) flattener
         assertNotNull(this.audienceProvider.flattener());
     }
 
     @Test
-    void testClose() {
+    @Override
+    public void testClose() {
         // #close() should be no-op, and not throw any exception
         assertDoesNotThrow(this.audienceProvider::close);
     }

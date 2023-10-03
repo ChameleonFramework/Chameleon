@@ -45,7 +45,7 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-final class PlatformAudienceProviderTests {
+final class PlatformAudienceProviderTests implements AudienceProviderTests {
 
     private final @NotNull PlatformAudienceProviderImpl audienceProvider = new PlatformAudienceProviderImpl();
     private AudienceProvider underlyingProvider = mock(AudienceProvider.class);
@@ -57,7 +57,8 @@ final class PlatformAudienceProviderTests {
     }
 
     @Test
-    void testAll() {
+    @Override
+    public void testAll() {
         // #all() should return Audience#empty() when the underlying audience provider
         // is unavailable
         assertEquals(Audience.empty(), this.audienceProvider.all());
@@ -73,7 +74,8 @@ final class PlatformAudienceProviderTests {
     }
 
     @Test
-    void testConsole() {
+    @Override
+    public void testConsole() {
         // #console() should return Audience#empty() when the underlying audience provider
         // is unavailable
         assertEquals(Audience.empty(), this.audienceProvider.console());
@@ -89,7 +91,8 @@ final class PlatformAudienceProviderTests {
     }
 
     @Test
-    void testPlayers() {
+    @Override
+    public void testPlayers() {
         // #players() should return Audience#empty() when the underlying audience provider
         // is unavailable
         assertEquals(Audience.empty(), this.audienceProvider.players());
@@ -105,7 +108,8 @@ final class PlatformAudienceProviderTests {
     }
 
     @Test
-    void testPlayer() {
+    @Override
+    public void testPlayer() {
         UUID id = UUID.randomUUID();
 
         // #player(UUID) should return Audience#empty() when the underlying audience provider
@@ -123,7 +127,8 @@ final class PlatformAudienceProviderTests {
     }
 
     @Test
-    void testPermission() {
+    @Override
+    public void testPermission() {
         // #permission(String) should return Audience#empty() when the underlying audience
         // provider is unavailable
         assertEquals(Audience.empty(), this.audienceProvider.permission("chameleon.test"));
@@ -141,7 +146,8 @@ final class PlatformAudienceProviderTests {
     }
 
     @Test
-    void testWorld() {
+    @Override
+    public void testWorld() {
         Key key = Key.key("chameleon:test");
 
         // #world(Key) should return Audience#empty() when the underlying audience provider
@@ -159,7 +165,8 @@ final class PlatformAudienceProviderTests {
     }
 
     @Test
-    void testServer() {
+    @Override
+    public void testServer() {
         // #server(String) should return Audience#empty() when the underlying audience provider
         // is unavailable
         assertEquals(Audience.empty(), this.audienceProvider.server("test"));
@@ -176,7 +183,8 @@ final class PlatformAudienceProviderTests {
     }
 
     @Test
-    void testFlattener() {
+    @Override
+    public void testFlattener() {
         // #flattener() should return ComponentFlattener#basic() when the underlying audience
         // provider is unavailable
         assertEquals(ComponentFlattener.basic(), this.audienceProvider.flattener());
@@ -191,7 +199,8 @@ final class PlatformAudienceProviderTests {
     }
 
     @Test
-    void testClose() {
+    @Override
+    public void testClose() {
         // #close() should be no-op when the underlying audience provider is unavailable
         assertDoesNotThrow(this.audienceProvider::close);
 
