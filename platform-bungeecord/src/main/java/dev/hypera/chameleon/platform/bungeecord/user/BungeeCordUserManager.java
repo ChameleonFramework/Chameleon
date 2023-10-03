@@ -59,7 +59,7 @@ public final class BungeeCordUserManager extends PlatformUserManager<ProxiedPlay
      */
     public void registerListeners() {
         this.chameleon.getPlatformPlugin().getProxy().getPluginManager()
-            .registerListener(chameleon.getPlatformPlugin(), this.listener);
+            .registerListener(this.chameleon.getPlatformPlugin(), this.listener);
     }
 
     /**

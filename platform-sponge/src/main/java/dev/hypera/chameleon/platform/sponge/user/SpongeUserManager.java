@@ -31,7 +31,6 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
-import org.spongepowered.api.event.EventListenerRegistration;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.network.ServerSideConnectionEvent;
 import org.spongepowered.api.service.permission.Subject;
@@ -43,6 +42,7 @@ public final class SpongeUserManager extends PlatformUserManager<ServerPlayer, S
 
     private final @NotNull SpongeChameleon chameleon;
     private final @NotNull PlayerReflection playerReflection;
+    private final @NotNull SpongeUserManager.Listener listener = new SpongeUserManager.Listener();
 
     /**
      * Sponge user manager constructor.
@@ -54,18 +54,23 @@ public final class SpongeUserManager extends PlatformUserManager<ServerPlayer, S
         this.chameleon = chameleon;
         this.playerReflection = new PlayerReflection(this.chameleon.getAdventureMapper()
             .getComponentMapper());
-        Sponge.eventManager().registerListener(
-            EventListenerRegistration.builder(ServerSideConnectionEvent.Join.class)
-                .plugin(chameleon.getPlatformPlugin().getPluginContainer())
-                .listener(event -> addUser(event.player().uniqueId(), event.player()))
-                .order(Order.EARLY).build()
+    }
+
+    /**
+     * Registers the platform listeners.
+     */
+    public void registerListeners() {
+        Sponge.eventManager().registerListeners(
+            this.chameleon.getPlatformPlugin().getPluginContainer(),
+            this.listener
         );
-        Sponge.eventManager().registerListener(
-            EventListenerRegistration.builder(ServerSideConnectionEvent.Disconnect.class)
-                .plugin(chameleon.getPlatformPlugin().getPluginContainer())
-                .listener(event -> removeUser(event.player().uniqueId()))
-                .order(Order.LATE).build()
-        );
+    }
+
+    /**
+     * Unregisters the platform listeners.
+     */
+    public void unregisterListeners() {
+        Sponge.eventManager().unregisterListeners(this.listener);
     }
 
     /**
@@ -109,6 +114,25 @@ public final class SpongeUserManager extends PlatformUserManager<ServerPlayer, S
             return getConsole();
         }
         throw new IllegalArgumentException("cannot return a chat user representing the given object");
+    }
+
+    /**
+     * Sponge platform listener.
+     */
+    @Internal
+    @SuppressWarnings("unused")
+    private final class Listener {
+
+        @org.spongepowered.api.event.Listener(order = Order.EARLY)
+        public void onJoinEvent(@NotNull ServerSideConnectionEvent.Join event) {
+            addUser(event.player().uniqueId(), event.player());
+        }
+
+        @org.spongepowered.api.event.Listener(order = Order.LATE)
+        public void onDisconnectEvent(@NotNull ServerSideConnectionEvent.Disconnect event) {
+            removeUser(event.player().uniqueId());
+        }
+
     }
 
 }
