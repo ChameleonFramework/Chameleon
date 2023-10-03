@@ -26,8 +26,12 @@ package dev.hypera.chameleon.platform.nukkit.user;
 import cn.nukkit.Player;
 import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.event.EventPriority;
+import cn.nukkit.event.HandlerList;
+import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
+import cn.nukkit.plugin.PluginBase;
+import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.nukkit.event.NukkitEventDispatcher;
 import dev.hypera.chameleon.platform.user.PlatformUserManager;
 import dev.hypera.chameleon.user.ChatUser;
@@ -38,23 +42,39 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Nukkit user manager implementation.
  */
-public final class NukkitUserManager extends PlatformUserManager<Player, NukkitUser> {
+public final class NukkitUserManager extends PlatformUserManager<Player, NukkitUser> implements Listener {
+
+    private final @NotNull PlatformChameleon<PluginBase> chameleon;
 
     /**
      * Nukkit user manager constructor.
      *
-     * @param eventDispatcher Nukkit event dispatcher.
+     * @param chameleon Platform Chameleon instance.
      */
     @Internal
-    public NukkitUserManager(@NotNull NukkitEventDispatcher eventDispatcher) {
-        eventDispatcher.registerListener(
-            PlayerJoinEvent.class, EventPriority.LOW,
+    public NukkitUserManager(@NotNull PlatformChameleon<PluginBase> chameleon) {
+        this.chameleon = chameleon;
+    }
+
+    /**
+     * Registers the platform listeners.
+     */
+    public void registerListeners() {
+        NukkitEventDispatcher.registerListener(
+            this.chameleon, this, PlayerJoinEvent.class, EventPriority.LOW,
             event -> addUser(event.getPlayer().getUniqueId(), event.getPlayer())
         );
-        eventDispatcher.registerListener(
-            PlayerQuitEvent.class, EventPriority.MONITOR,
+        NukkitEventDispatcher.registerListener(
+            this.chameleon, this, PlayerQuitEvent.class, EventPriority.MONITOR,
             event -> removeUser(event.getPlayer().getUniqueId())
         );
+    }
+
+    /**
+     * Unregisters the platform listeners.
+     */
+    public void unregisterListeners() {
+        HandlerList.unregisterAll(this);
     }
 
     /**

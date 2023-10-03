@@ -54,7 +54,7 @@ public final class NukkitChameleon extends PlatformChameleon<PluginBase> {
     private final @NotNull NukkitCommandManager commandManager = new NukkitCommandManager(this);
     private final @NotNull NukkitPluginManager pluginManager = new NukkitPluginManager();
     private final @NotNull NukkitEventDispatcher eventDispatcher = new NukkitEventDispatcher(this);
-    private final @NotNull NukkitUserManager userManager = new NukkitUserManager(this.eventDispatcher);
+    private final @NotNull NukkitUserManager userManager = new NukkitUserManager(this);
     private final @NotNull NukkitScheduler scheduler = new NukkitScheduler(this);
     private final @NotNull ChameleonAudienceProvider audienceProvider = new StandaloneAudienceProvider(this.userManager);
 
@@ -86,6 +86,7 @@ public final class NukkitChameleon extends PlatformChameleon<PluginBase> {
      */
     @Override
     public void onEnable() {
+        this.userManager.registerListeners();
         this.eventDispatcher.registerListeners();
         super.onEnable();
     }
@@ -98,6 +99,7 @@ public final class NukkitChameleon extends PlatformChameleon<PluginBase> {
         super.onDisable();
         this.audienceProvider.close();
         this.eventDispatcher.unregisterListeners();
+        this.userManager.unregisterListeners();
         this.userManager.close();
     }
 

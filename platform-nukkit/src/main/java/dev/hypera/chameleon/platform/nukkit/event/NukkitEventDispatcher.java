@@ -26,6 +26,7 @@ package dev.hypera.chameleon.platform.nukkit.event;
 import cn.nukkit.Player;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.EventPriority;
+import cn.nukkit.event.HandlerList;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerChatEvent;
 import cn.nukkit.event.player.PlayerJoinEvent;
@@ -74,7 +75,7 @@ public final class NukkitEventDispatcher extends PlatformEventDispatcher impleme
         PlatformUserManager<Player, NukkitUser> userManager = (NukkitUserManager) this.chameleon.getUserManager();
 
         // Connect event
-        registerListener(PlayerJoinEvent.class, EventPriority.NORMAL, event -> {
+        registerListener(this.chameleon, this, PlayerJoinEvent.class, EventPriority.NORMAL, event -> {
             User user = userManager.wrapUser(event.getPlayer());
             UserConnectEvent chameleonEvent = dispatch(new UserConnectEvent(user, false));
 
@@ -85,7 +86,7 @@ public final class NukkitEventDispatcher extends PlatformEventDispatcher impleme
         });
 
         // Chat event
-        registerListener(PlayerChatEvent.class, EventPriority.NORMAL, false, event -> {
+        registerListener(this.chameleon, this, PlayerChatEvent.class, EventPriority.NORMAL, false, event -> {
             UserChatEvent chameleonEvent = dispatch(new UserChatEvent(
                 userManager.wrapUser(event.getPlayer()),
                 event.getMessage(), event.isCancelled(),
@@ -103,11 +104,11 @@ public final class NukkitEventDispatcher extends PlatformEventDispatcher impleme
         });
 
         // Disconnect event
-        registerListener(PlayerQuitEvent.class, EventPriority.NORMAL, event ->
+        registerListener(this.chameleon, this, PlayerQuitEvent.class, EventPriority.NORMAL, event ->
             dispatch(new UserDisconnectEvent(userManager.wrapUser(event.getPlayer()))));
 
         // Kick event
-        registerListener(PlayerKickEvent.class, EventPriority.NORMAL, event ->
+        registerListener(this.chameleon, this, PlayerKickEvent.class, EventPriority.NORMAL, event ->
             dispatch(new ServerUserKickEvent(
                 (ServerUser) userManager.wrapUser(event.getPlayer()),
                 LegacyComponentSerializer.legacySection().deserialize(event.getReason())
@@ -115,39 +116,65 @@ public final class NukkitEventDispatcher extends PlatformEventDispatcher impleme
     }
 
     /**
-     * Registers an event listener with a handler callback.
-     *
-     * <p>Cancelled events will be ignored. To receive cancelled events, see
-     * {@link #registerListener(Class, EventPriority, boolean, Consumer)}.</p>
-     *
-     * @param type     Bukkit event type.
-     * @param priority Bukkit listener priority.
-     * @param listener Listener callback.
-     * @param <T>      Bukkit event type.
-     *
-     * @see #registerListener(Class, EventPriority, boolean, Consumer)
+     * {@inheritDoc}
      */
-    @Internal
-    public <T extends Event> void registerListener(@NotNull Class<T> type, @NotNull EventPriority priority, @NotNull Consumer<T> listener) {
-        registerListener(type, priority, true, listener);
+    @Override
+    public void unregisterListeners() {
+        HandlerList.unregisterAll(this);
     }
 
     /**
      * Registers an event listener with a handler callback.
      *
-     * @param type            Bukkit event type.
-     * @param priority        Bukkit listener priority.
+     * <p>Cancelled events will be ignored. To receive cancelled events, see
+     * {@link #registerListener(PlatformChameleon, Listener, Class, EventPriority, boolean,
+     * Consumer)}.</p>
+     *
+     * @param chameleon Chameleon.
+     * @param listener  Listener object.
+     * @param type      Nukkit event type.
+     * @param priority  Nukkit listener priority.
+     * @param handler   Listener handler callback.
+     * @param <T>       Nukkit event type.
+     *
+     * @see #registerListener(PlatformChameleon, Listener, Class, EventPriority, boolean, Consumer)
+     */
+    @Internal
+    public static <T extends Event> void registerListener(
+        @NotNull PlatformChameleon<PluginBase> chameleon,
+        @NotNull Listener listener,
+        @NotNull Class<T> type,
+        @NotNull EventPriority priority,
+        @NotNull Consumer<T> handler
+    ) {
+        registerListener(chameleon, listener, type, priority, true, handler);
+    }
+
+    /**
+     * Registers an event listener with a handler callback.
+     *
+     * @param chameleon       Chameleon.
+     * @param listener        Listener object.
+     * @param type            Nukkit event type.
+     * @param priority        Nukkit listener priority.
      * @param ignoreCancelled Whether to ignore cancelled events.
-     * @param listener        Listener callback.
-     * @param <T>             Bukkit event type.
+     * @param handler         Listener handler callback.
+     * @param <T>             Nukkit event type.
      */
     @Internal
     @SuppressWarnings("unchecked")
-    public <T extends Event> void registerListener(@NotNull Class<T> type, @NotNull EventPriority priority, boolean ignoreCancelled, @NotNull Consumer<T> listener) {
-        this.chameleon.getPlatformPlugin().getServer().getPluginManager().registerEvent(type,
-            this, priority,
-            (l, event) -> listener.accept((T) event),
-            this.chameleon.getPlatformPlugin(), ignoreCancelled
+    public static <T extends Event> void registerListener(
+        @NotNull PlatformChameleon<PluginBase> chameleon,
+        @NotNull Listener listener,
+        @NotNull Class<T> type,
+        @NotNull EventPriority priority,
+        boolean ignoreCancelled,
+        @NotNull Consumer<T> handler
+    ) {
+        chameleon.getPlatformPlugin().getServer().getPluginManager().registerEvent(
+            type, listener, priority,
+            (l, event) -> handler.accept((T) event),
+            chameleon.getPlatformPlugin(), ignoreCancelled
         );
     }
 

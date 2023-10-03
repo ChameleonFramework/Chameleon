@@ -60,7 +60,7 @@ public final class BukkitEventDispatcher extends PlatformEventDispatcher impleme
     /**
      * Bukkit event dispatcher constructor.
      *
-     * @param chameleon The platform chameleon instance.
+     * @param chameleon Platform Chameleon instance.
      */
     @Internal
     public BukkitEventDispatcher(@NotNull PlatformChameleon<JavaPlugin> chameleon) {
