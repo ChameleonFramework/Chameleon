@@ -42,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 public final class BungeeCordUserManager extends PlatformUserManager<ProxiedPlayer, BungeeCordUser> {
 
     private final @NotNull BungeeCordChameleon chameleon;
+    private final @NotNull BungeeCordUserManager.Listener listener = new BungeeCordUserManager.Listener();
 
     /**
      * BungeeCord user manager constructor.
@@ -51,8 +52,22 @@ public final class BungeeCordUserManager extends PlatformUserManager<ProxiedPlay
     @Internal
     public BungeeCordUserManager(@NotNull BungeeCordChameleon chameleon) {
         this.chameleon = chameleon;
-        chameleon.getPlatformPlugin().getProxy().getPluginManager()
-            .registerListener(chameleon.getPlatformPlugin(), new BungeeCordUserManager.Listener());
+    }
+
+    /**
+     * Registers the platform listeners.
+     */
+    public void registerListeners() {
+        this.chameleon.getPlatformPlugin().getProxy().getPluginManager()
+            .registerListener(chameleon.getPlatformPlugin(), this.listener);
+    }
+
+    /**
+     * Unregisters the platform listeners.
+     */
+    public void unregisterListeners() {
+        this.chameleon.getPlatformPlugin().getProxy().getPluginManager()
+            .unregisterListener(this.listener);
     }
 
     /**

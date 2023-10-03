@@ -87,6 +87,7 @@ public final class BungeeCordChameleon extends PlatformChameleon<Plugin> {
     @Override
     public void onEnable() {
         this.audienceProvider.init(this.plugin);
+        this.userManager.registerListeners();
         this.eventDispatcher.registerListeners();
         super.onEnable();
     }
@@ -99,6 +100,7 @@ public final class BungeeCordChameleon extends PlatformChameleon<Plugin> {
         super.onDisable();
         this.audienceProvider.close();
         this.eventDispatcher.unregisterListeners();
+        this.userManager.unregisterListeners();
         this.userManager.close();
     }
 
