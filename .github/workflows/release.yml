@@ -66,6 +66,11 @@ jobs:
           echo "type=$TYPE" >> "$GITHUB_OUTPUT"
           echo "Detected $TYPE version"
 
+      - name: "Set up Indra"
+        run: |
+          # Indra only publishes release versions if HEAD is tagged
+          git tag -a "v$VERSION" HEAD -m "v$VERSION"
+
       - name: "Publish artifacts"
         uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a # v2
         with:
