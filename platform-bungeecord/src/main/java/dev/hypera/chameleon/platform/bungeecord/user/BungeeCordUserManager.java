@@ -24,36 +24,30 @@
 package dev.hypera.chameleon.platform.bungeecord.user;
 
 import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
+import dev.hypera.chameleon.platform.user.PlatformUserManager;
 import dev.hypera.chameleon.user.ChatUser;
 import dev.hypera.chameleon.user.ConsoleUser;
-import dev.hypera.chameleon.user.ProxyUser;
-import dev.hypera.chameleon.user.User;
-import dev.hypera.chameleon.user.UserManager;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
+import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * BungeeCord user manager implementation.
+ * BungeeCord user manager.
  */
-@Internal
-public final class BungeeCordUserManager implements UserManager {
+public final class BungeeCordUserManager extends PlatformUserManager<ProxiedPlayer, BungeeCordUser> {
 
     private final @NotNull BungeeCordChameleon chameleon;
-
-    private @Nullable BungeeCordConsoleUser consoleUser;
+    private final @NotNull BungeeCordUserManager.Listener listener = new BungeeCordUserManager.Listener();
 
     /**
      * BungeeCord user manager constructor.
      *
-     * @param chameleon BungeeCord Chameleon implementation.
+     * @param chameleon BungeeCord Chameleon.
      */
     @Internal
     public BungeeCordUserManager(@NotNull BungeeCordChameleon chameleon) {
@@ -61,59 +55,69 @@ public final class BungeeCordUserManager implements UserManager {
     }
 
     /**
+     * Registers the platform listeners.
+     */
+    public void registerListeners() {
+        this.chameleon.getPlatformPlugin().getProxy().getPluginManager()
+            .registerListener(this.chameleon.getPlatformPlugin(), this.listener);
+    }
+
+    /**
+     * Unregisters the platform listeners.
+     */
+    public void unregisterListeners() {
+        this.chameleon.getPlatformPlugin().getProxy().getPluginManager()
+            .unregisterListener(this.listener);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull ConsoleUser getConsole() {
-        if (this.consoleUser == null) {
-            this.consoleUser = new BungeeCordConsoleUser(this.chameleon);
+    protected @NotNull ConsoleUser createConsoleUser() {
+        return new BungeeCordConsoleUser(this.chameleon.getAdventure().console());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected @NotNull BungeeCordUser createUser(@NotNull ProxiedPlayer proxiedPlayer) {
+        return new BungeeCordUser(this.chameleon, proxiedPlayer);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Internal
+    @Override
+    public @NotNull ChatUser wrap(@NotNull Object obj) {
+        if (obj instanceof ProxiedPlayer) {
+            return getUserOrThrow(((ProxiedPlayer) obj).getUniqueId());
         }
-        return this.consoleUser;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Set<User> getUsers() {
-        return ProxyServer.getInstance().getPlayers().stream()
-            .map(this::wrap).collect(Collectors.toSet());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Optional<User> getUserById(@NotNull UUID id) {
-        return Optional.ofNullable(ProxyServer.getInstance().getPlayer(id)).map(this::wrap);
-    }
-
-    /**
-     * Wrap a BungeeCord ProxiedPlayer.
-     *
-     * @param player ProxiedPlayer to wrap.
-     *
-     * @return user wrapping the given player.
-     */
-    @Internal
-    public @NotNull ProxyUser wrap(@NotNull ProxiedPlayer player) {
-        return new BungeeCordUser(this.chameleon, player);
-    }
-
-    /**
-     * Wrap a command sender.
-     *
-     * @param sender Command sender to wrap.
-     *
-     * @return user wrapping the given command sender.
-     */
-    @Internal
-    public @NotNull ChatUser wrap(@NotNull CommandSender sender) {
-        if (sender instanceof ProxiedPlayer) {
-            return wrap((ProxiedPlayer) sender);
-        } else {
+        if (obj instanceof CommandSender) {
             return getConsole();
         }
+        throw new IllegalArgumentException("cannot return a chat user representing the given object");
+    }
+
+    /**
+     * BungeeCord platform listener.
+     */
+    @Internal
+    @SuppressWarnings("unused")
+    private final class Listener implements net.md_5.bungee.api.plugin.Listener {
+
+        @EventHandler(priority = EventPriority.LOWEST)
+        public void onLogin(@NotNull PostLoginEvent event) {
+            addUser(event.getPlayer().getUniqueId(), event.getPlayer());
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onDisconnect(@NotNull PlayerDisconnectEvent event) {
+            removeUser(event.getPlayer().getUniqueId());
+        }
+
     }
 
 }

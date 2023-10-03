@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.platform.bukkit.user;
 
 import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.platform.user.PlatformChatUser;
 import dev.hypera.chameleon.user.ConsoleUser;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -32,10 +33,9 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Bukkit console user implementation.
+ * Bukkit console user.
  */
-@Internal
-public final class BukkitConsoleUser implements ConsoleUser, ForwardingAudience.Single {
+public final class BukkitConsoleUser extends PlatformChatUser implements ConsoleUser, ForwardingAudience.Single {
 
     private final @NotNull Audience audience;
 
@@ -45,7 +45,7 @@ public final class BukkitConsoleUser implements ConsoleUser, ForwardingAudience.
      * @param chameleon Chameleon implementation.
      */
     @Internal
-    public BukkitConsoleUser(@NotNull Chameleon chameleon) {
+    BukkitConsoleUser(@NotNull Chameleon chameleon) {
         this.audience = chameleon.getAdventure().console();
     }
 

@@ -24,36 +24,32 @@
 package dev.hypera.chameleon.platform.bukkit.user;
 
 import dev.hypera.chameleon.platform.PlatformChameleon;
+import dev.hypera.chameleon.platform.bukkit.event.BukkitEventDispatcher;
+import dev.hypera.chameleon.platform.user.PlatformUserManager;
 import dev.hypera.chameleon.user.ChatUser;
 import dev.hypera.chameleon.user.ConsoleUser;
-import dev.hypera.chameleon.user.ServerUser;
-import dev.hypera.chameleon.user.User;
-import dev.hypera.chameleon.user.UserManager;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * Bukkit user manager implementation.
+ * Bukkit user manager.
  */
-@Internal
-public final class BukkitUserManager implements UserManager {
+public final class BukkitUserManager extends PlatformUserManager<Player, BukkitUser> implements Listener {
 
     private final @NotNull PlatformChameleon<JavaPlugin> chameleon;
-    private @Nullable BukkitConsoleUser consoleUser;
 
     /**
      * Bukkit user manager constructor.
      *
-     * @param chameleon Bukkit Chameleon implementation.
+     * @param chameleon       Bukkit Chameleon.
      */
     @Internal
     public BukkitUserManager(@NotNull PlatformChameleon<JavaPlugin> chameleon) {
@@ -61,58 +57,55 @@ public final class BukkitUserManager implements UserManager {
     }
 
     /**
-     * {@inheritDoc}
+     * Registers the platform listeners.
      */
-    @Override
-    public @NotNull ConsoleUser getConsole() {
-        if (this.consoleUser == null) {
-            this.consoleUser = new BukkitConsoleUser(this.chameleon);
-        }
-        return this.consoleUser;
+    public void registerListeners() {
+        BukkitEventDispatcher.registerListener(
+            this.chameleon, this, PlayerJoinEvent.class, EventPriority.LOW,
+            event -> addUser(event.getPlayer().getUniqueId(), event.getPlayer())
+        );
+        BukkitEventDispatcher.registerListener(
+            this.chameleon, this, PlayerQuitEvent.class, EventPriority.MONITOR,
+            event -> removeUser(event.getPlayer().getUniqueId())
+        );
+    }
+
+    /**
+     * Unregisters the platform listeners.
+     */
+    public void unregisterListeners() {
+        HandlerList.unregisterAll(this);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Collection<User> getUsers() {
-        return Bukkit.getOnlinePlayers().stream().map(this::wrap).collect(Collectors.toSet());
+    protected @NotNull ConsoleUser createConsoleUser() {
+        return new BukkitConsoleUser(this.chameleon);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Optional<User> getUserById(@NotNull UUID id) {
-        return Optional.ofNullable(Bukkit.getPlayer(id)).map(this::wrap);
-    }
-
-    /**
-     * Wrap a Bukkit Player.
-     *
-     * @param player Player to wrap.
-     *
-     * @return user wrapping the given player.
-     */
-    @Internal
-    public @NotNull ServerUser wrap(@NotNull Player player) {
+    protected @NotNull BukkitUser createUser(@NotNull Player player) {
         return new BukkitUser(this.chameleon, player);
     }
 
     /**
-     * Wrap a command sender.
-     *
-     * @param sender Command sender to wrap.
-     *
-     * @return user wrapping the given command sender.
+     * {@inheritDoc}
      */
     @Internal
-    public @NotNull ChatUser wrap(@NotNull CommandSender sender) {
-        if (sender instanceof Player) {
-            return wrap((Player) sender);
-        } else {
+    @Override
+    public @NotNull ChatUser wrap(@NotNull Object obj) {
+        if (obj instanceof Player) {
+            return getUserOrThrow(((Player) obj).getUniqueId());
+        }
+        if (obj instanceof ConsoleCommandSender) {
             return getConsole();
         }
+        throw new IllegalArgumentException("cannot return a chat user representing the given object");
     }
 
 }

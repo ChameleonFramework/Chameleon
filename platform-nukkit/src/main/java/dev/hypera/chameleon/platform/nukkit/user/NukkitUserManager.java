@@ -24,81 +24,87 @@
 package dev.hypera.chameleon.platform.nukkit.user;
 
 import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.ConsoleCommandSender;
+import cn.nukkit.event.EventPriority;
+import cn.nukkit.event.HandlerList;
+import cn.nukkit.event.Listener;
+import cn.nukkit.event.player.PlayerJoinEvent;
+import cn.nukkit.event.player.PlayerQuitEvent;
+import cn.nukkit.plugin.PluginBase;
+import dev.hypera.chameleon.platform.PlatformChameleon;
+import dev.hypera.chameleon.platform.nukkit.event.NukkitEventDispatcher;
+import dev.hypera.chameleon.platform.user.PlatformUserManager;
 import dev.hypera.chameleon.user.ChatUser;
 import dev.hypera.chameleon.user.ConsoleUser;
-import dev.hypera.chameleon.user.ServerUser;
-import dev.hypera.chameleon.user.User;
-import dev.hypera.chameleon.user.UserManager;
-import dev.hypera.chameleon.util.Preconditions;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Nukkit user manager implementation.
  */
-@Internal
-public final class NukkitUserManager implements UserManager {
+public final class NukkitUserManager extends PlatformUserManager<Player, NukkitUser> implements Listener {
 
-    private final @NotNull NukkitConsoleUser consoleUser = new NukkitConsoleUser();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull ConsoleUser getConsole() {
-        return this.consoleUser;
-    }
+    private final @NotNull PlatformChameleon<PluginBase> chameleon;
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Collection<User> getUsers() {
-        return Server.getInstance().getOnlinePlayers().values()
-            .stream().map(this::wrap).collect(Collectors.toSet());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Optional<User> getUserById(@NotNull UUID id) {
-        Preconditions.checkNotNull("id", id);
-        return Optional.ofNullable(Server.getInstance().getOnlinePlayers().get(id)).map(this::wrap);
-    }
-
-    /**
-     * Wrap a Nukkit Player.
+     * Nukkit user manager constructor.
      *
-     * @param player Player to wrap.
-     *
-     * @return user wrapping the given player.
+     * @param chameleon Platform Chameleon instance.
      */
     @Internal
-    public @NotNull ServerUser wrap(@NotNull Player player) {
+    public NukkitUserManager(@NotNull PlatformChameleon<PluginBase> chameleon) {
+        this.chameleon = chameleon;
+    }
+
+    /**
+     * Registers the platform listeners.
+     */
+    public void registerListeners() {
+        NukkitEventDispatcher.registerListener(
+            this.chameleon, this, PlayerJoinEvent.class, EventPriority.LOW,
+            event -> addUser(event.getPlayer().getUniqueId(), event.getPlayer())
+        );
+        NukkitEventDispatcher.registerListener(
+            this.chameleon, this, PlayerQuitEvent.class, EventPriority.MONITOR,
+            event -> removeUser(event.getPlayer().getUniqueId())
+        );
+    }
+
+    /**
+     * Unregisters the platform listeners.
+     */
+    public void unregisterListeners() {
+        HandlerList.unregisterAll(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected @NotNull ConsoleUser createConsoleUser() {
+        return new NukkitConsoleUser();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected @NotNull NukkitUser createUser(@NotNull Player player) {
         return new NukkitUser(player);
     }
 
     /**
-     * Wrap a command sender.
-     *
-     * @param sender Command sender to wrap.
-     *
-     * @return user wrapping the given command sender.
+     * {@inheritDoc}
      */
-    @Internal
-    public @NotNull ChatUser wrap(@NotNull CommandSender sender) {
-        if (sender instanceof Player) {
-            return wrap((Player) sender);
-        } else {
+    @Override
+    public @NotNull ChatUser wrap(@NotNull Object obj) {
+        if (obj instanceof Player) {
+            return getUserOrThrow(((Player) obj).getUniqueId());
+        }
+        if (obj instanceof ConsoleCommandSender) {
             return getConsole();
         }
+        throw new IllegalArgumentException("cannot return a chat user representing the given object");
     }
 
 }

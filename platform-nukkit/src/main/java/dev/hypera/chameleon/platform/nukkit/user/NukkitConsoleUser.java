@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.platform.nukkit.user;
 
 import cn.nukkit.Server;
+import dev.hypera.chameleon.platform.user.PlatformChatUser;
 import dev.hypera.chameleon.user.ConsoleUser;
 import dev.hypera.chameleon.util.Preconditions;
 import java.util.Optional;
@@ -54,8 +55,7 @@ import org.jetbrains.annotations.UnknownNullability;
 /**
  * Nukkit console user implementation.
  */
-@Internal
-public final class NukkitConsoleUser implements ConsoleUser {
+public final class NukkitConsoleUser extends PlatformChatUser implements ConsoleUser {
 
     private final @NotNull Pointers pointers;
 

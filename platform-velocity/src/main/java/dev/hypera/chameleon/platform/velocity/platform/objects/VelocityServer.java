@@ -78,7 +78,8 @@ public final class VelocityServer implements Server {
     @Override
     public @NotNull Collection<ProxyUser> getPlayers() {
         return this.server.getPlayersConnected().stream()
-            .map(this.chameleon.getUserManager()::wrap).collect(Collectors.toSet());
+            .map(this.chameleon.getUserManager()::wrapUser)
+            .map(u -> (ProxyUser) u).collect(Collectors.toSet());
     }
 
     /**

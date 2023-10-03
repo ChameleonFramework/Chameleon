@@ -34,9 +34,9 @@ import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
-import dev.hypera.chameleon.platform.velocity.adventure.VelocityAudienceProvider;
+import dev.hypera.chameleon.platform.adventure.StandaloneAudienceProvider;
 import dev.hypera.chameleon.platform.velocity.command.VelocityCommandManager;
-import dev.hypera.chameleon.platform.velocity.event.VelocityListener;
+import dev.hypera.chameleon.platform.velocity.event.VelocityEventDispatcher;
 import dev.hypera.chameleon.platform.velocity.platform.VelocityPlatform;
 import dev.hypera.chameleon.platform.velocity.platform.VelocityPluginManager;
 import dev.hypera.chameleon.platform.velocity.scheduler.VelocityScheduler;
@@ -52,12 +52,13 @@ import org.jetbrains.annotations.NotNull;
 public final class VelocityChameleon extends PlatformChameleon<VelocityPlugin> {
 
     private final @NotNull AdventureMapper adventureMapper = new AdventureMapper(this);
-    private final @NotNull VelocityAudienceProvider audienceProvider = new VelocityAudienceProvider(this);
     private final @NotNull VelocityCommandManager commandManager = new VelocityCommandManager(this);
     private final @NotNull VelocityPlatform platform = new VelocityPlatform(this);
     private final @NotNull VelocityPluginManager pluginManager = new VelocityPluginManager(this);
     private final @NotNull VelocityScheduler scheduler = new VelocityScheduler(this);
+    private final @NotNull VelocityEventDispatcher eventDispatcher = new VelocityEventDispatcher(this);
     private final @NotNull VelocityUserManager userManager = new VelocityUserManager(this);
+    private final @NotNull ChameleonAudienceProvider audienceProvider = new StandaloneAudienceProvider(this.userManager);
 
     @Internal
     VelocityChameleon(
@@ -107,8 +108,21 @@ public final class VelocityChameleon extends PlatformChameleon<VelocityPlugin> {
      */
     @Override
     public void onEnable() {
-        this.plugin.getServer().getEventManager().register(this.plugin, new VelocityListener(this));
+        this.userManager.registerListeners();
+        this.eventDispatcher.registerListeners();
         super.onEnable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onDisable() {
+        super.onDisable();
+        this.audienceProvider.close();
+        this.eventDispatcher.unregisterListeners();
+        this.userManager.unregisterListeners();
+        this.userManager.close();
     }
 
     /**

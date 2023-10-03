@@ -25,6 +25,7 @@ package dev.hypera.chameleon.platform.velocity.user;
 
 import com.velocitypowered.api.command.CommandSource;
 import dev.hypera.chameleon.adventure.ReflectedAudience;
+import dev.hypera.chameleon.platform.user.PlatformChatUser;
 import dev.hypera.chameleon.user.ConsoleUser;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -35,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
  * Velocity console user implementation.
  */
 @Internal
-public final class VelocityConsoleUser implements ConsoleUser, ForwardingAudience.Single {
+public final class VelocityConsoleUser extends PlatformChatUser implements ConsoleUser, ForwardingAudience.Single {
 
     private final @NotNull CommandSource console;
     private final @NotNull ReflectedAudience audience;

@@ -21,71 +21,89 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.sponge.adventure;
+package dev.hypera.chameleon.platform.adventure;
 
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.platform.sponge.SpongeChameleon;
 import dev.hypera.chameleon.user.ChatUser;
+import dev.hypera.chameleon.user.ProxyUser;
+import dev.hypera.chameleon.user.UserManager;
 import dev.hypera.chameleon.util.Preconditions;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
-import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Sponge Chameleon audience provider implementation.
+ * Standalone Chameleon audience provider.
+ *
+ * <p>This audience provider implementation does not require any platform Adventure implementation,
+ * and instead uses Chameleon's {@link UserManager}.</p>
  */
-@Internal
-public final class SpongeAudienceProvider implements ChameleonAudienceProvider {
+public final class StandaloneAudienceProvider implements ChameleonAudienceProvider, ForwardingAudience {
 
-    private final @NotNull SpongeChameleon chameleon;
+    private final @NotNull UserManager userManager;
 
     /**
-     * Sponge audience provider constructor.
+     * Standalone Chameleon audience provider constructor.
      *
-     * @param chameleon Sponge Chameleon implementation.
+     * @param userManager User manager.
      */
-    public SpongeAudienceProvider(@NotNull SpongeChameleon chameleon) {
-        this.chameleon = chameleon;
+    public StandaloneAudienceProvider(@NotNull UserManager userManager) {
+        this.userManager = userManager;
     }
 
     /**
-     * Gets an audience for all online players, including the server's console.
+     * Returns the audiences.
+     *
+     * @return the audiences.
+     */
+    @Override
+    public @NotNull Iterable<? extends Audience> audiences() {
+        return Stream.concat(
+            Stream.of(this.userManager.getConsole()),
+            this.userManager.getUsers().stream()
+        ).collect(Collectors.toUnmodifiableSet());
+    }
+
+    /**
+     * Returns an audience for all online players, including the server's console.
      * <p>The audience is dynamically updated as players join and leave.</p>
      *
      * @return the players' and console audience.
      */
     @Override
     public @NotNull Audience all() {
-        return Audience.audience(players(), console());
+        return this;
     }
 
     /**
-     * Gets an audience for the server's console.
+     * Returns an audience for the server's console.
      *
      * @return the console audience.
      */
     @Override
     public @NotNull Audience console() {
-        return this.chameleon.getUserManager().getConsole();
+        return this.userManager.getConsole();
     }
 
     /**
-     * Gets an audience for all online players.
+     * Returns an audience for all online players.
      * <p>The audience is dynamically updated as players join and leave.</p>
      *
      * @return the players' audience.
      */
     @Override
     public @NotNull Audience players() {
-        return Audience.audience(this.chameleon.getUserManager().getUsers());
+        return Audience.audience(this.userManager.getUsers());
     }
 
     /**
-     * Gets an audience for an individual player.
+     * Returns an audience for an individual player.
      * <p>If the player is not online, messages are silently dropped.</p>
      *
      * @param playerId a player uuid.
@@ -95,12 +113,12 @@ public final class SpongeAudienceProvider implements ChameleonAudienceProvider {
     @Override
     public @NotNull Audience player(@NotNull UUID playerId) {
         Preconditions.checkNotNull("playerId", playerId);
-        return this.chameleon.getUserManager().getUserById(playerId).map(Audience.class::cast)
-            .orElse(Audience.empty());
+        return this.userManager.getUserById(playerId)
+            .map(p -> (Audience) p).orElse(Audience.empty());
     }
 
     /**
-     * Creates an audience based on a filter.
+     * Returns an audience based on a filter.
      *
      * @param filter a filter.
      *
@@ -109,11 +127,11 @@ public final class SpongeAudienceProvider implements ChameleonAudienceProvider {
     @Override
     public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
         Preconditions.checkNotNull("filter", filter);
-        return all().filterAudience(f -> filter.test((ChatUser) f));
+        return all().filterAudience(a -> filter.test((ChatUser) a));
     }
 
     /**
-     * Gets or creates an audience containing all viewers with the provided permission.
+     * Returns or creates an audience containing all viewers with the provided permission.
      * <p>The audience is dynamically updated as permissions change.</p>
      *
      * @param permission the permission to filter sending to.
@@ -127,7 +145,7 @@ public final class SpongeAudienceProvider implements ChameleonAudienceProvider {
     }
 
     /**
-     * Gets an audience for online players in a world, including the server's console.
+     * Returns an audience for online players in a world, including the server's console.
      * <p>The audience is dynamically updated as players join and leave.</p>
      *
      * <p>World identifiers were introduced in Minecraft 1.16. On older game instances, worlds will
@@ -139,12 +157,11 @@ public final class SpongeAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience world(@NotNull Key world) {
-        Preconditions.checkNotNull("world", world);
         return all();
     }
 
     /**
-     * Gets an audience for online players on a server, including the server's console.
+     * Returns an audience for online players on a server, including the server's console.
      * <p>If the platform is not a proxy, the audience defaults to everyone.</p>
      *
      * @param serverName a server name.
@@ -153,8 +170,8 @@ public final class SpongeAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience server(@NotNull String serverName) {
-        Preconditions.checkNotNull("serverName", serverName);
-        return all();
+        return filter(p -> p instanceof ProxyUser && ((ProxyUser) p).getConnectedServer()
+            .map(s -> s.getName().equals(serverName)).orElse(false));
     }
 
     /**
@@ -175,7 +192,7 @@ public final class SpongeAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public void close() {
-        // We cannot close the audience provider on Sponge.
+        // Not available.
     }
 
 }

@@ -32,8 +32,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Platform Chameleon provides access to the platform plugin.
- * <p><strong>This class is designed for use inside Chameleon platform implementations only. This
- * API is subject to change and use will not be supported.</strong></p>
  *
  * @param <P> Platform plugin type.
  */

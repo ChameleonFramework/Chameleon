@@ -21,38 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.util;
-
-import dev.hypera.chameleon.logger.ChameleonLogger;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * Platform event utilities.
+ * Common implementations for Chameleon platform implementations.
+ *
+ * <p>Warning: This package is designed for use in Chameleon platform implementations. This API is
+ * not designed for end-users, and use may be unsupported.</p>
+ *
+ * <p><strong>This package may not follow Semantic Versioning, and breaking changes may be
+ * introduced without warning.</strong></p>
  */
 @Internal
-public final class PlatformEventUtil {
+package dev.hypera.chameleon.platform;
 
-    private PlatformEventUtil() {
-        throw new UnsupportedOperationException("PlatformEventUtil is a utility class and cannot be instantiated");
-    }
-
-    /**
-     * Logs a failure to modify a UserChatEvent message.
-     *
-     * @param logger Logger.
-     */
-    public static void logChatModificationFailure(@NotNull ChameleonLogger logger) {
-        logger.debug("Failed to modify UserChatEvent message: modification may not supported on the current platform");
-    }
-
-    /**
-     * Logs a failure to cancel a UserChatEvent message.
-     *
-     * @param logger Logger.
-     */
-    public static void logChatCancellationFailure(@NotNull ChameleonLogger logger) {
-        logger.debug("Failed to cancel UserChatEvent: cancellation may not supported on the current platform");
-    }
-
-}
+import org.jetbrains.annotations.ApiStatus.Internal;

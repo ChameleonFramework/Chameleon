@@ -23,7 +23,6 @@
  */
 package dev.hypera.chameleon.platform.bukkit.scheduler;
 
-import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.scheduler.Schedule;
 import dev.hypera.chameleon.scheduler.ScheduledTask;
 import dev.hypera.chameleon.scheduler.Scheduler;
@@ -40,35 +39,33 @@ import org.jetbrains.annotations.NotNull;
 public final class BukkitScheduler extends Scheduler {
 
     private static final int CRAFT_NO_REPEATING = -1;
-    private final @NotNull PlatformChameleon<JavaPlugin> chameleon;
+    private final @NotNull JavaPlugin plugin;
 
     /**
      * Bukkit scheduler constructor.
      *
-     * @param chameleon Bukkit Chameleon implementation.
+     * @param plugin Bukkit plugin.
      */
     @Internal
-    public BukkitScheduler(@NotNull PlatformChameleon<JavaPlugin> chameleon) {
-        this.chameleon = chameleon;
+    public BukkitScheduler(@NotNull JavaPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @Override
     protected @NotNull ScheduledTask scheduleAsyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
         BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimerAsynchronously(
-            this.chameleon.getPlatformPlugin(), task, delay.toTicks(),
+            this.plugin, task, delay.toTicks(),
             repeat.toTicks() < 1 ? CRAFT_NO_REPEATING : repeat.toTicks()
         );
-
         return bukkitTask::cancel;
     }
 
     @Override
     protected @NotNull ScheduledTask scheduleSyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
         BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimer(
-            this.chameleon.getPlatformPlugin(), task, delay.toTicks(),
+            this.plugin, task, delay.toTicks(),
             repeat.toTicks() < 1 ? CRAFT_NO_REPEATING : repeat.toTicks()
         );
-
         return bukkitTask::cancel;
     }
 

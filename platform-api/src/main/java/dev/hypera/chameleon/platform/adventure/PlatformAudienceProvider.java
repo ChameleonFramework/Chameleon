@@ -21,40 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.nukkit.adventure;
+package dev.hypera.chameleon.platform.adventure;
 
-import cn.nukkit.Server;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.platform.nukkit.NukkitChameleon;
-import dev.hypera.chameleon.user.ChatUser;
 import dev.hypera.chameleon.util.Preconditions;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicReference;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
-import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Nukkit Chameleon audience provider implementation.
+ * Platform audience provider implementation.
+ *
+ * <p>Important: This implementation supports loading the underlying audience provider at a later
+ * time (e.g. after the plugin has been enabled). This implementation will act as a no-op audience
+ * provider, which only returns {@code Audience.empty()} until {@code audienceProvider} has been
+ * set.</p>
+ *
+ * <p>If Adventure does not support the underlying platform, or is directly supported by the
+ * platform but requires mapping, see {@link StandaloneAudienceProvider}.</p>
  */
-@Internal
-public final class NukkitAudienceProvider implements ChameleonAudienceProvider {
+public abstract class PlatformAudienceProvider implements ChameleonAudienceProvider {
 
-    private final @NotNull NukkitChameleon chameleon;
-
-    /**
-     * Nukkit audience provider constructor.
-     *
-     * @param chameleon Nukkit Chameleon implementation.
-     */
-    @Internal
-    public NukkitAudienceProvider(@NotNull NukkitChameleon chameleon) {
-        this.chameleon = chameleon;
-    }
+    protected final @NotNull AtomicReference<AudienceProvider> audienceProvider = new AtomicReference<>();
 
     /**
      * Gets an audience for all online players, including the server's console.
@@ -64,33 +56,44 @@ public final class NukkitAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull Audience all() {
-        return Audience.audience(players(), console());
+        AudienceProvider provider = this.audienceProvider.get();
+        if (provider == null) {
+            return Audience.empty();
+        }
+        return provider.all();
     }
 
     /**
-     * Gets an audience for the server's console.
+     * Returns an audience for the server's console.
      *
      * @return the console audience.
      */
     @Override
     public @NotNull Audience console() {
-        return this.chameleon.getUserManager().getConsole();
+        AudienceProvider provider = this.audienceProvider.get();
+        if (provider == null) {
+            return Audience.empty();
+        }
+        return provider.console();
     }
 
     /**
-     * Gets an audience for all online players.
+     * Returns an audience for all online players.
      * <p>The audience is dynamically updated as players join and leave.</p>
      *
      * @return the players' audience.
      */
     @Override
     public @NotNull Audience players() {
-        return Audience.audience(Server.getInstance().getOnlinePlayers().values().stream()
-            .map(this.chameleon.getUserManager()::wrap).collect(Collectors.toSet()));
+        AudienceProvider provider = this.audienceProvider.get();
+        if (provider == null) {
+            return Audience.empty();
+        }
+        return provider.players();
     }
 
     /**
-     * Gets an audience for an individual player.
+     * Returns an audience for an individual player.
      * <p>If the player is not online, messages are silently dropped.</p>
      *
      * @param playerId a player uuid.
@@ -100,25 +103,15 @@ public final class NukkitAudienceProvider implements ChameleonAudienceProvider {
     @Override
     public @NotNull Audience player(@NotNull UUID playerId) {
         Preconditions.checkNotNull("playerId", playerId);
-        return Optional.ofNullable(Server.getInstance().getOnlinePlayers().get(playerId))
-            .map(this.chameleon.getUserManager()::wrap).map(Audience.class::cast).orElse(Audience.empty());
+        AudienceProvider provider = this.audienceProvider.get();
+        if (provider == null) {
+            return Audience.empty();
+        }
+        return provider.player(playerId);
     }
 
     /**
-     * Creates an audience based on a filter.
-     *
-     * @param filter a filter.
-     *
-     * @return an audience.
-     */
-    @Override
-    public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
-        Preconditions.checkNotNull("filter", filter);
-        return all().filterAudience(f -> filter.test((ChatUser) f));
-    }
-
-    /**
-     * Gets or creates an audience containing all viewers with the provided permission.
+     * Returns or creates an audience containing all viewers with the provided permission.
      * <p>The audience is dynamically updated as permissions change.</p>
      *
      * @param permission the permission to filter sending to.
@@ -128,11 +121,15 @@ public final class NukkitAudienceProvider implements ChameleonAudienceProvider {
     @Override
     public @NotNull Audience permission(@NotNull String permission) {
         Preconditions.checkNotNull("permission", permission);
-        return filter(p -> p.hasPermission(permission));
+        AudienceProvider provider = this.audienceProvider.get();
+        if (provider == null) {
+            return Audience.empty();
+        }
+        return provider.permission(permission);
     }
 
     /**
-     * Gets an audience for online players in a world, including the server's console.
+     * Returns an audience for online players in a world, including the server's console.
      * <p>The audience is dynamically updated as players join and leave.</p>
      *
      * <p>World identifiers were introduced in Minecraft 1.16. On older game instances, worlds will
@@ -145,11 +142,15 @@ public final class NukkitAudienceProvider implements ChameleonAudienceProvider {
     @Override
     public @NotNull Audience world(@NotNull Key world) {
         Preconditions.checkNotNull("world", world);
-        return all();
+        AudienceProvider provider = this.audienceProvider.get();
+        if (provider == null) {
+            return Audience.empty();
+        }
+        return provider.world(world);
     }
 
     /**
-     * Gets an audience for online players on a server, including the server's console.
+     * Returns an audience for online players on a server, including the server's console.
      * <p>If the platform is not a proxy, the audience defaults to everyone.</p>
      *
      * @param serverName a server name.
@@ -159,11 +160,15 @@ public final class NukkitAudienceProvider implements ChameleonAudienceProvider {
     @Override
     public @NotNull Audience server(@NotNull String serverName) {
         Preconditions.checkNotNull("serverName", serverName);
-        return all();
+        AudienceProvider provider = this.audienceProvider.get();
+        if (provider == null) {
+            return Audience.empty();
+        }
+        return provider.server(serverName);
     }
 
     /**
-     * Return a component flattener that can use game data to resolve extra information about
+     * Returns a component flattener that can use game data to resolve extra information about
      * components.
      * <p>This can be used for displaying components, or with serializers including the plain and
      * legacy serializers.</p>
@@ -172,7 +177,11 @@ public final class NukkitAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public @NotNull ComponentFlattener flattener() {
-        return ComponentFlattener.basic();
+        AudienceProvider provider = this.audienceProvider.get();
+        if (provider == null) {
+            return ComponentFlattener.basic();
+        }
+        return provider.flattener();
     }
 
     /**
@@ -180,7 +189,10 @@ public final class NukkitAudienceProvider implements ChameleonAudienceProvider {
      */
     @Override
     public void close() {
-        // We cannot close the audience provider on Nukkit.
+        AudienceProvider provider = this.audienceProvider.get();
+        if (provider != null) {
+            provider.close();
+        }
     }
 
 }

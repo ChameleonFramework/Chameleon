@@ -28,12 +28,15 @@ import dev.hypera.chameleon.event.common.UserConnectEvent;
 import dev.hypera.chameleon.event.common.UserDisconnectEvent;
 import dev.hypera.chameleon.event.server.ServerUserKickEvent;
 import dev.hypera.chameleon.exception.reflection.ChameleonReflectiveException;
+import dev.hypera.chameleon.platform.event.PlatformEventDispatcher;
 import dev.hypera.chameleon.platform.sponge.SpongeChameleon;
+import dev.hypera.chameleon.platform.util.PlatformEventUtil;
 import dev.hypera.chameleon.user.ServerUser;
-import dev.hypera.chameleon.util.PlatformEventUtil;
+import dev.hypera.chameleon.user.User;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
@@ -45,7 +48,7 @@ import org.spongepowered.api.event.network.ServerSideConnectionEvent;
  * Sponge listener.
  */
 @Internal
-public final class SpongeListener {
+public final class SpongeEventDispatcher extends PlatformEventDispatcher {
 
     private final @NotNull SpongeChameleon chameleon;
     private final @NotNull EventReflection eventReflection;
@@ -56,17 +59,31 @@ public final class SpongeListener {
      * @param chameleon Sponge Chameleon implementation.
      */
     @Internal
-    public SpongeListener(@NotNull SpongeChameleon chameleon) {
+    public SpongeEventDispatcher(@NotNull SpongeChameleon chameleon) {
+        super(chameleon.getEventBus());
         this.chameleon = chameleon;
         this.eventReflection = new EventReflection(chameleon.getAdventureMapper()
             .getComponentMapper());
     }
 
     /**
-     * Load reflection utilities.
+     * {@inheritDoc}
      */
-    public void load() {
-        this.eventReflection.load();
+    @Override
+    public void registerListeners() {
+        if (this.eventReflection.isLoaded()) {
+            this.eventReflection.load();
+        }
+        Sponge.eventManager().registerListeners(this.chameleon
+            .getPlatformPlugin().getPluginContainer(), this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void unregisterListeners() {
+        Sponge.eventManager().unregisterListeners(this);
     }
 
     /**
@@ -76,7 +93,7 @@ public final class SpongeListener {
      */
     @Listener
     public void onJoinEvent(@NotNull ServerSideConnectionEvent.Join event) {
-        ServerUser user = this.chameleon.getUserManager().wrap(event.player());
+        User user = this.chameleon.getUserManager().wrapUser(event.player());
         UserConnectEvent chameleonEvent = new UserConnectEvent(user, false);
 
         this.chameleon.getEventBus().dispatch(chameleonEvent);
@@ -105,7 +122,7 @@ public final class SpongeListener {
             }
 
             UserChatEvent chameleonEvent = new UserChatEvent(
-                this.chameleon.getUserManager().wrap(sender),
+                this.chameleon.getUserManager().wrapUser(sender),
                 serialized, false,
                 false, true
             );
@@ -132,7 +149,7 @@ public final class SpongeListener {
     @Listener
     public void onDisconnectEvent(@NotNull ServerSideConnectionEvent.Disconnect event) {
         this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(
-            this.chameleon.getUserManager().wrap(event.player())));
+            this.chameleon.getUserManager().wrapUser(event.player())));
     }
 
     /**
@@ -144,7 +161,7 @@ public final class SpongeListener {
     public void onKickEvent(@NotNull KickPlayerEvent event) {
         try {
             this.chameleon.getEventBus().dispatch(new ServerUserKickEvent(
-                this.chameleon.getUserManager().wrap(event.player()), event.message() == null ? null :
+                (ServerUser) this.chameleon.getUserManager().wrapUser(event.player()), event.message() == null ? null :
                 this.chameleon.getAdventureMapper().getComponentMapper().mapBackwards(event.message()))
             );
         } catch (ReflectiveOperationException ex) {

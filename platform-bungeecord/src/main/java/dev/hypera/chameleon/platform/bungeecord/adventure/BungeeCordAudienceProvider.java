@@ -23,16 +23,14 @@
  */
 package dev.hypera.chameleon.platform.bungeecord.adventure;
 
-import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
-import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
+import dev.hypera.chameleon.platform.adventure.PlatformAudienceProvider;
+import dev.hypera.chameleon.platform.bungeecord.user.BungeeCordUserManager;
 import dev.hypera.chameleon.user.ChatUser;
 import dev.hypera.chameleon.util.Preconditions;
-import java.util.UUID;
 import java.util.function.Predicate;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.key.Key;
+import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
-import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -41,146 +39,40 @@ import org.jetbrains.annotations.NotNull;
  * BungeeCord chameleon audience provider implementation.
  */
 @Internal
-public final class BungeeCordAudienceProvider implements ChameleonAudienceProvider {
+public final class BungeeCordAudienceProvider extends PlatformAudienceProvider {
 
-    private final @NotNull BungeeCordChameleon chameleon;
-    private final @NotNull BungeeAudiences adventure;
+    private final @NotNull BungeeCordUserManager userManager;
 
     /**
-     * Bungeecord audience provider constructor.
+     * BungeeCord audience provider constructor.
      *
-     * @param chameleon Chameleon implementation.
-     * @param plugin    BungeeCord plugin instance.
+     * @param userManager User manager implementation.
      */
     @Internal
-    public BungeeCordAudienceProvider(@NotNull BungeeCordChameleon chameleon, @NotNull Plugin plugin) {
-        this.chameleon = chameleon;
-        this.adventure = BungeeAudiences.create(plugin);
+    public BungeeCordAudienceProvider(@NotNull BungeeCordUserManager userManager) {
+        this.userManager = userManager;
     }
 
     /**
-     * Gets an audience for all online players, including the server's console.
-     * <p>The audience is dynamically updated as players join and leave.</p>
+     * Initialises the underlying Adventure audience provider implementation.
      *
-     * @return the players' and console audience.
+     * @param plugin BungeeCord plugin.
      */
-    @Override
-    public @NotNull Audience all() {
-        return this.adventure.all();
+    public void init(@NotNull Plugin plugin) {
+        this.audienceProvider.set(BungeeAudiences.create(plugin));
     }
 
     /**
-     * Gets an audience for the server's console.
-     *
-     * @return the console audience.
-     */
-    @Override
-    public @NotNull Audience console() {
-        return this.adventure.console();
-    }
-
-    /**
-     * Gets an audience for all online players.
-     * <p>The audience is dynamically updated as players join and leave.</p>
-     *
-     * @return the players' audience.
-     */
-    @Override
-    public @NotNull Audience players() {
-        return this.adventure.players();
-    }
-
-    /**
-     * Gets an audience for an individual player.
-     * <p>If the player is not online, messages are silently dropped.</p>
-     *
-     * @param playerId a player uuid.
-     *
-     * @return a player audience.
-     */
-    @Override
-    public @NotNull Audience player(@NotNull UUID playerId) {
-        Preconditions.checkNotNull("playerId", playerId);
-        return this.adventure.player(playerId);
-    }
-
-    /**
-     * Creates an audience based on a filter.
-     *
-     * @param filter a filter.
-     *
-     * @return an audience.
+     * {@inheritDoc}
      */
     @Override
     public @NotNull Audience filter(@NotNull Predicate<ChatUser> filter) {
         Preconditions.checkNotNull("filter", filter);
-        return this.adventure.filter(c -> filter.test(this.chameleon.getUserManager().wrap(c)));
-    }
-
-    /**
-     * Gets or creates an audience containing all viewers with the provided permission.
-     * <p>The audience is dynamically updated as permissions change.</p>
-     *
-     * @param permission the permission to filter sending to.
-     *
-     * @return a permissible audience.
-     */
-    @Override
-    public @NotNull Audience permission(@NotNull String permission) {
-        Preconditions.checkNotNull("permission", permission);
-        return this.adventure.permission(permission);
-    }
-
-    /**
-     * Gets an audience for online players in a world, including the server's console.
-     * <p>The audience is dynamically updated as players join and leave.</p>
-     *
-     * <p>World identifiers were introduced in Minecraft 1.16. On older game instances, worlds will
-     * be assigned the key {@code minecraft:<world name>}</p>
-     *
-     * @param world identifier for a world.
-     *
-     * @return the world's audience.
-     */
-    @Override
-    public @NotNull Audience world(@NotNull Key world) {
-        Preconditions.checkNotNull("world", world);
-        return this.adventure.world(world);
-    }
-
-    /**
-     * Gets an audience for online players on a server, including the server's console.
-     * <p>If the platform is not a proxy, the audience defaults to everyone.</p>
-     *
-     * @param serverName a server name.
-     *
-     * @return a server's audience.
-     */
-    @Override
-    public @NotNull Audience server(@NotNull String serverName) {
-        Preconditions.checkNotNull("serverName", serverName);
-        return this.adventure.server(serverName);
-    }
-
-    /**
-     * Return a component flattener that can use game data to resolve extra information about
-     * components.
-     * <p>This can be used for displaying components, or with serializers including the plain and
-     * legacy serializers.</p>
-     *
-     * @return the flattener.
-     */
-    @Override
-    public @NotNull ComponentFlattener flattener() {
-        return this.adventure.flattener();
-    }
-
-    /**
-     * Closes the provider and forces audiences to be empty.
-     */
-    @Override
-    public void close() {
-        this.adventure.close();
+        AudienceProvider provider = this.audienceProvider.get();
+        if (provider == null) {
+            return Audience.empty();
+        }
+        return ((BungeeAudiences) provider).filter(c -> filter.test(this.userManager.wrap(c)));
     }
 
 }

@@ -26,6 +26,7 @@ package dev.hypera.chameleon.platform.nukkit.user;
 import cn.nukkit.Player;
 import cn.nukkit.network.protocol.SetTitlePacket;
 import dev.hypera.chameleon.platform.server.GameMode;
+import dev.hypera.chameleon.platform.user.PlatformUser;
 import dev.hypera.chameleon.user.ServerUser;
 import dev.hypera.chameleon.util.Preconditions;
 import java.net.SocketAddress;
@@ -49,6 +50,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.title.Title.Times;
 import net.kyori.adventure.title.TitlePart;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,7 +59,7 @@ import org.jetbrains.annotations.UnknownNullability;
 /**
  * Nukkit server user implementation.
  */
-public final class NukkitUser implements ServerUser {
+public final class NukkitUser extends PlatformUser<Player> implements ServerUser {
 
     private final @NotNull Player player;
     private final @NotNull Pointers pointers;
@@ -67,7 +69,8 @@ public final class NukkitUser implements ServerUser {
      *
      * @param player Player to be wrapped.
      */
-    public NukkitUser(@NotNull Player player) {
+    @Internal
+    NukkitUser(@NotNull Player player) {
         this.player = player;
         this.pointers = Pointers.builder()
             .withDynamic(Identity.NAME, player::getName)
@@ -495,6 +498,7 @@ public final class NukkitUser implements ServerUser {
      *
      * @return Nukkit player.
      */
+    @Override
     public @NotNull Player getPlayer() {
         return this.player;
     }

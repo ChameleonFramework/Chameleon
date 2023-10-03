@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 public final class ChameleonUtil {
 
     private ChameleonUtil() {
-
+        throw new UnsupportedOperationException("ChameleonUtil is a utility class and cannot be instantiated");
     }
 
     /**

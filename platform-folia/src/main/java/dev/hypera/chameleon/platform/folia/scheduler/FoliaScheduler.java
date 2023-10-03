@@ -23,7 +23,6 @@
  */
 package dev.hypera.chameleon.platform.folia.scheduler;
 
-import dev.hypera.chameleon.platform.folia.FoliaChameleon;
 import dev.hypera.chameleon.scheduler.Schedule;
 import dev.hypera.chameleon.scheduler.ScheduledTask;
 import dev.hypera.chameleon.scheduler.Scheduler;
@@ -31,6 +30,7 @@ import io.papermc.paper.threadedregions.scheduler.AsyncScheduler;
 import io.papermc.paper.threadedregions.scheduler.GlobalRegionScheduler;
 import java.util.concurrent.TimeUnit;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,16 +40,16 @@ import org.jetbrains.annotations.NotNull;
 @Internal
 public final class FoliaScheduler extends Scheduler {
 
-    private final @NotNull FoliaChameleon chameleon;
+    private final @NotNull JavaPlugin plugin;
 
     /**
      * Folia scheduler constructor.
      *
-     * @param chameleon Folia Chameleon implementation.
+     * @param plugin Folia plugin.
      */
     @Internal
-    public FoliaScheduler(@NotNull FoliaChameleon chameleon) {
-        this.chameleon = chameleon;
+    public FoliaScheduler(@NotNull JavaPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @Override
@@ -57,9 +57,8 @@ public final class FoliaScheduler extends Scheduler {
         AsyncScheduler scheduler = Bukkit.getAsyncScheduler();
         long period = repeat.toMillis();
         io.papermc.paper.threadedregions.scheduler.ScheduledTask foliaTask = period > 0
-            ? scheduler.runAtFixedRate(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toMillis(), period, TimeUnit.MILLISECONDS)
-            : scheduler.runDelayed(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toMillis(), TimeUnit.MILLISECONDS);
-
+            ? scheduler.runAtFixedRate(this.plugin, t -> task.run(), delay.toMillis(), period, TimeUnit.MILLISECONDS)
+            : scheduler.runDelayed(this.plugin, t -> task.run(), delay.toMillis(), TimeUnit.MILLISECONDS);
         return foliaTask::cancel;
     }
 
@@ -68,9 +67,8 @@ public final class FoliaScheduler extends Scheduler {
         GlobalRegionScheduler scheduler = Bukkit.getGlobalRegionScheduler();
         long period = repeat.toTicks();
         io.papermc.paper.threadedregions.scheduler.ScheduledTask foliaTask = period > 0
-            ? scheduler.runAtFixedRate(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toTicks(), period)
-            : scheduler.runDelayed(this.chameleon.getPlatformPlugin(), t -> task.run(), delay.toTicks());
-
+            ? scheduler.runAtFixedRate(this.plugin, t -> task.run(), delay.toTicks(), period)
+            : scheduler.runDelayed(this.plugin, t -> task.run(), delay.toTicks());
         return foliaTask::cancel;
     }
 

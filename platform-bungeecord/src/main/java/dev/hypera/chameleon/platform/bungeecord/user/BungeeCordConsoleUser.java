@@ -23,8 +23,9 @@
  */
 package dev.hypera.chameleon.platform.bungeecord.user;
 
-import dev.hypera.chameleon.Chameleon;
+import dev.hypera.chameleon.platform.user.PlatformChatUser;
 import dev.hypera.chameleon.user.ConsoleUser;
+import dev.hypera.chameleon.util.Preconditions;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.md_5.bungee.api.ProxyServer;
@@ -34,19 +35,18 @@ import org.jetbrains.annotations.NotNull;
 /**
  * BungeeCord console user implementation.
  */
-@Internal
-public final class BungeeCordConsoleUser implements ConsoleUser, ForwardingAudience.Single {
+public final class BungeeCordConsoleUser extends PlatformChatUser implements ConsoleUser, ForwardingAudience.Single {
 
     private final @NotNull Audience audience;
 
     /**
-     * BungeeCord console user constructor.
+     * BungeeCord console user.
      *
-     * @param chameleon Chameleon implementation.
+     * @param consoleAudience Adventure console audience.
      */
     @Internal
-    public BungeeCordConsoleUser(@NotNull Chameleon chameleon) {
-        this.audience = chameleon.getAdventure().console();
+    BungeeCordConsoleUser(@NotNull Audience consoleAudience) {
+        this.audience = consoleAudience;
     }
 
     /**
@@ -54,11 +54,12 @@ public final class BungeeCordConsoleUser implements ConsoleUser, ForwardingAudie
      */
     @Override
     public boolean hasPermission(@NotNull String permission) {
+        Preconditions.checkNotNull("permission", permission);
         return ProxyServer.getInstance().getConsole().hasPermission(permission);
     }
 
     /**
-     * Get the audience for this user.
+     * Returns the audience for this user.
      *
      * @return audience.
      */

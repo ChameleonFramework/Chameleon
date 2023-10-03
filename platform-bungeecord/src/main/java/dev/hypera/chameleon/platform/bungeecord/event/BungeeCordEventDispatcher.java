@@ -29,13 +29,12 @@ import dev.hypera.chameleon.event.common.UserDisconnectEvent;
 import dev.hypera.chameleon.event.proxy.ProxyUserSwitchEvent;
 import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platform.bungeecord.platform.objects.BungeeCordServer;
-import dev.hypera.chameleon.platform.bungeecord.user.BungeeCordUser;
+import dev.hypera.chameleon.platform.event.PlatformEventDispatcher;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.user.ProxyUser;
 import dev.hypera.chameleon.user.User;
 import java.util.Optional;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -46,22 +45,38 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * BungeeCord listener.
+ * BungeeCord event dispatcher.
  */
-@Internal
-@SuppressWarnings("unused")
-public final class BungeeCordListener implements Listener {
+public final class BungeeCordEventDispatcher extends PlatformEventDispatcher implements Listener {
 
     private final @NotNull BungeeCordChameleon chameleon;
 
     /**
-     * BungeeCord listener constructor.
+     * BungeeCord event dispatcher constructor.
      *
-     * @param chameleon BungeeCord Chameleon implementation.
+     * @param chameleon Chameleon.
      */
     @Internal
-    public BungeeCordListener(@NotNull BungeeCordChameleon chameleon) {
+    public BungeeCordEventDispatcher(@NotNull BungeeCordChameleon chameleon) {
+        super(chameleon.getEventBus());
         this.chameleon = chameleon;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void registerListeners() {
+        this.chameleon.getPlatformPlugin().getProxy().getPluginManager()
+            .registerListener(this.chameleon.getPlatformPlugin(), this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void unregisterListeners() {
+        this.chameleon.getPlatformPlugin().getProxy().getPluginManager().unregisterListener(this);
     }
 
     /**
@@ -71,10 +86,10 @@ public final class BungeeCordListener implements Listener {
      */
     @EventHandler
     public void onPostLoginEvent(@NotNull PostLoginEvent event) {
-        User user = wrap(event.getPlayer());
-        UserConnectEvent chameleonEvent = new UserConnectEvent(user, false);
+        User user = this.chameleon.getUserManager().wrapUser(event.getPlayer());
+        UserConnectEvent chameleonEvent = dispatch(new UserConnectEvent(user, false));
 
-        this.chameleon.getEventBus().dispatch(chameleonEvent);
+        // Cancel platform event
         if (chameleonEvent.isCancelled()) {
             user.disconnect(chameleonEvent.getCancelReason());
         }
@@ -87,19 +102,20 @@ public final class BungeeCordListener implements Listener {
      */
     @EventHandler
     public void onChatEvent(@NotNull ChatEvent event) {
-        UserChatEvent chameleonEvent = new UserChatEvent(
-            wrap((ProxiedPlayer) event.getSender()),
+        UserChatEvent chameleonEvent = dispatch(new UserChatEvent(
+            this.chameleon.getUserManager().wrapUser(event.getSender()),
             event.getMessage(), event.isCancelled(),
             true, true
-        );
-        this.chameleon.getEventBus().dispatch(chameleonEvent);
+        ));
 
+        // Update message
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {
             event.setMessage(chameleonEvent.getMessage());
         }
 
-        if (chameleonEvent.isCancelled()) {
-            event.setCancelled(true);
+        // Cancel platform event
+        if (chameleonEvent.isCancelled() != event.isCancelled()) {
+            event.setCancelled(chameleonEvent.isCancelled());
         }
     }
 
@@ -110,7 +126,7 @@ public final class BungeeCordListener implements Listener {
      */
     @EventHandler
     public void onPlayerDisconnectEvent(@NotNull PlayerDisconnectEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(wrap(event.getPlayer())));
+        dispatch(new UserDisconnectEvent(this.chameleon.getUserManager().wrapUser(event.getPlayer())));
     }
 
     /**
@@ -120,15 +136,11 @@ public final class BungeeCordListener implements Listener {
      */
     @EventHandler
     public void onServerSwitchEvent(@NotNull ServerSwitchEvent event) {
-        this.chameleon.getEventBus()
-            .dispatch(new ProxyUserSwitchEvent(wrap(event.getPlayer()),
-                Optional.ofNullable(event.getFrom()).map(this::wrap).orElse(null),
-                wrap(event.getPlayer().getServer().getInfo())
-            ));
-    }
-
-    private @NotNull ProxyUser wrap(@NotNull ProxiedPlayer player) {
-        return new BungeeCordUser(this.chameleon, player);
+        dispatch(new ProxyUserSwitchEvent(
+            (ProxyUser) this.chameleon.getUserManager().wrapUser(event.getPlayer()),
+            Optional.ofNullable(event.getFrom()).map(this::wrap).orElse(null),
+            wrap(event.getPlayer().getServer().getInfo())
+        ));
     }
 
     private @NotNull Server wrap(@NotNull ServerInfo server) {

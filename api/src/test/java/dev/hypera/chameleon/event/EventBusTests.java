@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import dev.hypera.chameleon.logger.ChameleonNoopLogger;
 import dev.hypera.chameleon.logger.DummyChameleonLogger;
 import org.junit.jupiter.api.Test;
 
@@ -96,7 +97,7 @@ final class EventBusTests {
 
     @Test
     void cancellable() {
-        EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
+        EventBus eventBus = new EventBusImpl(new ChameleonNoopLogger());
         eventBus.subscribe(TestEvent.class, TestEvent::touch);
 
         TestEvent event = new TestEvent(false);
@@ -127,7 +128,7 @@ final class EventBusTests {
 
     @Test
     void receivesChildren() {
-        EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
+        EventBus eventBus = new EventBusImpl(new ChameleonNoopLogger());
         eventBus.subscribe(ChameleonEvent.class, event -> {
             if (event instanceof TestEvent) {
                 ((TestEvent) event).touch();
@@ -141,7 +142,7 @@ final class EventBusTests {
 
     @Test
     void expiresAfter() {
-        EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
+        EventBus eventBus = new EventBusImpl(new ChameleonNoopLogger());
         eventBus.subscribe(TestEvent.class,
             EventSubscriber.builder(TestEvent.class)
                 .expireAfter(1)
@@ -161,7 +162,7 @@ final class EventBusTests {
 
     @Test
     void expiresWhen() {
-        EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
+        EventBus eventBus = new EventBusImpl(new ChameleonNoopLogger());
         eventBus.subscribe(TestEvent.class,
             EventSubscriber.builder(TestEvent.class)
                 .expireWhen(e -> e.getTouches() == 1)
@@ -181,7 +182,7 @@ final class EventBusTests {
 
     @Test
     void filters() {
-        EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
+        EventBus eventBus = new EventBusImpl(new ChameleonNoopLogger());
         eventBus.subscribe(TestEvent.class,
             EventSubscriber.builder(TestEvent.class)
                 .filters(e -> e.getTouches() == 0 || e.getTouches() == 2)

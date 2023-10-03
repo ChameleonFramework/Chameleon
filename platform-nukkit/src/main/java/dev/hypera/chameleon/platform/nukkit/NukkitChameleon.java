@@ -23,7 +23,6 @@
  */
 package dev.hypera.chameleon.platform.nukkit;
 
-import cn.nukkit.Server;
 import cn.nukkit.plugin.PluginBase;
 import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.adventure.ChameleonAudienceProvider;
@@ -34,9 +33,9 @@ import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PlatformChameleon;
 import dev.hypera.chameleon.platform.PluginManager;
-import dev.hypera.chameleon.platform.nukkit.adventure.NukkitAudienceProvider;
+import dev.hypera.chameleon.platform.adventure.StandaloneAudienceProvider;
 import dev.hypera.chameleon.platform.nukkit.command.NukkitCommandManager;
-import dev.hypera.chameleon.platform.nukkit.event.NukkitListener;
+import dev.hypera.chameleon.platform.nukkit.event.NukkitEventDispatcher;
 import dev.hypera.chameleon.platform.nukkit.platform.NukkitPlatform;
 import dev.hypera.chameleon.platform.nukkit.platform.NukkitPluginManager;
 import dev.hypera.chameleon.platform.nukkit.scheduler.NukkitScheduler;
@@ -51,12 +50,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class NukkitChameleon extends PlatformChameleon<PluginBase> {
 
-    private final @NotNull NukkitAudienceProvider audienceProvider = new NukkitAudienceProvider(this);
     private final @NotNull NukkitPlatform platform = new NukkitPlatform();
     private final @NotNull NukkitCommandManager commandManager = new NukkitCommandManager(this);
     private final @NotNull NukkitPluginManager pluginManager = new NukkitPluginManager();
-    private final @NotNull NukkitUserManager userManager = new NukkitUserManager();
+    private final @NotNull NukkitEventDispatcher eventDispatcher = new NukkitEventDispatcher(this);
+    private final @NotNull NukkitUserManager userManager = new NukkitUserManager(this);
     private final @NotNull NukkitScheduler scheduler = new NukkitScheduler(this);
+    private final @NotNull ChameleonAudienceProvider audienceProvider = new StandaloneAudienceProvider(this.userManager);
 
     @Internal
     NukkitChameleon(
@@ -86,8 +86,21 @@ public final class NukkitChameleon extends PlatformChameleon<PluginBase> {
      */
     @Override
     public void onEnable() {
-        Server.getInstance().getPluginManager().registerEvents(new NukkitListener(this), this.plugin);
+        this.userManager.registerListeners();
+        this.eventDispatcher.registerListeners();
         super.onEnable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onDisable() {
+        super.onDisable();
+        this.audienceProvider.close();
+        this.eventDispatcher.unregisterListeners();
+        this.userManager.unregisterListeners();
+        this.userManager.close();
     }
 
     /**

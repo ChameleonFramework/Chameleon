@@ -36,26 +36,26 @@ import org.jetbrains.annotations.NotNull;
 public interface UserManager {
 
     /**
-     * Get a user representing the platform console.
+     * Returns a user representing the platform console.
      *
      * @return console user.
      */
     @NotNull ConsoleUser getConsole();
 
     /**
-     * Get all online users.
+     * Returns all online users.
      *
-     * @return all online users.
+     * @return online users.
      */
-    @NotNull Collection<User> getUsers();
+    @NotNull Collection<? extends User> getUsers();
 
     /**
-     * Attempt to get a user with the given id.
+     * Returns a user with the given identifier.
      *
-     * @param id The user's unique id.
+     * @param id Unique ID of the user to retrieve.
      *
-     * @return an optional containing the user if found, otherwise an empty optional.
+     * @return an optional containing the user, if found, otherwise an empty optional.
      */
-    @NotNull Optional<User> getUserById(@NotNull UUID id);
+    @NotNull Optional<? extends User> getUserById(@NotNull UUID id);
 
 }
