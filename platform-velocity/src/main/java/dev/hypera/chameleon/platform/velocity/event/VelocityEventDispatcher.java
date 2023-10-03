@@ -73,6 +73,9 @@ public final class VelocityEventDispatcher extends PlatformEventDispatcher {
             .register(this.chameleon.getPlatformPlugin(), this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void unregisterListeners() {
         this.chameleon.getPlatformPlugin().getServer().getEventManager()

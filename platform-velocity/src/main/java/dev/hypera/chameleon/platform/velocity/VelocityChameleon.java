@@ -108,6 +108,7 @@ public final class VelocityChameleon extends PlatformChameleon<VelocityPlugin> {
      */
     @Override
     public void onEnable() {
+        this.userManager.registerListeners();
         this.eventDispatcher.registerListeners();
         super.onEnable();
     }
@@ -120,6 +121,7 @@ public final class VelocityChameleon extends PlatformChameleon<VelocityPlugin> {
         super.onDisable();
         this.audienceProvider.close();
         this.eventDispatcher.unregisterListeners();
+        this.userManager.unregisterListeners();
         this.userManager.close();
     }
 

@@ -25,6 +25,7 @@ package dev.hypera.chameleon.platform.velocity.user;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.event.PostOrder;
+import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.proxy.Player;
@@ -41,6 +42,7 @@ public final class VelocityUserManager extends PlatformUserManager<Player, Veloc
 
     private final @NotNull VelocityChameleon chameleon;
     private final @NotNull PlayerReflection playerReflection;
+    private final @NotNull VelocityUserManager.Listener listener = new VelocityUserManager.Listener();
 
     /**
      * Velocity user manager constructor.
@@ -51,14 +53,22 @@ public final class VelocityUserManager extends PlatformUserManager<Player, Veloc
     public VelocityUserManager(@NotNull VelocityChameleon chameleon) {
         this.chameleon = chameleon;
         this.playerReflection = new PlayerReflection(this.chameleon.getAdventureMapper().getComponentMapper());
-        chameleon.getPlatformPlugin().getServer().getEventManager().register(
-            chameleon.getPlatformPlugin(), PostLoginEvent.class, PostOrder.EARLY,
-            event -> addUser(event.getPlayer().getUniqueId(), event.getPlayer())
-        );
-        chameleon.getPlatformPlugin().getServer().getEventManager().register(
-            chameleon.getPlatformPlugin(), DisconnectEvent.class, PostOrder.LATE,
-            event -> removeUser(event.getPlayer().getUniqueId())
-        );
+    }
+
+    /**
+     * Registers the platform listeners.
+     */
+    public void registerListeners() {
+        this.chameleon.getPlatformPlugin().getServer().getEventManager()
+            .register(this.chameleon.getPlatformPlugin(), this.listener);
+    }
+
+    /**
+     * Unregisters the platform listeners.
+     */
+    public void unregisterListeners() {
+        this.chameleon.getPlatformPlugin().getServer().getEventManager()
+            .unregisterListener(this.chameleon.getPlatformPlugin(), this.listener);
     }
 
     /**
@@ -88,6 +98,25 @@ public final class VelocityUserManager extends PlatformUserManager<Player, Veloc
             this.chameleon.getAdventureMapper().createReflectedAudience(player),
             this.playerReflection
         );
+    }
+
+    /**
+     * Velocity platform listener.
+     */
+    @Internal
+    @SuppressWarnings("unused")
+    private final class Listener {
+
+        @Subscribe(order = PostOrder.EARLY)
+        public void onPostLoginEvent(@NotNull PostLoginEvent event) {
+            addUser(event.getPlayer().getUniqueId(), event.getPlayer());
+        }
+
+        @Subscribe(order = PostOrder.LATE)
+        public void onDisconnectEvent(@NotNull DisconnectEvent event) {
+            removeUser(event.getPlayer().getUniqueId());
+        }
+
     }
 
 }
