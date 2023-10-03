@@ -55,7 +55,7 @@ public final class BukkitChameleon extends PlatformChameleon<JavaPlugin> {
 
     private final @NotNull BukkitPlatform platform = new BukkitPlatform();
     private final @NotNull BukkitEventDispatcher eventDispatcher = new BukkitEventDispatcher(this);
-    private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this, this.eventDispatcher);
+    private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this);
     private final @NotNull BukkitCommandManager commandManager = new BukkitCommandManager(this, this.userManager);
     private final @NotNull BukkitPluginManager pluginManager = new BukkitPluginManager();
     private final @NotNull BukkitScheduler scheduler = new BukkitScheduler(this.plugin);
@@ -90,6 +90,7 @@ public final class BukkitChameleon extends PlatformChameleon<JavaPlugin> {
     @Override
     public void onEnable() {
         this.audienceProvider.init(this.plugin);
+        this.userManager.registerListeners();
         this.eventDispatcher.registerListeners();
         super.onEnable();
     }
@@ -102,6 +103,7 @@ public final class BukkitChameleon extends PlatformChameleon<JavaPlugin> {
         super.onDisable();
         this.audienceProvider.close();
         this.eventDispatcher.unregisterListeners();
+        this.userManager.unregisterListeners();
         this.userManager.close();
     }
 

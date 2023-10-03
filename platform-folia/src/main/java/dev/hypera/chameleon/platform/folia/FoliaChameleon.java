@@ -58,7 +58,7 @@ public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
 
     private final @NotNull Platform platform;
     private final @NotNull BukkitEventDispatcher eventDispatcher = new BukkitEventDispatcher(this);
-    private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this, this.eventDispatcher);
+    private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this);
     private final @NotNull CommandManager commandManager = new BukkitCommandManager(this, this.userManager);
     private final @NotNull PluginManager pluginManager;
     private final @NotNull Scheduler scheduler;
@@ -98,6 +98,7 @@ public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
     @Override
     public void onEnable() {
         this.audienceProvider.init(this.plugin);
+        this.userManager.registerListeners();
         this.eventDispatcher.registerListeners();
         super.onEnable();
     }
@@ -110,6 +111,7 @@ public final class FoliaChameleon extends PlatformChameleon<JavaPlugin> {
         super.onDisable();
         this.audienceProvider.close();
         this.eventDispatcher.unregisterListeners();
+        this.userManager.unregisterListeners();
         this.userManager.close();
     }
 

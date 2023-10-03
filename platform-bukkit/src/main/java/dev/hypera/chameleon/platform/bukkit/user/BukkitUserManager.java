@@ -31,6 +31,8 @@ import dev.hypera.chameleon.user.ConsoleUser;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Bukkit user manager.
  */
-public final class BukkitUserManager extends PlatformUserManager<Player, BukkitUser> {
+public final class BukkitUserManager extends PlatformUserManager<Player, BukkitUser> implements Listener {
 
     private final @NotNull PlatformChameleon<JavaPlugin> chameleon;
 
@@ -48,19 +50,31 @@ public final class BukkitUserManager extends PlatformUserManager<Player, BukkitU
      * Bukkit user manager constructor.
      *
      * @param chameleon       Bukkit Chameleon.
-     * @param eventDispatcher Bukkit event dispatcher.
      */
     @Internal
-    public BukkitUserManager(@NotNull PlatformChameleon<JavaPlugin> chameleon, @NotNull BukkitEventDispatcher eventDispatcher) {
+    public BukkitUserManager(@NotNull PlatformChameleon<JavaPlugin> chameleon) {
         this.chameleon = chameleon;
-        eventDispatcher.registerListener(
-            PlayerJoinEvent.class, EventPriority.LOW,
+    }
+
+    /**
+     * Registers the platform listeners.
+     */
+    public void registerListeners() {
+        BukkitEventDispatcher.registerListener(
+            this.chameleon, this, PlayerJoinEvent.class, EventPriority.LOW,
             event -> addUser(event.getPlayer().getUniqueId(), event.getPlayer())
         );
-        eventDispatcher.registerListener(
-            PlayerQuitEvent.class, EventPriority.MONITOR,
+        BukkitEventDispatcher.registerListener(
+            this.chameleon, this, PlayerQuitEvent.class, EventPriority.MONITOR,
             event -> removeUser(event.getPlayer().getUniqueId())
         );
+    }
+
+    /**
+     * Unregisters the platform listeners.
+     */
+    public void unregisterListeners() {
+        HandlerList.unregisterAll(this);
     }
 
     /**
