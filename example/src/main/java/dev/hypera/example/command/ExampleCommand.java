@@ -29,8 +29,10 @@ import dev.hypera.chameleon.command.annotations.Permission;
 import dev.hypera.chameleon.command.annotations.SubCommandHandler;
 import dev.hypera.chameleon.command.context.Context;
 import dev.hypera.chameleon.command.objects.Condition;
+import dev.hypera.chameleon.meta.MetadataKey;
 import dev.hypera.chameleon.platform.PlatformTarget;
 import dev.hypera.chameleon.user.User;
+import dev.hypera.example.ChameleonExample;
 import dev.hypera.example.event.ExampleCustomEvent;
 import java.util.Collections;
 import java.util.List;
@@ -44,6 +46,8 @@ import org.jetbrains.annotations.NotNull;
 @Permission("example.command")
 @CommandHandler("example|ex")
 public class ExampleCommand extends Command {
+
+    private static final @NotNull MetadataKey<Integer> EXECUTION_TIMES = MetadataKey.integer("example:command_execution");
 
     /**
      * Example command constructor.
@@ -65,6 +69,11 @@ public class ExampleCommand extends Command {
     @Override
     public void execute(@NotNull Context context) {
         context.getSender().sendMessage(Component.text("Hello, world!"));
+
+        // Retrieve metadata from the user
+        if (context.getSender().getMetadata(ChameleonExample.FIRST_PLAYER).orElse(false)) {
+            context.getSender().sendMessage(Component.text("You are the first player to join since the last reboot!"));
+        }
     }
 
     /**
@@ -80,6 +89,16 @@ public class ExampleCommand extends Command {
 
         // Send 'Hello, <name>!' to the person who executed the command.
         context.getSender().sendMessage(Component.text("Hello, " + name + "!"));
+
+        // Retrieve and set metadata
+        int executionTimes = context.getSender().getMetadata(EXECUTION_TIMES).orElse(0) + 1;
+        context.getSender().setMetadata(EXECUTION_TIMES, executionTimes);
+        context.getSender().sendMessage(
+            Component.text("You have executed this command ")
+                .color(NamedTextColor.GREEN)
+                .append(Component.text(executionTimes, NamedTextColor.GOLD))
+                .append(Component.text(" times!"))
+        );
 
         // Dispatch a custom event
         context.getChameleon().getEventBus().dispatch(new ExampleCustomEvent(name));
