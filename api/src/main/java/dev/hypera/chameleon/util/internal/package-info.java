@@ -21,35 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.util;
+/**
+ * Internal Chameleon utilities.
+ *
+ * <p>Warning: This package is designed for internal use within Chameleon. This API is not designed
+ * for end-users, and use may be unsupported.</p>
+ *
+ * <p><strong>This package may not follow Semantic Versioning, and breaking changes may be
+ * introduced without warning.</strong></p>
+ */
+@Internal @Experimental
+package dev.hypera.chameleon.util.internal;
 
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-/**
- * Chameleon internal utilities.
- */
-@Internal
-@Experimental
-public final class ChameleonUtil {
-
-    private ChameleonUtil() {
-        throw new UnsupportedOperationException("ChameleonUtil is a utility class and cannot be instantiated");
-    }
-
-    /**
-     * Check if first argument is null, return it if it isn't, otherwise return the default value.
-     *
-     * @param s            Object to check if null.
-     * @param defaultValue Default return value.
-     * @param <T>          Type.
-     *
-     * @return {@code s} if not null, otherwise {@code defaultValue}.
-     */
-    public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
-        return s == null ? defaultValue : s;
-    }
-
-}

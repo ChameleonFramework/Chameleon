@@ -24,7 +24,7 @@
 package dev.hypera.chameleon.platform.folia.platform.objects;
 
 import dev.hypera.chameleon.platform.PlatformPlugin;
-import dev.hypera.chameleon.util.ChameleonUtil;
+import dev.hypera.chameleon.util.internal.ChameleonUtil;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;

@@ -21,19 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.util;
+package dev.hypera.chameleon.util.internal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import dev.hypera.chameleon.util.internal.ChameleonUtil;
-import org.junit.jupiter.api.Test;
+/**
+ * Common internal Chameleon utilities.
+ */
+@Internal
+public final class ChameleonUtil {
 
-final class ChameleonUtilTests {
+    private ChameleonUtil() {
+        throw new UnsupportedOperationException("ChameleonUtil is a utility class and cannot be instantiated");
+    }
 
-    @Test
-    void testGetOrDefault() {
-        assertEquals("test", ChameleonUtil.getOrDefault("test", "test2"));
-        assertEquals("test", ChameleonUtil.getOrDefault(null, "test"));
+    /**
+     * Check if first argument is null, return it if it isn't, otherwise return the default value.
+     *
+     * @param s            Object to check if null.
+     * @param defaultValue Default return value.
+     * @param <T>          Type.
+     *
+     * @return {@code s} if not null, otherwise {@code defaultValue}.
+     */
+    public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
+        return s == null ? defaultValue : s;
     }
 
 }
