@@ -32,6 +32,7 @@ import dev.hypera.chameleon.event.EventSubscriptionPriority;
 import dev.hypera.chameleon.event.common.UserConnectEvent;
 import dev.hypera.chameleon.event.common.UserDisconnectEvent;
 import dev.hypera.chameleon.logger.ChameleonLogger;
+import dev.hypera.chameleon.meta.MetadataKey;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.PlatformPlugin;
 import dev.hypera.chameleon.scheduler.Schedule;
@@ -80,6 +81,8 @@ import org.jetbrains.annotations.NotNull;
 )
 public final class ChameleonExample implements ChameleonPlugin {
 
+    public static final @NotNull MetadataKey<Boolean> FIRST_PLAYER = MetadataKey.bool("example:first_player");
+
     private final @NotNull Chameleon chameleon;
     private final @NotNull ChameleonLogger logger;
 
@@ -115,12 +118,15 @@ public final class ChameleonExample implements ChameleonPlugin {
 
         // User connect event with an expiry after of 1 and HIGH priority.
         this.chameleon.getEventBus().subscribe(EventSubscriber.builder(UserConnectEvent.class)
-            .expireAfter(1).handler(event ->
+            .expireAfter(1).handler(event -> {
                 event.getUser().sendMessage(Component.text(
                     "Welcome, you're the first person to join since the last restart!",
                     NamedTextColor.GOLD
-                ))
-            ).priority(EventSubscriptionPriority.HIGH).build());
+                ));
+
+                // Set example metadata
+                event.getUser().setMetadata(FIRST_PLAYER, true);
+            }).priority(EventSubscriptionPriority.HIGH).build());
 
         // User disconnect event
         this.chameleon.getEventBus().subscribe(UserDisconnectEvent.class, event ->
