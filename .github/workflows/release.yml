@@ -68,6 +68,10 @@ jobs:
 
       - name: "Prepare for publish"
         run: |
+          # Configure Git
+          git config --global user.name "hypera-bot"
+          git config --global user.email "bot@hypera.dev"
+
           # Indra only publishes release versions if HEAD is tagged
           git tag -a "v$VERSION" HEAD -m "v$VERSION"
 
