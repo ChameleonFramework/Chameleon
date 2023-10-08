@@ -283,11 +283,6 @@
     <!-- https://checkstyle.org/checks/javadoc/nonemptyatclausedescription.html#NonEmptyAtclauseDescription -->
     <module name="NonEmptyAtclauseDescription"/>
 
-    <!-- https://checkstyle.org/checks/whitespace/nowhitespaceafter.html#NoWhitespaceAfter -->
-    <module name="NoWhitespaceAfter">
-      <property name="allowLineBreaks" value="true"/>
-    </module>
-
     <!-- https://checkstyle.org/checks/whitespace/nowhitespacebefore.html#NoWhitespaceBefore -->
     <module name="NoWhitespaceBefore">
       <property name="allowLineBreaks" value="true"/>

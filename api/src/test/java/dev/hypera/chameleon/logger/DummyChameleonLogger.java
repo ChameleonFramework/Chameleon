@@ -26,76 +26,163 @@ package dev.hypera.chameleon.logger;
 import java.util.ArrayList;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Dummy Chameleon logger implementation.
  */
-public class DummyChameleonLogger implements ChameleonLogger {
+public final class DummyChameleonLogger implements ChameleonLogger {
 
     private final @NotNull List<Throwable> exceptions = new ArrayList<>();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void info(@NotNull String message, @NotNull Object... args) {
+    public void trace(@NotNull String msg) {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void debug(@NotNull String message, @NotNull Object... args) {
+    public void trace(@NotNull String format, @Nullable Object arg) {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void warn(@NotNull String message, @NotNull Object... args) {
+    public void trace(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... args) {
+    public void trace(@NotNull String format, @Nullable Object @NotNull ... arguments) {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void error(@NotNull String message, @NotNull Object... args) {
+    public void trace(@NotNull String msg, @Nullable Throwable t) {
+        this.exceptions.add(t);
+    }
+
+    @Override
+    public void debug(@NotNull String msg) {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... args) {
-        this.exceptions.add(throwable);
+    public void debug(@NotNull String format, @Nullable Object arg) {
+
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public @NotNull ChameleonLogger enableDebug() {
-        return this;
+    public void debug(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public @NotNull ChameleonLogger disableDebug() {
-        return this;
+    public void debug(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+
+    }
+
+    @Override
+    public void debug(@NotNull String msg, @Nullable Throwable t) {
+        this.exceptions.add(t);
+    }
+
+    @Override
+    public void info(@NotNull String msg) {
+
+    }
+
+    @Override
+    public void info(@NotNull String format, @Nullable Object arg) {
+
+    }
+
+    @Override
+    public void info(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+
+    }
+
+    @Override
+    public void info(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+
+    }
+
+    @Override
+    public void info(@NotNull String msg, @Nullable Throwable t) {
+        this.exceptions.add(t);
+    }
+
+    @Override
+    public void warn(@NotNull String msg) {
+
+    }
+
+    @Override
+    public void warn(@NotNull String format, @Nullable Object arg) {
+
+    }
+
+    @Override
+    public void warn(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+
+    }
+
+    @Override
+    public void warn(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+
+    }
+
+    @Override
+    public void warn(@NotNull String msg, @Nullable Throwable t) {
+        this.exceptions.add(t);
+    }
+
+    @Override
+    public void error(@NotNull String msg) {
+
+    }
+
+    @Override
+    public void error(@NotNull String format, @Nullable Object arg) {
+
+    }
+
+    @Override
+    public void error(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+
+    }
+
+    @Override
+    public void error(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+
+    }
+
+    @Override
+    public void error(@NotNull String msg, @Nullable Throwable t) {
+        this.exceptions.add(t);
+    }
+
+    @Override
+    public boolean isTraceEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isDebugEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isInfoEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isWarnEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isErrorEnabled() {
+        return false;
     }
 
     /**

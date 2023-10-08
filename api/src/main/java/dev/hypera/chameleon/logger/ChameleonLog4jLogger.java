@@ -23,9 +23,13 @@
  */
 package dev.hypera.chameleon.logger;
 
+import dev.hypera.chameleon.util.logger.FormattedMessage;
+import dev.hypera.chameleon.util.logger.MessageFormatter;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Log4J Chameleon logger implementation.
@@ -34,7 +38,6 @@ import org.jetbrains.annotations.NotNull;
 public final class ChameleonLog4jLogger implements ChameleonLogger {
 
     private final @NotNull Logger logger;
-    private boolean debug = false;
 
     /**
      * Chameleon Log4J logger constructor.
@@ -45,22 +48,21 @@ public final class ChameleonLog4jLogger implements ChameleonLogger {
         this.logger = logger;
     }
 
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public void info(@NotNull String message, @NotNull Object... o) {
-        this.logger.info(String.format(message, o));
+    public void trace(@NotNull String msg) {
+        this.logger.trace(msg);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void debug(@NotNull String message, @NotNull Object... o) {
-        if (this.debug) {
-            this.logger.debug(String.format(message, o));
+    public void trace(@NotNull String format, @Nullable Object arg) {
+        if (isTraceEnabled()) {
+            logFormatted(Level.TRACE, format, arg);
         }
     }
 
@@ -68,51 +70,279 @@ public final class ChameleonLog4jLogger implements ChameleonLogger {
      * {@inheritDoc}
      */
     @Override
-    public void warn(@NotNull String message, @NotNull Object... o) {
-        this.logger.warn(String.format(message, o));
+    public void trace(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        if (isTraceEnabled()) {
+            logFormatted(Level.TRACE, format, arg1, arg2);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
-        this.logger.warn(String.format(message, o), throwable);
+    public void trace(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        if (isTraceEnabled()) {
+            logFormatted(Level.TRACE, format, arguments);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void error(@NotNull String message, @NotNull Object... o) {
-        this.logger.error(String.format(message, o));
+    public void trace(@NotNull String msg, @Nullable Throwable t) {
+        if (isTraceEnabled()) {
+            this.logger.trace(msg, t);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
-        this.logger.error(String.format(message, o), throwable);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull ChameleonLogger enableDebug() {
-        this.debug = true;
-        return this;
+    public void debug(@NotNull String msg) {
+        if (isDebugEnabled()) {
+            this.logger.debug(msg);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull ChameleonLogger disableDebug() {
-        this.debug = false;
-        return this;
+    public void debug(@NotNull String format, @Nullable Object arg) {
+        if (isDebugEnabled()) {
+            logFormatted(Level.DEBUG, format, arg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void debug(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        if (isDebugEnabled()) {
+            logFormatted(Level.DEBUG, format, arg1, arg2);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void debug(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        if (isDebugEnabled()) {
+            logFormatted(Level.DEBUG, format, arguments);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void debug(@NotNull String msg, @Nullable Throwable t) {
+        if (isDebugEnabled()) {
+            this.logger.debug(msg, t);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String msg) {
+        if (isInfoEnabled()) {
+            this.logger.info(msg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String format, @Nullable Object arg) {
+        if (isInfoEnabled()) {
+            logFormatted(Level.INFO, format, arg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        if (isInfoEnabled()) {
+            logFormatted(Level.INFO, format, arg1, arg2);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        if (isInfoEnabled()) {
+            logFormatted(Level.INFO, format, arguments);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String msg, @Nullable Throwable t) {
+        if (isInfoEnabled()) {
+            this.logger.info(msg, t);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String msg) {
+        if (isWarnEnabled()) {
+            this.logger.warn(msg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String format, @Nullable Object arg) {
+        if (isWarnEnabled()) {
+            logFormatted(Level.WARN, format, arg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        if (isWarnEnabled()) {
+            logFormatted(Level.WARN, format, arg1, arg2);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        if (isWarnEnabled()) {
+            logFormatted(Level.WARN, format, arguments);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String msg, @Nullable Throwable t) {
+        if (isWarnEnabled()) {
+            this.logger.warn(msg, t);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String msg) {
+        if (isErrorEnabled()) {
+            this.logger.error(msg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String format, @Nullable Object arg) {
+        if (isErrorEnabled()) {
+            logFormatted(Level.ERROR, format, arg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        if (isErrorEnabled()) {
+            logFormatted(Level.ERROR, format, arg1, arg2);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        if (isErrorEnabled()) {
+            logFormatted(Level.ERROR, format, arguments);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String msg, @Nullable Throwable t) {
+        if (isErrorEnabled()) {
+            this.logger.error(msg, t);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isTraceEnabled() {
+        return this.logger.isTraceEnabled();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDebugEnabled() {
+        return this.logger.isDebugEnabled();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInfoEnabled() {
+        return this.logger.isInfoEnabled();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isWarnEnabled() {
+        return this.logger.isWarnEnabled();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isErrorEnabled() {
+        return this.logger.isErrorEnabled();
+    }
+
+    private void logFormatted(@NotNull Level level, @NotNull String format, @Nullable Object @NotNull ... args) {
+        FormattedMessage m = MessageFormatter.format(format, args);
+        if (m.throwable() == null) {
+            this.logger.atLevel(level).log(m.message());
+            return;
+        }
+        this.logger.atLevel(level).withThrowable(m.throwable()).log(m.message());
     }
 
 }

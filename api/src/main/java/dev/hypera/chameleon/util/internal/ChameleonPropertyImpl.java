@@ -26,7 +26,6 @@ package dev.hypera.chameleon.util.internal;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * {@link ChameleonProperty} implementation.
@@ -39,14 +38,15 @@ final class ChameleonPropertyImpl<T> implements ChameleonProperty<T> {
 
     private final @NotNull String name;
     private final @NotNull Function<String, T> parser;
-    private final @Nullable T defaultValue;
+    private final @NotNull T defaultValue;
     private final @NotNull AtomicBoolean retrieved = new AtomicBoolean(false);
-    private @Nullable T value;
+    private @NotNull T value;
 
-    ChameleonPropertyImpl(@NotNull String name, @NotNull Function<String, T> parser, @Nullable T defaultValue) {
+    ChameleonPropertyImpl(@NotNull String name, @NotNull Function<String, T> parser, @NotNull T defaultValue) {
         this.name = name;
         this.parser = parser;
         this.defaultValue = defaultValue;
+        this.value = defaultValue;
     }
 
     /**
@@ -61,7 +61,7 @@ final class ChameleonPropertyImpl<T> implements ChameleonProperty<T> {
      * {@inheritDoc}
      */
     @Override
-    public T get() {
+    public @NotNull T get() {
         if (!this.retrieved.compareAndSet(false, true)) {
             this.value = retrieveValue();
         }
@@ -72,7 +72,7 @@ final class ChameleonPropertyImpl<T> implements ChameleonProperty<T> {
      * {@inheritDoc}
      */
     @Override
-    public void set(T t) {
+    public void set(@NotNull T t) {
         this.retrieved.set(true);
         this.value = t;
     }
@@ -85,8 +85,8 @@ final class ChameleonPropertyImpl<T> implements ChameleonProperty<T> {
         this.value = this.defaultValue;
     }
 
-    private @Nullable T retrieveValue() {
-        String v = System.getProperty(NAMESPACE + '.' + name);
+    private @NotNull T retrieveValue() {
+        String v = System.getProperty(NAMESPACE + '.' + this.name);
         T parsed = v != null ? this.parser.apply(v) : null;
         if (parsed == null) {
             return this.defaultValue;

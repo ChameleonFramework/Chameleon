@@ -28,7 +28,6 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Chameleon property.
@@ -63,7 +62,7 @@ public interface ChameleonProperty<T> {
      * @return new property.
      */
     @Contract(value = "_, _, _ -> new", pure = true)
-    static <T> @NotNull ChameleonProperty<T> of(@NotNull String name, @NotNull Function<String, T> parser, @Nullable T defaultValue) {
+    static <T> @NotNull ChameleonProperty<T> of(@NotNull String name, @NotNull Function<String, T> parser, @NotNull T defaultValue) {
         return new ChameleonPropertyImpl<>(name, parser, defaultValue);
     }
 
@@ -81,14 +80,14 @@ public interface ChameleonProperty<T> {
      * @return property value.
      */
     @Contract(value = "-> _", pure = true)
-    T get();
+    @NotNull T get();
 
     /**
      * Sets the value of this property.
      *
      * @param t New property value.
      */
-    void set(T t);
+    void set(@NotNull T t);
 
     /**
      * Resets the value of this property back to the default value.

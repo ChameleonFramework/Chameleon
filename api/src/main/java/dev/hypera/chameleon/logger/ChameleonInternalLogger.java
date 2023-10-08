@@ -30,22 +30,33 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Internal Chameleon logger wrapper.
+ *
+ * <p>Warning: This is designed for internal use within Chameleon. This API is NOT designed for
+ * end-users, and use is not recommended or supported.</p>
  */
 @Internal
 public final class ChameleonInternalLogger implements ChameleonLogger {
 
     private static final @NotNull String CHAMELEON_PREFIX = "[Chameleon] ";
-
     private final @NotNull ChameleonLogger logger;
 
+    private ChameleonInternalLogger(@NotNull ChameleonLogger logger) {
+        this.logger = logger;
+    }
+
     /**
-     * Chameleon internal logger constructor.
+     * Returns a new internal Chameleon logger that logs to the given {@code logger}.
      *
-     * @param logger Chameleon logger instance to use.
+     * <p>Warning: This is designed for internal use within Chameleon. This API is not designed for
+     * end-users, and use is not recommended or supported.</p>
+     *
+     * @param logger Logger to be wrapped.
+     *
+     * @return new internal logger.
      */
     @Internal
-    public ChameleonInternalLogger(@NotNull ChameleonLogger logger) {
-        this.logger = logger;
+    public static @NotNull ChameleonLogger create(@NotNull ChameleonLogger logger) {
+        return new ChameleonInternalLogger(logger);
     }
 
     /**

@@ -236,7 +236,7 @@ public final class ChameleonNoopLogger implements ChameleonLogger {
      */
     @Override
     public boolean isTraceEnabled() {
-        return true;
+        return false;
     }
 
     /**
@@ -244,7 +244,7 @@ public final class ChameleonNoopLogger implements ChameleonLogger {
      */
     @Override
     public boolean isDebugEnabled() {
-        return true;
+        return false;
     }
 
     /**
@@ -252,7 +252,7 @@ public final class ChameleonNoopLogger implements ChameleonLogger {
      */
     @Override
     public boolean isInfoEnabled() {
-        return true;
+        return false;
     }
 
     /**
@@ -260,7 +260,7 @@ public final class ChameleonNoopLogger implements ChameleonLogger {
      */
     @Override
     public boolean isWarnEnabled() {
-        return true;
+        return false;
     }
 
     /**
@@ -268,7 +268,7 @@ public final class ChameleonNoopLogger implements ChameleonLogger {
      */
     @Override
     public boolean isErrorEnabled() {
-        return true;
+        return false;
     }
 
 }

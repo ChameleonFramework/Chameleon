@@ -21,18 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * Internal Chameleon utilities.
- *
- * <p>Warning: This package is designed for internal use within Chameleon. This API is not designed
- * for end-users, and use may be unsupported.</p>
- *
- * <p><strong>This package may not follow Semantic Versioning, and breaking changes may be
- * introduced without warning.</strong></p>
- */
-@Internal
-@Experimental
-package dev.hypera.chameleon.util.internal;
+package dev.hypera.chameleon.util.logger;
 
-import org.jetbrains.annotations.ApiStatus.Experimental;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * Represents a formatted message.
+ */
+public final class FormattedMessage {
+
+    private final @Nullable String message;
+    private final @Nullable Throwable throwable;
+
+    FormattedMessage(@Nullable String message, @Nullable Throwable throwable) {
+        this.message = message;
+        this.throwable = throwable;
+    }
+
+    /**
+     * Returns the formatted message.
+     *
+     * @return formatted message.
+     */
+    public @Nullable String message() {
+        return this.message;
+    }
+
+    /**
+     * Returns the throwable to be logged with this message.
+     *
+     * @return throwable.
+     */
+    public @Nullable Throwable throwable() {
+        return this.throwable;
+    }
+
+}
