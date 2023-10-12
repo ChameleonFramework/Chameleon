@@ -62,7 +62,7 @@ final class ChameleonPropertyImpl<T> implements ChameleonProperty<T> {
      */
     @Override
     public @NotNull T get() {
-        if (!this.retrieved.compareAndSet(false, true)) {
+        if (this.retrieved.compareAndSet(false, true)) {
             this.value = retrieveValue();
         }
         return this.value;
