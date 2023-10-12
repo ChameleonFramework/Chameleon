@@ -82,6 +82,7 @@ final class ChameleonPropertyImpl<T> implements ChameleonProperty<T> {
      */
     @Override
     public void reset() {
+        this.retrieved.set(false);
         this.value = this.defaultValue;
     }
 
