@@ -37,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 @Internal
 public final class ChameleonInternalLogger implements ChameleonLogger {
 
-    private static final @NotNull String CHAMELEON_PREFIX = "[Chameleon] ";
+    static final @NotNull String CHAMELEON_PREFIX = "[Chameleon] ";
     private final @NotNull ChameleonLogger logger;
 
     private ChameleonInternalLogger(@NotNull ChameleonLogger logger) {
