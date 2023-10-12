@@ -62,7 +62,12 @@ public abstract class Chameleon {
     private final @NotNull ExtensionManager extensionManager;
 
     @Internal
-    protected Chameleon(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull EventBus eventBus, @NotNull ChameleonLogger logger, @NotNull ExtensionMap extensions) {
+    protected Chameleon(
+        @NotNull ChameleonPluginBootstrap pluginBootstrap,
+        @NotNull EventBus eventBus,
+        @NotNull ChameleonLogger logger,
+        @NotNull ExtensionMap extensions
+    ) {
         Preconditions.checkNotNull("pluginBootstrap", pluginBootstrap);
         Preconditions.checkNotNull("eventBus", eventBus);
         Preconditions.checkNotNull("logger", logger);
