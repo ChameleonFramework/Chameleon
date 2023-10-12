@@ -33,13 +33,32 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Message formatting utility.
  *
- * <p>Example usage: {@code MessageFormatter.basicFormat("Hello, {}!", "world")} would return
+ * <p>This utility was designed to replicate SLF4J's message formatting on other logging libraries.
+ * Outputs from the formatting methods should match SLF4J's. If a message is formatted differently
+ * by SLF4J, please <a
+ * href="https://github.com/ChameleonFramework/Chameleon/issues/new?template=bug_report.yml">create
+ * an issue</a> so this can be resolved.</p>
+ *
+ * <p>Formatting works by using "placeholders" {@code {}} in message patterns. Placeholders
+ * designate the location where arguments will be placed within a message pattern, e.g.
+ * <pre>{@code MessageFormatter.basicFormat("Hello, {}!", "world")}</pre> will return
  * {@code "Hello, world!"}</p>
+ *
+ * <p>If you need to place the string {@code {}} in a message without it being used as a
+ * placeholder, you can escape the sequence with a backslash, e.g.
+ * <pre>{@code MessageFormatter.basicFormat("Hello \\{}, I'm {}.", "Bob")}</pre> will return
+ * {@code "Hello {}, I'm Bob."}.</p>
+ *
+ * <p>If you need to place a backslash before a placeholder, without escaping the
+ * placeholder, you can "double escape" (escape the escape) to prevent the placeholder from being
+ * escaped, e.g.
+ * <pre>{@code MessageFormatter.basicFormat("Saved to C:\\\\{}.", "chameleon\\image.png")}</pre>
+ * will return {@code "Saved to C:\\chameleon\\image.png}</p>
  */
 public final class MessageFormatter {
 
     private static final char START_CHAR = '{';
-    private static final @NotNull String STR = "{}";
+    private static final @NotNull String PLACEHOLDER = "{}";
     private static final char ESCAPE_CHAR = '\\';
 
     private MessageFormatter() {
@@ -48,12 +67,12 @@ public final class MessageFormatter {
     }
 
     /**
-     * Formats the given message.
+     * Formats the given message pattern with the provided arguments.
      *
-     * @param pattern Message pattern.
-     * @param args    Arguments.
+     * @param pattern Message pattern containing placeholders.
+     * @param args    Arguments to replace placeholders in the pattern.
      *
-     * @return formatted message.
+     * @return formatted message string, or {@code null} if the given pattern is {@code null}.
      */
     @Contract(value = "!null, _ -> !null; null, _ -> null", pure = true)
     public static @Nullable String basicFormat(@Nullable String pattern, @Nullable Object... args) {
@@ -61,12 +80,13 @@ public final class MessageFormatter {
     }
 
     /**
-     * Formats the given message.
+     * Formats the given message pattern with the provided arguments.
      *
-     * @param pattern Message pattern.
-     * @param args    Arguments.
+     * @param pattern Message pattern containing placeholders.
+     * @param args    Arguments to replace the placeholders in the pattern.
      *
-     * @return formatted message.
+     * @return a {@link FormattedMessage} object containing the formatted message and extracted
+     *     throwable.
      */
     public static @NotNull FormattedMessage format(@Nullable String pattern, @Nullable Object... args) {
         Throwable t = getThrowable(args);
@@ -77,13 +97,13 @@ public final class MessageFormatter {
     }
 
     /**
-     * Format the given message.
+     * Format the given message pattern with the provided arguments.
      *
-     * @param pattern Message pattern.
-     * @param args    Arguments.
+     * @param pattern Message pattern containing placeholders.
+     * @param args    Arguments to replace the placeholders in the pattern.
      * @param t       Throwable.
      *
-     * @return formatted message.
+     * @return a {@link FormattedMessage} object containing the formatted message and throwable.
      */
     public static @NotNull FormattedMessage format(@Nullable String pattern, @Nullable Object[] args, @Nullable Throwable t) {
         if (pattern == null) {
@@ -103,7 +123,7 @@ public final class MessageFormatter {
         StringBuilder sb = new StringBuilder(pattern.length());
 
         for (a = 0; a < args.length; a++) {
-            v = pattern.indexOf(STR, i);
+            v = pattern.indexOf(PLACEHOLDER, i);
             if (v == -1) { // Variable placeholder not found
                 if (i == 0) {
                     return pattern;
@@ -303,7 +323,7 @@ public final class MessageFormatter {
     /**
      * Removes the last element from the given array.
      *
-     * @param array Array to remove last element from.
+     * @param array Array to remove the last element from.
      *
      * @return a copy of the given array with the last element removed.
      */
@@ -322,7 +342,8 @@ public final class MessageFormatter {
      *
      * @param array Array to retrieve throwable from.
      *
-     * @return throwable, if the last element of the array was a throwable, otherwise {@code null}.
+     * @return a throwable, if the last element of the array was a throwable, otherwise
+     *     {@code null}.
      */
     @Contract(value = "null -> null", pure = true)
     private static @Nullable Throwable getThrowable(@Nullable Object @Nullable [] array) {
