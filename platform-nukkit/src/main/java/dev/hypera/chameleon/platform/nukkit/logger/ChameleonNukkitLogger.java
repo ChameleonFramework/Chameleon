@@ -51,6 +51,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         this.logger = logger;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void trace(@NotNull String msg) {
         if (isTraceEnabled()) {
@@ -58,6 +61,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void trace(@NotNull String format, @Nullable Object arg) {
         if (isTraceEnabled()) {
@@ -65,6 +71,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void trace(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isTraceEnabled()) {
@@ -72,6 +81,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void trace(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isTraceEnabled()) {
@@ -79,6 +91,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void trace(@NotNull String msg, @Nullable Throwable t) {
         if (isTraceEnabled()) {
@@ -86,6 +101,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void debug(@NotNull String msg) {
         if (isDebugEnabled()) {
@@ -93,6 +111,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void debug(@NotNull String format, @Nullable Object arg) {
         if (isDebugEnabled()) {
@@ -100,6 +121,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void debug(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isDebugEnabled()) {
@@ -107,6 +131,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void debug(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isDebugEnabled()) {
@@ -114,6 +141,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void debug(@NotNull String msg, @Nullable Throwable t) {
         if (isDebugEnabled()) {
@@ -121,6 +151,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void info(@NotNull String msg) {
         if (isInfoEnabled()) {
@@ -128,6 +161,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void info(@NotNull String format, @Nullable Object arg) {
         if (isInfoEnabled()) {
@@ -135,6 +171,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void info(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isInfoEnabled()) {
@@ -142,6 +181,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void info(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isInfoEnabled()) {
@@ -149,6 +191,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void info(@NotNull String msg, @Nullable Throwable t) {
         if (isInfoEnabled()) {
@@ -156,6 +201,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void warn(@NotNull String msg) {
         if (isWarnEnabled()) {
@@ -163,6 +211,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void warn(@NotNull String format, @Nullable Object arg) {
         if (isWarnEnabled()) {
@@ -170,6 +221,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void warn(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isWarnEnabled()) {
@@ -177,6 +231,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void warn(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isWarnEnabled()) {
@@ -184,6 +241,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void warn(@NotNull String msg, @Nullable Throwable t) {
         if (isWarnEnabled()) {
@@ -191,6 +251,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void error(@NotNull String msg) {
         if (isErrorEnabled()) {
@@ -198,6 +261,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void error(@NotNull String format, @Nullable Object arg) {
         if (isErrorEnabled()) {
@@ -205,6 +271,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void error(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isErrorEnabled()) {
@@ -212,6 +281,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void error(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isErrorEnabled()) {
@@ -219,6 +291,9 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void error(@NotNull String msg, @Nullable Throwable t) {
         if (isErrorEnabled()) {
@@ -226,26 +301,41 @@ public final class ChameleonNukkitLogger implements ChameleonLogger {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isTraceEnabled() {
         return Nukkit.getLogLevel().isLessSpecificThan(Level.TRACE);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isDebugEnabled() {
         return Nukkit.getLogLevel().isLessSpecificThan(Level.DEBUG);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isInfoEnabled() {
         return Nukkit.getLogLevel().isLessSpecificThan(Level.INFO);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isWarnEnabled() {
         return Nukkit.getLogLevel().isLessSpecificThan(Level.WARN);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isErrorEnabled() {
         return Nukkit.getLogLevel().isLessSpecificThan(Level.ERROR);
