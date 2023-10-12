@@ -40,20 +40,23 @@ import org.jetbrains.annotations.Nullable;
  * an issue</a> so this can be resolved.</p>
  *
  * <p>Formatting works by using "placeholders" {@code {}} in message patterns. Placeholders
- * designate the location where arguments will be placed within a message pattern, e.g.
- * <pre>{@code MessageFormatter.basicFormat("Hello, {}!", "world")}</pre> will return
- * {@code "Hello, world!"}</p>
+ * designate the location where arguments will be placed within a message pattern, e.g.</p>
+ * <pre>{@code
+ * MessageFormatter.basicFormat("Hello, {}!", "world") // returns "Hello, world!"
+ * }</pre>
  *
  * <p>If you need to place the string {@code {}} in a message without it being used as a
- * placeholder, you can escape the sequence with a backslash, e.g.
- * <pre>{@code MessageFormatter.basicFormat("Hello \\{}, I'm {}.", "Bob")}</pre> will return
- * {@code "Hello {}, I'm Bob."}.</p>
+ * placeholder, you can escape the sequence with a backslash, e.g.</p>
+ * <pre>{@code
+ * MessageFormatter.basicFormat("Hello \\{}, I'm {}.", "Bob") // returns "Hello {}, I'm Bob."
+ * }</pre>
  *
  * <p>If you need to place a backslash before a placeholder, without escaping the
  * placeholder, you can "double escape" (escape the escape) to prevent the placeholder from being
- * escaped, e.g.
- * <pre>{@code MessageFormatter.basicFormat("Saved to C:\\\\{}.", "chameleon\\image.png")}</pre>
- * will return {@code "Saved to C:\\chameleon\\image.png}</p>
+ * escaped, e.g.</p>
+ * <pre>{@code
+ * MessageFormatter.basicFormat("Saved to C:\\\\{}.", "chameleon\\image.png") // returns "Saved to C:\\chameleon\\image.png"
+ * }</pre>
  */
 public final class MessageFormatter {
 
