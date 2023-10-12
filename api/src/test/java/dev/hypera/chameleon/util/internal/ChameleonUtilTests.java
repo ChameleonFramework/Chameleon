@@ -21,11 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.util;
+package dev.hypera.chameleon.util.internal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import dev.hypera.chameleon.util.internal.ChameleonUtil;
 import org.junit.jupiter.api.Test;
 
 final class ChameleonUtilTests {
