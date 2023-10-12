@@ -25,7 +25,7 @@ package dev.hypera.chameleon.platform.bungeecord;
 
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPluginBootstrap;
-import dev.hypera.chameleon.logger.ChameleonJavaLogger;
+import dev.hypera.chameleon.platform.logger.ChameleonJavaLogger;
 import dev.hypera.chameleon.platform.Platform;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus.Internal;

@@ -21,36 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.logger;
+package dev.hypera.chameleon.platform.logger;
 
+import dev.hypera.chameleon.logger.AbstractChameleonLogger;
 import dev.hypera.chameleon.util.logger.FormattedMessage;
 import dev.hypera.chameleon.util.logger.MessageFormatter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Java Chameleon logger implementation.
+ * Log4J Chameleon logger implementation.
  */
-@Internal
-public final class ChameleonJavaLogger extends AbstractChameleonLogger {
-
-    private static final @NotNull Level LEVEL_TRACE = Level.FINER;
-    private static final @NotNull Level LEVEL_DEBUG = Level.FINE;
-    private static final @NotNull Level LEVEL_INFO = Level.INFO;
-    private static final @NotNull Level LEVEL_WARN = Level.WARNING;
-    private static final @NotNull Level LEVEL_ERROR = Level.SEVERE;
+public final class ChameleonLog4jLogger extends AbstractChameleonLogger {
 
     private final @NotNull Logger logger;
 
     /**
-     * Chameleon Java logger constructor.
+     * Chameleon Log4J logger constructor.
      *
-     * @param logger Java logger instance to use.
+     * @param logger Log4J logger instance to use.
      */
-    public ChameleonJavaLogger(@NotNull Logger logger) {
+    public ChameleonLog4jLogger(@NotNull Logger logger) {
         this.logger = logger;
     }
 
@@ -59,9 +52,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
      */
     @Override
     public void trace(@NotNull String msg) {
-        if (isTraceEnabled()) {
-            this.logger.log(LEVEL_TRACE, msg);
-        }
+        this.logger.trace(msg);
     }
 
     /**
@@ -70,7 +61,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void trace(@NotNull String format, @Nullable Object arg) {
         if (isTraceEnabled()) {
-            logFormatted(LEVEL_TRACE, format, arg);
+            logFormatted(Level.TRACE, format, arg);
         }
     }
 
@@ -80,7 +71,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void trace(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isTraceEnabled()) {
-            logFormatted(LEVEL_TRACE, format, arg1, arg2);
+            logFormatted(Level.TRACE, format, arg1, arg2);
         }
     }
 
@@ -90,7 +81,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void trace(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isTraceEnabled()) {
-            logFormatted(LEVEL_TRACE, format, arguments);
+            logFormatted(Level.TRACE, format, arguments);
         }
     }
 
@@ -100,7 +91,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void trace(@NotNull String msg, @Nullable Throwable t) {
         if (isTraceEnabled()) {
-            this.logger.log(LEVEL_TRACE, msg, t);
+            this.logger.trace(msg, t);
         }
     }
 
@@ -110,7 +101,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void debug(@NotNull String msg) {
         if (isDebugEnabled()) {
-            this.logger.log(LEVEL_DEBUG, msg);
+            this.logger.debug(msg);
         }
     }
 
@@ -120,7 +111,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void debug(@NotNull String format, @Nullable Object arg) {
         if (isDebugEnabled()) {
-            logFormatted(LEVEL_DEBUG, format, arg);
+            logFormatted(Level.DEBUG, format, arg);
         }
     }
 
@@ -130,7 +121,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void debug(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isDebugEnabled()) {
-            logFormatted(LEVEL_DEBUG, format, arg1, arg2);
+            logFormatted(Level.DEBUG, format, arg1, arg2);
         }
     }
 
@@ -140,7 +131,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void debug(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isDebugEnabled()) {
-            logFormatted(LEVEL_DEBUG, format, arguments);
+            logFormatted(Level.DEBUG, format, arguments);
         }
     }
 
@@ -150,7 +141,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void debug(@NotNull String msg, @Nullable Throwable t) {
         if (isDebugEnabled()) {
-            this.logger.log(LEVEL_DEBUG, msg, t);
+            this.logger.debug(msg, t);
         }
     }
 
@@ -160,7 +151,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void info(@NotNull String msg) {
         if (isInfoEnabled()) {
-            this.logger.log(LEVEL_INFO, msg);
+            this.logger.info(msg);
         }
     }
 
@@ -170,7 +161,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void info(@NotNull String format, @Nullable Object arg) {
         if (isInfoEnabled()) {
-            logFormatted(LEVEL_INFO, format, arg);
+            logFormatted(Level.INFO, format, arg);
         }
     }
 
@@ -180,7 +171,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void info(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isInfoEnabled()) {
-            logFormatted(LEVEL_INFO, format, arg1, arg2);
+            logFormatted(Level.INFO, format, arg1, arg2);
         }
     }
 
@@ -190,7 +181,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void info(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isInfoEnabled()) {
-            logFormatted(LEVEL_INFO, format, arguments);
+            logFormatted(Level.INFO, format, arguments);
         }
     }
 
@@ -200,7 +191,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void info(@NotNull String msg, @Nullable Throwable t) {
         if (isInfoEnabled()) {
-            this.logger.log(LEVEL_INFO, msg, t);
+            this.logger.info(msg, t);
         }
     }
 
@@ -210,7 +201,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void warn(@NotNull String msg) {
         if (isWarnEnabled()) {
-            this.logger.log(LEVEL_WARN, msg);
+            this.logger.warn(msg);
         }
     }
 
@@ -220,7 +211,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void warn(@NotNull String format, @Nullable Object arg) {
         if (isWarnEnabled()) {
-            logFormatted(LEVEL_WARN, format, arg);
+            logFormatted(Level.WARN, format, arg);
         }
     }
 
@@ -230,7 +221,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void warn(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isWarnEnabled()) {
-            logFormatted(LEVEL_WARN, format, arg1, arg2);
+            logFormatted(Level.WARN, format, arg1, arg2);
         }
     }
 
@@ -240,7 +231,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void warn(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isWarnEnabled()) {
-            logFormatted(LEVEL_WARN, format, arguments);
+            logFormatted(Level.WARN, format, arguments);
         }
     }
 
@@ -250,7 +241,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void warn(@NotNull String msg, @Nullable Throwable t) {
         if (isWarnEnabled()) {
-            this.logger.log(LEVEL_WARN, msg, t);
+            this.logger.warn(msg, t);
         }
     }
 
@@ -260,7 +251,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void error(@NotNull String msg) {
         if (isErrorEnabled()) {
-            this.logger.log(LEVEL_ERROR, msg);
+            this.logger.error(msg);
         }
     }
 
@@ -270,7 +261,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void error(@NotNull String format, @Nullable Object arg) {
         if (isErrorEnabled()) {
-            logFormatted(LEVEL_ERROR, format, arg);
+            logFormatted(Level.ERROR, format, arg);
         }
     }
 
@@ -280,7 +271,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void error(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isErrorEnabled()) {
-            logFormatted(LEVEL_ERROR, format, arg1, arg2);
+            logFormatted(Level.ERROR, format, arg1, arg2);
         }
     }
 
@@ -290,7 +281,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void error(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isErrorEnabled()) {
-            logFormatted(LEVEL_ERROR, format, arguments);
+            logFormatted(Level.ERROR, format, arguments);
         }
     }
 
@@ -300,7 +291,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
     @Override
     public void error(@NotNull String msg, @Nullable Throwable t) {
         if (isErrorEnabled()) {
-            this.logger.log(LEVEL_ERROR, msg, t);
+            this.logger.error(msg, t);
         }
     }
 
@@ -309,7 +300,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
      */
     @Override
     public boolean isTraceEnabled() {
-        return this.logger.isLoggable(LEVEL_TRACE);
+        return this.logger.isTraceEnabled();
     }
 
     /**
@@ -317,7 +308,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
      */
     @Override
     public boolean isDebugEnabled() {
-        return this.logger.isLoggable(LEVEL_DEBUG);
+        return this.logger.isDebugEnabled();
     }
 
     /**
@@ -325,7 +316,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
      */
     @Override
     public boolean isInfoEnabled() {
-        return this.logger.isLoggable(LEVEL_INFO);
+        return this.logger.isInfoEnabled();
     }
 
     /**
@@ -333,7 +324,7 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
      */
     @Override
     public boolean isWarnEnabled() {
-        return this.logger.isLoggable(LEVEL_WARN);
+        return this.logger.isWarnEnabled();
     }
 
     /**
@@ -341,16 +332,16 @@ public final class ChameleonJavaLogger extends AbstractChameleonLogger {
      */
     @Override
     public boolean isErrorEnabled() {
-        return this.logger.isLoggable(LEVEL_ERROR);
+        return this.logger.isErrorEnabled();
     }
 
     private void logFormatted(@NotNull Level level, @NotNull String format, @Nullable Object @NotNull ... args) {
         FormattedMessage m = MessageFormatter.format(format, args);
         if (m.throwable() == null) {
-            this.logger.log(level, m.message());
+            this.logger.atLevel(level).log(m.message());
             return;
         }
-        this.logger.log(level, m.message(), m.throwable());
+        this.logger.atLevel(level).withThrowable(m.throwable()).log(m.message());
     }
 
 }

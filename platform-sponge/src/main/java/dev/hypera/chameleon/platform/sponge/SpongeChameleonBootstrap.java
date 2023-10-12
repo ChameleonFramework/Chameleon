@@ -25,7 +25,7 @@ package dev.hypera.chameleon.platform.sponge;
 
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPluginBootstrap;
-import dev.hypera.chameleon.logger.ChameleonLog4jLogger;
+import dev.hypera.chameleon.platform.logger.ChameleonLog4jLogger;
 import dev.hypera.chameleon.platform.Platform;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;

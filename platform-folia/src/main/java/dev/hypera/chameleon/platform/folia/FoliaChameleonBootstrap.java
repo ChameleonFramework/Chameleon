@@ -25,7 +25,7 @@ package dev.hypera.chameleon.platform.folia;
 
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPluginBootstrap;
-import dev.hypera.chameleon.logger.ChameleonSlf4jLogger;
+import dev.hypera.chameleon.platform.logger.ChameleonSlf4jLogger;
 import dev.hypera.chameleon.platform.Platform;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;

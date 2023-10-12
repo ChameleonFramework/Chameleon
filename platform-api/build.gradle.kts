@@ -28,4 +28,8 @@ plugins {
 
 dependencies {
     api(projects.chameleonApi)
+
+    // Logging libraries for logger wrappers
+    compileOnly(libs.slf4j) // Used in ChameleonSlf4jLogger
+    compileOnly(libs.log4j) // Used in ChameleonLog4jLogger
 }
