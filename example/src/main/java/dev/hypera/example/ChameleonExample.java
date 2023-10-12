@@ -130,12 +130,12 @@ public final class ChameleonExample implements ChameleonPlugin {
 
         // User disconnect event
         this.chameleon.getEventBus().subscribe(UserDisconnectEvent.class, event ->
-            this.logger.info("%s left the server", event.getUser().getName())
+            this.logger.info("{} left the server", event.getUser().getName())
         );
 
         // Custom event
         this.chameleon.getEventBus().subscribe(ExampleCustomEvent.class, event ->
-            this.logger.info("Received example custom event! Hello, %s!", event.getName())
+            this.logger.info("Received example custom event! Hello, {}!", event.getName())
         );
 
         /* Scheduling */
@@ -149,15 +149,15 @@ public final class ChameleonExample implements ChameleonPlugin {
 
         /* Plugin Management */
         for (PlatformPlugin plugin : this.chameleon.getPluginManager().getPlugins()) {
-            this.logger.info("Found plugin %s v%s", plugin.getName(), plugin.getVersion());
+            this.logger.info("Found plugin {} v{}", plugin.getName(), plugin.getVersion());
         }
 
         this.logger.info(
-            "Successfully started ChameleonExample plugin, took %s ms.",
+            "Successfully started ChameleonExample plugin, took {} ms.",
             Duration.between(start, Instant.now()).toMillis()
         );
         this.logger.info(
-            "Running on %s (%s) v%s with Chameleon v%s!",
+            "Running on {} ({}) v{} with Chameleon v{}!",
             this.chameleon.getPlatform().getName(), this.chameleon.getPlatform().getId(),
             this.chameleon.getPlatform().getVersion(), Chameleon.getVersion()
         );
