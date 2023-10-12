@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * No-op Chameleon logger implementation.
  */
-public final class ChameleonNoopLogger implements ChameleonLogger {
+public final class ChameleonNoopLogger extends AbstractChameleonLogger {
 
     /**
      * {@inheritDoc}

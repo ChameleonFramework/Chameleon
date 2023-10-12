@@ -26,7 +26,7 @@ package dev.hypera.chameleon.platform.nukkit.logger;
 import cn.nukkit.Nukkit;
 import cn.nukkit.utils.LogLevel;
 import cn.nukkit.utils.Logger;
-import dev.hypera.chameleon.logger.ChameleonLogger;
+import dev.hypera.chameleon.logger.AbstractChameleonLogger;
 import dev.hypera.chameleon.util.logger.FormattedMessage;
 import dev.hypera.chameleon.util.logger.MessageFormatter;
 import org.apache.logging.log4j.Level;
@@ -38,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
  * Nukkit Chameleon logger implementation.
  */
 @Internal
-public final class ChameleonNukkitLogger implements ChameleonLogger {
+public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
 
     private final @NotNull Logger logger;
 

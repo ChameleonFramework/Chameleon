@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * end-users, and use is not recommended or supported.</p>
  */
 @Internal
-public final class ChameleonInternalLogger implements ChameleonLogger {
+public final class ChameleonInternalLogger extends AbstractChameleonLogger {
 
     static final @NotNull String CHAMELEON_PREFIX = "[Chameleon] ";
     private final @NotNull ChameleonLogger logger;

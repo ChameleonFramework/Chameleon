@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * Log4J Chameleon logger implementation.
  */
 @Internal
-public final class ChameleonLog4jLogger implements ChameleonLogger {
+public final class ChameleonLog4jLogger extends AbstractChameleonLogger {
 
     private final @NotNull Logger logger;
 

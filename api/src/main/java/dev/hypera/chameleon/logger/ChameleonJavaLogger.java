@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * Java Chameleon logger implementation.
  */
 @Internal
-public final class ChameleonJavaLogger implements ChameleonLogger {
+public final class ChameleonJavaLogger extends AbstractChameleonLogger {
 
     private static final @NotNull Level LEVEL_TRACE = Level.FINER;
     private static final @NotNull Level LEVEL_DEBUG = Level.FINE;

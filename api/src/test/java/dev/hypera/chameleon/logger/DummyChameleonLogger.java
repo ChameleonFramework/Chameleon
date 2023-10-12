@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Dummy Chameleon logger implementation.
  */
-public final class DummyChameleonLogger implements ChameleonLogger {
+public final class DummyChameleonLogger extends AbstractChameleonLogger {
 
     private final @NotNull List<Throwable> exceptions = new ArrayList<>();
 

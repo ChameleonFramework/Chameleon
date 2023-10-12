@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 /**
  * SLF4J Chameleon logger implementation.
  */
-public final class ChameleonSlf4jLogger implements ChameleonLogger {
+public final class ChameleonSlf4jLogger extends AbstractChameleonLogger {
 
     private final @NotNull Logger logger;
 
