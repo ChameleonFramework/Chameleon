@@ -55,7 +55,7 @@ import org.jetbrains.annotations.Nullable;
  * placeholder, you can "double escape" (escape the escape) to prevent the placeholder from being
  * escaped, e.g.</p>
  * <pre>{@code
- * MessageFormatter.basicFormat("Saved to C:\\\\{}.", "chameleon\\image.png") // returns "Saved to C:\\chameleon\\image.png"
+ * MessageFormatter.basicFormat("Saved to C:\\\\{}.", "chameleon\\image.png") // returns "Saved to C:\chameleon\image.png"
  * }</pre>
  */
 public final class MessageFormatter {

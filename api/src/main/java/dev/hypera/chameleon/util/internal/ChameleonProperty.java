@@ -45,12 +45,12 @@ public interface ChameleonProperty<T> {
      * <p>When enabled, Chameleon will log additional messages that could be helpful when
      * debugging.</p>
      */
-    ChameleonProperty<Boolean> DEBUG = of("debug", Boolean::parseBoolean, false);
+    @NotNull ChameleonProperty<Boolean> DEBUG = of("debug", Boolean::parseBoolean, false);
 
     /**
      * Specifies whether errors in Chameleon should be logged.
      */
-    ChameleonProperty<Boolean> LOG_ERRORS = of("logErrors", Boolean::parseBoolean, true);
+    @NotNull ChameleonProperty<Boolean> LOG_ERRORS = of("logErrors", Boolean::parseBoolean, true);
 
     /**
      * Returns the name of this property.
