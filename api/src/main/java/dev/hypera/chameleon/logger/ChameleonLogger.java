@@ -23,77 +23,298 @@
  */
 package dev.hypera.chameleon.logger;
 
-import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Chameleon logger.
  */
-@NonExtendable
 public interface ChameleonLogger {
 
     /**
-     * Log an informational message.
+     * Log a trace message.
      *
-     * @param message Message to be logged.
-     * @param args    Message arguments.
+     * @param msg Message to be logged.
      */
-    void info(@NotNull String message, @NotNull Object... args);
+    void trace(@NotNull String msg);
+
+    /**
+     * Log a trace message with the specified format and argument.
+     *
+     * <p>This method avoids unnecessary object creation when the underlying logger has trace logs
+     * disabled.</p>
+     *
+     * @param format Message format.
+     * @param arg    Format argument.
+     */
+    void trace(@NotNull String format, @Nullable Object arg);
+
+    /**
+     * Log a trace message with the specified format and arguments.
+     *
+     * <p>This method avoids unnecessary object creation when the underlying logger has trace logs
+     * disabled.</p>
+     *
+     * @param format Message format.
+     * @param arg1   First format argument.
+     * @param arg2   Second format argument.
+     */
+    void trace(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2);
+
+    /**
+     * Log a trace message with the specified format and arguments.
+     *
+     * <p>This method avoids unnecessary string concatenation when the logger has trace logs
+     * disabled. However, this method incurs the hidden cost of creating a {@code Object[]} before
+     * invoking the method, even if the underlying logger has trace logs disabled.</p>
+     *
+     * @param format    Message format.
+     * @param arguments Format arguments.
+     */
+    void trace(@NotNull String format, @Nullable Object @NotNull ... arguments);
+
+    /**
+     * Log a trace message with an exception.
+     *
+     * @param msg Message to be logged.
+     * @param t   Throwable to be logged.
+     */
+    void trace(@NotNull String msg, @Nullable Throwable t);
 
     /**
      * Log a debug message.
      *
-     * @param message Message to be logged.
-     * @param args    Message arguments.
+     * @param msg Message to be logged.
      */
-    void debug(@NotNull String message, @NotNull Object... args);
+    void debug(@NotNull String msg);
+
+    /**
+     * Log a debug message with the specified format and argument.
+     *
+     * <p>This method avoids unnecessary object creation when the underlying logger has debug logs
+     * disabled.</p>
+     *
+     * @param format Message format.
+     * @param arg    Format argument.
+     */
+    void debug(@NotNull String format, @Nullable Object arg);
+
+
+    /**
+     * Log a debug message with the specified format and arguments.
+     *
+     * <p>This method avoids unnecessary object creation when the underlying logger has debug logs
+     * disabled.</p>
+     *
+     * @param format Message format.
+     * @param arg1   First format argument.
+     * @param arg2   Second format argument.
+     */
+    void debug(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2);
+
+    /**
+     * Log a debug message with the specified format and arguments.
+     *
+     * <p>This method avoids unnecessary string concatenation when the logger has debug logs
+     * disabled. However, this method incurs the hidden cost of creating a {@code Object[]} before
+     * invoking the method, even if the underlying logger has debug logs disabled.</p>
+     *
+     * @param format    Message format.
+     * @param arguments Format arguments.
+     */
+    void debug(@NotNull String format, @Nullable Object @NotNull ... arguments);
+
+    /**
+     * Log a debug message with an exception.
+     *
+     * @param msg Message to be logged.
+     * @param t   Throwable to be logged.
+     */
+    void debug(@NotNull String msg, @Nullable Throwable t);
+
+    /**
+     * Log an informational message.
+     *
+     * @param msg Message to be logged.
+     */
+    void info(@NotNull String msg);
+
+    /**
+     * Log an informational message with the specified format and argument.
+     *
+     * <p>This method avoids unnecessary object creation when the underlying logger has info logs
+     * disabled.</p>
+     *
+     * @param format Message format.
+     * @param arg    Format argument.
+     */
+    void info(@NotNull String format, @Nullable Object arg);
+
+    /**
+     * Log an informational message with the specified format and arguments.
+     *
+     * <p>This method avoids unnecessary object creation when the underlying logger has info logs
+     * disabled.</p>
+     *
+     * @param format Message format.
+     * @param arg1   First format argument.
+     * @param arg2   Second format argument.
+     */
+    void info(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2);
+
+    /**
+     * Log an informational message with the specified format and arguments.
+     *
+     * <p>This method avoids unnecessary string concatenation when the logger has info logs
+     * disabled. However, this method incurs the hidden cost of creating a {@code Object[]} before
+     * invoking the method, even if the underlying logger has info logs disabled.</p>
+     *
+     * @param format    Message format.
+     * @param arguments Format arguments.
+     */
+    void info(@NotNull String format, @Nullable Object @NotNull ... arguments);
+
+    /**
+     * Log an informational message with an exception.
+     *
+     * @param msg Message to be logged.
+     * @param t   Throwable to be logged.
+     */
+    void info(@NotNull String msg, @Nullable Throwable t);
 
     /**
      * Log a warning message.
      *
-     * @param message Message to be logged.
-     * @param args    Message arguments.
+     * @param msg Message to be logged.
      */
-    void warn(@NotNull String message, @NotNull Object... args);
+    void warn(@NotNull String msg);
+
+    /**
+     * Log a warning message with the specified format and argument.
+     *
+     * <p>This method avoids unnecessary object creation when the underlying logger has warn logs
+     * disabled.</p>
+     *
+     * @param format Message format.
+     * @param arg    Format argument.
+     */
+    void warn(@NotNull String format, @Nullable Object arg);
+
+    /**
+     * Log a warning message with the specified format and arguments.
+     *
+     * <p>This method avoids unnecessary object creation when the underlying logger has warn logs
+     * disabled.</p>
+     *
+     * @param format Message format.
+     * @param arg1   First format argument.
+     * @param arg2   Second format argument.
+     */
+    void warn(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2);
+
+    /**
+     * Log a warning message with the specified format and arguments.
+     *
+     * <p>This method avoids unnecessary string concatenation when the logger has warn logs
+     * disabled. However, this method incurs the hidden cost of creating a {@code Object[]} before
+     * invoking the method, even if the underlying logger has warn logs disabled.</p>
+     *
+     * @param format    Message format.
+     * @param arguments Format arguments.
+     */
+    void warn(@NotNull String format, @Nullable Object @NotNull ... arguments);
 
     /**
      * Log a warning message with an exception.
      *
-     * @param message   Message to be logged.
-     * @param throwable Exception to be logged.
-     * @param args      Message arguments.
+     * @param msg Message to be logged.
+     * @param t   Throwable to be logged.
      */
-    void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... args);
+    void warn(@NotNull String msg, @Nullable Throwable t);
 
     /**
      * Log an error message.
      *
-     * @param message Message to be logged.
-     * @param args    Message arguments.
+     * @param msg Message to be logged.
      */
-    void error(@NotNull String message, @NotNull Object... args);
+    void error(@NotNull String msg);
+
+    /**
+     * Log an error message with the specified format and argument.
+     *
+     * <p>This method avoids unnecessary object creation when the underlying logger has error logs
+     * disabled.</p>
+     *
+     * @param format Message format.
+     * @param arg    Format argument.
+     */
+    void error(@NotNull String format, @Nullable Object arg);
+
+    /**
+     * Log an error message with the specified format and arguments.
+     *
+     * <p>This method avoids unnecessary object creation when the underlying logger has error logs
+     * disabled.</p>
+     *
+     * @param format Message format.
+     * @param arg1   First format argument.
+     * @param arg2   Second format argument.
+     */
+    void error(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2);
+
+    /**
+     * Log an error message with the specified format and arguments.
+     *
+     * <p>This method avoids unnecessary string concatenation when the logger has error logs
+     * disabled. However, this method incurs the hidden cost of creating a {@code Object[]} before
+     * invoking the method, even if the underlying logger has error logs disabled.</p>
+     *
+     * @param format    Message format.
+     * @param arguments Format arguments.
+     */
+    void error(@NotNull String format, @Nullable Object @NotNull ... arguments);
 
     /**
      * Log an error message with an exception.
      *
-     * @param message   Message to be logged.
-     * @param throwable Exception to be logged.
-     * @param args      Message arguments.
+     * @param msg Message to be logged.
+     * @param t   Throwable to be logged.
      */
-    void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... args);
+    void error(@NotNull String msg, @Nullable Throwable t);
 
     /**
-     * Enable debug logs.
+     * Returns whether trace logs are enabled.
      *
-     * @return {@code this}.
+     * @return trace logs enabled.
      */
-    @NotNull ChameleonLogger enableDebug();
+    boolean isTraceEnabled();
 
     /**
-     * Disable debug logs.
+     * Returns whether debug logs are enabled.
      *
-     * @return {@code this}.
+     * @return debug logs enabled.
      */
-    @NotNull ChameleonLogger disableDebug();
+    boolean isDebugEnabled();
+
+    /**
+     * Returns whether informational logs are enabled.
+     *
+     * @return info logs enabled.
+     */
+    boolean isInfoEnabled();
+
+    /**
+     * Returns whether warning logs are enabled.
+     *
+     * @return warn logs enabled.
+     */
+    boolean isWarnEnabled();
+
+    /**
+     * Returns whether error logs are enabled.
+     *
+     * @return error logs enabled.
+     */
+    boolean isErrorEnabled();
 
 }

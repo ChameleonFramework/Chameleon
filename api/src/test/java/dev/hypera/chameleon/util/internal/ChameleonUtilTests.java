@@ -21,35 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.sponge;
+package dev.hypera.chameleon.util.internal;
 
-import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPluginBootstrap;
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.platform.logger.ChameleonLog4jLogger;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Sponge Chameleon bootstrap implementation.
- */
-public final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeChameleon> {
+import org.junit.jupiter.api.Test;
 
-    private final @NotNull SpongePlugin spongePlugin;
+final class ChameleonUtilTests {
 
-    @Internal
-    SpongeChameleonBootstrap(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull SpongePlugin spongePlugin) {
-        super(Platform.SPONGE, pluginBootstrap, new ChameleonLog4jLogger(spongePlugin.getLogger()));
-        this.spongePlugin = spongePlugin;
-    }
-
-    @Override
-    protected @NotNull SpongeChameleon loadPlatform() {
-        return new SpongeChameleon(
-            this.pluginBootstrap, this.spongePlugin,
-            this.eventBus, this.logger, this.extensions
-        );
+    @Test
+    void testGetOrDefault() {
+        assertEquals("test", ChameleonUtil.getOrDefault("test", "test2"));
+        assertEquals("test", ChameleonUtil.getOrDefault(null, "test"));
     }
 
 }
-

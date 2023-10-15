@@ -43,7 +43,8 @@ import org.jetbrains.annotations.Nullable;
 public final class Preconditions {
 
     private Preconditions() {
-        throw new UnsupportedOperationException("Preconditions is a utility class and cannot be instantiated");
+        throw new UnsupportedOperationException(
+            "Preconditions is a utility class and cannot be instantiated");
     }
 
     /**
@@ -223,6 +224,42 @@ public final class Preconditions {
     }
 
     /**
+     * Ensures the given {@code value} is not null or empty.
+     *
+     * @param name  Argument name, used in the exception message if {@code value} is null or empty.
+     * @param value Argument value.
+     * @param <T>   Value type.
+     *
+     * @return {@code value}.
+     */
+    @Contract("_, !null -> param2; _, null -> fail")
+    public static <T> @Nullable T @NotNull [] checkNotNullOrEmpty(@NotNull String name, @Nullable T @Nullable [] value) {
+        Preconditions.checkNotNull(name, value);
+        if (value.length < 1) {
+            throw new IllegalArgumentException(name.concat(" cannot be empty"));
+        }
+        return value;
+    }
+
+    /**
+     * Ensures the given {@code value} is not null or empty.
+     *
+     * @param name  Argument name, used in the exception message if {@code value} is null or empty.
+     * @param value Argument value.
+     * @param <T>   Value type.
+     *
+     * @return {@code value}.
+     */
+    @Contract("_, !null -> param2; _, null -> fail")
+    public static <T> @NotNull Collection<T> checkNotNullOrEmpty(@NotNull String name, @Nullable Collection<T> value) {
+        Preconditions.checkNotNull(name, value);
+        if (value.isEmpty()) {
+            throw new IllegalArgumentException(name.concat(" cannot be empty"));
+        }
+        return value;
+    }
+
+    /**
      * Ensures the given {@code value} does not contain null.
      *
      * @param name  Argument name, used in the exception message if {@code value} contains null.
@@ -249,7 +286,8 @@ public final class Preconditions {
      * @param value Argument value.
      *
      * @return {@code value}.
-     * @throws IllegalArgumentException if the given {@code value} does not match the given pattern.
+     * @throws IllegalArgumentException if the given {@code value} does not match the given
+     *                                  pattern.
      */
     @Contract("_, _, null -> fail; _, _, _ -> param3")
     public static @NotNull String checkMatches(@NotNull String name, @NotNull Pattern regex, @Nullable String value) {

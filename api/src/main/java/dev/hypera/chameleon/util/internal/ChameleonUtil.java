@@ -21,35 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.sponge;
+package dev.hypera.chameleon.util.internal;
 
-import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPluginBootstrap;
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.platform.logger.ChameleonLog4jLogger;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Sponge Chameleon bootstrap implementation.
+ * Common internal Chameleon utilities.
  */
-public final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeChameleon> {
+@Internal
+public final class ChameleonUtil {
 
-    private final @NotNull SpongePlugin spongePlugin;
-
-    @Internal
-    SpongeChameleonBootstrap(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull SpongePlugin spongePlugin) {
-        super(Platform.SPONGE, pluginBootstrap, new ChameleonLog4jLogger(spongePlugin.getLogger()));
-        this.spongePlugin = spongePlugin;
+    private ChameleonUtil() {
+        throw new UnsupportedOperationException("ChameleonUtil is a utility class and cannot be instantiated");
     }
 
-    @Override
-    protected @NotNull SpongeChameleon loadPlatform() {
-        return new SpongeChameleon(
-            this.pluginBootstrap, this.spongePlugin,
-            this.eventBus, this.logger, this.extensions
-        );
+    /**
+     * Check if first argument is null, return it if it isn't, otherwise return the default value.
+     *
+     * @param s            Object to check if null.
+     * @param defaultValue Default return value.
+     * @param <T>          Type.
+     *
+     * @return {@code s} if not null, otherwise {@code defaultValue}.
+     */
+    public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
+        return s == null ? defaultValue : s;
     }
 
 }
-

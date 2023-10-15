@@ -24,17 +24,18 @@
 package dev.hypera.chameleon.logger;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * No-op Chameleon logger implementation.
  */
-public final class ChameleonNoopLogger implements ChameleonLogger {
+public final class ChameleonNoopLogger extends AbstractChameleonLogger {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void info(@NotNull String message, @NotNull Object... args) {
+    public void trace(@NotNull String msg) {
         // No-op
     }
 
@@ -42,7 +43,7 @@ public final class ChameleonNoopLogger implements ChameleonLogger {
      * {@inheritDoc}
      */
     @Override
-    public void debug(@NotNull String message, @NotNull Object... args) {
+    public void trace(@NotNull String format, @Nullable Object arg) {
         // No-op
     }
 
@@ -50,7 +51,7 @@ public final class ChameleonNoopLogger implements ChameleonLogger {
      * {@inheritDoc}
      */
     @Override
-    public void warn(@NotNull String message, @NotNull Object... args) {
+    public void trace(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         // No-op
     }
 
@@ -58,7 +59,7 @@ public final class ChameleonNoopLogger implements ChameleonLogger {
      * {@inheritDoc}
      */
     @Override
-    public void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... args) {
+    public void trace(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         // No-op
     }
 
@@ -66,7 +67,7 @@ public final class ChameleonNoopLogger implements ChameleonLogger {
      * {@inheritDoc}
      */
     @Override
-    public void error(@NotNull String message, @NotNull Object... args) {
+    public void trace(@NotNull String msg, @Nullable Throwable t) {
         // No-op
     }
 
@@ -74,7 +75,7 @@ public final class ChameleonNoopLogger implements ChameleonLogger {
      * {@inheritDoc}
      */
     @Override
-    public void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... args) {
+    public void debug(@NotNull String msg) {
         // No-op
     }
 
@@ -82,18 +83,192 @@ public final class ChameleonNoopLogger implements ChameleonLogger {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull ChameleonLogger enableDebug() {
+    public void debug(@NotNull String format, @Nullable Object arg) {
         // No-op
-        return this;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull ChameleonLogger disableDebug() {
+    public void debug(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         // No-op
-        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void debug(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void debug(@NotNull String msg, @Nullable Throwable t) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String msg) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String format, @Nullable Object arg) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String msg, @Nullable Throwable t) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String msg) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String format, @Nullable Object arg) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String msg, @Nullable Throwable t) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String msg) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String format, @Nullable Object arg) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String msg, @Nullable Throwable t) {
+        // No-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isTraceEnabled() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDebugEnabled() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInfoEnabled() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isWarnEnabled() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isErrorEnabled() {
+        return false;
     }
 
 }

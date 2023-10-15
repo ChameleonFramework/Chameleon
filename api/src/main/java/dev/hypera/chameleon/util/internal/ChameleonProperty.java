@@ -21,35 +21,63 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.util;
+package dev.hypera.chameleon.util.internal;
 
-import org.jetbrains.annotations.ApiStatus.Experimental;
+import static dev.hypera.chameleon.util.internal.ChameleonPropertyImpl.of;
+
 import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * Chameleon internal utilities.
+ * Chameleon property.
+ *
+ * @param <T> Value type.
  */
 @Internal
-@Experimental
-public final class ChameleonUtil {
-
-    private ChameleonUtil() {
-        throw new UnsupportedOperationException("ChameleonUtil is a utility class and cannot be instantiated");
-    }
+@NonExtendable
+public interface ChameleonProperty<T> {
 
     /**
-     * Check if first argument is null, return it if it isn't, otherwise return the default value.
+     * Specifies whether debug mode is enabled.
      *
-     * @param s            Object to check if null.
-     * @param defaultValue Default return value.
-     * @param <T>          Type.
-     *
-     * @return {@code s} if not null, otherwise {@code defaultValue}.
+     * <p>When enabled, Chameleon will log additional messages that could be helpful when
+     * debugging.</p>
      */
-    public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
-        return s == null ? defaultValue : s;
-    }
+    @NotNull ChameleonProperty<Boolean> DEBUG = of("debug", Boolean::parseBoolean, false);
+
+    /**
+     * Specifies whether errors in Chameleon should be logged.
+     */
+    @NotNull ChameleonProperty<Boolean> LOG_ERRORS = of("logErrors", Boolean::parseBoolean, true);
+
+    /**
+     * Returns the name of this property.
+     *
+     * @return property name.
+     */
+    @Contract(value = "-> _", pure = true)
+    @NotNull String name();
+
+    /**
+     * Returns the value of this property.
+     *
+     * @return property value.
+     */
+    @Contract(value = "-> _", pure = true)
+    @NotNull T get();
+
+    /**
+     * Sets the value of this property.
+     *
+     * @param t New property value.
+     */
+    void set(@NotNull T t);
+
+    /**
+     * Resets the value of this property back to the default value.
+     */
+    void reset();
 
 }

@@ -24,6 +24,7 @@
 package dev.hypera.chameleon;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -46,6 +47,11 @@ final class ChameleonBuildPlaceholdersTests {
     @Test
     void gitCommitHashIsPresent() {
         assertNotEquals(placeholder("gitCommitHash"), Chameleon.getCommitHash());
+    }
+
+    @Test
+    void testShortGitCommit() {
+        assertEquals(7, Chameleon.getShortCommitHash().length());
     }
 
     @Test

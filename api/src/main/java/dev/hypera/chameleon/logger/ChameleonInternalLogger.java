@@ -23,95 +23,330 @@
  */
 package dev.hypera.chameleon.logger;
 
+import dev.hypera.chameleon.util.internal.ChameleonProperty;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Internal Chameleon logger wrapper.
+ *
+ * <p>Warning: This is designed for internal use within Chameleon. This API is NOT designed for
+ * end-users, and use is not recommended or supported.</p>
  */
 @Internal
-public final class ChameleonInternalLogger implements ChameleonLogger {
+public final class ChameleonInternalLogger extends AbstractChameleonLogger {
 
-    private static final @NotNull String CHAMELEON_PREFIX = "[Chameleon] ";
-
+    static final @NotNull String CHAMELEON_PREFIX = "[Chameleon] ";
     private final @NotNull ChameleonLogger logger;
 
-    /**
-     * Chameleon internal logger constructor.
-     *
-     * @param logger Chameleon logger instance to use.
-     */
-    @Internal
-    public ChameleonInternalLogger(@NotNull ChameleonLogger logger) {
+    private ChameleonInternalLogger(@NotNull ChameleonLogger logger) {
         this.logger = logger;
     }
 
-
     /**
-     * {@inheritDoc}
+     * Returns a new internal Chameleon logger that logs to the given {@code logger}.
+     *
+     * <p>Warning: This is designed for internal use within Chameleon. This API is not designed for
+     * end-users, and use is not recommended or supported.</p>
+     *
+     * @param logger Logger to be wrapped.
+     *
+     * @return new internal logger.
      */
-    @Override
-    public void info(@NotNull String message, @NotNull Object... o) {
-        this.logger.info(CHAMELEON_PREFIX + message, o);
+    @Internal
+    public static @NotNull ChameleonLogger create(@NotNull ChameleonLogger logger) {
+        return new ChameleonInternalLogger(logger);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void debug(@NotNull String message, @NotNull Object... o) {
-        this.logger.debug(CHAMELEON_PREFIX + message, o);
+    public void trace(@NotNull String msg) {
+        if (isTraceEnabled()) {
+            this.logger.trace(CHAMELEON_PREFIX.concat(msg));
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void warn(@NotNull String message, @NotNull Object... o) {
-        this.logger.warn(CHAMELEON_PREFIX + message, o);
+    public void trace(@NotNull String format, @Nullable Object arg) {
+        if (isTraceEnabled()) {
+            this.logger.trace(CHAMELEON_PREFIX.concat(format), arg);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void warn(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
-        this.logger.warn(CHAMELEON_PREFIX + message, throwable, o);
+    public void trace(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        if (isTraceEnabled()) {
+            this.logger.trace(CHAMELEON_PREFIX.concat(format), arg1, arg2);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void error(@NotNull String message, @NotNull Object... o) {
-        this.logger.error(CHAMELEON_PREFIX + message, o);
+    public void trace(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        if (isTraceEnabled()) {
+            this.logger.trace(CHAMELEON_PREFIX.concat(format), arguments);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void error(@NotNull String message, @NotNull Throwable throwable, @NotNull Object... o) {
-        this.logger.error(CHAMELEON_PREFIX + message, throwable, o);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull ChameleonLogger enableDebug() {
-        this.logger.enableDebug();
-        return this;
+    public void trace(@NotNull String msg, @Nullable Throwable t) {
+        if (isTraceEnabled()) {
+            this.logger.trace(CHAMELEON_PREFIX.concat(msg), t);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull ChameleonLogger disableDebug() {
-        this.logger.disableDebug();
-        return this;
+    public void debug(@NotNull String msg) {
+        if (isDebugEnabled()) {
+            this.logger.debug(CHAMELEON_PREFIX.concat(msg));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void debug(@NotNull String format, @Nullable Object arg) {
+        if (isDebugEnabled()) {
+            this.logger.debug(CHAMELEON_PREFIX.concat(format), arg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void debug(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        if (isDebugEnabled()) {
+            this.logger.debug(CHAMELEON_PREFIX.concat(format), arg1, arg2);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void debug(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        if (isDebugEnabled()) {
+            this.logger.debug(CHAMELEON_PREFIX.concat(format), arguments);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void debug(@NotNull String msg, @Nullable Throwable t) {
+        if (isDebugEnabled()) {
+            this.logger.debug(CHAMELEON_PREFIX.concat(msg), t);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String msg) {
+        if (isInfoEnabled()) {
+            this.logger.info(CHAMELEON_PREFIX.concat(msg));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String format, @Nullable Object arg) {
+        if (isInfoEnabled()) {
+            this.logger.info(CHAMELEON_PREFIX.concat(format), arg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        if (isInfoEnabled()) {
+            this.logger.info(CHAMELEON_PREFIX.concat(format), arg1, arg2);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        if (isInfoEnabled()) {
+            this.logger.info(CHAMELEON_PREFIX.concat(format), arguments);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void info(@NotNull String msg, @Nullable Throwable t) {
+        if (isInfoEnabled()) {
+            this.logger.info(CHAMELEON_PREFIX.concat(msg), t);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String msg) {
+        if (isWarnEnabled()) {
+            this.logger.warn(CHAMELEON_PREFIX.concat(msg));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String format, @Nullable Object arg) {
+        if (isWarnEnabled()) {
+            this.logger.warn(CHAMELEON_PREFIX.concat(format), arg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        if (isWarnEnabled()) {
+            this.logger.warn(CHAMELEON_PREFIX.concat(format), arg1, arg2);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        if (isWarnEnabled()) {
+            this.logger.warn(CHAMELEON_PREFIX.concat(format), arguments);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warn(@NotNull String msg, @Nullable Throwable t) {
+        if (isWarnEnabled()) {
+            this.logger.warn(CHAMELEON_PREFIX.concat(msg), t);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String msg) {
+        if (isErrorEnabled()) {
+            this.logger.error(CHAMELEON_PREFIX.concat(msg));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String format, @Nullable Object arg) {
+        if (isErrorEnabled()) {
+            this.logger.error(CHAMELEON_PREFIX.concat(format), arg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
+        if (isErrorEnabled()) {
+            this.logger.error(CHAMELEON_PREFIX.concat(format), arg1, arg2);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String format, @Nullable Object @NotNull ... arguments) {
+        if (isErrorEnabled()) {
+            this.logger.error(CHAMELEON_PREFIX.concat(format), arguments);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void error(@NotNull String msg, @Nullable Throwable t) {
+        if (isErrorEnabled()) {
+            this.logger.error(CHAMELEON_PREFIX.concat(msg), t);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isTraceEnabled() {
+        return ChameleonProperty.DEBUG.get() && this.logger.isTraceEnabled();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDebugEnabled() {
+        return ChameleonProperty.DEBUG.get() && this.logger.isDebugEnabled();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInfoEnabled() {
+        return ChameleonProperty.DEBUG.get() && this.logger.isInfoEnabled();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isWarnEnabled() {
+        return ChameleonProperty.DEBUG.get() && this.logger.isWarnEnabled();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isErrorEnabled() {
+        return ChameleonProperty.LOG_ERRORS.get() && this.logger.isErrorEnabled();
     }
 
 }

@@ -21,35 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.sponge;
+package dev.hypera.chameleon.util.logger;
 
-import dev.hypera.chameleon.ChameleonBootstrap;
-import dev.hypera.chameleon.ChameleonPluginBootstrap;
-import dev.hypera.chameleon.platform.Platform;
-import dev.hypera.chameleon.platform.logger.ChameleonLog4jLogger;
-import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Sponge Chameleon bootstrap implementation.
+ * Represents a formatted message.
  */
-public final class SpongeChameleonBootstrap extends ChameleonBootstrap<SpongeChameleon> {
+public final class FormattedMessage {
 
-    private final @NotNull SpongePlugin spongePlugin;
+    private final @Nullable String message;
+    private final @Nullable Throwable throwable;
 
-    @Internal
-    SpongeChameleonBootstrap(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull SpongePlugin spongePlugin) {
-        super(Platform.SPONGE, pluginBootstrap, new ChameleonLog4jLogger(spongePlugin.getLogger()));
-        this.spongePlugin = spongePlugin;
+    FormattedMessage(@Nullable String message, @Nullable Throwable throwable) {
+        this.message = message;
+        this.throwable = throwable;
     }
 
-    @Override
-    protected @NotNull SpongeChameleon loadPlatform() {
-        return new SpongeChameleon(
-            this.pluginBootstrap, this.spongePlugin,
-            this.eventBus, this.logger, this.extensions
-        );
+    /**
+     * Returns the formatted message.
+     *
+     * @return formatted message.
+     */
+    public @Nullable String message() {
+        return this.message;
+    }
+
+    /**
+     * Returns the throwable to be logged with this message.
+     *
+     * @return throwable.
+     */
+    public @Nullable Throwable throwable() {
+        return this.throwable;
     }
 
 }
-

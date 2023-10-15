@@ -21,33 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.nukkit.logger;
+package dev.hypera.chameleon.platform.logger;
 
-import cn.nukkit.Nukkit;
-import cn.nukkit.utils.LogLevel;
-import cn.nukkit.utils.Logger;
 import dev.hypera.chameleon.logger.AbstractChameleonLogger;
 import dev.hypera.chameleon.util.logger.FormattedMessage;
 import dev.hypera.chameleon.util.logger.MessageFormatter;
 import org.apache.logging.log4j.Level;
-import org.jetbrains.annotations.ApiStatus.Internal;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Nukkit Chameleon logger implementation.
+ * Log4J Chameleon logger implementation.
  */
-@Internal
-public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
+public final class ChameleonLog4jLogger extends AbstractChameleonLogger {
 
     private final @NotNull Logger logger;
 
     /**
-     * Chameleon Nukkit logger constructor.
+     * Chameleon Log4J logger constructor.
      *
-     * @param logger Nukkit logger instance to use.
+     * @param logger Log4J logger instance to use.
      */
-    public ChameleonNukkitLogger(@NotNull Logger logger) {
+    public ChameleonLog4jLogger(@NotNull Logger logger) {
         this.logger = logger;
     }
 
@@ -56,9 +52,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
      */
     @Override
     public void trace(@NotNull String msg) {
-        if (isTraceEnabled()) {
-            this.logger.debug(msg);
-        }
+        this.logger.trace(msg);
     }
 
     /**
@@ -67,7 +61,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void trace(@NotNull String format, @Nullable Object arg) {
         if (isTraceEnabled()) {
-            logFormatted(LogLevel.DEBUG, format, arg);
+            logFormatted(Level.TRACE, format, arg);
         }
     }
 
@@ -77,7 +71,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void trace(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isTraceEnabled()) {
-            logFormatted(LogLevel.DEBUG, format, arg1, arg2);
+            logFormatted(Level.TRACE, format, arg1, arg2);
         }
     }
 
@@ -87,7 +81,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void trace(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isTraceEnabled()) {
-            logFormatted(LogLevel.DEBUG, format, arguments);
+            logFormatted(Level.TRACE, format, arguments);
         }
     }
 
@@ -97,7 +91,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void trace(@NotNull String msg, @Nullable Throwable t) {
         if (isTraceEnabled()) {
-            this.logger.debug(msg, t);
+            this.logger.trace(msg, t);
         }
     }
 
@@ -117,7 +111,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void debug(@NotNull String format, @Nullable Object arg) {
         if (isDebugEnabled()) {
-            logFormatted(LogLevel.DEBUG, format, arg);
+            logFormatted(Level.DEBUG, format, arg);
         }
     }
 
@@ -127,7 +121,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void debug(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isDebugEnabled()) {
-            logFormatted(LogLevel.DEBUG, format, arg1, arg2);
+            logFormatted(Level.DEBUG, format, arg1, arg2);
         }
     }
 
@@ -137,7 +131,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void debug(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isDebugEnabled()) {
-            logFormatted(LogLevel.DEBUG, format, arguments);
+            logFormatted(Level.DEBUG, format, arguments);
         }
     }
 
@@ -167,7 +161,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void info(@NotNull String format, @Nullable Object arg) {
         if (isInfoEnabled()) {
-            logFormatted(LogLevel.INFO, format, arg);
+            logFormatted(Level.INFO, format, arg);
         }
     }
 
@@ -177,7 +171,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void info(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isInfoEnabled()) {
-            logFormatted(LogLevel.INFO, format, arg1, arg2);
+            logFormatted(Level.INFO, format, arg1, arg2);
         }
     }
 
@@ -187,7 +181,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void info(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isInfoEnabled()) {
-            logFormatted(LogLevel.INFO, format, arguments);
+            logFormatted(Level.INFO, format, arguments);
         }
     }
 
@@ -207,7 +201,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void warn(@NotNull String msg) {
         if (isWarnEnabled()) {
-            this.logger.warning(msg);
+            this.logger.warn(msg);
         }
     }
 
@@ -217,7 +211,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void warn(@NotNull String format, @Nullable Object arg) {
         if (isWarnEnabled()) {
-            logFormatted(LogLevel.WARNING, format, arg);
+            logFormatted(Level.WARN, format, arg);
         }
     }
 
@@ -227,7 +221,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void warn(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isWarnEnabled()) {
-            logFormatted(LogLevel.WARNING, format, arg1, arg2);
+            logFormatted(Level.WARN, format, arg1, arg2);
         }
     }
 
@@ -237,7 +231,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void warn(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isWarnEnabled()) {
-            logFormatted(LogLevel.WARNING, format, arguments);
+            logFormatted(Level.WARN, format, arguments);
         }
     }
 
@@ -247,7 +241,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void warn(@NotNull String msg, @Nullable Throwable t) {
         if (isWarnEnabled()) {
-            this.logger.warning(msg, t);
+            this.logger.warn(msg, t);
         }
     }
 
@@ -267,7 +261,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void error(@NotNull String format, @Nullable Object arg) {
         if (isErrorEnabled()) {
-            logFormatted(LogLevel.ERROR, format, arg);
+            logFormatted(Level.ERROR, format, arg);
         }
     }
 
@@ -277,7 +271,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void error(@NotNull String format, @Nullable Object arg1, @Nullable Object arg2) {
         if (isErrorEnabled()) {
-            logFormatted(LogLevel.ERROR, format, arg1, arg2);
+            logFormatted(Level.ERROR, format, arg1, arg2);
         }
     }
 
@@ -287,7 +281,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
     @Override
     public void error(@NotNull String format, @Nullable Object @NotNull ... arguments) {
         if (isErrorEnabled()) {
-            logFormatted(LogLevel.ERROR, format, arguments);
+            logFormatted(Level.ERROR, format, arguments);
         }
     }
 
@@ -306,7 +300,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
      */
     @Override
     public boolean isTraceEnabled() {
-        return Nukkit.getLogLevel().isLessSpecificThan(Level.TRACE);
+        return this.logger.isTraceEnabled();
     }
 
     /**
@@ -314,7 +308,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
      */
     @Override
     public boolean isDebugEnabled() {
-        return Nukkit.getLogLevel().isLessSpecificThan(Level.DEBUG);
+        return this.logger.isDebugEnabled();
     }
 
     /**
@@ -322,7 +316,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
      */
     @Override
     public boolean isInfoEnabled() {
-        return Nukkit.getLogLevel().isLessSpecificThan(Level.INFO);
+        return this.logger.isInfoEnabled();
     }
 
     /**
@@ -330,7 +324,7 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
      */
     @Override
     public boolean isWarnEnabled() {
-        return Nukkit.getLogLevel().isLessSpecificThan(Level.WARN);
+        return this.logger.isWarnEnabled();
     }
 
     /**
@@ -338,16 +332,16 @@ public final class ChameleonNukkitLogger extends AbstractChameleonLogger {
      */
     @Override
     public boolean isErrorEnabled() {
-        return Nukkit.getLogLevel().isLessSpecificThan(Level.ERROR);
+        return this.logger.isErrorEnabled();
     }
 
-    private void logFormatted(@NotNull LogLevel level, @NotNull String format, @Nullable Object @NotNull ... args) {
+    private void logFormatted(@NotNull Level level, @NotNull String format, @Nullable Object @NotNull ... args) {
         FormattedMessage m = MessageFormatter.format(format, args);
         if (m.throwable() == null) {
-            this.logger.log(level, m.message());
+            this.logger.atLevel(level).log(m.message());
             return;
         }
-        this.logger.log(level, m.message(), m.throwable());
+        this.logger.atLevel(level).withThrowable(m.throwable()).log(m.message());
     }
 
 }

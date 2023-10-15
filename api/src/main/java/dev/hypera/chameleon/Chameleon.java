@@ -74,7 +74,7 @@ public abstract class Chameleon {
         Preconditions.checkNotNull("extensions", extensions);
 
         this.logger = logger;
-        this.internalLogger = new ChameleonInternalLogger(logger);
+        this.internalLogger = ChameleonInternalLogger.create(logger);
         this.plugin = pluginBootstrap.createPlugin(this);
         this.eventBus = eventBus;
         this.extensionManager = new ExtensionManagerImpl(this, extensions);
@@ -124,9 +124,11 @@ public abstract class Chameleon {
     }
 
     /**
-     * Returns an internal logger instance for use by Chameleon.
-     * <p><strong>This must not be used outside of Chameleon and is only intended to be
-     * used for debugging and error reporting by Chameleon.</strong></p>
+     * Returns the internal Chameleon logger.
+     *
+     * <p><strong>Warning: This is designed for internal use within Chameleon. This API is NOT
+     * designed for end-users, and should NOT be used outside of Chameleon. Use is not recommended,
+     * nor will it be supported.</strong></p>
      *
      * @return the internal logger instance.
      */

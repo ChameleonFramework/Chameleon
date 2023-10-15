@@ -21,18 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.util;
+/**
+ * Internal Chameleon utilities.
+ *
+ * <p>Warning: This package is designed for internal use within Chameleon. This API is not designed
+ * for end-users, and use may be unsupported.</p>
+ *
+ * <p><strong>This package may not follow Semantic Versioning, and breaking changes may be
+ * introduced without warning.</strong></p>
+ */
+@Internal
+@Experimental
+package dev.hypera.chameleon.util.internal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
-
-final class ChameleonUtilTests {
-
-    @Test
-    void testGetOrDefault() {
-        assertEquals("test", ChameleonUtil.getOrDefault("test", "test2"));
-        assertEquals("test", ChameleonUtil.getOrDefault(null, "test"));
-    }
-
-}
+import org.jetbrains.annotations.ApiStatus.Experimental;
+import org.jetbrains.annotations.ApiStatus.Internal;
