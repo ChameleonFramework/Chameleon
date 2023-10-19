@@ -20,7 +20,7 @@ jobs:
       contents: read
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: "Validate Gradle wrapper"
         uses: gradle/wrapper-validation-action@56b90f209b02bf6d1deae490e9ef18b21a389cd4 # v1
@@ -36,7 +36,7 @@ jobs:
       name: "release"
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: "Set up JDK ${{ env.JAVA_VERSION }}"
         uses: actions/setup-java@0ab4596768b603586c0de567f2430c30f5b0d2b0 # v3
