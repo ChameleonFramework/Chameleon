@@ -28,6 +28,9 @@ plugins {
 
 repositories {
     sonatype.ossSnapshots()
+
+    // Needed to resolve com.mojang:brigadier used by net.md-5:bungeecord-protocol.
+    maven("https://libraries.minecraft.net/")
 }
 
 dependencies {
