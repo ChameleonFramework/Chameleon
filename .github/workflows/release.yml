@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    uses: HyperaDev/actions/workflows/gradle-release.yml@main
+    uses: HyperaDev/actions/.github/workflows/gradle-release.yml@main
     secrets:
       HYPERA_SIGNING_KEY: "${{ secrets.GPG_PRIVATE_KEY }}"
       HYPERA_SIGNING_PASSWORD: "${{ secrets.GPG_PASSPHRASE }}"
