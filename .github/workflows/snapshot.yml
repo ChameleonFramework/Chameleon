@@ -8,6 +8,7 @@ on:
 
 jobs:
   snapshot:
+    name: "Snapshot"
     uses: HyperaDev/actions/.github/workflows/gradle-snapshot.yml@main
     secrets:
       HYPERA_SIGNING_KEY: "${{ secrets.GPG_PRIVATE_KEY }}"

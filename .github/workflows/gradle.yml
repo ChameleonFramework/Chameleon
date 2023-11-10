@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    name: "Build"
     uses: HyperaDev/actions/.github/workflows/gradle-build.yml@main
     with:
       java_version: 17
