@@ -6,62 +6,15 @@ on:
   push:
     branches: [ "main" ]
 
-concurrency:
-  group: "snapshot-${{ github.ref_name }}"
-  cancel-in-progress: true
-
-
-env:
-  JAVA_VERSION: 17 # Use latest LTS
-
 jobs:
-  validate:
-    name: "Validate"
-    runs-on: "ubuntu-latest"
-    permissions:
-      contents: read
-    steps:
-      - name: "Checkout repository"
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-
-      - name: "Validate Gradle wrapper"
-        uses: gradle/wrapper-validation-action@56b90f209b02bf6d1deae490e9ef18b21a389cd4 # v1
-
-  # Snapshots (published from 'main' branch)
   snapshot:
-    name: "Snapshot"
-    runs-on: "ubuntu-latest"
-    needs: ["validate"]
-    permissions:
-      contents: read
-    environment:
-      name: "snapshot"
-    steps:
-      - name: "Checkout repository"
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-
-      - name: "Set up JDK ${{ env.JAVA_VERSION }}"
-        uses: actions/setup-java@0ab4596768b603586c0de567f2430c30f5b0d2b0 # v3
-        with:
-          java-version: "${{ env.JAVA_VERSION }}"
-          distribution: "temurin" # Adoptium
-
-      - name: "Validate version"
-        run: |
-          if ! grep -q 'version = ".*-SNAPSHOT"' build.gradle.kts; then
-            echo "Release version detected, refusing to publish from main branch..."
-            exit 1
-          fi
-          echo "Snapshot version detected"
-
-      - name: "Publish artifacts"
-        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a # v2
-        with:
-          arguments: "publish"
-        env:
-          ORG_GRADLE_PROJECT_hyperaSigningKey: "${{ secrets.GPG_PRIVATE_KEY }}"
-          ORG_GRADLE_PROJECT_hyperaSigningPassword: "${{ secrets.GPG_PASSPHRASE }}"
-          ORG_GRADLE_PROJECT_sonatypeUsername: "${{ secrets.SONATYPE_USERNAME }}"
-          ORG_GRADLE_PROJECT_sonatypePassword: "${{ secrets.SONATYPE_PASSWORD }}"
-          ORG_GRADLE_PROJECT_hyperaSnapshotsUsername: "${{ secrets.HYPERA_SNAPSHOTS_USERNAME }}"
-          ORG_GRADLE_PROJECT_hyperaSnapshotsPassword: "${{ secrets.HYPERA_SNAPSHOTS_PASSWORD }}"
+    uses: HyperaDev/actions/workflows/gradle-snapshot.yml@main
+    secrets:
+      HYPERA_SIGNING_KEY: "${{ secrets.GPG_PRIVATE_KEY }}"
+      HYPERA_SIGNING_PASSWORD: "${{ secrets.GPG_PASSPHRASE }}"
+      HYPERA_SNAPSHOTS_USERNAME: "${{ secrets.HYPERA_SNAPSHOTS_USERNAME }}"
+      HYPERA_SNAPSHOTS_PASSWORD: "${{ secrets.HYPERA_SNAPSHOTS_PASSWORD }}"
+      SONATYPE_USERNAME: "${{ secrets.SONATYPE_USERNAME }}"
+      SONATYPE_PASSWORD: "${{ secrets.SONATYPE_PASSWORD }}"
+    with:
+      java_version: 17
