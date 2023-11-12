@@ -5,94 +5,18 @@ on:
   push:
     branches: [ "releases/**" ]
 
-concurrency:
-  group: "release-${{ github.ref_name }}"
-  cancel-in-progress: true
-
-env:
-  JAVA_VERSION: 17 # Use latest LTS
-
 jobs:
-  validate:
-    name: "Validate"
-    runs-on: "ubuntu-latest"
-    permissions:
-      contents: read
-    steps:
-      - name: "Checkout repository"
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-
-      - name: "Validate Gradle wrapper"
-        uses: gradle/wrapper-validation-action@56b90f209b02bf6d1deae490e9ef18b21a389cd4 # v1
-
-  # Releases (published from 'releases/<major>' branches)
   release:
     name: "Release"
-    runs-on: "ubuntu-latest"
-    needs: ["validate"]
-    permissions:
-      contents: read
-    environment:
-      name: "release"
-    steps:
-      - name: "Checkout repository"
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-
-      - name: "Set up JDK ${{ env.JAVA_VERSION }}"
-        uses: actions/setup-java@0ab4596768b603586c0de567f2430c30f5b0d2b0 # v3
-        with:
-          java-version: "${{ env.JAVA_VERSION }}"
-          distribution: "temurin" # Adoptium
-
-      - name: "Validate version"
-        id: version
-        # This script extracts the current version, prevents releasing '-SNAPSHOT'
-        # versions, and determines the version type (stability), e.g.
-        #  1.0.0 = stable, 1.1.0-rc.1 = unstable, 0.1.0 = unstable
-        run: |
-          # Extract version
-          VERSION="$(grep -oP '(?<=version = \").*(?=\")' build.gradle.kts)"
-          # Prevent releasing '-SNAPSHOT' versions
-          if echo "$VERSION" | grep -q 'SNAPSHOT'; then
-            echo "Detected snapshot version, refusing to release..."
-            exit 1
-          fi
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          # Determine version type
-          TYPE=unstable
-          if echo "$VERSION" | grep -Eq '^[1-9][0-9]*\.[0-9]+\.[0-9]+$'; then
-            TYPE=stable
-          fi
-          echo "type=$TYPE" >> "$GITHUB_OUTPUT"
-          echo "Detected $TYPE version"
-
-      - name: "Prepare for publish"
-        run: |
-          # Configure Git
-          git config --global user.name "hypera-bot"
-          git config --global user.email "bot@hypera.dev"
-
-          # Indra only publishes release versions if HEAD is tagged
-          git tag -a "v$VERSION" HEAD -m "v$VERSION"
-
-      - name: "Publish artifacts"
-        uses: gradle/gradle-build-action@842c587ad8aa4c68eeba24c396e15af4c2e9f30a # v2
-        with:
-          arguments: "publish closeAndReleaseSonatypeStagingRepository"
-        env:
-          ORG_GRADLE_PROJECT_hyperaSigningKey: "${{ secrets.GPG_PRIVATE_KEY }}"
-          ORG_GRADLE_PROJECT_hyperaSigningPassword: "${{ secrets.GPG_PASSPHRASE }}"
-          ORG_GRADLE_PROJECT_sonatypeUsername: "${{ secrets.SONATYPE_USERNAME }}"
-          ORG_GRADLE_PROJECT_sonatypePassword: "${{ secrets.SONATYPE_PASSWORD }}"
-          ORG_GRADLE_PROJECT_hyperaReleasesUsername: "${{ secrets.HYPERA_RELEASES_USERNAME }}"
-          ORG_GRADLE_PROJECT_hyperaReleasesPassword: "${{ secrets.HYPERA_RELEASES_PASSWORD }}"
-
-      - name: "Create GitHub release"
-        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
-        with:
-          name: "Chameleon v${{ steps.version.outputs.version }}"
-          tag_name: "v${{ steps.version.outputs.version }}"
-          prerelease: ${{ steps.version.outputs.type == 'unstable' }}
-          target_commitish: "${{ github.ref_name }}"
-          generate_release_notes: true
-          token: "${{ secrets.HYPERA_BOT_TOKEN }}"
+    uses: HyperaDev/actions/.github/workflows/gradle-release.yml@main
+    secrets:
+      HYPERA_SIGNING_KEY: "${{ secrets.GPG_PRIVATE_KEY }}"
+      HYPERA_SIGNING_PASSWORD: "${{ secrets.GPG_PASSPHRASE }}"
+      HYPERA_RELEASES_USERNAME: "${{ secrets.HYPERA_RELEASES_USERNAME }}"
+      HYPERA_RELEASES_PASSWORD: "${{ secrets.HYPERA_RELEASES_PASSWORD }}"
+      SONATYPE_USERNAME: "${{ secrets.SONATYPE_USERNAME }}"
+      SONATYPE_PASSWORD: "${{ secrets.SONATYPE_PASSWORD }}"
+    with:
+      project_name: "Chameleon"
+      java_version: 17
+      release_maven_central: true
