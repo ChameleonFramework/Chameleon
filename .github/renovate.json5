@@ -1,0 +1,13 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'github>HyperaDev/actions',
+  ],
+  packageRules: [
+    {
+      // Ignore Spigot API experimental snapshots
+      matchPackageNames: ['org.spigotmc:spigot-api'],
+      allowedVersions: '!/\\-experimental\\-SNAPSHOT$/',
+    },
+  ],
+}
