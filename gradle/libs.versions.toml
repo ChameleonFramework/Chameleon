@@ -26,7 +26,7 @@ slf4j = "2.0.9"
 log4j = "2.21.1"
 
 # Code safety
-annotations = "24.0.1"
+annotations = "24.1.0"
 
 # Build
 indra = "3.1.3"
