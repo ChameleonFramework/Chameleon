@@ -40,20 +40,28 @@ import org.jetbrains.annotations.NotNull;
  * Bukkit platform plugin implementation.
  */
 @Internal
+@SuppressWarnings("deprecation") // Paper
 public final class BukkitPlugin implements PlatformPlugin {
 
     private final @NotNull Plugin plugin;
 
-    /**
-     * Bukkit plugin constructor.
-     *
-     * @param plugin Plugin to be wrapped.
-     */
-    @Internal
-    public BukkitPlugin(@NotNull Plugin plugin) {
+    private BukkitPlugin(@NotNull Plugin plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * Returns a new platform plugin for the given Bukkit plugin.
+     *
+     * @param plugin Bukkit plugin.
+     *
+     * @return new platform plugin.
+     */
+    public static @NotNull PlatformPlugin create(@NotNull Plugin plugin) {
+        if (PaperPlugin.SUPPORTED) {
+            return new PaperPlugin(plugin);
+        }
+        return new BukkitPlugin(plugin);
+    }
 
     /**
      * {@inheritDoc}

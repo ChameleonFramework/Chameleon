@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.folia.scheduler;
+package dev.hypera.chameleon.platform.bukkit.scheduler;
 
+import dev.hypera.chameleon.platform.util.ReflectionUtil;
 import dev.hypera.chameleon.scheduler.Schedule;
 import dev.hypera.chameleon.scheduler.ScheduledTask;
 import dev.hypera.chameleon.scheduler.Scheduler;
@@ -38,20 +39,18 @@ import org.jetbrains.annotations.NotNull;
  * Folia scheduler implementation.
  */
 @Internal
-public final class FoliaScheduler extends Scheduler {
+final class FoliaScheduler extends Scheduler {
 
+    static final boolean SUPPORTED = ReflectionUtil.hasClass("io.papermc.paper.threadedregions.RegionizedServer");
     private final @NotNull JavaPlugin plugin;
 
-    /**
-     * Folia scheduler constructor.
-     *
-     * @param plugin Folia plugin.
-     */
-    @Internal
-    public FoliaScheduler(@NotNull JavaPlugin plugin) {
+    FoliaScheduler(@NotNull JavaPlugin plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @NotNull ScheduledTask scheduleAsyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
         AsyncScheduler scheduler = Bukkit.getAsyncScheduler();
@@ -62,6 +61,9 @@ public final class FoliaScheduler extends Scheduler {
         return foliaTask::cancel;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @NotNull ScheduledTask scheduleSyncTask(@NotNull Runnable task, @NotNull Schedule delay, @NotNull Schedule repeat) {
         GlobalRegionScheduler scheduler = Bukkit.getGlobalRegionScheduler();

@@ -63,13 +63,12 @@ import org.jetbrains.annotations.NotNull;
         @Dependency(
             name = "LuckPerms",
             soft = true,
-            platforms = { Platform.BUKKIT, Platform.FOLIA }
+            platforms = { Platform.BUKKIT, Platform.BUNGEECORD }
         )
     },
     platforms = { // If this is empty, all platforms will be supported.
         Platform.BUKKIT,
         Platform.BUNGEECORD,
-        Platform.FOLIA,
         Platform.NUKKIT,
         Platform.SPONGE,
         Platform.VELOCITY

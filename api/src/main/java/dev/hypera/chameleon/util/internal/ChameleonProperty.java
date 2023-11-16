@@ -23,8 +23,6 @@
  */
 package dev.hypera.chameleon.util.internal;
 
-import static dev.hypera.chameleon.util.internal.ChameleonPropertyImpl.of;
-
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.Contract;
@@ -45,12 +43,12 @@ public interface ChameleonProperty<T> {
      * <p>When enabled, Chameleon will log additional messages that could be helpful when
      * debugging.</p>
      */
-    @NotNull ChameleonProperty<Boolean> DEBUG = of("debug", Boolean::parseBoolean, false);
+    @NotNull ChameleonProperty<Boolean> DEBUG = ChameleonPropertyImpl.of("debug", Boolean::parseBoolean, false);
 
     /**
      * Specifies whether errors in Chameleon should be logged.
      */
-    @NotNull ChameleonProperty<Boolean> LOG_ERRORS = of("logErrors", Boolean::parseBoolean, true);
+    @NotNull ChameleonProperty<Boolean> LOG_ERRORS = ChameleonPropertyImpl.of("logErrors", Boolean::parseBoolean, true);
 
     /**
      * Returns the name of this property.

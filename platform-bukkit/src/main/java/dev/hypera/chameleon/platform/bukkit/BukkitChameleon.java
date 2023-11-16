@@ -58,7 +58,7 @@ public final class BukkitChameleon extends PlatformChameleon<JavaPlugin> {
     private final @NotNull BukkitUserManager userManager = new BukkitUserManager(this);
     private final @NotNull BukkitCommandManager commandManager = new BukkitCommandManager(this, this.userManager);
     private final @NotNull BukkitPluginManager pluginManager = new BukkitPluginManager();
-    private final @NotNull BukkitScheduler scheduler = new BukkitScheduler(this.plugin);
+    private final @NotNull Scheduler scheduler = BukkitScheduler.create(this.plugin);
     private final @NotNull BukkitAudienceProvider audienceProvider = new BukkitAudienceProvider(this.userManager);
 
     @Internal

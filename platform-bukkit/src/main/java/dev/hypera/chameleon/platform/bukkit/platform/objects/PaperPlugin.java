@@ -21,47 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.platform.folia.platform.objects;
+package dev.hypera.chameleon.platform.bukkit.platform.objects;
 
 import dev.hypera.chameleon.platform.PlatformPlugin;
-import dev.hypera.chameleon.util.internal.ChameleonUtil;
+import dev.hypera.chameleon.platform.util.ReflectionUtil;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Folia platform plugin implementation.
+ * Paper platform plugin implementation.
  */
 @Internal
-@SuppressWarnings({ "UnstableApiUsage" })
-public final class FoliaPlugin implements PlatformPlugin {
+@SuppressWarnings("UnstableApiUsage") // Paper - PluginMeta is @Experimental, and subject to change
+final class PaperPlugin implements PlatformPlugin {
 
+    static final boolean SUPPORTED = ReflectionUtil.hasClass("io.papermc.paper.plugin.configuration.PluginMeta");
     private final @NotNull Plugin plugin;
 
-    /**
-     * Folia plugin constructor.
-     *
-     * @param plugin Plugin to be wrapped.
-     */
-    @Internal
-    public FoliaPlugin(@NotNull Plugin plugin) {
+    PaperPlugin(@NotNull Plugin plugin) {
         this.plugin = plugin;
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Override
     public @NotNull String getName() {
-        return ChameleonUtil.getOrDefault(this.plugin.getPluginMeta().getName(), "unknown");
+        return this.plugin.getPluginMeta().getName();
     }
 
     /**
@@ -69,7 +60,7 @@ public final class FoliaPlugin implements PlatformPlugin {
      */
     @Override
     public @NotNull String getVersion() {
-        return ChameleonUtil.getOrDefault(this.plugin.getPluginMeta().getVersion(), "unknown");
+        return this.plugin.getPluginMeta().getVersion();
     }
 
     /**
@@ -93,23 +84,23 @@ public final class FoliaPlugin implements PlatformPlugin {
      */
     @Override
     public @NotNull Collection<String> getAuthors() {
-        return ChameleonUtil.getOrDefault(this.plugin.getPluginMeta().getAuthors(), Collections.emptyList());
+        return this.plugin.getPluginMeta().getAuthors();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Set<String> getDependencies() {
-        return new HashSet<>(this.plugin.getPluginMeta().getPluginDependencies());
+    public @NotNull Collection<String> getDependencies() {
+        return this.plugin.getPluginMeta().getPluginDependencies();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Set<String> getSoftDependencies() {
-        return new HashSet<>(this.plugin.getPluginMeta().getPluginSoftDependencies());
+    public @NotNull Collection<String> getSoftDependencies() {
+        return this.plugin.getPluginMeta().getPluginSoftDependencies();
     }
 
     /**

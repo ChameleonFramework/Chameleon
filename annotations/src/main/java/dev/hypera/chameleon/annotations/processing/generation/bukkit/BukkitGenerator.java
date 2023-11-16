@@ -117,7 +117,8 @@ public class BukkitGenerator extends Generator {
                     Dependency::name).collect(Collectors.toList()))
                 .add("softdepend", Arrays.stream(data.dependencies()).filter(d -> d.soft() && (d.platforms().length == 0 || Arrays.asList(d.platforms()).contains(Platform.BUKKIT))).map(
                     Dependency::name).collect(Collectors.toList()))
-                .add("description", data.description()), writer);
+                .add("description", data.description())
+                .add("folia-supported", true), writer);
         }
     }
 

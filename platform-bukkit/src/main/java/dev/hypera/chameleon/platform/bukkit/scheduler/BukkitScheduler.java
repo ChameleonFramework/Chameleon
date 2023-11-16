@@ -41,14 +41,22 @@ public final class BukkitScheduler extends Scheduler {
     private static final int CRAFT_NO_REPEATING = -1;
     private final @NotNull JavaPlugin plugin;
 
+    private BukkitScheduler(@NotNull JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
+
     /**
-     * Bukkit scheduler constructor.
+     * Returns a new scheduler for the current Bukkit platform.
      *
      * @param plugin Bukkit plugin.
+     *
+     * @return new scheduler.
      */
-    @Internal
-    public BukkitScheduler(@NotNull JavaPlugin plugin) {
-        this.plugin = plugin;
+    public static @NotNull Scheduler create(@NotNull JavaPlugin plugin) {
+        if (FoliaScheduler.SUPPORTED) {
+            return new FoliaScheduler(plugin);
+        }
+        return new BukkitScheduler(plugin);
     }
 
     @Override

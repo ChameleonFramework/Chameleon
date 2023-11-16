@@ -34,32 +34,31 @@ public interface Platform {
 
     @NotNull String BUKKIT = "Bukkit";
     @NotNull String BUNGEECORD = "BungeeCord";
-    @NotNull String FOLIA = "Folia";
     @NotNull String NUKKIT = "Nukkit";
     @NotNull String SPONGE = "Sponge";
     @NotNull String VELOCITY = "Velocity";
 
     /**
-     * Get a unique identifier for this Platform.
-     * <p>This will return the common name of the API that is in use, e.g. "BungeeCord" or "Velocity".</p>
+     * Returns the unique identifier for the platform.
+     * <p>This will return a common name for the platform.</p>
      *
-     * @return Platform identifier.
+     * @return platform identifier.
      */
     @NotNull String getId();
 
     /**
-     * Get the friendly name of this Platform.
-     * <p>This will return the name provided by the Platform, which may not match the name of the API that is in use.</p>
+     * Returns the name of the platform.
+     * <p>This will return the name provided by the platform, which may not match the name of the
+     * API that is being used.</p>
      *
-     * @return Platform friendly name.
+     * @return platform name.
      */
     @NotNull String getName();
 
     /**
-     * Get the version of this Platform.
-     * <p>This will return the version provided by the Platform.</p>
+     * Returns the version of the platform.
      *
-     * @return Platform version.
+     * @return platform version.
      */
     @NotNull String getVersion();
 

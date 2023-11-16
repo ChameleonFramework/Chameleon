@@ -24,6 +24,7 @@
 package dev.hypera.chameleon.platform.logger;
 
 import dev.hypera.chameleon.logger.AbstractChameleonLogger;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -42,6 +43,22 @@ public final class ChameleonSlf4jLogger extends AbstractChameleonLogger {
      */
     public ChameleonSlf4jLogger(@NotNull Logger logger) {
         this.logger = logger;
+    }
+
+    /**
+     * Returns a new Chameleon SLF4J logger that wraps the given SLF4J logger.
+     *
+     * @param slf4jLogger SLF4J logger object.
+     *
+     * @return new Chameleon logger.
+     * @throws IllegalArgumentException if the provided {@code slf4jLogger} is not instanceof
+     *                                  {@code org.slf4j.Logger}.
+     */
+    public static @NotNull ChameleonLogger create(@NotNull Object slf4jLogger) {
+        if (slf4jLogger instanceof Logger) {
+            return new ChameleonSlf4jLogger((Logger) slf4jLogger);
+        }
+        throw new IllegalArgumentException("slf4jLogger must be an SLF4J logger instance");
     }
 
     /**
