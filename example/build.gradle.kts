@@ -28,8 +28,8 @@ plugins {
 }
 
 /*
- * Chameleon requires Java 11. Additionally, Folia and Sponge support requires Java 17.
- * If you wish to support Folia and/or Sponge, you must target Java 17.
+ * Chameleon requires Java 11. Additionally, Bukkit (Paper, Folia) and Sponge support requires Java 17.
+ * If you wish to support Bukkit (Paper, Folia) and/or Sponge, you must target Java 17.
  *
  * If you want your plugin to work with Java 11+, you must keep your source code
  * compatible with Java 11.
