@@ -156,9 +156,10 @@ public final class ChameleonExample implements ChameleonPlugin {
             Duration.between(start, Instant.now()).toMillis()
         );
         this.logger.info(
-            "Running on {} ({}) v{} with Chameleon v{}!",
+            "Running on {} ({}) v{} with Chameleon v{} (git: {}, {})",
             this.chameleon.getPlatform().getName(), this.chameleon.getPlatform().getId(),
-            this.chameleon.getPlatform().getVersion(), Chameleon.getVersion()
+            this.chameleon.getPlatform().getVersion(), Chameleon.getVersion(),
+            Chameleon.getBranch(), Chameleon.getShortCommitHash()
         );
     }
 
