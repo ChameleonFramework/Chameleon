@@ -72,7 +72,7 @@ public final class BukkitEventDispatcher extends PlatformEventDispatcher impleme
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation") // Paper
     public void registerListeners() {
         PlatformUserManager<Player, BukkitUser> userManager = (BukkitUserManager) this.chameleon.getUserManager();
 
