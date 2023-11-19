@@ -50,10 +50,10 @@ indra {
     javaVersions {
         if (project.name in requires17) {
             target(17)
-            testWith(17)
+            testWith(17, 21)
         } else {
             target(11)
-            testWith(11, 17)
+            testWith(11, 17, 21)
         }
     }
 }
