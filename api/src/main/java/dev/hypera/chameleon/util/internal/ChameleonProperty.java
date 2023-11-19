@@ -23,6 +23,7 @@
  */
 package dev.hypera.chameleon.util.internal;
 
+import java.util.function.Function;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.Contract;
@@ -43,12 +44,27 @@ public interface ChameleonProperty<T> {
      * <p>When enabled, Chameleon will log additional messages that could be helpful when
      * debugging.</p>
      */
-    @NotNull ChameleonProperty<Boolean> DEBUG = ChameleonPropertyImpl.of("debug", Boolean::parseBoolean, false);
+    @NotNull ChameleonProperty<Boolean> DEBUG = of("debug", Boolean::parseBoolean, false);
 
     /**
      * Specifies whether errors in Chameleon should be logged.
      */
-    @NotNull ChameleonProperty<Boolean> LOG_ERRORS = ChameleonPropertyImpl.of("logErrors", Boolean::parseBoolean, true);
+    @NotNull ChameleonProperty<Boolean> LOG_ERRORS = of("logErrors", Boolean::parseBoolean, true);
+
+    /**
+     * Returns a new property.
+     *
+     * @param name         Property name.
+     * @param parser       Value parser.
+     * @param defaultValue Default value.
+     * @param <T>          Value type.
+     *
+     * @return new property.
+     */
+    @Contract(value = "_, _, _ -> new", pure = true)
+    static <T> @NotNull ChameleonProperty<T> of(@NotNull String name, @NotNull Function<String, T> parser, @NotNull T defaultValue) {
+        return new ChameleonPropertyImpl<>(name, parser, defaultValue);
+    }
 
     /**
      * Returns the name of this property.
