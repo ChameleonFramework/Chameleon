@@ -30,18 +30,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Bukkit scheduler implementation.
  */
 @Internal
-public final class BukkitScheduler extends Scheduler {
+@NonExtendable
+public class BukkitScheduler extends Scheduler {
 
     private static final int CRAFT_NO_REPEATING = -1;
-    private final @NotNull JavaPlugin plugin;
+    protected final @NotNull JavaPlugin plugin;
 
-    private BukkitScheduler(@NotNull JavaPlugin plugin) {
+    BukkitScheduler(@NotNull JavaPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -52,7 +54,7 @@ public final class BukkitScheduler extends Scheduler {
      *
      * @return new scheduler.
      */
-    public static @NotNull Scheduler create(@NotNull JavaPlugin plugin) {
+    public static @NotNull BukkitScheduler create(@NotNull JavaPlugin plugin) {
         if (FoliaScheduler.SUPPORTED) {
             return new FoliaScheduler(plugin);
         }

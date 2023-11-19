@@ -26,7 +26,6 @@ package dev.hypera.chameleon.platform.bukkit.scheduler;
 import dev.hypera.chameleon.platform.util.ReflectionUtil;
 import dev.hypera.chameleon.scheduler.Schedule;
 import dev.hypera.chameleon.scheduler.ScheduledTask;
-import dev.hypera.chameleon.scheduler.Scheduler;
 import io.papermc.paper.threadedregions.scheduler.AsyncScheduler;
 import io.papermc.paper.threadedregions.scheduler.GlobalRegionScheduler;
 import java.util.concurrent.TimeUnit;
@@ -39,13 +38,12 @@ import org.jetbrains.annotations.NotNull;
  * Folia scheduler implementation.
  */
 @Internal
-final class FoliaScheduler extends Scheduler {
+final class FoliaScheduler extends BukkitScheduler {
 
     static final boolean SUPPORTED = ReflectionUtil.hasClass("io.papermc.paper.threadedregions.RegionizedServer");
-    private final @NotNull JavaPlugin plugin;
 
     FoliaScheduler(@NotNull JavaPlugin plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     /**
