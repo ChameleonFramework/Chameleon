@@ -16,6 +16,7 @@ jobs:
       HYPERA_RELEASES_PASSWORD: "${{ secrets.HYPERA_RELEASES_PASSWORD }}"
       SONATYPE_USERNAME: "${{ secrets.SONATYPE_USERNAME }}"
       SONATYPE_PASSWORD: "${{ secrets.SONATYPE_PASSWORD }}"
+      GITHUB_RELEASE_TOKEN: "${{ secrets.HYPERA_BOT_TOKEN }}"
     with:
       project_name: "Chameleon"
       java_version: 17
