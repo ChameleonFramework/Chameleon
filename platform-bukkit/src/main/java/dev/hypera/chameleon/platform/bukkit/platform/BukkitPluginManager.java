@@ -46,7 +46,8 @@ public final class BukkitPluginManager implements PluginManager {
     @Override
     public @NotNull Collection<PlatformPlugin> getPlugins() {
         return Arrays.stream(Bukkit.getPluginManager().getPlugins())
-            .map(BukkitPlugin::create).collect(Collectors.toSet());
+            .map(BukkitPlugin::create)
+            .collect(Collectors.toSet());
     }
 
     /**
