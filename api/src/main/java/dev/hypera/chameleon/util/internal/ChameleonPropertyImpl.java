@@ -25,7 +25,6 @@ package dev.hypera.chameleon.util.internal;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
