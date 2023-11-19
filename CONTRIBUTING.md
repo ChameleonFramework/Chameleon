@@ -140,7 +140,6 @@ Additionally, commit message lines should not exceed 100 characters.
 - `events`, when modifying a file that is related to events.
 - `examples`, when modifying an example.
 - `extensions`, when modifying a file that is related to extensions.
-- `folia`, when modifying a file inside the `platform-folia` module.
 - `nukkit`, when modifying a file inside the `platform-nukkit` module.
 - `platform`, when modifying a file inside the `platform-api` module.
 - `scheduling`, when modifying a file that is related to scheduling.

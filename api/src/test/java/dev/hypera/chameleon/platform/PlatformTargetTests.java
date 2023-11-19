@@ -74,11 +74,6 @@ final class PlatformTargetTests {
     }
 
     @Test
-    void testFolia() {
-        assertTrue(PlatformTarget.folia().test(DummyPlatform.of(Platform.FOLIA)));
-    }
-
-    @Test
     void testNukkit() {
         assertTrue(PlatformTarget.nukkit().test(DummyPlatform.of(Platform.NUKKIT)));
     }

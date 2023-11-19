@@ -44,7 +44,6 @@ sequenceOf(
     "platform-api",
     "platform-bukkit",
     "platform-bungeecord",
-    "platform-folia",
     "platform-nukkit",
     "platform-sponge",
     "platform-velocity"

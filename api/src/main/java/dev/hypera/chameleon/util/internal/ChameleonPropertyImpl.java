@@ -25,7 +25,6 @@ package dev.hypera.chameleon.util.internal;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -48,21 +47,6 @@ final class ChameleonPropertyImpl<T> implements ChameleonProperty<T> {
         this.parser = parser;
         this.defaultValue = defaultValue;
         this.value = defaultValue;
-    }
-
-    /**
-     * Returns a new property.
-     *
-     * @param name         Property name.
-     * @param parser       Value parser.
-     * @param defaultValue Default value.
-     * @param <T>          Value type.
-     *
-     * @return new property.
-     */
-    @Contract(value = "_, _, _ -> new", pure = true)
-    static <T> @NotNull ChameleonProperty<T> of(@NotNull String name, @NotNull Function<String, T> parser, @NotNull T defaultValue) {
-        return new ChameleonPropertyImpl<>(name, parser, defaultValue);
     }
 
     /**

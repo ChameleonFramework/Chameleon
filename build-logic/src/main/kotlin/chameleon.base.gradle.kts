@@ -41,7 +41,7 @@ plugins {
 val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 val requires17 = setOf(
     "chameleon-example",
-    "chameleon-platform-folia",
+    "chameleon-platform-bukkit",
     "chameleon-platform-sponge",
 )
 

@@ -121,6 +121,7 @@ public final class BukkitUser extends PlatformUser<Player> implements ServerUser
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("deprecation") // Paper
     public void disconnect(@NotNull Component reason) {
         Preconditions.checkNotNull("reason", reason);
         this.player.kickPlayer(LegacyComponentSerializer.legacySection().serialize(reason));

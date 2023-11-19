@@ -46,7 +46,7 @@ public final class BukkitPluginManager implements PluginManager {
     @Override
     public @NotNull Collection<PlatformPlugin> getPlugins() {
         return Arrays.stream(Bukkit.getPluginManager().getPlugins())
-            .map(BukkitPlugin::new)
+            .map(BukkitPlugin::create)
             .collect(Collectors.toSet());
     }
 
@@ -56,7 +56,7 @@ public final class BukkitPluginManager implements PluginManager {
     @Override
     public @NotNull Optional<PlatformPlugin> getPlugin(@NotNull String name) {
         return Optional.ofNullable(Bukkit.getPluginManager().getPlugin(name))
-            .map(BukkitPlugin::new);
+            .map(BukkitPlugin::create);
     }
 
     /**

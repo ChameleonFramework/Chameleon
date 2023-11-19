@@ -66,16 +66,15 @@ In the event that maintaining compatibility with a platform's API becomes unfeas
 other reason a platform is deemed no longer worth supporting, we reserve the right to discontinue
 support for the platform without prior notice.
 
-| Platform Name  | Dependency                                 | Status       |
-|----------------|--------------------------------------------|--------------|
-| **Bukkit**     | `dev.hypera:chameleon-platform-bukkit`     |              |
-| **BungeeCord** | `dev.hypera:chameleon-platform-bungeecord` |              |
-| Fabric         | ~~`dev.hypera:chameleon-platform-fabric`~~ | Coming soon  |
-| **Folia**      | `dev.hypera:chameleon-platform-folia`      | Experimental |
-| Forge          | ~~`dev.hypera:chameleon-platform-forge`~~  | Coming soon  |
-| **Nukkit**     | `dev.hypera:chameleon-platform-nukkit`     |              |
-| **Sponge**     | `dev.hypera:chameleon-platform-sponge`     | Unstable     |
-| **Velocity**   | `dev.hypera:chameleon-platform-velocity`   |              |
+| Platform Name             | Dependency                                 | Status      |
+|---------------------------|--------------------------------------------|-------------|
+| **Bukkit** (Paper, Folia) | `dev.hypera:chameleon-platform-bukkit`     |             |
+| **BungeeCord**            | `dev.hypera:chameleon-platform-bungeecord` |             |
+| Fabric                    | ~~`dev.hypera:chameleon-platform-fabric`~~ | Coming soon |
+| Forge                     | ~~`dev.hypera:chameleon-platform-forge`~~  | Coming soon |
+| **Nukkit**                | `dev.hypera:chameleon-platform-nukkit`     |             |
+| **Sponge**                | `dev.hypera:chameleon-platform-sponge`     | Unstable    |
+| **Velocity**              | `dev.hypera:chameleon-platform-velocity`   |             |
 
 #### Discontinued Platform Support
 

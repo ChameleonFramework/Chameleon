@@ -25,8 +25,12 @@ package dev.hypera.chameleon.platform.bukkit;
 
 import dev.hypera.chameleon.ChameleonBootstrap;
 import dev.hypera.chameleon.ChameleonPluginBootstrap;
+import dev.hypera.chameleon.logger.ChameleonLogger;
 import dev.hypera.chameleon.platform.Platform;
 import dev.hypera.chameleon.platform.logger.ChameleonJavaLogger;
+import dev.hypera.chameleon.platform.logger.ChameleonSlf4jLogger;
+import dev.hypera.chameleon.platform.util.ReflectionUtil;
+import java.lang.invoke.MethodHandle;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +44,7 @@ public final class BukkitChameleonBootstrap extends ChameleonBootstrap<BukkitCha
 
     @Internal
     BukkitChameleonBootstrap(@NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull JavaPlugin bukkitPlugin) {
-        super(Platform.BUKKIT, pluginBootstrap, new ChameleonJavaLogger(bukkitPlugin.getLogger()));
+        super(Platform.BUKKIT, pluginBootstrap, createLogger(bukkitPlugin));
         this.bukkitPlugin = bukkitPlugin;
     }
 
@@ -50,6 +54,21 @@ public final class BukkitChameleonBootstrap extends ChameleonBootstrap<BukkitCha
             this.pluginBootstrap, this.bukkitPlugin,
             this.eventBus, this.logger, this.extensions
         );
+    }
+
+    private static @NotNull ChameleonLogger createLogger(@NotNull JavaPlugin bukkitPlugin) {
+        MethodHandle slf4jMethod = ReflectionUtil.getMethod(
+            bukkitPlugin.getClass(), "getSLF4JLogger",
+            ReflectionUtil.findClass("org.slf4j.Logger")
+        );
+        if (slf4jMethod != null) {
+            try {
+                return ChameleonSlf4jLogger.create(slf4jMethod.bindTo(bukkitPlugin).invoke());
+            } catch (Throwable ignored) {
+                // continue
+            }
+        }
+        return new ChameleonJavaLogger(bukkitPlugin.getLogger());
     }
 
 }

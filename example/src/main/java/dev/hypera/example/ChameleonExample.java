@@ -63,13 +63,12 @@ import org.jetbrains.annotations.NotNull;
         @Dependency(
             name = "LuckPerms",
             soft = true,
-            platforms = { Platform.BUKKIT, Platform.FOLIA }
+            platforms = { Platform.BUKKIT, Platform.BUNGEECORD }
         )
     },
     platforms = { // If this is empty, all platforms will be supported.
         Platform.BUKKIT,
         Platform.BUNGEECORD,
-        Platform.FOLIA,
         Platform.NUKKIT,
         Platform.SPONGE,
         Platform.VELOCITY
@@ -157,9 +156,10 @@ public final class ChameleonExample implements ChameleonPlugin {
             Duration.between(start, Instant.now()).toMillis()
         );
         this.logger.info(
-            "Running on {} ({}) v{} with Chameleon v{}!",
+            "Running on {} ({}) v{} with Chameleon v{} (git: {}, {})",
             this.chameleon.getPlatform().getName(), this.chameleon.getPlatform().getId(),
-            this.chameleon.getPlatform().getVersion(), Chameleon.getVersion()
+            this.chameleon.getPlatform().getVersion(), Chameleon.getVersion(),
+            Chameleon.getBranch(), Chameleon.getShortCommitHash()
         );
     }
 

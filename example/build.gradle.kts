@@ -28,8 +28,8 @@ plugins {
 }
 
 /*
- * Chameleon requires Java 11. Additionally, Folia and Sponge support requires Java 17.
- * If you wish to support Folia and/or Sponge, you must target Java 17.
+ * Chameleon requires Java 11. Additionally, Bukkit (Paper, Folia) and Sponge support requires Java 17.
+ * If you wish to support Bukkit (Paper, Folia) and/or Sponge, you must target Java 17.
  *
  * If you want your plugin to work with Java 11+, you must keep your source code
  * compatible with Java 11.
@@ -42,9 +42,11 @@ java {
 }
 
 repositories {
+    // mavenCentral() // If you're using a release version of Chameleon
+    // maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") // If you're using a snapshot version of Chameleon
+
+    maven("https://papermc.io/repo/repository/maven-public/") // Required for Bukkit/Paper/Folia support
     maven("https://oss.sonatype.org/content/repositories/snapshots/") // Required for BungeeCord support
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // Required for Bukkit support
-    maven("https://papermc.io/repo/repository/maven-public/") // Required for Folia support
     maven("https://repo.spongepowered.org/maven/") // Required for Sponge support
     maven("https://repo.opencollab.dev/main/") // Required for Nukkit support
     maven("https://repo.papermc.io/repository/maven-public/") // Required for Velocity support
@@ -54,17 +56,13 @@ dependencies {
     // Chameleon API
     implementation(projects.chameleonApi) // dev.hypera:chameleon-api
 
-    // Bukkit support
+    // Bukkit (and Paper, Folia) support
     implementation(projects.chameleonPlatformBukkit) // dev.hypera:chameleon-platform-bukkit
-    compileOnly(libs.platform.bukkit) // org.spigotmc:spigot-api
+    compileOnly(libs.platform.bukkit) // io.papermc.paper:paper-api
 
     // BungeeCord support
     implementation(projects.chameleonPlatformBungeecord) // dev.hypera:chameleon-platform-bungeecord
     compileOnly(libs.platform.bungeecord) // net.md-5:bungeecord-api
-
-    // Folia support
-    implementation(projects.chameleonPlatformFolia) // dev.hypera:chameleon-platform-folia
-    compileOnly(libs.platform.folia) // dev.folia:folia-api
 
     // Nukkit support
     implementation(projects.chameleonPlatformNukkit) // dev.hypera:chameleon-platform-nukkit
