@@ -21,49 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.annotations.generator;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Platform Dependency.
+ * Represents a generated resource.
  */
-@Retention(RetentionPolicy.SOURCE)
-@Target({})
-public @interface Dependency {
+public interface GeneratedResource {
 
     /**
-     * Returns the name or ID of this dependency.
+     * Returns a new generated resource.
      *
-     * @return dependency name or ID.
+     * @param name    Resource name.
+     * @param content Resource content.
+     *
+     * @return new generated resource.
+     */
+    static @NotNull GeneratedResource of(@NotNull String name, @NotNull String content) {
+        return new GeneratedResourceImpl(name, content);
+    }
+
+    /**
+     * Returns the name of the resource.
+     *
+     * @return resource name.
      */
     @NotNull String name();
 
     /**
-     * Returns the version, or a maven range, that represents the versions of this dependency.
-     * <p><strong>This is required for Sponge support.</strong></p>
+     * Returns the content of the resource.
      *
-     * @return the required version of this dependency.
+     * @return resource content.
      */
-    @NotNull String version() default "";
-
-    /**
-     * Returns whether this dependency is not required to load the dependant.
-     * <p>By default, this is {@code false}, meaning the dependency is required.</p>
-     *
-     * @return {@code true} if the dependency is not required for the dependant to load.
-     */
-    boolean optional() default false;
-
-    /**
-     * Returns the platforms this dependency applies to.
-     * <p>Defaults to all platforms.</p>
-     *
-     * @return dependency platforms.
-     */
-    @NotNull String[] platforms() default {};
+    @NotNull String content();
 
 }

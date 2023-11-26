@@ -34,7 +34,8 @@ import org.jetbrains.annotations.Nullable;
 public final class ChameleonUtil {
 
     private ChameleonUtil() {
-        throw new UnsupportedOperationException("ChameleonUtil is a utility class and cannot be instantiated");
+        throw new UnsupportedOperationException(
+            "ChameleonUtil is a utility class and cannot be instantiated");
     }
 
     /**
@@ -48,6 +49,46 @@ public final class ChameleonUtil {
      */
     public static <T> @NotNull T getOrDefault(@Nullable T s, @NotNull T defaultValue) {
         return s == null ? defaultValue : s;
+    }
+
+    /**
+     * Returns the first non-empty string. If all strings are empty, the last one will be returned.
+     *
+     * @param s1 First string.
+     * @param s2 Second string.
+     *
+     * @return first non-empty string.
+     */
+    public static @NotNull String firstNonEmpty(@NotNull String s1, @NotNull String s2) {
+        return !s1.isEmpty() ? s1 : s2;
+    }
+
+    /**
+     * Returns {@code null} if the given string is {@code null} or empty, otherwise the given
+     * string.
+     *
+     * @param s String.
+     *
+     * @return {@code null} if the given string is equal to {@code null} or empty, otherwise the
+     *     given string.
+     */
+    public static @Nullable String nullifyEmpty(@Nullable String s) {
+        if (isNullOrEmpty(s)) {
+            return null;
+        }
+        return s;
+    }
+
+    /**
+     * Returns whether the given string is {@code null} or empty.
+     *
+     * @param s String.
+     *
+     * @return {@code true} if the given string is equal to {@code null} or empty, otherwise
+     *     {@code true}.
+     */
+    public static boolean isNullOrEmpty(@Nullable String s) {
+        return s == null || s.isEmpty();
     }
 
 }

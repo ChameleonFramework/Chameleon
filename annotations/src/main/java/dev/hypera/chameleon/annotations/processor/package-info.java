@@ -21,26 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.annotations.processing.generation.sponge.meta;
+
+/**
+ * Annotation processors.
+ */
+@Internal
+package dev.hypera.chameleon.annotations.processor;
 
 import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.NotNull;
-
-@Internal
-@SuppressWarnings({ "unused", "FieldCanBeLocal" })
-final class Loader {
-
-    private final @NotNull String name;
-    private final @NotNull String version;
-
-    @Internal
-    private Loader(@NotNull String name, @NotNull String version) {
-        this.name = name;
-        this.version = version;
-    }
-
-    static @NotNull Loader javaPlain() {
-        return new Loader("java_plain", "1.0");
-    }
-
-}
