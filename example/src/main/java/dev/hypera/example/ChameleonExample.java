@@ -62,20 +62,22 @@ import org.jetbrains.annotations.NotNull;
     dependencies = {
         @Dependency(
             name = "LuckPerms",
-            soft = true,
-            platforms = { Platform.BUKKIT, Platform.BUNGEECORD }
+            optional = true,
+            platforms = { Platform.BUKKIT, Platform.BUNGEECORD, Platform.VELOCITY }
         )
     },
-    platforms = { // If this is empty, all platforms will be supported.
+    platforms = { // This can be omitted or empty to include all platforms.
         Platform.BUKKIT,
         Platform.BUNGEECORD,
         Platform.NUKKIT,
         Platform.SPONGE,
         Platform.VELOCITY
     },
-    // You can use custom bootstraps to initialise your plugin.
+    // You can use a custom bootstrap to initialise your plugin.
     // If you do not provide one here, the default one will be used, and a public constructor with
     // a single Chameleon parameter will be required.
+    //
+    // Note: The given bootstrap class must have a public constructor with no parameters.
     bootstrap = ChameleonExampleBootstrap.class
 )
 public final class ChameleonExample implements ChameleonPlugin {

@@ -1,7 +1,7 @@
 /*
  * This file is a part of the Chameleon Framework, licensed under the MIT License.
  *
- * Copyright (c) 2021-2024 The Chameleon Framework Authors.
+ * Copyright (c) 2021-2023 The Chameleon Framework Authors.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,47 +23,48 @@
  */
 package dev.hypera.chameleon.annotations;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Platform Dependency.
+ * Platform plugin generator options.
+ *
+ * @see dev.hypera.chameleon.annotations.generator.platform.PlatformPluginGenerator
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target({})
-public @interface Dependency {
+@Target(ElementType.TYPE)
+public @interface PluginGeneratorOptions {
 
     /**
-     * Returns the name or ID of this dependency.
+     * Returns the generated platform class name format.
+     * <p>Defaults to {@code {name}{platform}}, e.g. {@code ChameleonExampleBukkit}.</p>
      *
-     * @return dependency name or ID.
+     * <p>The following placeholders will be replaced in this string:</p>
+     * <ul>
+     *   <li>{@code {name}} - Name of the ChameleonPlugin class, e.g. {@code ChameleonExample}.</li>
+     *   <li>{@code {platform}} - Platform identifier, e.g. {@code Bukkit}, {@code Velocity}.</li>
+     * </ul>
+     *
+     * @return generated platform class name.
      */
-    @NotNull String name();
+    @NotNull String generatedClassName() default "{name}{platform}";
 
     /**
-     * Returns the version, or a maven range, that represents the versions of this dependency.
-     * <p><strong>This is required for Sponge support.</strong></p>
+     * Returns the package generated platform classes should be placed in.
+     * <p>Defaults to {@code {package}.platform.{platform}}, e.g.
+     * {@code com.example.platform.bukkit}</p>
      *
-     * @return the required version of this dependency.
-     */
-    @NotNull String version() default "";
-
-    /**
-     * Returns whether this dependency is not required to load the dependant.
-     * <p>By default, this is {@code false}, meaning the dependency is required.</p>
+     * <p>The following placeholders will be replaced in this string:</p>
+     * <ul>
+     *   <li>{@code {package}} - Name of the package the ChameleonPlugin is in.</li>
+     *   <li>{@code {platform}} - Platform identifier, e.g. {@code bukkit}, {@code velocity}.</li>
+     * </ul>
      *
-     * @return {@code true} if the dependency is not required for the dependant to load.
+     * @return platform package name.
      */
-    boolean optional() default false;
-
-    /**
-     * Returns the platforms this dependency applies to.
-     * <p>Defaults to all platforms.</p>
-     *
-     * @return dependency platforms.
-     */
-    @NotNull String[] platforms() default {};
+    @NotNull String generatedPackageName() default "{package}.platform.{platform}";
 
 }

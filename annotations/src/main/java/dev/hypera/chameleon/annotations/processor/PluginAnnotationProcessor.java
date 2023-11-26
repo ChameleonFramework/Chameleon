@@ -21,25 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.annotations.processing;
+package dev.hypera.chameleon.annotations.processor;
 
+import com.google.auto.service.AutoService;
 import dev.hypera.chameleon.Chameleon;
 import dev.hypera.chameleon.ChameleonPluginBootstrap;
 import dev.hypera.chameleon.annotations.Plugin;
+import dev.hypera.chameleon.annotations.PluginGeneratorOptions;
 import dev.hypera.chameleon.annotations.exception.ChameleonAnnotationException;
-import dev.hypera.chameleon.annotations.processing.generation.Generator;
-import dev.hypera.chameleon.annotations.processing.generation.bukkit.BukkitGenerator;
-import dev.hypera.chameleon.annotations.processing.generation.bungeecord.BungeeCordGenerator;
-import dev.hypera.chameleon.annotations.processing.generation.nukkit.NukkitGenerator;
-import dev.hypera.chameleon.annotations.processing.generation.sponge.SpongeGenerator;
-import dev.hypera.chameleon.annotations.processing.generation.velocity.VelocityGenerator;
-import dev.hypera.chameleon.platform.Platform;
+import dev.hypera.chameleon.annotations.generator.GeneratedClass;
+import dev.hypera.chameleon.annotations.generator.GeneratedResource;
+import dev.hypera.chameleon.annotations.generator.platform.PlatformPluginGenerator;
+import dev.hypera.chameleon.util.internal.ChameleonUtil;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
@@ -49,22 +51,19 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
+import javax.tools.FileObject;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Chameleon Annotation Processor.
+ * Chameleon {@link Plugin} annotation processor.
  */
-@SupportedAnnotationTypes({ "dev.hypera.chameleon.annotations.Plugin" })
-public class ChameleonAnnotationProcessor extends AbstractProcessor {
+@AutoService(Processor.class)
+public final class PluginAnnotationProcessor extends AbstractProcessor {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.latestSupported();
-    }
+    public static final @NotNull String CHAMELEON_PLUGIN_ANNOTATION = Plugin.class.getCanonicalName();
 
     /**
      * {@inheritDoc}
@@ -72,50 +71,73 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
     @Override
     public synchronized boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Plugin.class);
-        if (!elements.isEmpty()) {
-            if (elements.size() > 1) {
-                throw new ChameleonAnnotationException("@Plugin cannot be used more than once");
-            }
+        if (elements.isEmpty()) {
+            return false;
+        }
+        if (elements.size() > 1) {
+            throw new ChameleonAnnotationException("@Plugin cannot be used more than once");
+        }
 
-            Element element = elements.iterator().next();
-            if (element.getKind() != ElementKind.CLASS || element.getModifiers().contains(Modifier.ABSTRACT)) {
-                throw new ChameleonAnnotationException("@Plugin cannot be used on abstract classes");
-            }
+        Element element = elements.iterator().next();
+        if (element.getKind() != ElementKind.CLASS || element.getModifiers().contains(Modifier.ABSTRACT)) {
+            throw new ChameleonAnnotationException("@Plugin cannot be used on abstract classes");
+        }
 
-            TypeElement plugin = (TypeElement) element;
-            Plugin data = plugin.getAnnotation(Plugin.class);
+        TypeElement pluginClass = (TypeElement) element;
+        Plugin pluginData = pluginClass.getAnnotation(Plugin.class);
+        validatePluginAnnotation(pluginData);
 
-            // Plugin bootstrap
-            TypeElement pluginBootstrap = retrieveBootstrap(plugin);
+        TypeElement bootstrapClass = retrieveBootstrap(pluginClass);
+        PlatformPluginGenerator.Options options = PlatformPluginGenerator.createOptions(
+            pluginClass.getAnnotation(PluginGeneratorOptions.class)
+        );
 
-            // Platform "main class" generation
-            for (String platform : data.platforms()) {
-                Generator generator;
-                switch (platform) {
-                    case Platform.BUKKIT:
-                        generator = new BukkitGenerator();
-                        break;
-                    case Platform.BUNGEECORD:
-                        generator = new BungeeCordGenerator();
-                        break;
-                    case Platform.NUKKIT:
-                        generator = new NukkitGenerator();
-                        break;
-                    case Platform.SPONGE:
-                        generator = new SpongeGenerator();
-                        break;
-                    case Platform.VELOCITY:
-                        generator = new VelocityGenerator();
-                        break;
-                    default:
-                        throw new IllegalStateException("Invalid or unknown platform: " + platform);
+        for (String platformId : pluginData.platforms()) {
+            PlatformPluginGenerator.Context ctx = PlatformPluginGenerator.createContext(
+                pluginData, pluginClass, bootstrapClass, platformId, options
+            );
+            generatePlatformPlugin(ctx);
+        }
+        return false;
+    }
+
+    private void validatePluginAnnotation(@NotNull Plugin plugin) {
+        if (ChameleonUtil.isNullOrEmpty(plugin.id())) {
+            throw new ChameleonAnnotationException("Validating @Plugin: Plugin ID is required");
+        }
+        if (ChameleonUtil.isNullOrEmpty(plugin.version())) {
+            throw new ChameleonAnnotationException("Validating @Plugin: Plugin version is required");
+        }
+    }
+
+    private void generatePlatformPlugin(@NotNull PlatformPluginGenerator.Context ctx) {
+        PlatformPluginGenerator generator = PlatformPluginGenerator.create(ctx.platformId());
+
+        // Generate classes
+        for (GeneratedClass clazz : generator.generateClasses(ctx)) {
+            try {
+                JavaFileObject javaFile = this.processingEnv.getFiler()
+                    .createSourceFile(clazz.fqcn(), ctx.pluginClass());
+                try (Writer out = javaFile.openWriter()) {
+                    out.write(clazz.content());
                 }
-
-                generator.generate(data, plugin, pluginBootstrap, processingEnv);
+            } catch (IOException ex) {
+                throw new IllegalStateException("Failed to save generated class: " + clazz.fqcn(), ex);
             }
         }
 
-        return false;
+        // Generate resources
+        for (GeneratedResource resource : generator.generateResources(ctx)) {
+            try {
+                FileObject resourceFile = this.processingEnv.getFiler()
+                    .createResource(StandardLocation.SOURCE_OUTPUT, "", resource.name());
+                try (Writer out = resourceFile.openWriter()) {
+                    out.write(resource.content());
+                }
+            } catch (IOException ex) {
+                throw new IllegalStateException("Failed to save generated resource: " + resource.name(), ex);
+            }
+        }
     }
 
     private @Nullable TypeElement retrieveBootstrap(@NotNull TypeElement plugin) {
@@ -141,7 +163,9 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
             .findAny();
         if (constructor.isEmpty()) {
             throw new ChameleonAnnotationException(
-                "If a plugin bootstrap is not provided to @Plugin, the annotated class must have a constructor with a single Chameleon parameter."
+                "Validating @Plugin: Custom plugin bootstrap not provided: " +
+                    "ChameleonPlugin implementation must have constructor with only a " +
+                    "Chameleon parameter to use the default bootstrap"
             );
         }
     }
@@ -173,6 +197,22 @@ public class ChameleonAnnotationProcessor extends AbstractProcessor {
             }
         }
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<String> getSupportedAnnotationTypes() {
+        return Collections.singleton(CHAMELEON_PLUGIN_ANNOTATION);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.latestSupported();
     }
 
 }

@@ -45,51 +45,59 @@ public @interface Plugin {
     @NotNull String id();
 
     /**
-     * The plugin's human-readable name.
+     * Returns the human-readable display name of this plugin.
      *
-     * @return the plugin's name, or an empty string.
+     * @return plugin name.
      */
     @NotNull String name() default "";
 
     /**
-     * The plugin's version.
+     * Returns the version of this plugin.
      *
-     * @return the plugin's version.
+     * @return plugin version.
      */
     @NotNull String version();
 
     /**
-     * The plugin's description, generally a short explanation of what the plugin is used for.
+     * Returns the license this plugin is distributed under.
+     * <p>This is currently only used for Sponge support.</p>
      *
-     * @return the plugin's description, or an empty string.
+     * @return plugin license.
+     */
+    @NotNull String license() default "";
+
+    /**
+     * Returns a short description of this plugin.
+     *
+     * @return plugin description.
      */
     @NotNull String description() default "";
 
     /**
-     * The plugin's website or download URL.
+     * Returns the website or download URL of this plugin.
      *
-     * @return the plugin's url, or an empty string.
+     * @return plugin URL.
      */
     @NotNull String url() default "";
 
     /**
-     * The plugin's author(s).
+     * Returns the authors of this plugin.
      *
-     * @return the plugin's authors.
+     * @return plugin authors.
      */
     @NotNull String[] authors() default {};
 
     /**
-     * The plugin's dependencies.
+     * Returns the dependencies of this plugin.
      *
-     * @return the plugin's dependencies.
+     * @return plugin dependencies.
      */
     @NotNull Dependency[] dependencies() default {};
 
     /**
-     * The platforms this plugin can run on.
-     * <p>This is used by Chameleon Annotations to determine what generators should be run.</p>
-     * <p>Defaults to all platforms.</p>
+     * Returns the platforms this plugin can run on.
+     *
+     * <p>This is used internally to decide which platform plugin generators to run.</p>
      *
      * @return the platforms this plugin can run on.
      */
@@ -97,8 +105,10 @@ public @interface Plugin {
 
     /**
      * Returns the plugin bootstrap to use when bootstrapping Chameleon.
-     * <p><strong>If this is not provided, the annotated class must have a public constructor with a
-     * single Chameleon parameter.</strong></p>
+     *
+     * <p>The provided bootstrap must have a public constructor with no parameters.</p>
+     * <p><strong>If this is not provided, the annotated class must have a public constructor with
+     * a single Chameleon parameter.</strong></p>
      *
      * @return plugin bootstrap class.
      */
