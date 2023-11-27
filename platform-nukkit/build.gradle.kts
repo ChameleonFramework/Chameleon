@@ -33,4 +33,5 @@ repositories {
 dependencies {
     api(projects.chameleonPlatformApi)
     compileOnly(libs.platform.nukkit)
+    implementation(libs.adventure.textSerializer.legacy)
 }

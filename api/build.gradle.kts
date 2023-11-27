@@ -28,8 +28,7 @@ plugins {
 
 dependencies {
     api(libs.adventure.api)
-    api(libs.adventure.textSerializer.legacy)
-    api(libs.adventure.textSerializer.gson)
     api(libs.adventure.platform.api)
+    implementation(libs.adventure.textSerializer.gson)
     compileOnlyApi(libs.annotations)
 }

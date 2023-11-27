@@ -35,4 +35,5 @@ dependencies {
     api(projects.chameleonPlatformApi)
     compileOnly(libs.platform.bukkit)
     implementation(libs.adventure.platform.bukkit)
+    implementation(libs.adventure.textSerializer.legacy)
 }
