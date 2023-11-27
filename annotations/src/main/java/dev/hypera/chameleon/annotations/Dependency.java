@@ -29,7 +29,9 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Platform Dependency.
+ * Plugin Dependency.
+ *
+ * @see Plugin
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target({})
@@ -43,7 +45,8 @@ public @interface Dependency {
     @NotNull String name();
 
     /**
-     * Returns the version, or a maven range, that represents the versions of this dependency.
+     * Returns the version, or a maven version range, that represents the compatible versions of
+     * this dependency.
      * <p><strong>This is required for Sponge support.</strong></p>
      *
      * @return the required version of this dependency.
@@ -51,10 +54,10 @@ public @interface Dependency {
     @NotNull String version() default "";
 
     /**
-     * Returns whether this dependency is not required to load the dependant.
-     * <p>By default, this is {@code false}, meaning the dependency is required.</p>
+     * Returns whether this dependency is optional for loading the dependant plugin.
+     * <p>Defaults to {@code false}, meaning the dependency is not required.</p>
      *
-     * @return {@code true} if the dependency is not required for the dependant to load.
+     * @return {@code true} if the dependency is not required when loading the dependant plugin.
      */
     boolean optional() default false;
 
