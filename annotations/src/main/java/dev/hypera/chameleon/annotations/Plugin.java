@@ -38,9 +38,9 @@ import org.jetbrains.annotations.NotNull;
 public @interface Plugin {
 
     /**
-     * The plugin's unique identifier.
+     * Returns the unique identifier of this plugin.
      *
-     * @return the plugin's ID.
+     * @return plugin ID.
      */
     @NotNull String id();
 
