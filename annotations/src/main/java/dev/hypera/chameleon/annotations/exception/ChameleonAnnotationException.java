@@ -24,50 +24,56 @@
 package dev.hypera.chameleon.annotations.exception;
 
 import dev.hypera.chameleon.exception.ChameleonRuntimeException;
+import org.jetbrains.annotations.ApiStatus.Internal;
 
 /**
  * Chameleon extension exception.
  */
-public class ChameleonAnnotationException extends ChameleonRuntimeException {
+public final class ChameleonAnnotationException extends ChameleonRuntimeException {
 
     private static final long serialVersionUID = 3638644893311787308L;
 
     /**
-     * {@link ChameleonAnnotationException} constructor.
+     * Chameleon annotation exception constructor.
      */
+    @Internal
     public ChameleonAnnotationException() {
         super();
     }
 
     /**
-     * {@link ChameleonAnnotationException} constructor.
+     * Chameleon annotation exception constructor.
      *
      * @param message Exception message.
      */
+    @Internal
     public ChameleonAnnotationException(String message) {
         super(message);
     }
 
     /**
-     * {@link ChameleonAnnotationException} constructor.
+     * Chameleon annotation exception constructor.
      *
      * @param message Exception message.
      * @param cause   Exception cause.
      */
+    @Internal
     public ChameleonAnnotationException(String message, Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * {@link ChameleonAnnotationException} constructor.
+     * Chameleon annotation exception constructor.
      *
      * @param cause Exception cause.
      */
+    @Internal
     public ChameleonAnnotationException(Throwable cause) {
         super(cause);
     }
 
-    protected ChameleonAnnotationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    @Internal
+    ChameleonAnnotationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
