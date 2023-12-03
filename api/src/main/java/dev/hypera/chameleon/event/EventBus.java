@@ -79,4 +79,22 @@ public interface EventBus {
      */
     void unsubscribeIf(@NotNull Predicate<EventSubscriber<? super ChameleonEvent>> predicate);
 
+    /**
+     * Represents an exception handler.
+     */
+    @FunctionalInterface
+    interface ExceptionHandler {
+
+        /**
+         * Handles an exception that was thrown by an event subscriber.
+         *
+         * @param eventBus   Event bus.
+         * @param subscriber Event subscriber.
+         * @param event      Event.
+         * @param throwable  Thrown exception.
+         */
+        void handle(@NotNull EventBus eventBus, @NotNull EventSubscriber<? super ChameleonEvent> subscriber, @NotNull ChameleonEvent event, @NotNull Throwable throwable);
+
+    }
+
 }

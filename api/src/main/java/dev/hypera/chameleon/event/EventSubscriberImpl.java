@@ -28,26 +28,25 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscriber<T> {
+final class EventSubscriberImpl<E extends ChameleonEvent> implements EventSubscriber<E> {
 
-    private final @NotNull Class<T> type;
+    private final @NotNull Class<E> type;
 
-    private final @NotNull EventSubscriber<T> handler;
+    private final @NotNull EventConsumer<E> handler;
     private final @NotNull EventSubscriptionPriority priority;
     private final boolean acceptsCancelled;
 
-    private final @NotNull Collection<Predicate<T>> filters;
-    private final @NotNull Predicate<T> expireWhen;
+    private final @NotNull Collection<Predicate<E>> filters;
+    private final @NotNull Predicate<E> expireWhen;
     private final @Nullable AtomicInteger expirationCount;
 
     private @Nullable EventSubscription subscription;
 
-    EventSubscriberImpl(@NotNull Class<T> type, @NotNull EventSubscriber<T> handler, @NotNull EventSubscriptionPriority priority, boolean acceptsCancelled, @NotNull Collection<Predicate<T>> filters, @NotNull Predicate<T> expireWhen, int expiresAfter) {
+    EventSubscriberImpl(@NotNull Class<E> type, @NotNull EventConsumer<E> handler, @NotNull EventSubscriptionPriority priority, boolean acceptsCancelled, @NotNull Collection<Predicate<E>> filters, @NotNull Predicate<E> expireWhen, int expiresAfter) {
         this.type = type;
         this.handler = handler;
         this.priority = priority;
@@ -62,7 +61,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
      * {@inheritDoc}
      */
     @Override
-    public void on(@NotNull T event) throws Exception {
+    public void on(@NotNull E event) throws Throwable {
         Preconditions.checkNotNull("event", event);
         if (this.subscription == null) {
             throw new IllegalStateException();
@@ -104,7 +103,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Class<T> getType() {
+    public @NotNull Class<E> getType() {
         return this.type;
     }
 
@@ -113,18 +112,18 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
         this.subscription = subscription;
     }
 
-    static final class BuilderImpl<T extends ChameleonEvent> implements Builder<T> {
+    static final class BuilderImpl<E extends ChameleonEvent> implements Builder<E> {
 
-        private final @NotNull Class<T> type;
-        private @Nullable EventSubscriber<T> handler;
+        private final @NotNull Class<E> type;
+        private @Nullable EventConsumer<E> handler;
         private @NotNull EventSubscriptionPriority priority = EventSubscriptionPriority.NORMAL;
         private boolean acceptsCancelled = false;
 
-        private final @NotNull Collection<Predicate<T>> filters = new ArrayList<>();
-        private @NotNull Predicate<T> expireWhen = event -> false;
+        private final @NotNull Collection<Predicate<E>> filters = new ArrayList<>();
+        private @NotNull Predicate<E> expireWhen = event -> false;
         private int expiresAfter = -1;
 
-        BuilderImpl(@NotNull Class<T> type) {
+        BuilderImpl(@NotNull Class<E> type) {
             Preconditions.checkNotNull("type", type);
             this.type = type;
         }
@@ -133,9 +132,9 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
          * {@inheritDoc}
          */
         @Override
-        public @NotNull Builder<T> handler(@NotNull Consumer<T> handler) {
+        public @NotNull Builder<E> handler(@NotNull EventConsumer<E> handler) {
             Preconditions.checkNotNull("handler", handler);
-            this.handler = handler::accept;
+            this.handler = handler;
             return this;
         }
 
@@ -143,7 +142,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
          * {@inheritDoc}
          */
         @Override
-        public @NotNull Builder<T> priority(@NotNull EventSubscriptionPriority priority) {
+        public @NotNull Builder<E> priority(@NotNull EventSubscriptionPriority priority) {
             Preconditions.checkNotNull("priority", priority);
             this.priority = priority;
             return this;
@@ -153,7 +152,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
          * {@inheritDoc}
          */
         @Override
-        public @NotNull Builder<T> acceptsCancelled(boolean acceptsCancelled) {
+        public @NotNull Builder<E> acceptsCancelled(boolean acceptsCancelled) {
             this.acceptsCancelled = acceptsCancelled;
             return this;
         }
@@ -162,7 +161,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
          * {@inheritDoc}
          */
         @Override
-        public @NotNull Builder<T> filters(@NotNull Predicate<T> filter) {
+        public @NotNull Builder<E> filters(@NotNull Predicate<E> filter) {
             Preconditions.checkNotNull("filter", filter);
             this.filters.add(filter);
             return this;
@@ -172,7 +171,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
          * {@inheritDoc}
          */
         @Override
-        public @NotNull Builder<T> filters(@NotNull Collection<Predicate<T>> filters) {
+        public @NotNull Builder<E> filters(@NotNull Collection<Predicate<E>> filters) {
             Preconditions.checkNotNull("filters", filters);
             this.filters.addAll(filters);
             return this;
@@ -182,7 +181,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
          * {@inheritDoc}
          */
         @Override
-        public @NotNull Builder<T> expireAfter(int expiresAfter) {
+        public @NotNull Builder<E> expireAfter(int expiresAfter) {
             this.expiresAfter = expiresAfter;
             return this;
         }
@@ -191,7 +190,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
          * {@inheritDoc}
          */
         @Override
-        public @NotNull Builder<T> expireWhen(@NotNull Predicate<T> expireWhen) {
+        public @NotNull Builder<E> expireWhen(@NotNull Predicate<E> expireWhen) {
             Preconditions.checkNotNull("expireWhen", expireWhen);
             this.expireWhen = expireWhen;
             return this;
@@ -201,7 +200,7 @@ final class EventSubscriberImpl<T extends ChameleonEvent> implements EventSubscr
          * {@inheritDoc}
          */
         @Override
-        public @NotNull EventSubscriber<T> build() {
+        public @NotNull EventSubscriber<E> build() {
             Preconditions.checkState(this.handler != null, "handler is required");
             return new EventSubscriberImpl<>(
                 this.type, Objects.requireNonNull(this.handler), this.priority,

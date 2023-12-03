@@ -25,7 +25,6 @@ package dev.hypera.chameleon.event;
 
 import dev.hypera.chameleon.event.EventSubscriberImpl.BuilderImpl;
 import java.util.Collection;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.Contract;
@@ -35,10 +34,10 @@ import org.jetbrains.annotations.Nullable;
 /**
  * An event subscriber, used to listen for events.
  *
- * @param <T> Event type.
+ * @param <E> Event type.
  */
 @FunctionalInterface
-public interface EventSubscriber<T extends ChameleonEvent> {
+public interface EventSubscriber<E extends ChameleonEvent> extends EventConsumer<E> {
 
     /**
      * Create a new event subscriber builder.
@@ -51,15 +50,6 @@ public interface EventSubscriber<T extends ChameleonEvent> {
     static <T extends ChameleonEvent> @NotNull Builder<T> builder(@NotNull Class<T> type) {
         return new BuilderImpl<>(type);
     }
-
-    /**
-     * Executed when this event is dispatched.
-     *
-     * @param event Dispatched event.
-     *
-     * @throws Exception if something goes wrong while handling this event.
-     */
-    void on(@NotNull T event) throws Exception;
 
     /**
      * Get the priority of this subscriber.
@@ -88,7 +78,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
      *
      * @return event type.
      */
-    default @Nullable Class<T> getType() {
+    default @Nullable Class<E> getType() {
         return null;
     }
 
@@ -96,10 +86,10 @@ public interface EventSubscriber<T extends ChameleonEvent> {
     /**
      * Event subscriber builder.
      *
-     * @param <T> Event type.
+     * @param <E> Event type.
      */
     @NonExtendable
-    interface Builder<T extends ChameleonEvent> {
+    interface Builder<E extends ChameleonEvent> {
 
         /**
          * Set the event handler.
@@ -109,7 +99,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
          * @return {@code this}.
          */
         @Contract("_ -> this")
-        @NotNull Builder<T> handler(@NotNull Consumer<T> handler);
+        @NotNull Builder<E> handler(@NotNull EventConsumer<E> handler);
 
         /**
          * Set the subscriber priority.
@@ -119,7 +109,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
          * @return {@code this}.
          */
         @Contract("_ -> this")
-        @NotNull Builder<T> priority(@NotNull EventSubscriptionPriority priority);
+        @NotNull Builder<E> priority(@NotNull EventSubscriptionPriority priority);
 
         /**
          * Accept cancelled events.
@@ -127,7 +117,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
          * @return {@code this}.
          */
         @Contract("-> this")
-        default @NotNull Builder<T> acceptCancelled() {
+        default @NotNull Builder<E> acceptCancelled() {
             return acceptsCancelled(true);
         }
 
@@ -139,7 +129,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
          * @return {@code this}.
          */
         @Contract("_ -> this")
-        @NotNull Builder<T> acceptsCancelled(boolean acceptsCancelled);
+        @NotNull Builder<E> acceptsCancelled(boolean acceptsCancelled);
 
         /**
          * Add a filter for this subscriber.
@@ -149,7 +139,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
          * @return {@code this}.
          */
         @Contract("_ -> this")
-        @NotNull Builder<T> filters(@NotNull Predicate<T> filter);
+        @NotNull Builder<E> filters(@NotNull Predicate<E> filter);
 
         /**
          * Add filters for this subscriber.
@@ -159,7 +149,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
          * @return {@code this}.
          */
         @Contract("_ -> this")
-        @NotNull Builder<T> filters(@NotNull Collection<Predicate<T>> filters);
+        @NotNull Builder<E> filters(@NotNull Collection<Predicate<E>> filters);
 
         /**
          * Expire when this predicate returns {@code true}.
@@ -169,7 +159,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
          * @return {@code this}.
          */
         @Contract("_ -> this")
-        @NotNull Builder<T> expireWhen(@NotNull Predicate<T> expireWhen);
+        @NotNull Builder<E> expireWhen(@NotNull Predicate<E> expireWhen);
 
         /**
          * Expire after {@code expiresAfter} executions.
@@ -179,7 +169,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
          * @return {@code this}.
          */
         @Contract("_ -> this")
-        @NotNull Builder<T> expireAfter(int expiresAfter);
+        @NotNull Builder<E> expireAfter(int expiresAfter);
 
         /**
          * Build event subscriber.
@@ -187,7 +177,7 @@ public interface EventSubscriber<T extends ChameleonEvent> {
          * @return new event subscriber.
          */
         @Contract(value = "-> new", pure = true)
-        @NotNull EventSubscriber<T> build();
+        @NotNull EventSubscriber<E> build();
 
     }
 

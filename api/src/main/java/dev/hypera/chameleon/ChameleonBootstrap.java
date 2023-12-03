@@ -48,7 +48,7 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
     private final @NotNull String platform;
     protected final @NotNull ChameleonPluginBootstrap pluginBootstrap;
     protected final @NotNull ChameleonLogger logger;
-    protected final @NotNull EventBus eventBus;
+    protected final @NotNull EventBusImpl eventBus;
     protected final @NotNull ExtensionMap extensions = new ExtensionMap();
 
     protected ChameleonBootstrap(@NotNull String platform, @NotNull ChameleonPluginBootstrap pluginBootstrap, @NotNull ChameleonLogger logger) {
@@ -56,6 +56,22 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
         this.pluginBootstrap = pluginBootstrap;
         this.logger = logger;
         this.eventBus = new EventBusImpl(logger);
+    }
+
+    /**
+     * Sets the event bus exception handler.
+     * <p>When an exception is thrown by an event subscriber, the exception will be caught and given
+     * to the exception handler.</p>
+     *
+     * @param exceptionHandler Event exception handler.
+     *
+     * @return {@code this}.
+     */
+    @Contract("_ -> this")
+    public final @NotNull ChameleonBootstrap<T> withEventExceptionHandler(@NotNull EventBus.ExceptionHandler exceptionHandler) {
+        Preconditions.checkNotNull("exceptionHandler", exceptionHandler);
+        this.eventBus.setExceptionHandler(exceptionHandler);
+        return this;
     }
 
     /**
