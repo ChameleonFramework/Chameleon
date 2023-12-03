@@ -27,15 +27,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import dev.hypera.chameleon.logger.ChameleonNoopLogger;
+import dev.hypera.chameleon.event.EventBus.ExceptionHandler;
+import dev.hypera.chameleon.exception.ChameleonException;
 import dev.hypera.chameleon.logger.DummyChameleonLogger;
+import java.util.Collections;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 final class EventBusTests {
 
+    private static final @NotNull ExceptionHandler NOP_EXCEPTION_HANDLER = (eventBus, subscriber, event, throwable) -> {};
+
     @Test
     void subscribeUnsubscribe() {
-        EventBus eventBus = new EventBusImpl(new DummyChameleonLogger());
+        EventBus eventBus = new EventBusImpl(NOP_EXCEPTION_HANDLER);
         assertFalse(eventBus.subscribed(TestEvent.class));
 
         EventSubscription subscription = eventBus.subscribe(TestEvent.class, TestEvent::touch);
@@ -58,7 +63,7 @@ final class EventBusTests {
         DummyChameleonLogger logger = new DummyChameleonLogger();
         EventBus eventBus = new EventBusImpl(logger);
 
-        eventBus.subscribe(TestEvent.class,
+        eventBus.subscribe(
             EventSubscriber.builder(TestEvent.class)
                 .priority(EventSubscriptionPriority.MEDIUM)
                 .handler(event -> {
@@ -68,7 +73,7 @@ final class EventBusTests {
                 .build()
         );
 
-        eventBus.subscribe(TestEvent.class,
+        eventBus.subscribe(
             EventSubscriber.builder(TestEvent.class)
                 .priority(EventSubscriptionPriority.LOW)
                 .handler(event -> {
@@ -78,7 +83,7 @@ final class EventBusTests {
                 .build()
         );
 
-        eventBus.subscribe(TestEvent.class,
+        eventBus.subscribe(
             EventSubscriber.builder(TestEvent.class)
                 .priority(EventSubscriptionPriority.HIGH)
                 .handler(event -> {
@@ -97,7 +102,7 @@ final class EventBusTests {
 
     @Test
     void cancellable() {
-        EventBus eventBus = new EventBusImpl(new ChameleonNoopLogger());
+        EventBus eventBus = new EventBusImpl(NOP_EXCEPTION_HANDLER);
         eventBus.subscribe(TestEvent.class, TestEvent::touch);
 
         TestEvent event = new TestEvent(false);
@@ -112,7 +117,7 @@ final class EventBusTests {
         eventBus.dispatch(cancelledEvent);
         assertEquals(0, cancelledEvent.getTouches());
 
-        eventBus.subscribe(TestEvent.class,
+        eventBus.subscribe(
             EventSubscriber.builder(TestEvent.class)
                 .acceptCancelled()
                 .handler(TestEvent::touch)
@@ -128,7 +133,7 @@ final class EventBusTests {
 
     @Test
     void receivesChildren() {
-        EventBus eventBus = new EventBusImpl(new ChameleonNoopLogger());
+        EventBus eventBus = new EventBusImpl(NOP_EXCEPTION_HANDLER);
         eventBus.subscribe(ChameleonEvent.class, event -> {
             if (event instanceof TestEvent) {
                 ((TestEvent) event).touch();
@@ -142,8 +147,8 @@ final class EventBusTests {
 
     @Test
     void expiresAfter() {
-        EventBus eventBus = new EventBusImpl(new ChameleonNoopLogger());
-        eventBus.subscribe(TestEvent.class,
+        EventBus eventBus = new EventBusImpl(NOP_EXCEPTION_HANDLER);
+        eventBus.subscribe(
             EventSubscriber.builder(TestEvent.class)
                 .expireAfter(1)
                 .handler(TestEvent::touch)
@@ -162,8 +167,8 @@ final class EventBusTests {
 
     @Test
     void expiresWhen() {
-        EventBus eventBus = new EventBusImpl(new ChameleonNoopLogger());
-        eventBus.subscribe(TestEvent.class,
+        EventBus eventBus = new EventBusImpl(NOP_EXCEPTION_HANDLER);
+        eventBus.subscribe(
             EventSubscriber.builder(TestEvent.class)
                 .expireWhen(e -> e.getTouches() == 1)
                 .handler(TestEvent::touch)
@@ -182,10 +187,10 @@ final class EventBusTests {
 
     @Test
     void filters() {
-        EventBus eventBus = new EventBusImpl(new ChameleonNoopLogger());
-        eventBus.subscribe(TestEvent.class,
+        EventBus eventBus = new EventBusImpl(NOP_EXCEPTION_HANDLER);
+        eventBus.subscribe(
             EventSubscriber.builder(TestEvent.class)
-                .filters(e -> e.getTouches() == 0 || e.getTouches() == 2)
+                .filters(Collections.singleton(e -> e.getTouches() == 0 || e.getTouches() == 2))
                 .filters(e -> e.getTouches() < 3)
                 .handler(TestEvent::touch)
                 .build()
@@ -206,6 +211,27 @@ final class EventBusTests {
         assertEquals(3, event.getTouches());
     }
 
+    @Test
+    void testExceptionHandler() {
+        EventBusImpl eventBus = new EventBusImpl(new DummyChameleonLogger());
+        // Register subscriber that throws an exception
+        eventBus.subscribe(TestEvent.class, e -> {
+            throw new ChameleonException("Hello, world!");
+        });
+
+        // Exception should be handled by the default ExceptionHandler
+        TestEvent event = new TestEvent(false);
+        eventBus.dispatch(event);
+
+        // #setExceptionHandler(ExceptionHandler) should change the exception handler
+        TestExceptionHandler handler = new TestExceptionHandler();
+        eventBus.setExceptionHandler(handler);
+
+        // Exception should be handled by the new ExceptionHandler
+        eventBus.dispatch(event);
+        assertEquals(1, handler.getErrorCount());
+    }
+
     static final class TestEvent extends AbstractCancellable implements ChameleonEvent {
 
         private int touches = 0;
@@ -220,6 +246,21 @@ final class EventBusTests {
 
         public int getTouches() {
             return this.touches;
+        }
+
+    }
+
+    static final class TestExceptionHandler implements ExceptionHandler {
+
+        private int errorCount = 0;
+
+        @Override
+        public void handle(@NotNull EventBus eventBus, @NotNull EventSubscriber<? super ChameleonEvent> subscriber, @NotNull ChameleonEvent event, @NotNull Throwable throwable) {
+            this.errorCount++;
+        }
+
+        public int getErrorCount() {
+            return this.errorCount;
         }
 
     }
