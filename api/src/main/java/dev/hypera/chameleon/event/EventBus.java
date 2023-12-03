@@ -35,18 +35,18 @@ import org.jetbrains.annotations.NotNull;
 public interface EventBus {
 
     /**
-     * Dispatch an event to subscribers.
+     * Dispatches an event to subscribers.
      *
-     * @param event The event to be dispatched.
+     * @param event Event to be dispatched.
      */
     void dispatch(@NotNull ChameleonEvent event);
 
     /**
-     * Register the given subscriber.
+     * Registers an event subscriber.
      *
-     * @param event   The event type.
-     * @param handler The event handler.
-     * @param <T>     The event type.
+     * @param event   Event type.
+     * @param handler Event handler.
+     * @param <T>     Event type.
      *
      * @return an event subscription.
      */
@@ -55,10 +55,10 @@ public interface EventBus {
     }
 
     /**
-     * Register the given subscriber.
+     * Registers the given event subscriber.
      *
-     * @param subscriber The event subscriber.
-     * @param <T>        The event type.
+     * @param subscriber Event subscriber.
+     * @param <T>        Event type.
      *
      * @return an event subscription.
      * @throws IllegalArgumentException if the given {@code subscriber} does not have a set type.
@@ -75,14 +75,14 @@ public interface EventBus {
     boolean subscribed(@NotNull Class<? extends ChameleonEvent> event);
 
     /**
-     * Unregister subscribers matching the given predicate.
+     * Unregisters subscribers matching the given predicate.
      *
      * @param predicate The predicate to test subscribers against.
      */
     void unsubscribeIf(@NotNull Predicate<EventSubscriber<? super ChameleonEvent>> predicate);
 
     /**
-     * Represents an exception handler.
+     * Represents an event exception handler.
      */
     @FunctionalInterface
     interface ExceptionHandler {
