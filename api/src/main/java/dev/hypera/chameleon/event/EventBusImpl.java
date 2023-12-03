@@ -131,25 +131,6 @@ public final class EventBusImpl implements EventBus {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
-    public <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull Class<T> event, @NotNull EventSubscriber<T> subscriber) {
-        Preconditions.checkNotNull("event", event);
-        Preconditions.checkNotNull("subscriber", subscriber);
-        this.subscriptions.computeIfAbsent(event, key -> Collections.synchronizedSet(new HashSet<>())).add((EventSubscriber<ChameleonEvent>) subscriber);
-        this.sortedSubscriptions.clear();
-
-        EventSubscription subscription = () -> unsubscribeIf(sub -> sub.equals(subscriber));
-        if (subscriber instanceof EventSubscriberImpl) {
-            ((EventSubscriberImpl<T>) subscriber).setSubscription(subscription);
-        }
-
-        return subscription;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean subscribed(@NotNull Class<? extends ChameleonEvent> event) {
         Preconditions.checkNotNull("event", event);
         return this.subscriptions.entrySet().stream().anyMatch(entry -> entry.getKey().isAssignableFrom(event) && !entry.getValue().isEmpty());

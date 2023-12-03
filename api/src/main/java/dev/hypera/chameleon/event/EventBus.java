@@ -44,13 +44,15 @@ public interface EventBus {
     /**
      * Register the given subscriber.
      *
-     * @param event      The event type.
-     * @param subscriber The event subscriber.
-     * @param <T>        The event type.
+     * @param event   The event type.
+     * @param handler The event handler.
+     * @param <T>     The event type.
      *
      * @return an event subscription.
      */
-    <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull Class<T> event, @NotNull EventSubscriber<T> subscriber);
+    default <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull Class<T> event, @NotNull EventConsumer<T> handler) {
+        return subscribe(EventSubscriber.builder(event).handler(handler).build());
+    }
 
     /**
      * Register the given subscriber.
