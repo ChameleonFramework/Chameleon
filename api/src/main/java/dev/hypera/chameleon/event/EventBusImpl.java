@@ -46,9 +46,9 @@ public final class EventBusImpl implements EventBus {
 
     private static final @NotNull Comparator<EventSubscriber<? super ChameleonEvent>> PRIORITY_COMPARATOR = Comparator.comparingInt(e -> e.getPriority().ordinal());
 
-    private final @NotNull ChameleonLogger logger;
     private final @NotNull Map<Class<? extends ChameleonEvent>, Set<EventSubscriber<? super ChameleonEvent>>> subscriptions = new ConcurrentHashMap<>();
     private final @NotNull Map<Class<? extends ChameleonEvent>, List<EventSubscriber<? super ChameleonEvent>>> sortedSubscriptions = new ConcurrentHashMap<>();
+    private @NotNull ExceptionHandler exceptionHandler;
 
     /**
      * Event bus implementation constructor.
@@ -57,7 +57,22 @@ public final class EventBusImpl implements EventBus {
      */
     @Internal
     public EventBusImpl(@NotNull ChameleonLogger logger) {
-        this.logger = logger;
+        this((eventBus, subscriber, event, throwable) -> logger.error(
+            "An exception was thrown while dispatching event {} to {}",
+            event.getClass().getSimpleName(),
+            subscriber.getClass().getCanonicalName(),
+            throwable
+        ));
+    }
+
+    /**
+     * Event bus implementation constructor.
+     *
+     * @param exceptionHandler Event exception handler.
+     */
+    @Internal
+    public EventBusImpl(@NotNull ExceptionHandler exceptionHandler) {
+        this.exceptionHandler = exceptionHandler;
     }
 
     /**
@@ -70,8 +85,8 @@ public final class EventBusImpl implements EventBus {
             if (subscriber.acceptsCancelled() || !(event instanceof Cancellable) || !((Cancellable) event).isCancelled()) {
                 try {
                     subscriber.on(event);
-                } catch (Exception ex) {
-                    this.logger.error("An error occurred while dispatching an event to %s", ex, subscriber.getClass().getCanonicalName());
+                } catch (Throwable ex) {
+                    this.exceptionHandler.handle(this, subscriber, event, ex);
                 }
             }
         });
@@ -90,25 +105,6 @@ public final class EventBusImpl implements EventBus {
         );
 
         this.subscriptions.computeIfAbsent(subscriber.getType(), key -> Collections.synchronizedSet(new HashSet<>())).add((EventSubscriber<ChameleonEvent>) subscriber);
-        this.sortedSubscriptions.clear();
-
-        EventSubscription subscription = () -> unsubscribeIf(sub -> sub.equals(subscriber));
-        if (subscriber instanceof EventSubscriberImpl) {
-            ((EventSubscriberImpl<T>) subscriber).setSubscription(subscription);
-        }
-
-        return subscription;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull Class<T> event, @NotNull EventSubscriber<T> subscriber) {
-        Preconditions.checkNotNull("event", event);
-        Preconditions.checkNotNull("subscriber", subscriber);
-        this.subscriptions.computeIfAbsent(event, key -> Collections.synchronizedSet(new HashSet<>())).add((EventSubscriber<ChameleonEvent>) subscriber);
         this.sortedSubscriptions.clear();
 
         EventSubscription subscription = () -> unsubscribeIf(sub -> sub.equals(subscriber));
@@ -143,6 +139,15 @@ public final class EventBusImpl implements EventBus {
         if (removed) {
             this.sortedSubscriptions.clear();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setExceptionHandler(@NotNull ExceptionHandler exceptionHandler) {
+        Preconditions.checkNotNull("exceptionHandler", exceptionHandler);
+        this.exceptionHandler = exceptionHandler;
     }
 
     private synchronized @NotNull List<EventSubscriber<? super ChameleonEvent>> getSubscribers(@NotNull Class<? extends ChameleonEvent> event) {

@@ -35,28 +35,30 @@ import org.jetbrains.annotations.NotNull;
 public interface EventBus {
 
     /**
-     * Dispatch an event to subscribers.
+     * Dispatches an event to subscribers.
      *
-     * @param event The event to be dispatched.
+     * @param event Event to be dispatched.
      */
     void dispatch(@NotNull ChameleonEvent event);
 
     /**
-     * Register the given subscriber.
+     * Registers an event subscriber.
      *
-     * @param event      The event type.
-     * @param subscriber The event subscriber.
-     * @param <T>        The event type.
+     * @param event   Event type.
+     * @param handler Event handler.
+     * @param <T>     Event type.
      *
      * @return an event subscription.
      */
-    <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull Class<T> event, @NotNull EventSubscriber<T> subscriber);
+    default <T extends ChameleonEvent> @NotNull EventSubscription subscribe(@NotNull Class<T> event, @NotNull EventConsumer<T> handler) {
+        return subscribe(EventSubscriber.builder(event).handler(handler).build());
+    }
 
     /**
-     * Register the given subscriber.
+     * Registers the given event subscriber.
      *
-     * @param subscriber The event subscriber.
-     * @param <T>        The event type.
+     * @param subscriber Event subscriber.
+     * @param <T>        Event type.
      *
      * @return an event subscription.
      * @throws IllegalArgumentException if the given {@code subscriber} does not have a set type.
@@ -73,10 +75,37 @@ public interface EventBus {
     boolean subscribed(@NotNull Class<? extends ChameleonEvent> event);
 
     /**
-     * Unregister subscribers matching the given predicate.
+     * Unregisters subscribers matching the given predicate.
      *
      * @param predicate The predicate to test subscribers against.
      */
     void unsubscribeIf(@NotNull Predicate<EventSubscriber<? super ChameleonEvent>> predicate);
+
+    /**
+     * Sets the exception handler for this event bus.
+     *
+     * @param exceptionHandler New exception handler.
+     *
+     * @see dev.hypera.chameleon.ChameleonBootstrap#withEventExceptionHandler(ExceptionHandler)
+     */
+    void setExceptionHandler(@NotNull ExceptionHandler exceptionHandler);
+
+    /**
+     * Represents an event exception handler.
+     */
+    @FunctionalInterface
+    interface ExceptionHandler {
+
+        /**
+         * Handles an exception that was thrown by an event subscriber.
+         *
+         * @param eventBus   Event bus.
+         * @param subscriber Event subscriber.
+         * @param event      Event.
+         * @param throwable  Thrown exception.
+         */
+        void handle(@NotNull EventBus eventBus, @NotNull EventSubscriber<? super ChameleonEvent> subscriber, @NotNull ChameleonEvent event, @NotNull Throwable throwable);
+
+    }
 
 }

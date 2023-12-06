@@ -59,6 +59,21 @@ public abstract class ChameleonBootstrap<T extends Chameleon> {
     }
 
     /**
+     * Sets the event bus exception handler.
+     * <p>When an exception is thrown by an event subscriber, the exception will be caught and given
+     * to the exception handler.</p>
+     *
+     * @param exceptionHandler Event exception handler.
+     *
+     * @return {@code this}.
+     */
+    @Contract("_ -> this")
+    public final @NotNull ChameleonBootstrap<T> withEventExceptionHandler(@NotNull EventBus.ExceptionHandler exceptionHandler) {
+        this.eventBus.setExceptionHandler(exceptionHandler);
+        return this;
+    }
+
+    /**
      * Load with a Chameleon extension.
      *
      * @param factory The factory to create the Chameleon extension.
