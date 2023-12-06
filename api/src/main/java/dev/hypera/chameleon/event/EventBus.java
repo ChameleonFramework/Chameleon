@@ -82,6 +82,15 @@ public interface EventBus {
     void unsubscribeIf(@NotNull Predicate<EventSubscriber<? super ChameleonEvent>> predicate);
 
     /**
+     * Sets the exception handler for this event bus.
+     *
+     * @param exceptionHandler New exception handler.
+     *
+     * @see dev.hypera.chameleon.ChameleonBootstrap#withEventExceptionHandler(ExceptionHandler)
+     */
+    void setExceptionHandler(@NotNull ExceptionHandler exceptionHandler);
+
+    /**
      * Represents an event exception handler.
      */
     @FunctionalInterface

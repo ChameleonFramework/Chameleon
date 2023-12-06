@@ -76,18 +76,6 @@ public final class EventBusImpl implements EventBus {
     }
 
     /**
-     * Sets the exception handler for this event bus.
-     *
-     * @param exceptionHandler New exception handler.
-     *
-     * @see dev.hypera.chameleon.ChameleonBootstrap#withEventExceptionHandler(ExceptionHandler)
-     */
-    @Internal
-    public void setExceptionHandler(@NotNull ExceptionHandler exceptionHandler) {
-        this.exceptionHandler = exceptionHandler;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -151,6 +139,15 @@ public final class EventBusImpl implements EventBus {
         if (removed) {
             this.sortedSubscriptions.clear();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setExceptionHandler(@NotNull ExceptionHandler exceptionHandler) {
+        Preconditions.checkNotNull("exceptionHandler", exceptionHandler);
+        this.exceptionHandler = exceptionHandler;
     }
 
     private synchronized @NotNull List<EventSubscriber<? super ChameleonEvent>> getSubscribers(@NotNull Class<? extends ChameleonEvent> event) {
