@@ -21,32 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.annotations.utils;
-
-import java.util.HashMap;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * Map builder utility.
- *
- * @param <K> Key type.
- * @param <V> Value type.
+ * Annotation-based generators.
  */
-public final class MapBuilder<K, V> extends HashMap<K, V> {
+@Internal
+package dev.hypera.chameleon.annotations.generator;
 
-    private static final long serialVersionUID = 5845273231221036448L;
-
-    /**
-     * Add object to Map.
-     *
-     * @param k Key.
-     * @param v Value.
-     *
-     * @return {@code this}.
-     */
-    public @NotNull MapBuilder<K, V> add(@NotNull K k, @NotNull V v) {
-        put(k, v);
-        return this;
-    }
-
-}
+import org.jetbrains.annotations.ApiStatus.Internal;

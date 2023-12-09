@@ -21,26 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    id("chameleon.common")
-    id("java-library")
-}
 
-dependencies {
-    implementation(projects.chameleonApi)
+/**
+ * Platform plugin generators.
+ *
+ * <p>Platform plugin generators create the necessary classes/resources to run on a platform.</p>
+ *
+ * <p>For example, to create a plugin that will run on Bukkit, we need a "plugin main class" (that
+ * extends {@code org.bukkit.plugin.java.JavaPlugin}) and a "plugin description file"
+ * ({@code plugin.yml}). A Bukkit platform plugin generator would generate these files with the
+ * necessary content to load and run Chameleon on Bukkit.</p>
+ *
+ * <p><strong>When creating a new generator, make sure to register it in
+ * {@link dev.hypera.chameleon.annotations.generator.platform.PlatformPluginGenerator#GENERATORS}.
+ * </strong></p>
+ */
+@Internal
+package dev.hypera.chameleon.annotations.generator.platform;
 
-    // Escape Velocity (class templating)
-    implementation(libs.escapeVelocity)
-
-    // GSON and YAML (resource generation)
-    implementation(libs.gson)
-    implementation(libs.yaml) {
-        exclude(group = "joda-time", module = "joda-time")
-        exclude(group = "junit", module = "joda-time")
-        exclude(group = "org.apache", module = "velocity")
-    }
-
-    // Auto service
-    compileOnly(libs.autoService.annotations)
-    annotationProcessor(libs.autoService.processor)
-}
+import org.jetbrains.annotations.ApiStatus.Internal;

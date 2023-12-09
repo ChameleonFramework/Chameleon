@@ -21,52 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.annotations;
+package dev.hypera.chameleon.annotations.generator;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Plugin Dependency.
- *
- * @see Plugin
+ * Represents a generated class.
  */
-@Retention(RetentionPolicy.SOURCE)
-@Target({})
-public @interface Dependency {
+public interface GeneratedClass {
 
     /**
-     * Returns the name or ID of this dependency.
+     * Returns the fully-qualified class name.
      *
-     * @return dependency name or ID.
+     * @return fully-qualified class name.
      */
-    @NotNull String name();
+    @NotNull String fqcn();
 
     /**
-     * Returns the version, or a maven version range, that represents the compatible versions of
-     * this dependency.
-     * <p><strong>This is required for Sponge support.</strong></p>
+     * Returns the content of the class.
      *
-     * @return the required version of this dependency.
+     * @return class content.
      */
-    @NotNull String version() default "";
-
-    /**
-     * Returns whether this dependency is optional for loading the dependant plugin.
-     * <p>Defaults to {@code false}, meaning the dependency is not required.</p>
-     *
-     * @return {@code true} if the dependency is not required when loading the dependant plugin.
-     */
-    boolean optional() default false;
-
-    /**
-     * Returns the platforms this dependency applies to.
-     * <p>Defaults to all platforms.</p>
-     *
-     * @return dependency platforms.
-     */
-    @NotNull String[] platforms() default {};
+    @NotNull String content();
 
 }
