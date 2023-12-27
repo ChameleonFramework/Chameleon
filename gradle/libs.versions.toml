@@ -22,7 +22,7 @@ javapoet = "1.13.0"
 
 # Logging
 slf4j = "2.0.9"
-log4j = "2.22.0"
+log4j = "2.22.1"
 
 # Code safety
 annotations = "24.1.0"
