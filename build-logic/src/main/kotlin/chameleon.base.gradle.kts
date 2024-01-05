@@ -1,7 +1,7 @@
 /*
  * This file is a part of the Chameleon Framework, licensed under the MIT License.
  *
- * Copyright (c) 2021-2023 The Chameleon Framework Authors.
+ * Copyright (c) 2021-2024 The Chameleon Framework Authors.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +59,7 @@ indra {
 }
 
 indraSpotlessLicenser {
-    property("year", "2021-2023")
+    property("year", "2021-2024")
 }
 
 testlogger {
