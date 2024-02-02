@@ -16,3 +16,5 @@ jobs:
       java_version: "21"
       gradle_warning_mode: "fail"
       codecov_enabled: true
+    secrets:
+      CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
