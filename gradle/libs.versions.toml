@@ -35,7 +35,7 @@ errorprone = "2.24.1"
 errorprone-plugin = "3.1.0"
 nullaway = "0.10.22"
 nullaway-plugin = "1.6.0"
-nexusPublish = "2.0.0-rc-1"
+nexusPublish = "2.0.0-rc-2"
 
 # Test
 junit = "5.10.1"
