@@ -5,6 +5,8 @@ on:
   push:
     branches: [ "releases/**" ]
 
+concurrency: "gradle-release-${{ github.ref }}"
+
 jobs:
   release:
     name: "Release"

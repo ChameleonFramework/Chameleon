@@ -6,6 +6,8 @@ on:
   push:
     branches: [ "main" ]
 
+concurrency: "gradle-snapshot-${{ github.ref }}"
+
 jobs:
   snapshot:
     name: "Snapshot"
