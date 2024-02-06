@@ -40,7 +40,6 @@ dependencies {
 
     /* Truth */
     testImplementation(libs.findLibrary("test-truth").get())
-    testImplementation(libs.findLibrary("test-truth-java8").get())
 
     /* Guava Testing Library */
     testImplementation(libs.findLibrary("test-guava-testlib").get())
