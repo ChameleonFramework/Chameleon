@@ -94,7 +94,6 @@ test-junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
 test-junit-params = { module = "org.junit.jupiter:junit-jupiter-params" }
 test-junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 test-truth = { module = "com.google.truth:truth", version.ref = "truth" }
-test-truth-java8 = { module = "com.google.truth.extensions:truth-java8-extension", version.ref = "truth" }
 test-guava-testlib = { module = "com.google.guava:guava-testlib", version.ref = "guava-testlib" }
 test-mockito-bom = { module = "org.mockito:mockito-bom", version.ref = "mockito" }
 test-mockito-core = { module = "org.mockito:mockito-core" }
