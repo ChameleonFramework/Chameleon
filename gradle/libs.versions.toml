@@ -38,7 +38,7 @@ nullaway-plugin = "1.6.0"
 nexusPublish = "2.0.0-rc-2"
 
 # Test
-junit = "5.10.1"
+junit = "5.10.2"
 truth = "1.4.0"
 guava-testlib = "33.0.0-jre"
 mockito = "5.10.0"
