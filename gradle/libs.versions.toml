@@ -40,7 +40,7 @@ nexusPublish = "2.0.0-rc-2"
 # Test
 junit = "5.10.2"
 truth = "1.4.2"
-guava-testlib = "33.0.0-jre"
+guava-testlib = "33.1.0-jre"
 mockito = "5.11.0"
 
 
