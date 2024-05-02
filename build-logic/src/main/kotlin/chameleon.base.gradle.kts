@@ -43,6 +43,7 @@ val requires17 = setOf(
     "chameleon-example",
     "chameleon-platform-bukkit",
     "chameleon-platform-sponge",
+    "chameleon-platform-velocity",
 )
 
 indra {
