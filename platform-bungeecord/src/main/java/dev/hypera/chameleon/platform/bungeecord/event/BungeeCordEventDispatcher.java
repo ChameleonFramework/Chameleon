@@ -26,14 +26,14 @@ package dev.hypera.chameleon.platform.bungeecord.event;
 import dev.hypera.chameleon.event.common.UserChatEvent;
 import dev.hypera.chameleon.event.common.UserConnectEvent;
 import dev.hypera.chameleon.event.common.UserDisconnectEvent;
-import dev.hypera.chameleon.event.proxy.ProxyUserSwitchEvent;
+import dev.hypera.chameleon.event.proxy.ProxyUserConnectedEvent;
+import dev.hypera.chameleon.event.proxy.ProxyUserServerConnectedEvent;
 import dev.hypera.chameleon.platform.bungeecord.BungeeCordChameleon;
 import dev.hypera.chameleon.platform.bungeecord.platform.objects.BungeeCordServer;
 import dev.hypera.chameleon.platform.event.PlatformEventDispatcher;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.user.ProxyUser;
 import dev.hypera.chameleon.user.User;
-import java.util.Optional;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -42,6 +42,7 @@ import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -126,7 +127,8 @@ public final class BungeeCordEventDispatcher extends PlatformEventDispatcher imp
      */
     @EventHandler
     public void onPlayerDisconnectEvent(@NotNull PlayerDisconnectEvent event) {
-        dispatch(new UserDisconnectEvent(this.chameleon.getUserManager().wrapUser(event.getPlayer())));
+        dispatch(new UserDisconnectEvent(this.chameleon.getUserManager()
+            .wrapUser(event.getPlayer())));
     }
 
     /**
@@ -136,14 +138,20 @@ public final class BungeeCordEventDispatcher extends PlatformEventDispatcher imp
      */
     @EventHandler
     public void onServerSwitchEvent(@NotNull ServerSwitchEvent event) {
-        dispatch(new ProxyUserSwitchEvent(
-            (ProxyUser) this.chameleon.getUserManager().wrapUser(event.getPlayer()),
-            Optional.ofNullable(event.getFrom()).map(this::wrap).orElse(null),
-            wrap(event.getPlayer().getServer().getInfo())
-        ));
+        ProxyUser user = (ProxyUser) this.chameleon.getUserManager().wrapUser(event.getPlayer());
+        Server server = wrapServer(event.getPlayer().getServer().getInfo());
+
+        if (event.getFrom() == null) {
+            // Dispatched on initial connection only.
+            dispatch(new ProxyUserConnectedEvent(user, server));
+        }
+
+        dispatch(new ProxyUserServerConnectedEvent(user, server,
+            event.getFrom() != null ? wrapServer(event.getFrom()) : null));
     }
 
-    private @NotNull Server wrap(@NotNull ServerInfo server) {
+    @Contract(value = "_ -> new", pure = true)
+    private @NotNull Server wrapServer(@NotNull ServerInfo server) {
         return new BungeeCordServer(this.chameleon, server);
     }
 
