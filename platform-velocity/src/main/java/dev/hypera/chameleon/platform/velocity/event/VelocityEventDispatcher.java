@@ -42,6 +42,7 @@ import dev.hypera.chameleon.platform.velocity.VelocityChameleon;
 import dev.hypera.chameleon.platform.velocity.platform.objects.VelocityServer;
 import dev.hypera.chameleon.user.ProxyUser;
 import dev.hypera.chameleon.user.User;
+import dev.hypera.chameleon.util.internal.ChameleonProperty;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -105,8 +106,9 @@ public final class VelocityEventDispatcher extends PlatformEventDispatcher {
      */
     @Subscribe
     public void onChatEvent(@NotNull PlayerChatEvent event) {
-        boolean immutable = event.getPlayer().getProtocolVersion()
-            .compareTo(ProtocolVersion.MINECRAFT_1_19_1) >= 0;
+        boolean immutable = ChameleonProperty.PREVENT_CHAT_PROTOCOL_ERRORS.get() &&
+            event.getPlayer().getProtocolVersion().compareTo(ProtocolVersion.MINECRAFT_1_19_1) >= 0;
+
         UserChatEvent chameleonEvent = new UserChatEvent(
             this.chameleon.getUserManager().wrapUser(event.getPlayer()),
             event.getMessage(),

@@ -52,6 +52,16 @@ public interface ChameleonProperty<T> {
     @NotNull ChameleonProperty<Boolean> LOG_ERRORS = of("logErrors", Boolean::parseBoolean, true);
 
     /**
+     * Specifies whether Chameleon should attempt to prevent illegal protocol errors when handling
+     * chat events on proxy platforms.
+     *
+     * <p>On Velocity, the proxy will kick the player to prevent an illegal protocol state if the
+     * plugin attempts to cancel or modify a chat message. If this is enabled, Chameleon will not
+     * allow the cancellation or modification of chat events when the player may be kicked.</p>
+     */
+    @NotNull ChameleonProperty<Boolean> PREVENT_CHAT_PROTOCOL_ERRORS = of("preventChatProtocolErrors", Boolean::parseBoolean, true);
+
+    /**
      * Returns a new property.
      *
      * @param name         Property name.
@@ -72,7 +82,8 @@ public interface ChameleonProperty<T> {
      * @return property name.
      */
     @Contract(value = "-> _", pure = true)
-    @NotNull String name();
+    @NotNull
+    String name();
 
     /**
      * Returns the value of this property.
@@ -80,7 +91,8 @@ public interface ChameleonProperty<T> {
      * @return property value.
      */
     @Contract(value = "-> _", pure = true)
-    @NotNull T get();
+    @NotNull
+    T get();
 
     /**
      * Sets the value of this property.
