@@ -25,39 +25,43 @@ package dev.hypera.chameleon.event.proxy;
 
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.user.ProxyUser;
-import java.util.Optional;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * Proxy user switch sever event, dispatched whenever a player switches server.
+ * This event is dispatched once the user has successfully connected to the proxy and has been
+ * connected to a server.
+ *
+ * <p>This is similar to {@link ProxyUserServerConnectedEvent}, however this is only dispatched on
+ * the initial server connection after the user has connected to the proxy.</p>
+ *
+ * <p>{@link ProxyUserServerConnectedEvent} will also be dispatched, however
+ * {@link ProxyUserServerConnectedEvent#getPreviousServer()} will return an empty optional for the
+ * initial connection, as the user was not previously connected to a server.</p>
+ *
+ * @see ProxyUserServerConnectedEvent
  */
-public final class ProxyUserSwitchEvent implements ProxyUserEvent {
+public final class ProxyUserConnectedEvent implements ProxyUserEvent {
 
     private final @NotNull ProxyUser user;
-    private final @Nullable Server from;
-    private final @NotNull Server to;
+    private final @NotNull Server server;
 
     /**
-     * Proxy user switch event constructor.
+     * Constructs a ProxyUserConnectedEvent.
      *
-     * @param user The proxy user who switched server.
-     * @param from The server the user switched from.
-     * @param to   The server the user switched to.
+     * @param user   User who connected.
+     * @param server Server the user connected to.
      */
     @Internal
-    public ProxyUserSwitchEvent(@NotNull ProxyUser user, @Nullable Server from, @NotNull Server to) {
+    public ProxyUserConnectedEvent(@NotNull ProxyUser user, @NotNull Server server) {
         this.user = user;
-        this.from = from;
-        this.to = to;
+        this.server = server;
     }
 
-
     /**
-     * Get the user who switched server.
+     * Returns the user who connected.
      *
-     * @return the user who switched server.
+     * @return connected user.
      */
     @Override
     public @NotNull ProxyUser getUser() {
@@ -65,22 +69,12 @@ public final class ProxyUserSwitchEvent implements ProxyUserEvent {
     }
 
     /**
-     * The server the user switched from, if available.
+     * Returns the server the user connected to.
      *
-     * @return an optional containing the server the user switched from, if available, otherwise an
-     *     empty optional.
+     * @return connected server.
      */
-    public @NotNull Optional<Server> getFrom() {
-        return Optional.ofNullable(this.from);
-    }
-
-    /**
-     * The server the user switched to.
-     *
-     * @return the server the user switched to.
-     */
-    public @NotNull Server getTo() {
-        return this.to;
+    public @NotNull Server getServer() {
+        return this.server;
     }
 
 }

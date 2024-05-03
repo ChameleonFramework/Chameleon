@@ -34,7 +34,8 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.hypera.chameleon.event.common.UserChatEvent;
 import dev.hypera.chameleon.event.common.UserConnectEvent;
 import dev.hypera.chameleon.event.common.UserDisconnectEvent;
-import dev.hypera.chameleon.event.proxy.ProxyUserSwitchEvent;
+import dev.hypera.chameleon.event.proxy.ProxyUserConnectedEvent;
+import dev.hypera.chameleon.event.proxy.ProxyUserServerConnectedEvent;
 import dev.hypera.chameleon.platform.event.PlatformEventDispatcher;
 import dev.hypera.chameleon.platform.proxy.Server;
 import dev.hypera.chameleon.platform.util.PlatformEventUtil;
@@ -44,6 +45,7 @@ import dev.hypera.chameleon.user.ProxyUser;
 import dev.hypera.chameleon.user.User;
 import dev.hypera.chameleon.util.internal.ChameleonProperty;
 import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -93,7 +95,7 @@ public final class VelocityEventDispatcher extends PlatformEventDispatcher {
         User user = this.chameleon.getUserManager().wrapUser(event.getPlayer());
         UserConnectEvent chameleonEvent = new UserConnectEvent(user, false);
 
-        this.chameleon.getEventBus().dispatch(chameleonEvent);
+        dispatch(chameleonEvent);
         if (chameleonEvent.isCancelled()) {
             user.disconnect(chameleonEvent.getCancelReason());
         }
@@ -115,7 +117,7 @@ public final class VelocityEventDispatcher extends PlatformEventDispatcher {
             !event.getResult().isAllowed(),
             immutable, immutable
         );
-        this.chameleon.getEventBus().dispatch(chameleonEvent);
+        dispatch(chameleonEvent);
 
         // Event message modification
         if (!event.getMessage().equals(chameleonEvent.getMessage())) {
@@ -143,8 +145,8 @@ public final class VelocityEventDispatcher extends PlatformEventDispatcher {
      */
     @Subscribe
     public void onPlayerDisconnectEvent(@NotNull DisconnectEvent event) {
-        this.chameleon.getEventBus().dispatch(new UserDisconnectEvent(
-            this.chameleon.getUserManager().wrapUser(event.getPlayer())));
+        dispatch(new UserDisconnectEvent(this.chameleon.getUserManager()
+            .wrapUser(event.getPlayer())));
     }
 
     /**
@@ -153,15 +155,21 @@ public final class VelocityEventDispatcher extends PlatformEventDispatcher {
      * @param event Platform event.
      */
     @Subscribe
-    public void onServerSwitchEvent(@NotNull ServerConnectedEvent event) {
-        this.chameleon.getEventBus().dispatch(new ProxyUserSwitchEvent(
-            (ProxyUser) this.chameleon.getUserManager().wrapUser(event.getPlayer()),
-            event.getPreviousServer().map(this::wrap).orElse(null),
-            wrap(event.getServer())
-        ));
+    public void onServerConnectedEvent(@NotNull ServerConnectedEvent event) {
+        ProxyUser user = (ProxyUser) this.chameleon.getUserManager().wrapUser(event.getPlayer());
+        Server server = wrapServer(event.getServer());
+
+        if (event.getPreviousServer().isEmpty()) {
+            // Dispatched on initial connection only.
+            dispatch(new ProxyUserConnectedEvent(user, server));
+        }
+
+        dispatch(new ProxyUserServerConnectedEvent(user, server,
+            event.getPreviousServer().map(this::wrapServer).orElse(null)));
     }
 
-    private @NotNull Server wrap(@NotNull RegisteredServer server) {
+    @Contract(value = "_ -> new", pure = true)
+    private @NotNull Server wrapServer(@NotNull RegisteredServer server) {
         return new VelocityServer(this.chameleon, server);
     }
 

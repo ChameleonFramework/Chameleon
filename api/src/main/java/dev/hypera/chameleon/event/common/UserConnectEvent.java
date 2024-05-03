@@ -32,7 +32,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * User connect event, dispatched when a user joins the proxy/server.
+ * This event is dispatched when the user has connected to the server or proxy.
+ *
+ * <p>On proxy platforms, the user may not have been connected to a server yet.
+ * {@link dev.hypera.chameleon.event.proxy.ProxyUserConnectedEvent} will be dispatched once the user
+ * has connected to the proxy and has been connected to a server.</p>
  */
 public final class UserConnectEvent extends AbstractCancellable implements UserEvent, Cancellable {
 
@@ -40,7 +44,7 @@ public final class UserConnectEvent extends AbstractCancellable implements UserE
     private @NotNull Component cancelReason = Component.text("Disconnected");
 
     /**
-     * User connect event constructor.
+     * Constructs a UserConnectEvent.
      *
      * @param user      The user who connected.
      * @param cancelled Whether this event has been cancelled.
@@ -52,9 +56,9 @@ public final class UserConnectEvent extends AbstractCancellable implements UserE
     }
 
     /**
-     * Get the user who connected.
+     * Returns the user who connected.
      *
-     * @return connecting user.
+     * @return connected user.
      */
     @Override
     public @NotNull User getUser() {
@@ -84,7 +88,7 @@ public final class UserConnectEvent extends AbstractCancellable implements UserE
     }
 
     /**
-     * Get the reason used when kicking the player if this event is cancelled.
+     * Returns the reason used when kicking the player if this event is cancelled.
      *
      * @return cancel reason.
      */
