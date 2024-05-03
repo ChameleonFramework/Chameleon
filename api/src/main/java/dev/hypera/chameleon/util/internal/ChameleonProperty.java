@@ -82,8 +82,7 @@ public interface ChameleonProperty<T> {
      * @return property name.
      */
     @Contract(value = "-> _", pure = true)
-    @NotNull
-    String name();
+    @NotNull String name();
 
     /**
      * Returns the value of this property.
@@ -91,8 +90,7 @@ public interface ChameleonProperty<T> {
      * @return property value.
      */
     @Contract(value = "-> _", pure = true)
-    @NotNull
-    T get();
+    @NotNull T get();
 
     /**
      * Sets the value of this property.
