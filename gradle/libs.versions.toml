@@ -3,7 +3,7 @@ version = "1.0"
 
 [versions]
 # Adventure
-adventure = "4.16.0"
+adventure = "4.17.0"
 adventure-platform = "4.3.2"
 
 # Platforms
