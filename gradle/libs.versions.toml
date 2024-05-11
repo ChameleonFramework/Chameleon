@@ -13,14 +13,13 @@ nukkit = "1.0-SNAPSHOT"
 sponge = "10.0.0"
 velocity = "3.2.0-SNAPSHOT"
 
-# File formats
+# Annotation-based generation
 gson = "2.10.1"
 yaml = "2.2"
+escapeVelocity = "1.1"
+autoService = "1.1.1"
 
-# Code generation
-javapoet = "1.13.0"
-
-# Logging
+# Logging library support
 slf4j = "2.0.13"
 log4j = "2.23.1"
 
@@ -60,12 +59,12 @@ platform-nukkit = { module = "cn.nukkit:nukkit", version.ref = "nukkit" }
 platform-sponge = { module = "org.spongepowered:spongeapi", version.ref = "sponge" }
 platform-velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
 
-# File formats
+# Annotation-based generation
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 yaml = { module = "org.yaml:snakeyaml", version.ref = "yaml" }
-
-# Code generation
-javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
+escapeVelocity = { module = "com.google.escapevelocity:escapevelocity", version.ref = "escapeVelocity" }
+autoService-annotations = { module = "com.google.auto.service:auto-service-annotations", version.ref = "autoService" }
+autoService-processor = { module = "com.google.auto.service:auto-service", version.ref = "autoService" }
 
 # Logging
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }

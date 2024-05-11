@@ -21,26 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.hypera.chameleon.annotations.processing.generation.sponge.meta;
+package dev.hypera.chameleon.annotations.generator;
 
-import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
-@Internal
-@SuppressWarnings({ "unused", "FieldCanBeLocal" })
-final class Loader {
+/**
+ * Represents a generated resource.
+ */
+public interface GeneratedResource {
 
-    private final @NotNull String name;
-    private final @NotNull String version;
-
-    @Internal
-    private Loader(@NotNull String name, @NotNull String version) {
-        this.name = name;
-        this.version = version;
+    /**
+     * Returns a new generated resource.
+     *
+     * @param name    Resource name.
+     * @param content Resource content.
+     *
+     * @return new generated resource.
+     */
+    static @NotNull GeneratedResource of(@NotNull String name, @NotNull String content) {
+        return new GeneratedResourceImpl(name, content);
     }
 
-    static @NotNull Loader javaPlain() {
-        return new Loader("java_plain", "1.0");
-    }
+    /**
+     * Returns the name of the resource.
+     *
+     * @return resource name.
+     */
+    @NotNull String name();
+
+    /**
+     * Returns the content of the resource.
+     *
+     * @return resource content.
+     */
+    @NotNull String content();
 
 }

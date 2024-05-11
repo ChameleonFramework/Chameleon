@@ -21,26 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    id("chameleon.common")
-    id("java-library")
-}
+package dev.hypera.chameleon.annotations.generator;
 
-dependencies {
-    implementation(projects.chameleonApi)
+import org.jetbrains.annotations.NotNull;
 
-    // Escape Velocity (class templating)
-    implementation(libs.escapeVelocity)
+/**
+ * Represents a generated class.
+ */
+public interface GeneratedClass {
 
-    // GSON and YAML (resource generation)
-    implementation(libs.gson)
-    implementation(libs.yaml) {
-        exclude(group = "joda-time", module = "joda-time")
-        exclude(group = "junit", module = "joda-time")
-        exclude(group = "org.apache", module = "velocity")
-    }
+    /**
+     * Returns the fully-qualified class name.
+     *
+     * @return fully-qualified class name.
+     */
+    @NotNull String fqcn();
 
-    // Auto service
-    compileOnly(libs.autoService.annotations)
-    annotationProcessor(libs.autoService.processor)
+    /**
+     * Returns the content of the class.
+     *
+     * @return class content.
+     */
+    @NotNull String content();
+
 }

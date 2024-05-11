@@ -21,26 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    id("chameleon.common")
-    id("java-library")
-}
 
-dependencies {
-    implementation(projects.chameleonApi)
+/**
+ * Annotation processors.
+ */
+@Internal
+package dev.hypera.chameleon.annotations.processor;
 
-    // Escape Velocity (class templating)
-    implementation(libs.escapeVelocity)
-
-    // GSON and YAML (resource generation)
-    implementation(libs.gson)
-    implementation(libs.yaml) {
-        exclude(group = "joda-time", module = "joda-time")
-        exclude(group = "junit", module = "joda-time")
-        exclude(group = "org.apache", module = "velocity")
-    }
-
-    // Auto service
-    compileOnly(libs.autoService.annotations)
-    annotationProcessor(libs.autoService.processor)
-}
+import org.jetbrains.annotations.ApiStatus.Internal;
