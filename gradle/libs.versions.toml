@@ -33,7 +33,7 @@ test-logger = "4.0.0"
 checkstyle = "10.16.0"
 errorprone = "2.28.0"
 errorprone-plugin = "3.1.0"
-nullaway = "0.10.26"
+nullaway = "0.11.0"
 nullaway-plugin = "2.0.0"
 nexusPublish = "2.0.0"
 
