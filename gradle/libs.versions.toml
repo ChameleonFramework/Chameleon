@@ -40,7 +40,7 @@ shadow = "8.1.8"
 
 # Test
 junit = "5.10.2"
-truth = "1.4.2"
+truth = "1.4.3"
 guava-testlib = "33.2.1-jre"
 mockito = "5.12.0"
 
