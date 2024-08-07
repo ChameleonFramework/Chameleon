@@ -21,7 +21,7 @@ yaml = "2.2"
 javapoet = "1.13.0"
 
 # Logging
-slf4j = "2.0.13"
+slf4j = "2.0.14"
 log4j = "2.23.1"
 
 # Code safety
