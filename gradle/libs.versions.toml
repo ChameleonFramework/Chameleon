@@ -39,7 +39,7 @@ nexusPublish = "2.0.0"
 shadow = "8.1.8"
 
 # Test
-junit = "5.11.3"
+junit = "5.11.4"
 truth = "1.4.4"
 guava-testlib = "33.3.0-jre"
 mockito = "5.14.2"
